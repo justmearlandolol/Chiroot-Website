@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'self'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'self'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Chiroot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1526,6 +1526,215 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   .playlist-item{ grid-template-columns:60px 1fr auto; }
 }
 
+.gramo-stickers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  max-width: 710px;
+  margin: 0 auto;
+}
+
+.gramo-sticker {
+  position: absolute;
+  font-family: 'Gloria Hallelujah', 'Kalam', cursive;
+  background: #fffdf5;
+  border: 2.4px solid #1a1a1a;
+  color: #1a1a1a;
+  padding: 3px 7px;
+  box-shadow: 1.5px 2px 0 #c8b78a;
+  transform: rotate(var(--rot, -6deg));
+  font-size: 8.5px;
+  text-align: center;
+  line-height: 1.05;
+  pointer-events: auto;
+  transition: transform .2s ease;
+  white-space: nowrap;
+}
+
+.gramo-sticker:hover {
+  transform: rotate(var(--rot, -6deg)) scale(1.1) translateY(-1px);
+  box-shadow: 3px 5px 0 #c8b78a;
+}
+
+.sticker-1 {
+  top: 8px;
+  left: 6%;
+  --rot: -9deg;
+  padding: 4px 9px;
+  background: #f7f0df;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transform: rotate(-9deg);
+}
+
+.sticker-1 .sticker-text {
+  font-size: 7px;
+  line-height: 0.95;
+}
+
+.sticker-1 .sticker-doodle {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 10px;
+  color: #d84a3a;
+}
+
+.sticker-2 {
+  top: 32%;
+  right: 4%;
+  --rot: 7deg;
+  padding: 3px 6px 2px;
+  background: #f0f7eb;
+  border-color: #3a8a6a;
+  font-size: 9.5px;
+  transform: rotate(7deg);
+}
+
+.sticker-2 .sticker-emoji {
+  display: block;
+  font-size: 11px;
+  line-height: 1;
+  color: #3a8a6a;
+}
+
+.sticker-2 .sticker-label {
+  display: block;
+  font-size: 6.5px;
+  margin-top: 1px;
+  font-family: 'Kalam', cursive;
+  color: #3a8a6a;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+}
+
+.sticker-3.chopper-sticker {
+  top: 62%;
+  left: 6%;
+  --rot: -5deg;
+  padding: 4px 5px 3px;
+  background: #fffaf0;
+  border: 2.5px solid #d84a3a;
+  box-shadow: 2px 3px 0 #c8b78a, 0 0 0 3px #fffaf0;
+  transform: rotate(-5deg);
+  width: 82px;
+  height: auto;
+  text-align: center;
+}
+
+.chopper-img {
+  width: 68px;
+  height: auto;
+  display: block;
+  margin: 0 auto 2px;
+  filter: drop-shadow(1px 1px 0 #d84a3a) drop-shadow(-1px -1px 0 #d84a3a);
+  image-rendering: crisp-edges;
+}
+
+.chopper-label {
+  font-family: 'Kalam', cursive;
+  font-size: 8px;
+  font-weight: 700;
+  color: #d84a3a;
+  letter-spacing: 0.4px;
+  display: block;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.sticker-3.chopper-sticker:hover {
+  transform: rotate(-5deg) scale(1.08);
+  box-shadow: 2px 4px 0 #c8b78a, 0 0 0 3px #fffaf0;
+}
+
+.sticker-4 {
+  bottom: 18%;
+  right: 7%;
+  --rot: 8deg;
+  padding: 3px 10px;
+  background: #f6e8f0;
+  border-color: #b65a9a;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  transform: rotate(8deg);
+}
+
+.sticker-4 .sticker-text {
+  color: #b65a9a;
+}
+
+.sticker-4 .sticker-doodle {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  font-size: 9px;
+  color: #b65a9a;
+}
+
+.sticker-5 {
+  bottom: 8%;
+  left: 18%;
+  --rot: -11deg;
+  padding: 2px 6px;
+  background: #fff0f0;
+  border-color: #d84a3a;
+  font-size: 11px;
+  transform: rotate(-11deg);
+}
+
+.sticker-5 .sticker-emoji {
+  color: #d84a3a;
+}
+
+.sticker-6 {
+  bottom: 38%;
+  left: 3%;
+  --rot: 4deg;
+  padding: 4px 6px;
+  background: #f5f0e0;
+  font-size: 6.5px;
+  font-weight: 700;
+  line-height: 0.95;
+  transform: rotate(4deg);
+}
+
+.sticker-6 .sticker-text {
+  font-family: 'Kalam', cursive;
+}
+
+@media (max-width: 560px) {
+  .gramo-sticker {
+    font-size: 7px;
+    padding: 2px 5px;
+  }
+  .sticker-1 { top: 6px; left: 3%; }
+  .sticker-2 { right: 2%; }
+  .sticker-3 { left: 5%; }
+  .sticker-4 { right: 4%; }
+  .sticker-5 { left: 14%; }
+  .sticker-6 { left: 2%; }
+
+  .sticker-3.chopper-sticker {
+    width: 66px;
+    padding: 3px 4px 2px;
+    top: 60%;
+    left: 4%;
+  }
+
+  .chopper-img {
+    width: 52px;
+  }
+
+  .chopper-label {
+    font-size: 6.5px;
+  }
+}
 
     #preloader {
       position: fixed;
@@ -1739,6 +1948,8 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
         height: 34px;
       }
     }
+
+
 </style>
 </head>
 <body>
@@ -1832,6 +2043,37 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
         <div class="gramophone-wrap">
 
+          <div class="gramo-stickers">
+
+            <div class="gramo-sticker sticker-1 sketch-border-tiny">
+              <span class="sticker-text">NOW<br>SPINNING</span>
+              <span class="sticker-doodle">✦</span>
+            </div>
+
+            <div class="gramo-sticker sticker-2">
+              <img src="Logos-removebg-preview.png" alt="sticker-emoji" class="sticker-label" style="width: 67px; height: 67px;">
+              <span class="chopper-label"></span>
+            </div>
+
+            <div class="gramo-sticker sticker-3 chopper-sticker sketch-border-tiny">
+              <img src="Chopper-removebg-preview.png" alt="Chopper" class="chopper-img">
+              <span class="chopper-label"></span>
+            </div>
+
+            <div class="gramo-sticker sticker-4">
+              <span class="sticker-text">CHIROOT</span>
+              <span class="sticker-doodle">✧</span>
+            </div>
+
+            <div class="gramo-sticker sticker-5">
+              <span class="sticker-emoji">♡ ♪</span>
+            </div>
+
+            <div class="gramo-sticker sticker-6 sketch-border-tiny">
+              <span class="sticker-text">Tony<br>Chopper</span>
+            </div>
+          </div>
+
           <div class="nowplaying-wrap" id="nowplaying-wrap">
             <div class="nowplaying-card sketch-border-soft">
               <div class="np-eyebrow">✦ now playing ✦</div>
@@ -1842,8 +2084,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
               </div>
             </div>
           </div>
-
-
 
           <div class="turntable-base sketch-border-soft">
             <div class="wood-grain g1"></div>
@@ -1969,9 +2209,9 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
             </span>
           </button>
           <div class="volume-track sketch-border-tiny">
-            <input type="range" id="volume" min="0" max="1" step="0.01" value="0.82" aria-label="Volume">
+            <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
           </div>
-          <span class="volume-label" id="volume-label">82%</span>
+          <span class="volume-label" id="volume-label">50%</span>
         </div>
       </section>
 
@@ -2157,10 +2397,10 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       <button class="modal-close sketchy" id="btn-lyrics-close" aria-label="Close">✕</button>
       <h3 class="modal-title" id="lyrics-modal-title">Lyrics</h3>
       <p class="modal-sub" id="lyrics-modal-artist"></p>
-      
+
       <div id="lyrics-content" style="max-height:420px; overflow:auto; padding:12px 4px; font-family:'Kalam',sans-serif; font-size:15.5px; line-height:1.65; white-space:pre-wrap; color:#3a2f22; background:#fffdf7; border:2px solid #1a1a1a; border-radius:12px;">
       </div>
-      
+
       <div class="modal-actions" style="margin-top:16px; justify-content:space-between; align-items:center;">
         <button type="button" class="btn-secondary sketch-border-soft" id="btn-lyrics-refresh" style="font-size:13px;">↻ Refresh Lyrics</button>
         <button type="button" class="btn-secondary sketch-border-soft" id="btn-lyrics-close2">Tutup</button>
@@ -2209,7 +2449,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
     </div>
   </div>
 
-  <audio id="audio" preload="metadata" crossorigin="anonymous"></audio>
+  <audio id="audio" preload="metadata"></audio>
 
   <div class="auth-overlay" id="auth-overlay" aria-hidden="true">
     <div class="auth-overlay-card sketch-border">
@@ -2344,14 +2584,45 @@ const TOP10_SONGS = [
 const LS_KEY = 'gramophone_playlist_v2';
 const LS_STATE = 'gramophone_state_v2';
 
-
-const MAX_IMPORT_BACKUP_BYTES = 60 * 1024 * 1024; 
+const MAX_IMPORT_BACKUP_BYTES = 60 * 1024 * 1024;
 const MAX_IMPORTED_TRACKS = 150;
-const MAX_AUDIO_DATA_URL_CHARS = 18 * 1024 * 1024; 
-const MAX_COVER_DATA_URL_CHARS = 7 * 1024 * 1024;  
+const MAX_AUDIO_DATA_URL_CHARS = 18 * 1024 * 1024;
+const MAX_COVER_DATA_URL_CHARS = 7 * 1024 * 1024;
+const MAX_AUDIO_FILE_BYTES = 12 * 1024 * 1024;
+const MAX_COVER_FILE_BYTES = 5 * 1024 * 1024;
+const MAX_API_RESPONSE_BYTES = 2 * 1024 * 1024;
+const ALLOWED_REMOTE_MEDIA_HOSTS = new Set(['astuagdezahmuuwjoghf.supabase.co']);
+const ALLOWED_LYRICS_HOSTS = new Set(['lrclib.net', 'astuagdezahmuuwjoghf.supabase.co']);
+function isAllowedHost(url, hosts){
+  try { const u = new URL(url); return u.protocol === 'https:' && hosts.has(u.hostname); }
+  catch(e){ return false; }
+}
+async function fetchWithTimeout(url, options={}, timeoutMs=10000, maxBytes=MAX_API_RESPONSE_BYTES){
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, {...options, signal: controller.signal, redirect: 'error'});
+    const len = Number(response.headers.get('content-length') || 0);
+    if(len && len > maxBytes) throw new Error('Response terlalu besar');
+    const text = await response.text();
+    if(text.length > maxBytes) throw new Error('Response terlalu besar');
+    return {response, text};
+  } finally { clearTimeout(timer); }
+}
+function hasMp3Signature(file){
+  return new Promise(resolve => {
+    try { const r=new FileReader(); r.onload=()=>{ const b=new Uint8Array(r.result||[]); resolve(b.length>=3 && ((b[0]===0x49&&b[1]===0x44&&b[2]===0x33) || (b[0]===0xff && (b[1]&0xe0)===0xe0))); }; r.onerror=()=>resolve(false); r.readAsArrayBuffer(file.slice(0,4)); }
+    catch(e){ resolve(false); }
+  });
+}
+function hasImageSignature(file){
+  return new Promise(resolve => {
+    try { const r=new FileReader(); r.onload=()=>{ const b=new Uint8Array(r.result||[]); const png=b.length>=8&&b[0]===0x89&&b[1]===0x50&&b[2]===0x4e&&b[3]===0x47; const jpg=b.length>=3&&b[0]===0xff&&b[1]===0xd8&&b[2]===0xff; resolve(png||jpg); }; r.onerror=()=>resolve(false); r.readAsArrayBuffer(file.slice(0,12)); }
+    catch(e){ resolve(false); }
+  });
+}
 const AUDIO_DATA_MIME_RE = /^(audio\/(mpeg|mp3|mpeg3|x-mpeg)|application\/octet-stream)$/i;
 const IMAGE_DATA_MIME_RE = /^image\/(png|jpe?g|webp)$/i;
-
 
 const RATE_LIMIT_STORAGE_KEY = 'gramophone_rate_limit_v1';
 const RATE_LIMITS = {
@@ -2423,6 +2694,26 @@ async function addTop10ToCrate(idx){
     return;
   }
   if(!consumeClientRateLimit('top10Add', RATE_LIMITS.top10Add)) return;
+
+  if(/^https?:\/\//i.test(String(song.src || ''))){
+    tracks.push({
+      id: 'top10_' + Date.now(),
+      title: song.title,
+      artist: song.artist,
+      src: String(song.src).trim(),
+      labelColor: song.labelColor || '#c9a227',
+      vinylColor: song.vinylColor || '#1e1e24',
+      cover: (song.cover && /^https?:\/\//i.test(String(song.cover))) ? String(song.cover).trim() : null,
+      isDemo: false
+    });
+    await savePlaylist();
+    renderPlaylist();
+    renderTop10();
+    loadTrack(tracks.length - 1, true, true);
+    showToast('✦ "' + song.title + '" ditambahkan – diputar dari URL!');
+    return;
+  }
+
   showToast('Menambahkan "' + song.title + '" ke Crate…');
   var audioDataUrl = null;
   try {
@@ -2475,7 +2766,7 @@ async function addTop10ToCrate(idx){
 async function init() {
   try {
 
-  audio.volume = parseFloat(volumeInput.value) || 0.82;
+  audio.volume = parseFloat(volumeInput.value) || 0.5;
   await loadPlaylist();
   restoreState();
   renderPlaylist();
@@ -2521,10 +2812,18 @@ function safeDataUrl(value, allowedMimeRe, maxChars){
   if(payload.length < 16 || !/^[a-z0-9+/]+={0,2}$/i.test(payload)) return '';
   return dataUrl;
 }
+function safeExternalUrl(value, maxChars){
+  if(typeof value !== 'string') return '';
+  var u = value.trim();
+  if(!u || u.length > (maxChars || 2048)) return '';
+  if(!isAllowedHost(u, ALLOWED_REMOTE_MEDIA_HOSTS)) return '';
+  if(/[\s"'<>\\]/.test(u)) return '';
+  return u;
+}
 function sanitizeTrack(t, i){
   if(!t || typeof t !== 'object') t = {};
-  var safeAudio = safeDataUrl(t.src, AUDIO_DATA_MIME_RE, MAX_AUDIO_DATA_URL_CHARS);
-  var safeCover = safeDataUrl(t.cover, IMAGE_DATA_MIME_RE, MAX_COVER_DATA_URL_CHARS);
+  var safeAudio = safeDataUrl(t.src, AUDIO_DATA_MIME_RE, MAX_AUDIO_DATA_URL_CHARS) || safeExternalUrl(t.src, 2048);
+  var safeCover = safeDataUrl(t.cover, IMAGE_DATA_MIME_RE, MAX_COVER_DATA_URL_CHARS) || safeExternalUrl(t.cover, 2048);
   return {
     id: cleanImportedId(t.id, 's_' + i + '_' + Date.now()),
     title: cleanImportedText(t.title, 'Untitled', 80),
@@ -3128,16 +3427,14 @@ function bindEvents(){
   safeOn(audio,'ended', ()=>{
     recordEl.classList.remove('playing');
     if (isLoop) { audio.currentTime=0; play(); }
-    else { 
-      // If page is hidden (user not on website), don't auto-play next track in background
-      // Queue next track to play when user returns to the page
+    else {
       if (document.hidden) {
         isPlaying = false;
-        window._playNextOnVisible = true; // Flag to play next when page becomes visible
+        window._playNextOnVisible = true;
         updatePlayPauseUI();
         saveState();
       } else {
-        nextTrack(); 
+        nextTrack();
       }
     }
   });
@@ -3155,20 +3452,12 @@ function bindEvents(){
     else if (e.code === 'Space') { e.preventDefault(); isPlaying ? pause() : play(); }
   });
 
-  // Page Visibility API: Handle autoplay when user returns to tab
-  // If audio was playing but got paused due to autoplay policy while page was hidden,
-  // resume playback when page becomes visible again
-  // Also: if song ended while page was hidden (not on loop), play next track when user returns
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-      // Page became visible
       if (window._playNextOnVisible && tracks && tracks.length > 0) {
-        // Song ended while page was hidden, not on loop - play next track now
         window._playNextOnVisible = false;
         nextTrack();
       } else if (isPlaying && audio.paused && tracks && tracks[currentIndex]) {
-        // Page became visible, audio should be playing but is paused (likely due to autoplay policy)
-        // Try to resume playback of CURRENT track
         audio.play().then(() => {
           recordEl.classList.add('playing');
           tonearm.classList.add('on-record');
@@ -3176,12 +3465,9 @@ function bindEvents(){
           updatePlayPauseUI();
         }).catch(err => {
           console.warn('Auto-resume playback failed:', err);
-          // User interaction needed, leave paused
         });
       }
     }
-    // When page becomes hidden and song ends, we DON'T auto-play next
-    // User must return to page to continue
   });
 
   setupAddModal();
@@ -3255,7 +3541,7 @@ function setupAddModal(){
         var functionUrl = String(SUPABASE_URL).trim().replace(/\/+$/, '')
           + '/functions/v1/' + SPOTIFY_FUNCTION_NAME;
 
-        var response = await fetch(functionUrl, {
+        var fetchResult = await fetchWithTimeout(functionUrl, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -3263,9 +3549,9 @@ function setupAddModal(){
             'apikey': String(SUPABASE_PUBLISHABLE_KEY).trim()
           },
           body: JSON.stringify({ url: url })
-        });
-
-        var rawResponse = await response.text();
+        }, 10000, MAX_API_RESPONSE_BYTES);
+        var response = fetchResult.response;
+        var rawResponse = fetchResult.text;
         var data = {};
         try {
           data = rawResponse ? JSON.parse(rawResponse) : {};
@@ -3435,7 +3721,8 @@ function setupAddModal(){
       showToast('Upload ditolak – hanya MP3');
       return;
     }
-    if(f.size > 12 * 1024 * 1024){
+    if(f.size > MAX_AUDIO_FILE_BYTES){
+      audioInput.value = ''; audioInput.setCustomValidity('Ukuran audio melebihi batas 12 MB');
       audioHint.textContent = '️ ' + f.name + ' • ' + formatBytes(f.size) + ' – >12MB, mungkin gagal simpan';
       audioHint.style.color = '#b36b00';
     } else {
@@ -3461,7 +3748,8 @@ function setupAddModal(){
       showToast('Cover ditolak – harus JPG/PNG');
       return;
     }
-    if(f.size > 5 * 1024 * 1024){
+    if(f.size > MAX_COVER_FILE_BYTES){
+      coverInput.value = ''; coverInput.setCustomValidity('Ukuran cover melebihi batas 5 MB');
       coverHint.textContent = '️ ' + f.name + ' • ' + formatBytes(f.size) + ' – >5MB, akan di-compress';
       coverHint.style.color = '#b36b00';
     } else {
@@ -3484,7 +3772,7 @@ function setupAddModal(){
     }
 
     if(af){
-      if(!isValidMp3(af)){
+      if(!isValidMp3(af) || af.size > MAX_AUDIO_FILE_BYTES || !(await hasMp3Signature(af))){
         alert('Upload ditolak.\n\nAudio harus file .mp3\nTerdeteksi: ' + (af.name||'unknown') + ' (' + (af.type||'no-mime') + ')');
         return;
       }
@@ -3495,7 +3783,7 @@ function setupAddModal(){
       }
     }
     if(cf){
-      if(!isValidCoverImage(cf)){
+      if(!isValidCoverImage(cf) || cf.size > MAX_COVER_FILE_BYTES || !(await hasImageSignature(cf))){
         alert('Cover ditolak.\n\nHarus JPG / JPEG / PNG\nTerdeteksi: ' + (cf.name||'') + ' (' + (cf.type||'') + ')');
         return;
       }
@@ -4228,7 +4516,6 @@ function setupSettings(){
   if(btnOk) btnOk.addEventListener('click', close);
   if(modal) modal.addEventListener('click', (e) => { if(e.target === modal) close(); });
 
-
   $('#btn-export-data').addEventListener('click', async () => {
     const data = await idbGet('playlist');
     if(!data || data.length === 0) return alert("Crate masih kosong!");
@@ -4242,7 +4529,6 @@ function setupSettings(){
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     showToast("Crate berhasil di-backup! ");
   });
-
 
   const inputImport = $('#input-import-file');
   $('#btn-import-data').addEventListener('click', () => inputImport.click());
@@ -4321,7 +4607,6 @@ function setupSettings(){
     };
     reader.readAsText(file, 'UTF-8');
   });
-
 
   $('#btn-reset-settings').addEventListener('click', () => {
     close();
@@ -4441,15 +4726,15 @@ async function fetchLyricsFromAPI(artist, title) {
   if (!isSupabaseConfigured()) {
         try {
       const searchUrl = `https://lrclib.net/api/search?artist_name=${encodeURIComponent(artist)}&track_name=${encodeURIComponent(title)}`;
-      const searchRes = await fetch(searchUrl, {
-        headers: { "User-Agent": "Chiroot/1.0" }
-      });
-      
+      if(!isAllowedHost(searchUrl, ALLOWED_LYRICS_HOSTS)) return null;
+      const searchResult = await fetchWithTimeout(searchUrl, { headers: { "Accept": "application/json" } }, 10000, MAX_API_RESPONSE_BYTES);
+      const searchRes = searchResult.response;
+
       if (!searchRes.ok) return null;
-      const searchData = await searchRes.json();
-      
+      const searchData = JSON.parse(searchResult.text);
+
       if (!searchData || searchData.length === 0) return null;
-      
+
       const track = searchData[0];
       return track.syncedLyrics || track.plainLyrics || null;
     } catch (e) {
@@ -4461,7 +4746,7 @@ async function fetchLyricsFromAPI(artist, title) {
   try {
     const functionUrl = String(SUPABASE_URL).trim().replace(/\/+$/, '') + '/functions/v1/get-lyrics';
 
-    const response = await fetch(functionUrl, {
+    const responseResult = await fetchWithTimeout(functionUrl, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -4469,10 +4754,11 @@ async function fetchLyricsFromAPI(artist, title) {
         'apikey': String(SUPABASE_PUBLISHABLE_KEY).trim()
       },
       body: JSON.stringify({ artist, title })
-    });
+    }, 10000, MAX_API_RESPONSE_BYTES);
+    const response = responseResult.response;
 
     if (!response.ok) return null;
-    const data = await response.json();
+    const data = JSON.parse(responseResult.text);
     return data.lyrics || null;
   } catch (e) {
     console.warn('Supabase get-lyrics error:', e);
@@ -4527,11 +4813,11 @@ if (btnRefreshLyrics) {
   btnRefreshLyrics.addEventListener('click', async () => {
     const track = tracks[currentIndex];
     if (!track) return;
-    
+
     lyricsContent.innerHTML = `<div style="text-align:center;color:#8b745b;padding:20px;">Mencari lyrics...</div>`;
-    
+
     const freshLyrics = await fetchLyricsFromAPI(track.artist, track.title);
-    
+
     if (freshLyrics) {
       lyricsContent.innerHTML = escapeHtml(freshLyrics).replace(/\n/g, '<br>');
     } else {
@@ -4539,6 +4825,8 @@ if (btnRefreshLyrics) {
     }
   });
 }
+
+
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a199551be93afe18',t:'MTc4Mzc4ODg5MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1cdffa37a4755e4',t:'MTc4NDM0MTEzNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a208053a5c93fe8b',t:'MTc4NDk0OTUzOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a21377d9d805fd37',t:'MTc4NTA2OTU3Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
