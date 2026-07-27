@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'self'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'self'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Chiroot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1948,8 +1948,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
         height: 34px;
       }
     }
-
-
 </style>
 </head>
 <body>
@@ -1978,7 +1976,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
           <div class="logo-wrapper">
             <div class="logo-inner">
-              <img src="Logos-removebg-preview.png" alt="Chiroot Logo" />
+              <img src="/assets/Logos-removebg-preview.png" alt="Chiroot Logo" />
             </div>
           </div>
 
@@ -2051,12 +2049,12 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
             </div>
 
             <div class="gramo-sticker sticker-2">
-              <img src="Logos-removebg-preview.png" alt="sticker-emoji" class="sticker-label" style="width: 67px; height: 67px;">
+              <img src="/assets/Logos-removebg-preview.png" alt="sticker-emoji" class="sticker-label" style="width: 67px; height: 67px;">
               <span class="chopper-label"></span>
             </div>
 
             <div class="gramo-sticker sticker-3 chopper-sticker sketch-border-tiny">
-              <img src="Chopper-removebg-preview.png" alt="Chopper" class="chopper-img">
+              <img src="/assets/Chopper-removebg-preview.png" alt="Chopper" class="chopper-img">
               <span class="chopper-label"></span>
             </div>
 
@@ -2209,9 +2207,9 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
             </span>
           </button>
           <div class="volume-track sketch-border-tiny">
-            <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
+            <input type="range" id="volume" min="0" max="1" step="0.01" value="0.82" aria-label="Volume">
           </div>
-          <span class="volume-label" id="volume-label">50%</span>
+          <span class="volume-label" id="volume-label">82%</span>
         </div>
       </section>
 
@@ -2542,40 +2540,40 @@ const TOP10_SONGS = [
   {
     title: "Niscaya",
     artist: "Bilal Indrajaya",
-    src: "vidssave.com Bilal Indrajaya - Niscaya (Official Lyric Video) LOW.mp3",
-    cover: "niscaya.jpg",
+    src: "/Audio/vidssave.com Bilal Indrajaya - Niscaya (Official Lyric Video) LOW.mp3",
+    cover: "/assets/niscaya.jpg",
     labelColor: "#d84a3a",
     vinylColor: "#1e1e24"
   },
   {
     title: "Feels",
     artist: "Calvin Harris, Pharrell Williams ,Katy Perry , Big Sean",
-    src: "vidssave.com Calvin Harris - Feels ft. Pharrell Williams, Katy Perry, Big Sean LOW.mp3",
-    cover: "Feel.jpeg",
+    src: "/Audio/vidssave.com Calvin Harris - Feels ft. Pharrell Williams, Katy Perry, Big Sean LOW.mp3",
+    cover: "/assets/Feel.jpeg",
     labelColor: "#c9a227",
     vinylColor: "#1e1e24"
   },
   {
     title: "Day 1",
     artist: "Red Velvet",
-    src: "Day 1.mp3",
-    cover: "reze.png",
+    src: "/Audio/Day 1.mp3",
+    cover: "/assets/reze.png",
     labelColor: "#3a8a6a",
     vinylColor: "#1a2a1e"
   },
   {
     title: "Sweet Boy",
     artist: "Malcolm Todd",
-    src: "vidssave.com Malcolm Todd - Sweet Boy (Lyrics) LOW.mp3",
-    cover: "sweetboy.jpeg",
+    src: "/Audio/vidssave.com Malcolm Todd - Sweet Boy (Lyrics) LOW.mp3",
+    cover: "/assets/sweetboy.jpeg",
     labelColor: "#5b6ee1",
     vinylColor: "#1a2238"
   },
   {
     title: "Smile",
     artist: "Lily Allen",
-    src: "Smile.mp3",
-    cover: "Smile.jpeg",
+    src: "/Audio/Smile.mp3",
+    cover: "/assets/Smile.jpeg",
     labelColor: "#b65a9a",
     vinylColor: "#2a1a1e"
   }
@@ -2588,39 +2586,6 @@ const MAX_IMPORT_BACKUP_BYTES = 60 * 1024 * 1024;
 const MAX_IMPORTED_TRACKS = 150;
 const MAX_AUDIO_DATA_URL_CHARS = 18 * 1024 * 1024;
 const MAX_COVER_DATA_URL_CHARS = 7 * 1024 * 1024;
-const MAX_AUDIO_FILE_BYTES = 12 * 1024 * 1024;
-const MAX_COVER_FILE_BYTES = 5 * 1024 * 1024;
-const MAX_API_RESPONSE_BYTES = 2 * 1024 * 1024;
-const ALLOWED_REMOTE_MEDIA_HOSTS = new Set(['astuagdezahmuuwjoghf.supabase.co']);
-const ALLOWED_LYRICS_HOSTS = new Set(['lrclib.net', 'astuagdezahmuuwjoghf.supabase.co']);
-function isAllowedHost(url, hosts){
-  try { const u = new URL(url); return u.protocol === 'https:' && hosts.has(u.hostname); }
-  catch(e){ return false; }
-}
-async function fetchWithTimeout(url, options={}, timeoutMs=10000, maxBytes=MAX_API_RESPONSE_BYTES){
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const response = await fetch(url, {...options, signal: controller.signal, redirect: 'error'});
-    const len = Number(response.headers.get('content-length') || 0);
-    if(len && len > maxBytes) throw new Error('Response terlalu besar');
-    const text = await response.text();
-    if(text.length > maxBytes) throw new Error('Response terlalu besar');
-    return {response, text};
-  } finally { clearTimeout(timer); }
-}
-function hasMp3Signature(file){
-  return new Promise(resolve => {
-    try { const r=new FileReader(); r.onload=()=>{ const b=new Uint8Array(r.result||[]); resolve(b.length>=3 && ((b[0]===0x49&&b[1]===0x44&&b[2]===0x33) || (b[0]===0xff && (b[1]&0xe0)===0xe0))); }; r.onerror=()=>resolve(false); r.readAsArrayBuffer(file.slice(0,4)); }
-    catch(e){ resolve(false); }
-  });
-}
-function hasImageSignature(file){
-  return new Promise(resolve => {
-    try { const r=new FileReader(); r.onload=()=>{ const b=new Uint8Array(r.result||[]); const png=b.length>=8&&b[0]===0x89&&b[1]===0x50&&b[2]===0x4e&&b[3]===0x47; const jpg=b.length>=3&&b[0]===0xff&&b[1]===0xd8&&b[2]===0xff; resolve(png||jpg); }; r.onerror=()=>resolve(false); r.readAsArrayBuffer(file.slice(0,12)); }
-    catch(e){ resolve(false); }
-  });
-}
 const AUDIO_DATA_MIME_RE = /^(audio\/(mpeg|mp3|mpeg3|x-mpeg)|application\/octet-stream)$/i;
 const IMAGE_DATA_MIME_RE = /^image\/(png|jpe?g|webp)$/i;
 
@@ -2766,7 +2731,7 @@ async function addTop10ToCrate(idx){
 async function init() {
   try {
 
-  audio.volume = parseFloat(volumeInput.value) || 0.5;
+  audio.volume = parseFloat(volumeInput.value) || 0.82;
   await loadPlaylist();
   restoreState();
   renderPlaylist();
@@ -2816,7 +2781,7 @@ function safeExternalUrl(value, maxChars){
   if(typeof value !== 'string') return '';
   var u = value.trim();
   if(!u || u.length > (maxChars || 2048)) return '';
-  if(!isAllowedHost(u, ALLOWED_REMOTE_MEDIA_HOSTS)) return '';
+  if(!/^https?:\/\//i.test(u)) return '';
   if(/[\s"'<>\\]/.test(u)) return '';
   return u;
 }
@@ -3541,7 +3506,7 @@ function setupAddModal(){
         var functionUrl = String(SUPABASE_URL).trim().replace(/\/+$/, '')
           + '/functions/v1/' + SPOTIFY_FUNCTION_NAME;
 
-        var fetchResult = await fetchWithTimeout(functionUrl, {
+        var response = await fetch(functionUrl, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -3549,9 +3514,9 @@ function setupAddModal(){
             'apikey': String(SUPABASE_PUBLISHABLE_KEY).trim()
           },
           body: JSON.stringify({ url: url })
-        }, 10000, MAX_API_RESPONSE_BYTES);
-        var response = fetchResult.response;
-        var rawResponse = fetchResult.text;
+        });
+
+        var rawResponse = await response.text();
         var data = {};
         try {
           data = rawResponse ? JSON.parse(rawResponse) : {};
@@ -3721,8 +3686,7 @@ function setupAddModal(){
       showToast('Upload ditolak – hanya MP3');
       return;
     }
-    if(f.size > MAX_AUDIO_FILE_BYTES){
-      audioInput.value = ''; audioInput.setCustomValidity('Ukuran audio melebihi batas 12 MB');
+    if(f.size > 12 * 1024 * 1024){
       audioHint.textContent = '️ ' + f.name + ' • ' + formatBytes(f.size) + ' – >12MB, mungkin gagal simpan';
       audioHint.style.color = '#b36b00';
     } else {
@@ -3748,8 +3712,7 @@ function setupAddModal(){
       showToast('Cover ditolak – harus JPG/PNG');
       return;
     }
-    if(f.size > MAX_COVER_FILE_BYTES){
-      coverInput.value = ''; coverInput.setCustomValidity('Ukuran cover melebihi batas 5 MB');
+    if(f.size > 5 * 1024 * 1024){
       coverHint.textContent = '️ ' + f.name + ' • ' + formatBytes(f.size) + ' – >5MB, akan di-compress';
       coverHint.style.color = '#b36b00';
     } else {
@@ -3772,7 +3735,7 @@ function setupAddModal(){
     }
 
     if(af){
-      if(!isValidMp3(af) || af.size > MAX_AUDIO_FILE_BYTES || !(await hasMp3Signature(af))){
+      if(!isValidMp3(af)){
         alert('Upload ditolak.\n\nAudio harus file .mp3\nTerdeteksi: ' + (af.name||'unknown') + ' (' + (af.type||'no-mime') + ')');
         return;
       }
@@ -3783,7 +3746,7 @@ function setupAddModal(){
       }
     }
     if(cf){
-      if(!isValidCoverImage(cf) || cf.size > MAX_COVER_FILE_BYTES || !(await hasImageSignature(cf))){
+      if(!isValidCoverImage(cf)){
         alert('Cover ditolak.\n\nHarus JPG / JPEG / PNG\nTerdeteksi: ' + (cf.name||'') + ' (' + (cf.type||'') + ')');
         return;
       }
@@ -4726,12 +4689,12 @@ async function fetchLyricsFromAPI(artist, title) {
   if (!isSupabaseConfigured()) {
         try {
       const searchUrl = `https://lrclib.net/api/search?artist_name=${encodeURIComponent(artist)}&track_name=${encodeURIComponent(title)}`;
-      if(!isAllowedHost(searchUrl, ALLOWED_LYRICS_HOSTS)) return null;
-      const searchResult = await fetchWithTimeout(searchUrl, { headers: { "Accept": "application/json" } }, 10000, MAX_API_RESPONSE_BYTES);
-      const searchRes = searchResult.response;
+      const searchRes = await fetch(searchUrl, {
+        headers: { "User-Agent": "Chiroot/1.0" }
+      });
 
       if (!searchRes.ok) return null;
-      const searchData = JSON.parse(searchResult.text);
+      const searchData = await searchRes.json();
 
       if (!searchData || searchData.length === 0) return null;
 
@@ -4746,7 +4709,7 @@ async function fetchLyricsFromAPI(artist, title) {
   try {
     const functionUrl = String(SUPABASE_URL).trim().replace(/\/+$/, '') + '/functions/v1/get-lyrics';
 
-    const responseResult = await fetchWithTimeout(functionUrl, {
+    const response = await fetch(functionUrl, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -4754,11 +4717,10 @@ async function fetchLyricsFromAPI(artist, title) {
         'apikey': String(SUPABASE_PUBLISHABLE_KEY).trim()
       },
       body: JSON.stringify({ artist, title })
-    }, 10000, MAX_API_RESPONSE_BYTES);
-    const response = responseResult.response;
+    });
 
     if (!response.ok) return null;
-    const data = JSON.parse(responseResult.text);
+    const data = await response.json();
     return data.lyrics || null;
   } catch (e) {
     console.warn('Supabase get-lyrics error:', e);
@@ -4825,8 +4787,201 @@ if (btnRefreshLyrics) {
     }
   });
 }
+// Hybrid save file
+(function() {
+  const HANDLE_KEY = 'chiroot_dir_handle_v2';
+  const CRATE_FILE = 'crate.json';
+  let dirHandle = null;
 
+  async function getIDB() {
+    return new Promise((res, rej) => {
+      const req = indexedDB.open('chiroot-persist', 1);
+      req.onupgradeneeded = () => req.result.createObjectStore('handles');
+      req.onsuccess = () => res(req.result);
+      req.onerror = () => rej(req.error);
+    });
+  }
+  async function idbGetHandle() {
+    try {
+      const db = await getIDB();
+      return new Promise(r => {
+        const tx = db.transaction('handles', 'readonly');
+        const rq = tx.objectStore('handles').get(HANDLE_KEY);
+        rq.onsuccess = () => r(rq.result || null);
+        rq.onerror = () => r(null);
+      });
+    } catch { return null; }
+  }
+  async function idbSetHandle(h) {
+    try {
+      const db = await getIDB();
+      const tx = db.transaction('handles', 'readwrite');
+      tx.objectStore('handles').put(h, HANDLE_KEY);
+    } catch {}
+  }
 
+  async function pickLibraryFolder() {
+    if (!window.showDirectoryPicker) {
+      alert('WebView ini belum support File System Access API.\nSolusi cepat: rebuild exe pakai Electron + partition:persist');
+      return null;
+    }
+    try {
+      const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+      if (handle) {
+        await idbSetHandle(handle);
+        dirHandle = handle;
+        toast('📁 Folder disimpan: ' + handle.name);
+        renderCompact(handle);
+        saveToDisk(getCurrentTracks());
+        return handle;
+      }
+    } catch (e) {
+      if (e.name !== 'AbortError') console.error(e);
+    }
+    return null;
+  }
+
+  async function ensureHandle() {
+    if (dirHandle) return dirHandle;
+    dirHandle = await idbGetHandle();
+    if (dirHandle) {
+      try {
+        const perm = await dirHandle.queryPermission({ mode: 'readwrite' });
+        if (perm !== 'granted') {
+          const req = await dirHandle.requestPermission({ mode: 'readwrite' });
+          if (req !== 'granted') dirHandle = null;
+        }
+      } catch { dirHandle = null; }
+    }
+    return dirHandle;
+  }
+
+  function getCurrentTracks() {
+    try {
+      const raw = localStorage.getItem('gramophone_playlist_v2');
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  }
+
+  async function saveToDisk(tracks) {
+    if (!tracks) tracks = getCurrentTracks();
+    const handle = await ensureHandle();
+    if (!handle) return;
+    try {
+      const lite = tracks.map(t => ({
+        id: t.id,
+        title: t.title,
+        artist: t.artist,
+        labelColor: t.labelColor,
+        vinylColor: t.vinylColor,
+        srcName: t.fileName || (t.title + '.mp3'),
+        coverName: t.coverName || null,
+        isDemo: !!t.isDemo,
+        addedAt: t.addedAt
+      }));
+      const fileHandle = await handle.getFileHandle(CRATE_FILE, { create: true });
+      const writable = await fileHandle.createWritable();
+      await writable.write(JSON.stringify({ v:2, savedAt:new Date().toISOString(), count:lite.length, tracks:lite }, null, 0));
+      await writable.close();
+    } catch (e) {
+      console.warn('[Chiroot Disk Save Failed]', e);
+    }
+  }
+
+  async function loadFromDisk() {
+    const handle = await ensureHandle();
+    if (!handle) return null;
+    try {
+      const fileHandle = await handle.getFileHandle(CRATE_FILE, { create: false });
+      const file = await fileHandle.getFile();
+      const data = JSON.parse(await file.text());
+      return data.tracks || null;
+    } catch { return null; }
+  }
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    if (!t) { console.log(msg); return; }
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function renderCompact(handle) {
+    const container = document.getElementById('chiroot-disk-root');
+    if (!container) return;
+    if (handle) {
+      container.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;background:#eef6ff;border:2px solid #1a1a1a;border-radius:999px;padding:6px 10px 6px 12px;">
+          <span style="font-size:13px">📁</span>
+          <span style="font-family:'Kalam';font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px">${handle.name} ✓</span>
+          <span style="font-size:10px;background:#d6f0d9;border:1.5px solid #1a1a1a;border-radius:999px;padding:2px 6px">auto-save</span>
+          <button id="btn-change-folder" style="margin-left:auto;background:#fbf6e8;border:1.8px solid #1a1a1a;border-radius:999px;padding:3px 8px;font-size:11px;cursor:pointer">Ganti</button>
+        </div>
+      `;
+      container.querySelector('#btn-change-folder')?.addEventListener('click', pickLibraryFolder);
+    } else {
+      container.innerHTML = `
+        <div style="background:#fff8e3;border:2.5px solid #1a1a1a;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px">
+          <div style="flex:1;text-align:left">
+            <b style="font-size:14px">💾 Save untuk windows</b><br>
+            <span style="font-size:12px;color:#7a6548">Pilih folder sekali biar lagu gak hilang</span>
+          </div>
+          <button id="btn-pick-library" style="background:#fbf6e8;border:2px solid #1a1a1a;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;white-space:nowrap">📁 Pick Folder</button>
+        </div>
+      `;
+      container.querySelector('#btn-pick-library')?.addEventListener('click', pickLibraryFolder);
+    }
+  }
+
+  function injectUI() {
+    const check = setInterval(() => {
+      const settingsPanel = document.querySelector('.settings-tools, #settings-overlay .install-card, .paper-card');
+      if (!settingsPanel) return;
+      if (document.getElementById('chiroot-disk-root')) return;
+      const root = document.createElement('div');
+      root.id = 'chiroot-disk-root';
+      root.style.margin = '10px 0';
+      root.style.transition = 'all .3s';
+      settingsPanel.prepend(root);
+      renderCompact(null);
+      ensureHandle().then(h => { if (h) renderCompact(h); });
+      clearInterval(check);
+    }, 800);
+  }
+
+  // Hook save
+  const origSave = window.savePlaylist;
+  if (typeof origSave === 'function') {
+    window.savePlaylist = async function(...args) {
+      const r = await origSave.apply(this, args);
+      saveToDisk();
+      return r;
+    };
+  } else {
+    setInterval(() => saveToDisk(), 10000);
+  }
+
+  // Auto-restore kalau crate kosong
+  window.addEventListener('load', async () => {
+    setTimeout(async () => {
+      try {
+        const cur = getCurrentTracks();
+        if (cur.length === 0) {
+          const disk = await loadFromDisk();
+          if (disk && disk.length) {
+            localStorage.setItem('gramophone_playlist_v2', JSON.stringify(disk));
+            toast(`♻️ Restore ${disk.length} lagu dari folder!`);
+            setTimeout(() => location.reload(), 1000);
+          }
+        }
+      } catch {}
+    }, 2000);
+  });
+
+  injectUI();
+  window.ChirootDisk = { pickLibraryFolder, saveToDisk, loadFromDisk };
+})();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a21377d9d805fd37',t:'MTc4NTA2OTU3Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a208b2f9a90a3fca',t:'MTc4NDk1NjY1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
