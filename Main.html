@@ -4787,58 +4787,101 @@ if (btnRefreshLyrics) {
     }
   });
 }
-// Hybrid save file
+// Hybrid save file - Chiroot Windows Permanent Folder & Audio Fix
 (function() {
-  const HANDLE_KEY = 'chiroot_dir_handle_v2';
-  const CRATE_FILE = 'crate.json';
+  const HANDLE_KEY = "chiroot_dir_handle_v2";
+  const CRATE_FILE = "crate.json";
   let dirHandle = null;
 
+  function sanitizeFilename(name) {
+    if (!name) return "Untitled_Track.mp3";
+    let clean = name.replace(/[\\/:*?"<>|]/g, "_").replace(/\s+/g, " ").trim();
+    if (!clean.toLowerCase().endsWith(".mp3")) {
+      clean += ".mp3";
+    }
+    return clean;
+  }
+
+  async function trackToBlob(track) {
+    if (!track || !track.src) return null;
+    if (typeof track.src !== "string") return null;
+
+    if (track.src.startsWith("data:")) {
+      try {
+        const parts = track.src.split(",");
+        const mimeMatch = parts[0].match(/:(.*?);/);
+        const mime = mimeMatch ? mimeMatch[1] : "audio/mp3";
+        const bstr = atob(parts[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+      } catch (e) {
+        console.warn("[Chiroot Windows] Gagal konversi base64 audio:", e);
+        return null;
+      }
+    } else {
+      try {
+        const res = await fetch(track.src);
+        if (res.ok) {
+          return await res.blob();
+        }
+      } catch (e) {
+        console.warn("[Chiroot Windows] Gagal fetch URL audio:", e);
+      }
+    }
+    return null;
+  }
+
   async function getIDB() {
-    return new Promise((res, rej) => {
-      const req = indexedDB.open('chiroot-persist', 1);
-      req.onupgradeneeded = () => req.result.createObjectStore('handles');
-      req.onsuccess = () => res(req.result);
-      req.onerror = () => rej(req.error);
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error("IDB timeout di WebView2 Windows")), 2000);
+      try {
+        const req = indexedDB.open("chiroot-persist", 1);
+        req.onupgradeneeded = () => {
+          if (!req.result.objectStoreNames.contains("handles")) {
+            req.result.createObjectStore("handles");
+          }
+        };
+        req.onsuccess = () => {
+          clearTimeout(timer);
+          resolve(req.result);
+        };
+        req.onerror = () => {
+          clearTimeout(timer);
+          reject(req.error);
+        };
+      } catch (err) {
+        clearTimeout(timer);
+        reject(err);
+      }
     });
   }
+
   async function idbGetHandle() {
     try {
       const db = await getIDB();
-      return new Promise(r => {
-        const tx = db.transaction('handles', 'readonly');
-        const rq = tx.objectStore('handles').get(HANDLE_KEY);
-        rq.onsuccess = () => r(rq.result || null);
-        rq.onerror = () => r(null);
+      return new Promise(resolve => {
+        const tx = db.transaction("handles", "readonly");
+        const rq = tx.objectStore("handles").get(HANDLE_KEY);
+        rq.onsuccess = () => resolve(rq.result || null);
+        rq.onerror = () => resolve(null);
       });
-    } catch { return null; }
-  }
-  async function idbSetHandle(h) {
-    try {
-      const db = await getIDB();
-      const tx = db.transaction('handles', 'readwrite');
-      tx.objectStore('handles').put(h, HANDLE_KEY);
-    } catch {}
-  }
-
-  async function pickLibraryFolder() {
-    if (!window.showDirectoryPicker) {
-      alert('WebView ini belum support File System Access API.\nSolusi cepat: rebuild exe pakai Electron + partition:persist');
+    } catch {
       return null;
     }
+  }
+
+  async function idbSetHandleSafe(h) {
     try {
-      const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
-      if (handle) {
-        await idbSetHandle(handle);
-        dirHandle = handle;
-        toast('📁 Folder disimpan: ' + handle.name);
-        renderCompact(handle);
-        saveToDisk(getCurrentTracks());
-        return handle;
-      }
-    } catch (e) {
-      if (e.name !== 'AbortError') console.error(e);
+      const db = await getIDB();
+      const tx = db.transaction("handles", "readwrite");
+      tx.objectStore("handles").put(h, HANDLE_KEY);
+    } catch (err) {
+      console.warn("[Chiroot Windows] IDB simpan handle diabaikan di WebView Windows:", err.message || err);
     }
-    return null;
   }
 
   async function ensureHandle() {
@@ -4846,45 +4889,207 @@ if (btnRefreshLyrics) {
     dirHandle = await idbGetHandle();
     if (dirHandle) {
       try {
-        const perm = await dirHandle.queryPermission({ mode: 'readwrite' });
-        if (perm !== 'granted') {
-          const req = await dirHandle.requestPermission({ mode: 'readwrite' });
-          if (req !== 'granted') dirHandle = null;
+        const perm = await dirHandle.queryPermission({ mode: "readwrite" });
+        if (perm !== "granted") {
+          const req = await dirHandle.requestPermission({ mode: "readwrite" });
+          if (req !== "granted") {
+            dirHandle = null;
+          }
         }
-      } catch { dirHandle = null; }
+      } catch {
+        dirHandle = null;
+      }
     }
     return dirHandle;
   }
 
   function getCurrentTracks() {
     try {
-      const raw = localStorage.getItem('gramophone_playlist_v2');
-      return raw ? JSON.parse(raw) : [];
-    } catch { return []; }
+      if (typeof window.tracks !== "undefined" && Array.isArray(window.tracks) && window.tracks.length > 0) {
+        return window.tracks;
+      }
+      if (typeof tracks !== "undefined" && Array.isArray(tracks) && tracks.length > 0) {
+        return tracks;
+      }
+      const raw = localStorage.getItem("gramophone_playlist_v2");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn("[Chiroot Windows] getCurrentTracks error:", e);
+    }
+    return [];
+  }
+
+  function toast(msg) {
+    let t = document.getElementById("toast");
+    if (!t) {
+      t = document.createElement("div");
+      t.id = "toast";
+      t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#f7f3e9;padding:10px 20px;border-radius:999px;font-size:14px;z-index:999999;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:opacity 0.3s;opacity:0;pointer-events:none;";
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = "1";
+    setTimeout(() => { t.style.opacity = "0"; }, 3500);
+  }
+
+  function renderCompact(handleOrName) {
+    const container = document.getElementById("chiroot-disk-root");
+    if (!container) return;
+
+    let folderName = null;
+    if (handleOrName && typeof handleOrName === "object" && handleOrName.name) {
+      folderName = handleOrName.name;
+      try {
+        localStorage.setItem("chiroot_saved_folder_name", folderName);
+      } catch (e) {}
+    } else if (typeof handleOrName === "string" && handleOrName.trim() !== "") {
+      folderName = handleOrName.trim();
+    } else {
+      try {
+        folderName = localStorage.getItem("chiroot_saved_folder_name");
+      } catch (e) {}
+    }
+
+    if (folderName) {
+      container.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;background:#eef6ff;border:2px solid #1a1a1a;border-radius:999px;padding:6px 10px 6px 12px;">
+          <span style="font-size:13px">📁</span>
+          <span style="font-family:'Kalam';font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;font-weight:700;color:#1a1a1a">${folderName} ✓</span>
+          <span style="font-size:10px;background:#d6f0d9;border:1.5px solid #1a1a1a;border-radius:999px;padding:2px 6px;color:#1a1a1a;font-weight:700">auto-save</span>
+          <button id="btn-change-folder" style="margin-left:auto;background:#fbf6e8;border:1.8px solid #1a1a1a;border-radius:999px;padding:3px 8px;font-size:11px;cursor:pointer;font-weight:700">Ganti</button>
+        </div>
+      `;
+      const btnGanti = container.querySelector("#btn-change-folder");
+      if (btnGanti) {
+        btnGanti.addEventListener("click", pickLibraryFolder);
+      }
+    } else {
+      container.innerHTML = `
+        <div style="background:#fff8e3;border:2.5px solid #1a1a1a;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px">
+          <div style="flex:1;text-align:left">
+            <b style="font-size:14px">💾 Save Permanen</b><br>
+            <span style="font-size:12px;color:#7a6548">Pilih folder sekali biar lagu & MP3 gak hilang</span>
+          </div>
+          <button id="btn-pick-library" style="background:#fbf6e8;border:2px solid #1a1a1a;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;white-space:nowrap">📁 Pick Folder</button>
+        </div>
+      `;
+      const btnPick = container.querySelector("#btn-pick-library");
+      if (btnPick) {
+        btnPick.addEventListener("click", pickLibraryFolder);
+      }
+    }
+  }
+
+  async function pickLibraryFolder() {
+    if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.pick_folder === "function") {
+      try {
+        const folderPath = await window.pywebview.api.pick_folder();
+        if (folderPath) {
+          toast("📁 Folder disimpan: " + folderPath);
+          renderCompact(folderPath);
+          return folderPath;
+        }
+        return null;
+      } catch (errPy) {
+        console.warn("[Chiroot Windows] Pywebview pick_folder fallback:", errPy);
+      }
+    }
+
+    if (!window.showDirectoryPicker) {
+      alert("WebView Windows ini belum mengaktifkan File System Access API.\n\nTips: Di script pywebview Python, tambahkan:\nwebview.settings['ALLOW_FILE_URLS'] = True");
+      return null;
+    }
+
+    let handle = null;
+    try {
+      handle = await window.showDirectoryPicker({ mode: "readwrite" });
+    } catch (e1) {
+      if (e1 && e1.name === "AbortError") return null;
+      try {
+        handle = await window.showDirectoryPicker();
+        if (handle && handle.requestPermission) {
+          const perm = await handle.requestPermission({ mode: "readwrite" });
+          if (perm !== "granted") {
+            alert("Izin write (tulis) ke folder tidak diberikan.");
+            return null;
+          }
+        }
+      } catch (e2) {
+        if (e2 && e2.name !== "AbortError") {
+          console.error("[Chiroot Windows] Error saat memilih folder:", e2);
+          alert("Gagal membuka folder di Windows: " + (e2.message || e2));
+        }
+        return null;
+      }
+    }
+
+    if (handle) {
+      dirHandle = handle;
+      window.__chiroot_dir_handle = handle;
+
+      // 1. LANGSUNG UPDATE UI DAN TOAST SEBELUM OPERASI INDEXEDDB! (Mencegah Gak Ke Ganti UI di Windows)
+      toast("📁 Folder disimpan: " + handle.name);
+      renderCompact(handle);
+
+      // 2. Simpan ke IndexedDB di background secara aman
+      idbSetHandleSafe(handle);
+
+      // 3. Simpan semua lagu & MP3 fisik ke dalam folder
+      await saveToDisk(getCurrentTracks());
+      return handle;
+    }
+    return null;
   }
 
   async function saveToDisk(tracks) {
-    if (!tracks) tracks = getCurrentTracks();
+    if (!tracks || !Array.isArray(tracks) || tracks.length === 0) {
+      tracks = getCurrentTracks();
+    }
     const handle = await ensureHandle();
-    if (!handle) return;
+    if (!handle) return false;
+
     try {
-      const lite = tracks.map(t => ({
-        id: t.id,
-        title: t.title,
-        artist: t.artist,
-        labelColor: t.labelColor,
-        vinylColor: t.vinylColor,
-        srcName: t.fileName || (t.title + '.mp3'),
-        coverName: t.coverName || null,
-        isDemo: !!t.isDemo,
-        addedAt: t.addedAt
-      }));
+      // 1. Simpan crate.json dengan data lagu LENGKAP agar tetap berbunyi saat direstore
       const fileHandle = await handle.getFileHandle(CRATE_FILE, { create: true });
       const writable = await fileHandle.createWritable();
-      await writable.write(JSON.stringify({ v:2, savedAt:new Date().toISOString(), count:lite.length, tracks:lite }, null, 0));
+      const payload = {
+        v: 2,
+        savedAt: new Date().toISOString(),
+        count: (tracks ? tracks.length : 0),
+        tracks: (tracks || [])
+      };
+      await writable.write(JSON.stringify(payload, null, 2));
       await writable.close();
-    } catch (e) {
-      console.warn('[Chiroot Disk Save Failed]', e);
+
+      // 2. Simpan file MP3 fisik ke folder yang dipilih pengguna di Windows
+      if (Array.isArray(tracks) && tracks.length > 0) {
+        let savedMp3Count = 0;
+        for (const t of tracks) {
+          try {
+            const blob = await trackToBlob(t);
+            if (blob && blob.size > 100) {
+              const fileName = sanitizeFilename((t.artist ? t.artist + " - " : "") + t.title);
+              const trackHandle = await handle.getFileHandle(fileName, { create: true });
+              const trackWritable = await trackHandle.createWritable();
+              await trackWritable.write(blob);
+              await trackWritable.close();
+              savedMp3Count++;
+            }
+          } catch (errMp3) {
+            console.warn("[Chiroot Windows] Gagal menulis file mp3:", t.title, errMp3);
+          }
+        }
+        if (savedMp3Count > 0) {
+          console.log(`[Chiroot Windows] Berhasil menyimpan ${savedMp3Count} file .mp3 ke folder ${handle.name}`);
+        }
+      }
+      return true;
+    } catch (err) {
+      console.warn("[Chiroot Windows] Gagal menyimpan ke folder Windows:", err);
+      return false;
     }
   }
 
@@ -4894,96 +5099,106 @@ if (btnRefreshLyrics) {
     try {
       const fileHandle = await handle.getFileHandle(CRATE_FILE, { create: false });
       const file = await fileHandle.getFile();
-      const data = JSON.parse(await file.text());
-      return data.tracks || null;
-    } catch { return null; }
-  }
-
-  function toast(msg) {
-    const t = document.getElementById('toast');
-    if (!t) { console.log(msg); return; }
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
-  function renderCompact(handle) {
-    const container = document.getElementById('chiroot-disk-root');
-    if (!container) return;
-    if (handle) {
-      container.innerHTML = `
-        <div style="display:flex;align-items:center;gap:8px;background:#eef6ff;border:2px solid #1a1a1a;border-radius:999px;padding:6px 10px 6px 12px;">
-          <span style="font-size:13px">📁</span>
-          <span style="font-family:'Kalam';font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px">${handle.name} ✓</span>
-          <span style="font-size:10px;background:#d6f0d9;border:1.5px solid #1a1a1a;border-radius:999px;padding:2px 6px">auto-save</span>
-          <button id="btn-change-folder" style="margin-left:auto;background:#fbf6e8;border:1.8px solid #1a1a1a;border-radius:999px;padding:3px 8px;font-size:11px;cursor:pointer">Ganti</button>
-        </div>
-      `;
-      container.querySelector('#btn-change-folder')?.addEventListener('click', pickLibraryFolder);
-    } else {
-      container.innerHTML = `
-        <div style="background:#fff8e3;border:2.5px solid #1a1a1a;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px">
-          <div style="flex:1;text-align:left">
-            <b style="font-size:14px">💾 Save Permanen</b><br>
-            <span style="font-size:12px;color:#7a6548">Pilih folder sekali biar lagu gak hilang</span>
-          </div>
-          <button id="btn-pick-library" style="background:#fbf6e8;border:2px solid #1a1a1a;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;white-space:nowrap">📁 Pick Folder</button>
-        </div>
-      `;
-      container.querySelector('#btn-pick-library')?.addEventListener('click', pickLibraryFolder);
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (data && Array.isArray(data.tracks) && data.tracks.length > 0) {
+        return data.tracks;
+      }
+      return null;
+    } catch (err) {
+      console.warn("[Chiroot Windows] Gagal membaca crate.json:", err);
+      return null;
     }
+  }
+
+  window.ChirootDisk = {
+    pickLibraryFolder,
+    saveToDisk,
+    loadFromDisk,
+    renderCompact,
+    getCurrentTracks
+  };
+
+  const origSave = window.savePlaylist;
+  if (typeof origSave === "function") {
+    window.savePlaylist = async function(...args) {
+      const result = await origSave.apply(this, args);
+      try {
+        await saveToDisk();
+      } catch (e) {}
+      return result;
+    };
+  } else {
+    setInterval(() => {
+      try { saveToDisk(); } catch (e) {}
+    }, 10000);
   }
 
   function injectUI() {
     const check = setInterval(() => {
-      const settingsPanel = document.querySelector('.settings-tools, #settings-overlay .install-card, .paper-card');
+      const settingsPanel = document.querySelector(".settings-tools, #settings-overlay .install-card, .paper-card");
       if (!settingsPanel) return;
-      if (document.getElementById('chiroot-disk-root')) return;
-      const root = document.createElement('div');
-      root.id = 'chiroot-disk-root';
-      root.style.margin = '10px 0';
-      root.style.transition = 'all .3s';
+      if (document.getElementById("chiroot-disk-root")) {
+        clearInterval(check);
+        return;
+      }
+      const root = document.createElement("div");
+      root.id = "chiroot-disk-root";
+      root.style.margin = "10px 0";
+      root.style.transition = "all .3s";
       settingsPanel.prepend(root);
-      renderCompact(null);
-      ensureHandle().then(h => { if (h) renderCompact(h); });
+
+      let savedName = null;
+      try {
+        savedName = localStorage.getItem("chiroot_saved_folder_name");
+      } catch (e) {}
+
+      if (savedName) {
+        renderCompact(savedName);
+      } else {
+        renderCompact(null);
+      }
+
+      ensureHandle().then(h => {
+        if (h) {
+          renderCompact(h);
+        }
+      });
       clearInterval(check);
     }, 800);
   }
 
-  // Hook save
-  const origSave = window.savePlaylist;
-  if (typeof origSave === 'function') {
-    window.savePlaylist = async function(...args) {
-      const r = await origSave.apply(this, args);
-      saveToDisk();
-      return r;
-    };
-  } else {
-    setInterval(() => saveToDisk(), 10000);
-  }
-
-  // Auto-restore kalau crate kosong
-  window.addEventListener('load', async () => {
+  window.addEventListener("load", () => {
+    injectUI();
     setTimeout(async () => {
       try {
         const cur = getCurrentTracks();
-        if (cur.length === 0) {
-          const disk = await loadFromDisk();
-          if (disk && disk.length) {
-            localStorage.setItem('gramophone_playlist_v2', JSON.stringify(disk));
-            toast(`♻️ Restore ${disk.length} lagu dari folder!`);
-            setTimeout(() => location.reload(), 1000);
+        if (!cur || cur.length === 0) {
+          const diskTracks = await loadFromDisk();
+          if (diskTracks && diskTracks.length > 0) {
+            window.tracks = diskTracks;
+            try {
+              localStorage.setItem("gramophone_playlist_v2", JSON.stringify(diskTracks));
+            } catch (e) {}
+            if (typeof window.savePlaylist === "function") {
+              await window.savePlaylist();
+            }
+            toast(`♻️ Berhasil memulihkan ${diskTracks.length} lagu dari folder!`);
+            if (typeof window.renderPlaylist === "function") window.renderPlaylist();
+            if (typeof window.loadTrack === "function") window.loadTrack(0, false, false);
           }
         }
-      } catch {}
-    }, 2000);
+      } catch (errRest) {
+        console.warn("[Chiroot Windows] Auto-restore gagal:", errRest);
+      }
+    }, 1500);
   });
 
-  injectUI();
-  window.ChirootDisk = { pickLibraryFolder, saveToDisk, loadFromDisk };
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    injectUI();
+  }
 })();
-
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a208b2f9a90a3fca',t:'MTc4NDk1NjY1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script src="chiroot-windows-patch.js"></script>
-</body>
+<script src="chiroot-windows-patch.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a222ed3cff269d08',t:'MTc4NTIzMTY3MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
