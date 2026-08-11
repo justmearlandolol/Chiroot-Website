@@ -1948,6 +1948,24 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
         height: 34px;
       }
     }
+.backup-dock{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin:4px auto 18px;
+  max-width:700px;
+  padding:11px 13px;
+  background:linear-gradient(180deg,#fffaf0,#f6ead0);
+  box-shadow:0 4px 14px rgba(118,86,36,.09);
+}
+.backup-dock-copy{display:flex;flex-direction:column;gap:1px;min-width:0;font-family:'Kalam',sans-serif;color:#5b4630;}
+.backup-dock-copy strong{font-family:'Caveat',cursive;font-size:25px;line-height:1;color:#1a1a1a;}
+.backup-dock-copy span:last-child{font-size:12px;color:#7a6548;}
+.backup-dock-kicker{font-size:10px!important;letter-spacing:.12em;text-transform:uppercase;color:#a47b2c!important;}
+.backup-dock-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.backup-dock-actions .btn-primary,.backup-dock-actions .btn-secondary{font-size:15px;padding:8px 12px;white-space:nowrap;}
+@media(max-width:560px){.backup-dock{align-items:stretch;flex-direction:column;margin-bottom:14px}.backup-dock-actions{justify-content:stretch}.backup-dock-actions button{flex:1}}
 </style>
 </head>
 <body>
@@ -2023,6 +2041,19 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       <div class="corner-doodle tr">✧</div>
       <div class="corner-doodle bl">✧</div>
       <div class="corner-doodle br">✦</div>
+
+      <section class="backup-dock sketch-border-soft" aria-label="Backup dan Restore JSON">
+        <div class="backup-dock-copy">
+          <span class="backup-dock-kicker">✦ Save Your song</span>
+          <strong>Backup &amp; Restore ZIP</strong>
+          <span>Simpan atau pulihkan koleksi kamu</span>
+        </div>
+        <div class="backup-dock-actions">
+          <button type="button" class="btn-primary sketch-border-soft" id="btn-export-data">↓ Backup ZIP</button>
+          <button type="button" class="btn-secondary sketch-border-soft" id="btn-import-data">↑ Restore ZIP</button>
+          <input type="file" id="input-import-file" accept="application/zip,.zip,application/json,.json" style="display:none;">
+        </div>
+      </section>
 
       <header class="track-header">
         <div class="vinyl-stamp">33⅓ RPM</div>
@@ -2245,7 +2276,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       </section>
 
       <footer class="player-footer">
-        <span>Made by Arlando D.A and My lovely Team :3</span>
+        <span>Made by ChirootDevTeam</span>
         <span class="footer-dot">✦</span>
       </footer>
     </div>
@@ -2409,20 +2440,11 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   <div class="modal-overlay" id="settings-modal" aria-hidden="true">
     <div class="modal-card sketch-border" style="max-width:480px;">
       <button class="modal-close sketchy" id="btn-settings-close" aria-label="Close">✕</button>
-      <h3 class="modal-title">⚙️ Settings & Tools</h3>
-      <p class="modal-sub">Manage your Crate and data.</p>
+      <h3 class="modal-title">⚙️ Backup & Restore</h3>
+      <p class="modal-sub">Pilih cara aman untuk memindahkan Crate kamu.</p>
 
       <div style="display:flex; flex-direction:column; gap:16px; margin-top:10px;">
-        <div class="report-box">
-          <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;"> Data Portability</div>
-          <p style="font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630; margin: 4px 0 12px;">Backup koleksi lagu kamu ke file .json untuk dipindahkan ke browser/HP lain.</p>
 
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button type="button" class="btn-primary sketch-border-soft" id="btn-export-data"> Backup Crate</button>
-            <button type="button" class="btn-secondary sketch-border-soft" id="btn-import-data"> Restore Crate</button>
-            <input type="file" id="input-import-file" accept=".json" style="display:none;">
-          </div>
-        </div>
 
         <div class="report-box" style="background:#fff4f0;">
           <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">️ Danger Zone</div>
@@ -2540,7 +2562,7 @@ const TOP10_SONGS = [
   {
     title: "Niscaya",
     artist: "Bilal Indrajaya",
-    src: "vidssave.com Bilal Indrajaya - Niscaya (Official Lyric Video) LOW.mp3",
+    src: "/vidssave.com Bilal Indrajaya - Niscaya (Official Lyric Video) LOW.mp3",
     cover: "niscaya.jpg",
     labelColor: "#d84a3a",
     vinylColor: "#1e1e24"
@@ -2573,7 +2595,7 @@ const TOP10_SONGS = [
     title: "Smile",
     artist: "Lily Allen",
     src: "Smile.mp3",
-    cover: "Smile.jpeg",
+    cover: "/Smile.jpeg",
     labelColor: "#b65a9a",
     vinylColor: "#2a1a1e"
   }
@@ -2582,7 +2604,7 @@ const TOP10_SONGS = [
 const LS_KEY = 'gramophone_playlist_v2';
 const LS_STATE = 'gramophone_state_v2';
 
-const MAX_IMPORT_BACKUP_BYTES = 60 * 1024 * 1024;
+const MAX_IMPORT_BACKUP_BYTES = 200 * 1024 * 1024;
 const MAX_IMPORTED_TRACKS = 150;
 const MAX_AUDIO_DATA_URL_CHARS = 18 * 1024 * 1024;
 const MAX_COVER_DATA_URL_CHARS = 7 * 1024 * 1024;
@@ -4459,6 +4481,97 @@ function hideMonthlyReportModal(){
     modal.setAttribute('aria-hidden', 'true');
   }
 }
+function zipCrc32(bytes){
+  var c = -1;
+  for(var i=0;i<bytes.length;i++){
+    c ^= bytes[i];
+    for(var j=0;j<8;j++) c = (c >>> 1) ^ (c & 1 ? 0xEDB88320 : 0);
+  }
+  return (c ^ -1) >>> 0;
+}
+function zipU16(view, offset){ return view.getUint16(offset, true); }
+function zipU32(view, offset){ return view.getUint32(offset, true); }
+function zipDataUrlToBytes(value){
+  var comma = value.indexOf(',');
+  var raw = atob(value.slice(comma + 1));
+  var bytes = new Uint8Array(raw.length);
+  for(var i=0;i<raw.length;i++) bytes[i] = raw.charCodeAt(i);
+  return bytes;
+}
+function zipExtFromDataUrl(value, fallback){
+  var type = String(value.slice(5, value.indexOf(';'))).toLowerCase();
+  if(type.includes('png')) return 'png';
+  if(type.includes('webp')) return 'webp';
+  if(type.includes('jpeg') || type.includes('jpg')) return 'jpg';
+  if(type.includes('mpeg') || type.includes('mp3')) return 'mp3';
+  return fallback;
+}
+function zipSafeName(value){ return String(value || 'track').replace(/[^a-z0-9_-]/gi,'_').slice(0,60) || 'track'; }
+async function createCrateZip(backup){
+  var files = [];
+  var manifest = { version:2, exportedAt:backup.exportedAt, tracks:[] };
+  backup.tracks.forEach(function(track, index){
+    var item = Object.assign({}, track);
+    var stem = String(index + 1).padStart(3,'0') + '-' + zipSafeName(track.id || track.title);
+    if(typeof track.src === 'string' && track.src.startsWith('data:')){
+      var audioPath = 'audio/' + stem + '.' + zipExtFromDataUrl(track.src, 'mp3');
+      files.push({name:audioPath, bytes:zipDataUrlToBytes(track.src)});
+      item.src = audioPath;
+    }
+    if(typeof track.cover === 'string' && track.cover.startsWith('data:')){
+      var coverPath = 'covers/' + stem + '.' + zipExtFromDataUrl(track.cover, 'jpg');
+      files.push({name:coverPath, bytes:zipDataUrlToBytes(track.cover)});
+      item.cover = coverPath;
+    }
+    manifest.tracks.push(item);
+  });
+  files.unshift({name:'crate.json', bytes:new TextEncoder().encode(JSON.stringify(manifest))});
+  var local = [], central = [], offset = 0;
+  files.forEach(function(file){
+    var name = new TextEncoder().encode(file.name), bytes = file.bytes, crc = zipCrc32(bytes);
+    var head = new Uint8Array(30 + name.length);
+    var view = new DataView(head.buffer);
+    view.setUint32(0,0x04034b50,true); view.setUint16(4,20,true); view.setUint16(6,0,true); view.setUint16(8,0,true);
+    view.setUint32(14,crc,true); view.setUint32(18,bytes.length,true); view.setUint32(22,bytes.length,true);
+    view.setUint16(26,name.length,true); name.forEach(function(v,i){head[30+i]=v;});
+    local.push(head,bytes);
+    var dir = new Uint8Array(46 + name.length), dv = new DataView(dir.buffer);
+    dv.setUint32(0,0x02014b50,true); dv.setUint16(4,20,true); dv.setUint16(6,20,true); dv.setUint16(8,0,true); dv.setUint16(10,0,true);
+    dv.setUint32(16,crc,true); dv.setUint32(20,bytes.length,true); dv.setUint32(24,bytes.length,true); dv.setUint16(28,name.length,true); dv.setUint32(42,offset,true);
+    name.forEach(function(v,i){dir[46+i]=v;}); central.push(dir); offset += head.length + bytes.length;
+  });
+  var centralSize = central.reduce(function(n,v){return n+v.length;},0), end = new Uint8Array(22), endView = new DataView(end.buffer);
+  endView.setUint32(0,0x06054b50,true); endView.setUint16(8,files.length,true); endView.setUint16(10,files.length,true); endView.setUint32(12,centralSize,true); endView.setUint32(16,offset,true);
+  return new Blob(local.concat(central,[end]),{type:'application/zip'});
+}
+async function readCrateZip(file){
+  var bytes = new Uint8Array(await file.arrayBuffer()), view = new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength), end = -1;
+  for(var i=bytes.length-22;i>=Math.max(0,bytes.length-65557);i--){ if(zipU32(view,i)===0x06054b50){end=i;break;} }
+  if(end<0) throw new Error('File ZIP tidak valid.');
+  var total=zipU16(view,end+10), pos=zipU32(view,end+16), decoder=new TextDecoder(), map={};
+  for(var n=0;n<total;n++){
+    if(zipU32(view,pos)!==0x02014b50) throw new Error('Struktur ZIP tidak valid.');
+    var method=zipU16(view,pos+10), size=zipU32(view,pos+24), nameLen=zipU16(view,pos+28), extraLen=zipU16(view,pos+30), commentLen=zipU16(view,pos+32), localOffset=zipU32(view,pos+42);
+    if(method!==0) throw new Error('ZIP ini memakai kompresi yang belum didukung. Buat backup dari Chiroot.');
+    var name=decoder.decode(bytes.slice(pos+46,pos+46+nameLen)), localNameLen=zipU16(view,localOffset+26), localExtraLen=zipU16(view,localOffset+28), dataStart=localOffset+30+localNameLen+localExtraLen;
+    map[name]=bytes.slice(dataStart,dataStart+size); pos+=46+nameLen+extraLen+commentLen;
+  }
+  if(!map['crate.json']) throw new Error('crate.json tidak ditemukan dalam ZIP.');
+  var manifest=JSON.parse(decoder.decode(map['crate.json']));
+  if(!manifest || !Array.isArray(manifest.tracks)) throw new Error('Manifest backup tidak valid.');
+  manifest.tracks.forEach(function(track){
+    ['src','cover'].forEach(function(key){
+      if(typeof track[key] === 'string' && map[track[key]]){
+        var path=track[key], ext=path.split('.').pop().toLowerCase(), mime=key==='src'?'audio/mpeg':(ext==='png'?'image/png':ext==='webp'?'image/webp':'image/jpeg');
+        var raw=map[path], binary='';
+        for(var j=0;j<raw.length;j+=32768) binary+=String.fromCharCode.apply(null,raw.subarray(j,j+32768));
+        track[key]='data:'+mime+';base64,'+btoa(binary);
+      }
+    });
+  });
+  return manifest.tracks;
+}
+
 function setupSettings(){
   const modal = $('#settings-modal');
   const btnOpen = $('#btn-settings-open');
@@ -4480,95 +4593,56 @@ function setupSettings(){
   if(modal) modal.addEventListener('click', (e) => { if(e.target === modal) close(); });
 
   $('#btn-export-data').addEventListener('click', async () => {
-    const data = await idbGet('playlist');
-    if(!data || data.length === 0) return alert("Crate masih kosong!");
-    const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
+    const data = Array.isArray(tracks) && tracks.length ? tracks : await idbGet('playlist');
+    if(!data || data.length === 0) return alert('Crate masih kosong!');
+    const backup = { version: 1, exportedAt: new Date().toISOString(), tracks: data };
+    const blob = await createCrateZip(backup);
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'doodle-gramophone-crate.json';
+    a.download = 'chiroot-crate-' + new Date().toISOString().slice(0,10) + '.zip';
     a.rel = 'noopener noreferrer';
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showToast("Crate berhasil di-backup! ");
+    showToast('Backup ZIP berhasil dibuat ✦');
   });
 
   const inputImport = $('#input-import-file');
   $('#btn-import-data').addEventListener('click', () => inputImport.click());
-  inputImport.addEventListener('change', (e) => {
+  inputImport.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     const clearImportInput = () => { inputImport.value = ''; };
-    if(!file) return;
-
-    const fileName = (file.name || '').toLowerCase();
-    const fileType = (file.type || '').toLowerCase();
-    const typeLooksSafe = !fileType || fileType === 'application/json' || fileType === 'text/json' || fileType === 'text/plain' || fileType === 'application/octet-stream';
-
-    if(!/\.json$/i.test(fileName)){
-      alert('Restore ditolak: file backup harus berekstensi .json');
-      clearImportInput();
-      return;
-    }
-    if(!typeLooksSafe){
-      alert('Restore ditolak: tipe file bukan JSON (' + fileType + ').');
-      clearImportInput();
-      return;
-    }
-    if(file.size > MAX_IMPORT_BACKUP_BYTES){
-      alert('Restore ditolak: file backup terlalu besar (' + formatBytes(file.size) + '). Maksimal ' + formatBytes(MAX_IMPORT_BACKUP_BYTES) + '.');
-      clearImportInput();
-      return;
-    }
-    if(!consumeClientRateLimit('importBackup', RATE_LIMITS.importBackup)){
-      clearImportInput();
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const rawText = String(event.target.result || '');
-        if(rawText.length > MAX_IMPORT_BACKUP_BYTES * 1.4){
-          throw new Error('Ukuran isi JSON terlalu besar.');
-        }
-
-        const parsed = JSON.parse(rawText);
-        const importList = extractImportTrackList(parsed);
-        if(!importList) {
-          alert('Format file tidak valid. Backup harus berupa array track atau object { tracks: [...] }.');
-          return;
-        }
-
-        const sanitized = sanitizeCrate(importList);
-        const dropped = importList.length - sanitized.length;
-        if(!sanitized.length){
-          alert('Tidak ada track valid di backup. Audio harus berupa data:audio/mpeg;base64, data:audio/mp3;base64, atau data:application/octet-stream;base64.');
-          return;
-        }
-
-        const limited = importList.length > MAX_IMPORTED_TRACKS ? ' Import dibatasi ke ' + MAX_IMPORTED_TRACKS + ' track pertama.' : '';
-        const droppedMsg = dropped > 0 ? '\n\nCatatan: ' + dropped + ' track/field tidak valid dibuang demi keamanan.' : '';
-        if(!confirm('Restore akan mengganti semua lagu di Crate saat ini dengan ' + sanitized.length + ' track valid.' + limited + droppedMsg + '\n\nLanjut?')) return;
-
-        tracks = sanitized;
-        currentIndex = 0;
-        await savePlaylist();
-        renderPlaylist();
-        renderTop10();
-        loadTrack(0, false, true);
-        showToast('Crate berhasil dipulihkan dengan aman! ');
-        close();
-      } catch(err) {
-        alert('Gagal membaca file backup: ' + (err && err.message ? err.message : err));
-      } finally {
-        clearImportInput();
+    try {
+      if(!file) return;
+      if(file.size > MAX_IMPORT_BACKUP_BYTES) throw new Error('File backup terlalu besar. Maksimal ' + formatBytes(MAX_IMPORT_BACKUP_BYTES) + '.');
+      if(!consumeClientRateLimit('importBackup', RATE_LIMITS.importBackup)) return;
+      var isZip = /\.zip$/i.test(file.name || '') || file.type === 'application/zip';
+      var importList;
+      if(isZip){
+        importList = await readCrateZip(file);
+      } else if(/\.json$/i.test(file.name || '')) {
+        importList = extractImportTrackList(JSON.parse(await file.text()));
+      } else {
+        throw new Error('Pilih file backup .zip atau .json.');
       }
-    };
-    reader.onerror = () => {
-      alert('Gagal membaca file backup.');
-      clearImportInput();
-    };
-    reader.readAsText(file, 'UTF-8');
+      if(!importList) throw new Error('Format backup tidak valid.');
+      const sanitized = sanitizeCrate(importList);
+      const dropped = importList.length - sanitized.length;
+      if(!sanitized.length) throw new Error('Tidak ada track valid di backup.');
+      const limited = importList.length > MAX_IMPORTED_TRACKS ? ' Import dibatasi ke ' + MAX_IMPORTED_TRACKS + ' track pertama.' : '';
+      const droppedMsg = dropped > 0 ? '\n\n' + dropped + ' track tidak valid dibuang.' : '';
+      if(!confirm('Restore akan mengganti Crate saat ini dengan ' + sanitized.length + ' track.' + limited + droppedMsg + '\n\nLanjut?')) return;
+      tracks = sanitized;
+      currentIndex = 0;
+      await savePlaylist();
+      renderPlaylist();
+      renderTop10();
+      loadTrack(0, false, true);
+      showToast('Crate berhasil dipulihkan ✦');
+      close();
+    } catch(err) {
+      alert('Gagal memulihkan backup: ' + (err && err.message ? err.message : err));
+    } finally { clearImportInput(); }
   });
 
   $('#btn-reset-settings').addEventListener('click', () => {
@@ -4787,418 +4861,8 @@ if (btnRefreshLyrics) {
     }
   });
 }
-// Hybrid save file - Chiroot Windows Permanent Folder & Audio Fix
-(function() {
-  const HANDLE_KEY = "chiroot_dir_handle_v2";
-  const CRATE_FILE = "crate.json";
-  let dirHandle = null;
 
-  function sanitizeFilename(name) {
-    if (!name) return "Untitled_Track.mp3";
-    let clean = name.replace(/[\\/:*?"<>|]/g, "_").replace(/\s+/g, " ").trim();
-    if (!clean.toLowerCase().endsWith(".mp3")) {
-      clean += ".mp3";
-    }
-    return clean;
-  }
-
-  async function trackToBlob(track) {
-    if (!track || !track.src) return null;
-    if (typeof track.src !== "string") return null;
-
-    if (track.src.startsWith("data:")) {
-      try {
-        const parts = track.src.split(",");
-        const mimeMatch = parts[0].match(/:(.*?);/);
-        const mime = mimeMatch ? mimeMatch[1] : "audio/mp3";
-        const bstr = atob(parts[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
-        return new Blob([u8arr], { type: mime });
-      } catch (e) {
-        console.warn("[Chiroot Windows] Gagal konversi base64 audio:", e);
-        return null;
-      }
-    } else {
-      try {
-        const res = await fetch(track.src);
-        if (res.ok) {
-          return await res.blob();
-        }
-      } catch (e) {
-        console.warn("[Chiroot Windows] Gagal fetch URL audio:", e);
-      }
-    }
-    return null;
-  }
-
-  async function getIDB() {
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => reject(new Error("IDB timeout di WebView2 Windows")), 2000);
-      try {
-        const req = indexedDB.open("chiroot-persist", 1);
-        req.onupgradeneeded = () => {
-          if (!req.result.objectStoreNames.contains("handles")) {
-            req.result.createObjectStore("handles");
-          }
-        };
-        req.onsuccess = () => {
-          clearTimeout(timer);
-          resolve(req.result);
-        };
-        req.onerror = () => {
-          clearTimeout(timer);
-          reject(req.error);
-        };
-      } catch (err) {
-        clearTimeout(timer);
-        reject(err);
-      }
-    });
-  }
-
-  async function idbGetHandle() {
-    try {
-      const db = await getIDB();
-      return new Promise(resolve => {
-        const tx = db.transaction("handles", "readonly");
-        const rq = tx.objectStore("handles").get(HANDLE_KEY);
-        rq.onsuccess = () => resolve(rq.result || null);
-        rq.onerror = () => resolve(null);
-      });
-    } catch {
-      return null;
-    }
-  }
-
-  async function idbSetHandleSafe(h) {
-    try {
-      const db = await getIDB();
-      const tx = db.transaction("handles", "readwrite");
-      tx.objectStore("handles").put(h, HANDLE_KEY);
-    } catch (err) {
-      console.warn("[Chiroot Windows] IDB simpan handle diabaikan di WebView Windows:", err.message || err);
-    }
-  }
-
-  async function ensureHandle() {
-    if (dirHandle) return dirHandle;
-    dirHandle = await idbGetHandle();
-    if (dirHandle) {
-      try {
-        const perm = await dirHandle.queryPermission({ mode: "readwrite" });
-        if (perm !== "granted") {
-          const req = await dirHandle.requestPermission({ mode: "readwrite" });
-          if (req !== "granted") {
-            dirHandle = null;
-          }
-        }
-      } catch {
-        dirHandle = null;
-      }
-    }
-    return dirHandle;
-  }
-
-  function getCurrentTracks() {
-    try {
-      if (typeof window.tracks !== "undefined" && Array.isArray(window.tracks) && window.tracks.length > 0) {
-        return window.tracks;
-      }
-      if (typeof tracks !== "undefined" && Array.isArray(tracks) && tracks.length > 0) {
-        return tracks;
-      }
-      const raw = localStorage.getItem("gramophone_playlist_v2");
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch (e) {
-      console.warn("[Chiroot Windows] getCurrentTracks error:", e);
-    }
-    return [];
-  }
-
-  function toast(msg) {
-    let t = document.getElementById("toast");
-    if (!t) {
-      t = document.createElement("div");
-      t.id = "toast";
-      t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#f7f3e9;padding:10px 20px;border-radius:999px;font-size:14px;z-index:999999;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:opacity 0.3s;opacity:0;pointer-events:none;";
-      document.body.appendChild(t);
-    }
-    t.textContent = msg;
-    t.style.opacity = "1";
-    setTimeout(() => { t.style.opacity = "0"; }, 3500);
-  }
-
-  function renderCompact(handleOrName) {
-    const container = document.getElementById("chiroot-disk-root");
-    if (!container) return;
-
-    let folderName = null;
-    if (handleOrName && typeof handleOrName === "object" && handleOrName.name) {
-      folderName = handleOrName.name;
-      try {
-        localStorage.setItem("chiroot_saved_folder_name", folderName);
-      } catch (e) {}
-    } else if (typeof handleOrName === "string" && handleOrName.trim() !== "") {
-      folderName = handleOrName.trim();
-    } else {
-      try {
-        folderName = localStorage.getItem("chiroot_saved_folder_name");
-      } catch (e) {}
-    }
-
-    if (folderName) {
-      container.innerHTML = `
-        <div style="display:flex;align-items:center;gap:8px;background:#eef6ff;border:2px solid #1a1a1a;border-radius:999px;padding:6px 10px 6px 12px;">
-          <span style="font-size:13px">📁</span>
-          <span style="font-family:'Kalam';font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;font-weight:700;color:#1a1a1a">${folderName} ✓</span>
-          <span style="font-size:10px;background:#d6f0d9;border:1.5px solid #1a1a1a;border-radius:999px;padding:2px 6px;color:#1a1a1a;font-weight:700">auto-save</span>
-          <button id="btn-change-folder" style="margin-left:auto;background:#fbf6e8;border:1.8px solid #1a1a1a;border-radius:999px;padding:3px 8px;font-size:11px;cursor:pointer;font-weight:700">Ganti</button>
-        </div>
-      `;
-      const btnGanti = container.querySelector("#btn-change-folder");
-      if (btnGanti) {
-        btnGanti.addEventListener("click", pickLibraryFolder);
-      }
-    } else {
-      container.innerHTML = `
-        <div style="background:#fff8e3;border:2.5px solid #1a1a1a;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px">
-          <div style="flex:1;text-align:left">
-            <b style="font-size:14px">💾 Save Permanen</b><br>
-            <span style="font-size:12px;color:#7a6548">Pilih folder sekali biar lagu & MP3 gak hilang</span>
-          </div>
-          <button id="btn-pick-library" style="background:#fbf6e8;border:2px solid #1a1a1a;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;white-space:nowrap">📁 Pick Folder</button>
-        </div>
-      `;
-      const btnPick = container.querySelector("#btn-pick-library");
-      if (btnPick) {
-        btnPick.addEventListener("click", pickLibraryFolder);
-      }
-    }
-  }
-
-  async function pickLibraryFolder() {
-    if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.pick_folder === "function") {
-      try {
-        const folderPath = await window.pywebview.api.pick_folder();
-        if (folderPath) {
-          toast("📁 Folder disimpan: " + folderPath);
-          renderCompact(folderPath);
-          return folderPath;
-        }
-        return null;
-      } catch (errPy) {
-        console.warn("[Chiroot Windows] Pywebview pick_folder fallback:", errPy);
-      }
-    }
-
-    if (!window.showDirectoryPicker) {
-      alert("WebView Windows ini belum mengaktifkan File System Access API.\n\nTips: Di script pywebview Python, tambahkan:\nwebview.settings['ALLOW_FILE_URLS'] = True");
-      return null;
-    }
-
-    let handle = null;
-    try {
-      handle = await window.showDirectoryPicker({ mode: "readwrite" });
-    } catch (e1) {
-      if (e1 && e1.name === "AbortError") return null;
-      try {
-        handle = await window.showDirectoryPicker();
-        if (handle && handle.requestPermission) {
-          const perm = await handle.requestPermission({ mode: "readwrite" });
-          if (perm !== "granted") {
-            alert("Izin write (tulis) ke folder tidak diberikan.");
-            return null;
-          }
-        }
-      } catch (e2) {
-        if (e2 && e2.name !== "AbortError") {
-          console.error("[Chiroot Windows] Error saat memilih folder:", e2);
-          alert("Gagal membuka folder di Windows: " + (e2.message || e2));
-        }
-        return null;
-      }
-    }
-
-    if (handle) {
-      dirHandle = handle;
-      window.__chiroot_dir_handle = handle;
-
-      // 1. LANGSUNG UPDATE UI DAN TOAST SEBELUM OPERASI INDEXEDDB! (Mencegah Gak Ke Ganti UI di Windows)
-      toast("📁 Folder disimpan: " + handle.name);
-      renderCompact(handle);
-
-      // 2. Simpan ke IndexedDB di background secara aman
-      idbSetHandleSafe(handle);
-
-      // 3. Simpan semua lagu & MP3 fisik ke dalam folder
-      await saveToDisk(getCurrentTracks());
-      return handle;
-    }
-    return null;
-  }
-
-  async function saveToDisk(tracks) {
-    if (!tracks || !Array.isArray(tracks) || tracks.length === 0) {
-      tracks = getCurrentTracks();
-    }
-    const handle = await ensureHandle();
-    if (!handle) return false;
-
-    try {
-      // 1. Simpan crate.json dengan data lagu LENGKAP agar tetap berbunyi saat direstore
-      const fileHandle = await handle.getFileHandle(CRATE_FILE, { create: true });
-      const writable = await fileHandle.createWritable();
-      const payload = {
-        v: 2,
-        savedAt: new Date().toISOString(),
-        count: (tracks ? tracks.length : 0),
-        tracks: (tracks || [])
-      };
-      await writable.write(JSON.stringify(payload, null, 2));
-      await writable.close();
-
-      // 2. Simpan file MP3 fisik ke folder yang dipilih pengguna di Windows
-      if (Array.isArray(tracks) && tracks.length > 0) {
-        let savedMp3Count = 0;
-        for (const t of tracks) {
-          try {
-            const blob = await trackToBlob(t);
-            if (blob && blob.size > 100) {
-              const fileName = sanitizeFilename((t.artist ? t.artist + " - " : "") + t.title);
-              const trackHandle = await handle.getFileHandle(fileName, { create: true });
-              const trackWritable = await trackHandle.createWritable();
-              await trackWritable.write(blob);
-              await trackWritable.close();
-              savedMp3Count++;
-            }
-          } catch (errMp3) {
-            console.warn("[Chiroot Windows] Gagal menulis file mp3:", t.title, errMp3);
-          }
-        }
-        if (savedMp3Count > 0) {
-          console.log(`[Chiroot Windows] Berhasil menyimpan ${savedMp3Count} file .mp3 ke folder ${handle.name}`);
-        }
-      }
-      return true;
-    } catch (err) {
-      console.warn("[Chiroot Windows] Gagal menyimpan ke folder Windows:", err);
-      return false;
-    }
-  }
-
-  async function loadFromDisk() {
-    const handle = await ensureHandle();
-    if (!handle) return null;
-    try {
-      const fileHandle = await handle.getFileHandle(CRATE_FILE, { create: false });
-      const file = await fileHandle.getFile();
-      const text = await file.text();
-      const data = JSON.parse(text);
-      if (data && Array.isArray(data.tracks) && data.tracks.length > 0) {
-        return data.tracks;
-      }
-      return null;
-    } catch (err) {
-      console.warn("[Chiroot Windows] Gagal membaca crate.json:", err);
-      return null;
-    }
-  }
-
-  window.ChirootDisk = {
-    pickLibraryFolder,
-    saveToDisk,
-    loadFromDisk,
-    renderCompact,
-    getCurrentTracks
-  };
-
-  const origSave = window.savePlaylist;
-  if (typeof origSave === "function") {
-    window.savePlaylist = async function(...args) {
-      const result = await origSave.apply(this, args);
-      try {
-        await saveToDisk();
-      } catch (e) {}
-      return result;
-    };
-  } else {
-    setInterval(() => {
-      try { saveToDisk(); } catch (e) {}
-    }, 10000);
-  }
-
-  function injectUI() {
-    const check = setInterval(() => {
-      const settingsPanel = document.querySelector(".settings-tools, #settings-overlay .install-card, .paper-card");
-      if (!settingsPanel) return;
-      if (document.getElementById("chiroot-disk-root")) {
-        clearInterval(check);
-        return;
-      }
-      const root = document.createElement("div");
-      root.id = "chiroot-disk-root";
-      root.style.margin = "10px 0";
-      root.style.transition = "all .3s";
-      settingsPanel.prepend(root);
-
-      let savedName = null;
-      try {
-        savedName = localStorage.getItem("chiroot_saved_folder_name");
-      } catch (e) {}
-
-      if (savedName) {
-        renderCompact(savedName);
-      } else {
-        renderCompact(null);
-      }
-
-      ensureHandle().then(h => {
-        if (h) {
-          renderCompact(h);
-        }
-      });
-      clearInterval(check);
-    }, 800);
-  }
-
-  window.addEventListener("load", () => {
-    injectUI();
-    setTimeout(async () => {
-      try {
-        const cur = getCurrentTracks();
-        if (!cur || cur.length === 0) {
-          const diskTracks = await loadFromDisk();
-          if (diskTracks && diskTracks.length > 0) {
-            window.tracks = diskTracks;
-            try {
-              localStorage.setItem("gramophone_playlist_v2", JSON.stringify(diskTracks));
-            } catch (e) {}
-            if (typeof window.savePlaylist === "function") {
-              await window.savePlaylist();
-            }
-            toast(`♻️ Berhasil memulihkan ${diskTracks.length} lagu dari folder!`);
-            if (typeof window.renderPlaylist === "function") window.renderPlaylist();
-            if (typeof window.loadTrack === "function") window.loadTrack(0, false, false);
-          }
-        }
-      } catch (errRest) {
-        console.warn("[Chiroot Windows] Auto-restore gagal:", errRest);
-      }
-    }, 1500);
-  });
-
-  if (document.readyState === "complete" || document.readyState === "interactive") {
-    injectUI();
-  }
-})();
 </script>
-<script src="chiroot-windows-patch.js"></script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a222ed3cff269d08',t:'MTc4NTIzMTY3MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a208b2f9a90a3fca',t:'MTc4NDk1NjY1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a265e69f8fb1fe09',t:'MTc4NTkzMzk0Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
