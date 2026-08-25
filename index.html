@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="Logos-removebg-preview.png">
+  <link rel="icon" type="image/png" href="/assets/Logos-removebg-preview.png">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#1a1a1a">
   <meta name="mobile-web-app-capable" content="yes">
@@ -69,7 +69,7 @@
   <nav class="site-nav" aria-label="Navigasi utama">
     <div class="nav-inner">
       <a class="brand" href="#top">
-        <img src="Logos-removebg-preview.png" class="brand-mark" alt="Chiroot">
+        <img src="/assets/Logos-removebg-preview.png" class="brand-mark" alt="Chiroot">
         <div class="brand-text"><span>Chiroot</span> Audio</div>
       </a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Buka menu" aria-expanded="false">
@@ -222,6 +222,9 @@
                 <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
               </svg>
             </button>
+            <button class="ctrl-btn" id="btn-reverb" title="Reverb" aria-label="Reverb">
+              <svg fill="currentColor" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M30.991 22.044c0-0.017 0.005-0.033 0.005-0.051v-20.845c0.012-0.109 0.008-0.223-0.018-0.336-0.085-0.466-0.492-0.82-0.982-0.82-0.184 0-0.355 0.053-0.503 0.14l-18.683 4.864c-0.337 0.083-0.586 0.335-0.688 0.646-0.078 0.142-0.125 0.302-0.125 0.475v17.892c-0.952-0.637-2.169-1.020-3.496-1.020-3.048 0-5.52 2.019-5.52 4.509s2.472 4.51 5.52 4.51c3.049 0 5.519-2.019 5.519-4.51 0-0.127-0.011-0.252-0.023-0.377v-20.367l17-4.425v16.68c-0.951-0.637-2.169-1.020-3.496-1.020-3.048 0-5.52 2.020-5.52 4.508 0 2.49 2.472 4.509 5.52 4.509s5.519-2.019 5.519-4.51c-0-0.154-0.010-0.305-0.028-0.453zM6.522 29.998c-2.080 0-3.53-1.318-3.53-2.5s1.45-2.498 3.53-2.498c1.851 0 3.2 1.044 3.475 2.106v0.012c0 0.101 0.020 0.197 0.048 0.288 0.002 0.031 0.007 0.061 0.007 0.093 0 1.181-1.45 2.5-3.529 2.5zM25.49 24.999c-2.061 0-3.499-1.318-3.499-2.5s1.437-2.498 3.498-2.498c2.061 0 3.498 1.317 3.498 2.498s-1.436 2.5-3.498 2.5z"></path></svg>
+            </button>
           </div>
 
           <div class="progress-wrap">
@@ -293,7 +296,7 @@
           <div class="corner-doodle tr">✦</div>
           <div class="feature-icon">🎛</div>
           <h3>Kontrol Lengkap</h3>
-          <p>Play/Pause, Stop, Restart, Prev/Next, Shuffle, Loop, Volume + Mute, dan seek bar yang bisa di-drag.</p>
+          <p>Play/Pause, Stop, Restart, Prev/Next, Shuffle, Loop, Volume + Mute, Reverb, dan seek bar yang bisa di-drag.</p>
         </article>
         <article class="feature-card sketch-border-soft">
           <div class="corner-doodle bl">✦</div>
@@ -355,7 +358,7 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <div class="brand">
-          <img src="Logos-removebg-preview.png" class="brand-mark" alt="Chiroot">
+          <img src="/assets/Logos-removebg-preview.png" class="brand-mark" alt="Chiroot">
           <div class="brand-text"><span>Chiroot</span> Audio</div>
         </div>
         <p>Your Free Spotify alternatives.</p>
@@ -387,7 +390,7 @@
   <audio id="audio" preload="metadata"></audio>
 
   <script>
-const PREVIEW_TRACKS=[{title:"DAY 1",artist:"Red Velvet",audio:"Day 1.mp3",cover:"reze.png",startTime:50,previewSeconds:30,labelColor:"#d84a3a"}];
+const PREVIEW_TRACKS=[{title:"DAY 1",artist:"Red Velvet",audio:"/Audio/Day 1.mp3",cover:"/assets/reze.png",startTime:50,previewSeconds:30,labelColor:"#d84a3a"}];
 const ICON_PLAY='<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><polygon points="7,5 20,12 7,19"/></svg>';
 const ICON_PAUSE='<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
 const ICON_VOL_HIGH='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
@@ -439,6 +442,60 @@ navLinks.querySelectorAll("a").forEach(function(a){a.addEventListener("click",fu
 document.addEventListener("keydown",function(e){if(e.target.matches("input,textarea"))return;switch(e.code){case"Space":e.preventDefault();if(isPlaying)pausePreview();else playPreview();break;case"ArrowLeft":e.preventDefault();prevTrack();break;case"ArrowRight":e.preventDefault();nextTrack();break;case"KeyS":btnShuffle.click();break;case"KeyL":btnLoop.click();break;case"KeyM":btnMute.click();break;case"KeyR":restartPreview();break}});
 document.addEventListener("click",unlockAudio,{once:true});
 audio.volume=parseFloat(volumeInput.value)||0.82;volumeLabel.textContent=Math.round(audio.volume*100)+"%";muteIcon.innerHTML=ICON_VOL_HIGH;applyTrack(PREVIEW_TRACKS[0],0);
+  </script>
+  <script>
+(function () {
+  var reverbAudio = document.getElementById('audio');
+  var reverbBtn = document.getElementById('btn-reverb');
+  if (!reverbAudio || !reverbBtn) return;
+  var rctx = null, rWet = null, rBuilt = false, rOn = false;
+  function rBuild() {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return false;
+    try {
+      rctx = new AC();
+      var rSrc = rctx.createMediaElementSource(reverbAudio);
+      var rConv = rctx.createConvolver();
+      var rLen = Math.floor(rctx.sampleRate * 2.4);
+      var rImp = rctx.createBuffer(2, rLen, rctx.sampleRate);
+      for (var rCh = 0; rCh < 2; rCh++) {
+        var rData = rImp.getChannelData(rCh);
+        for (var rI = 0; rI < rLen; rI++) {
+          rData[rI] = (Math.random() * 2 - 1) * Math.pow(1 - rI / rLen, 3);
+        }
+      }
+      rConv.buffer = rImp;
+      var rDry = rctx.createGain();
+      rDry.gain.value = 1;
+      var rSend = rctx.createGain();
+      rSend.gain.value = 0.85;
+      rWet = rctx.createGain();
+      rWet.gain.value = 0;
+      rSrc.connect(rDry);
+      rDry.connect(rctx.destination);
+      rSrc.connect(rConv);
+      rConv.connect(rSend);
+      rSend.connect(rWet);
+      rWet.connect(rctx.destination);
+      rBuilt = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function rSet(next) {
+    if (next && !rBuilt && !rBuild()) return;
+    if (rctx && rctx.state === 'suspended') rctx.resume();
+    rOn = next;
+    if (rBuilt && rWet) {
+      rWet.gain.cancelScheduledValues(rctx.currentTime);
+      rWet.gain.setTargetAtTime(next ? 0.9 : 0, rctx.currentTime, 0.05);
+    }
+    reverbBtn.classList.toggle('active', rOn);
+    if (typeof showToast === 'function') showToast(next ? 'Reverb aktif ✦' : 'Reverb nonaktif');
+  }
+  reverbBtn.addEventListener('click', function () { rSet(!rOn); });
+})();
   </script>
   <script>
     if ('serviceWorker' in navigator) {
@@ -784,5 +841,5 @@ audio.volume=parseFloat(volumeInput.value)||0.82;volumeLabel.textContent=Math.ro
       });
     })();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a213e6bbddeead69',t:'MTc4NTA3NDExOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a21c10684cb7243f',t:'MTc4NTE1OTcxMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a213e6bbddeead69',t:'MTc4NTA3NDExOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a21c10684cb7243f',t:'MTc4NTE1OTcxMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30affc328abf8fe',t:'MTc4NzY2NTEyNg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
