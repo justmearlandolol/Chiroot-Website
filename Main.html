@@ -1550,14 +1550,10 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   font-size: 8.5px;
   text-align: center;
   line-height: 1.05;
-  pointer-events: auto;
-  transition: transform .2s ease;
+  pointer-events: none;
+  user-select: none;
+  transition: none;
   white-space: nowrap;
-}
-
-.gramo-sticker:hover {
-  transform: rotate(var(--rot, -6deg)) scale(1.1) translateY(-1px);
-  box-shadow: 3px 5px 0 #c8b78a;
 }
 
 .sticker-1 {
@@ -1645,11 +1641,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   display: block;
   line-height: 1;
   margin-top: 2px;
-}
-
-.sticker-3.chopper-sticker:hover {
-  transform: rotate(-5deg) scale(1.08);
-  box-shadow: 2px 4px 0 #c8b78a, 0 0 0 3px #fffaf0;
 }
 
 .sticker-4 {
@@ -1997,6 +1988,220 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 .backup-dock-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
 .backup-dock-actions .btn-primary,.backup-dock-actions .btn-secondary{font-size:15px;padding:8px 12px;white-space:nowrap;}
 @media(max-width:560px){.backup-dock{align-items:stretch;flex-direction:column;margin-bottom:14px}.backup-dock-actions{justify-content:stretch}.backup-dock-actions button{flex:1}}
+.gramo-stickers,
+.gramo-stickers *{
+  pointer-events:none!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+  -webkit-user-drag:none!important;
+  touch-action:none;
+}
+.bluetooth-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  background:#edf3fb;
+  border-color:#4f6792;
+  color:#273d66;
+  box-shadow:0 3px 0 #9caccc;
+}
+.bluetooth-btn:hover{background:#f4f7fd;}
+.bluetooth-btn svg{width:20px;height:20px;flex-shrink:0;}
+.settings-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:46px;
+  padding-left:11px;
+  padding-right:11px;
+}
+.settings-button svg{width:23px;height:23px;display:block;flex-shrink:0;}
+.settings-modal-title,
+.bluetooth-modal-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.settings-modal-title svg{width:32px;height:32px;flex-shrink:0;}
+.bluetooth-modal-title svg{width:30px;height:30px;flex-shrink:0;}
+.bluetooth-modal-card{max-width:540px;}
+.bluetooth-status-card{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  padding:12px 13px;
+  margin:4px 0 14px;
+  background:#fffaf0;
+  border:2px solid #1a1a1a;
+  border-radius:14px 12px 15px 13px / 12px 14px 12px 15px;
+}
+.bluetooth-status-dot{
+  width:11px;
+  height:11px;
+  margin-top:5px;
+  border-radius:50%;
+  flex-shrink:0;
+  background:#c1ad88;
+  box-shadow:0 0 0 3px rgba(193,173,136,.18);
+}
+.bluetooth-status-dot[data-state="connected"]{
+  background:#3a8a6a;
+  box-shadow:0 0 0 3px rgba(58,138,106,.18);
+}
+.bluetooth-status-dot[data-state="ready"]{
+  background:#c9a227;
+  box-shadow:0 0 0 3px rgba(201,162,39,.18);
+}
+.bluetooth-status-dot[data-state="error"],
+.bluetooth-status-dot[data-state="disconnected"]{
+  background:#d84a3a;
+  box-shadow:0 0 0 3px rgba(216,74,58,.16);
+}
+.bluetooth-status-copy{min-width:0;display:flex;flex-direction:column;gap:1px;}
+.bluetooth-status-copy strong{font-family:'Kalam',sans-serif;font-size:15px;color:#2d271f;}
+.bluetooth-status-copy span{font-family:'Kalam',sans-serif;font-size:12.5px;color:#77644d;line-height:1.35;}
+.bluetooth-list-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 2px 7px;
+  font-family:'Kalam',sans-serif;
+  font-size:13px;
+  color:#66523b;
+}
+.bluetooth-device-count{
+  background:#f4e7c9;
+  border:1.6px solid #3b2a14;
+  border-radius:999px;
+  padding:1px 8px;
+  min-width:27px;
+  text-align:center;
+  color:#4e3c25;
+}
+.bluetooth-device-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  max-height:258px;
+  overflow:auto;
+  padding:9px;
+  background:#fffcf5;
+  border:2px solid #1a1a1a;
+  border-radius:17px 14px 18px 15px / 14px 17px 14px 18px;
+}
+.bluetooth-device{
+  width:100%;
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  padding:10px 11px;
+  border:2px solid #332b20;
+  border-radius:14px 12px 15px 13px / 12px 14px 12px 15px;
+  background:#fff9ee;
+  color:#2d271f;
+  text-align:left;
+  cursor:pointer;
+  font-family:inherit;
+  transition:transform .12s ease,background .15s ease,box-shadow .15s ease;
+}
+.bluetooth-device:hover{
+  transform:translateY(-1px);
+  background:#fff2d5;
+  box-shadow:0 3px 8px rgba(80,54,20,.09);
+}
+.bluetooth-device:active{transform:translateY(1px);}
+.bluetooth-device[aria-current="true"]{
+  background:#eaf5ed;
+  border-color:#3a8a6a;
+  box-shadow:inset 0 0 0 1px rgba(58,138,106,.18);
+}
+.bluetooth-device:disabled{cursor:wait;opacity:.62;transform:none;}
+.bluetooth-device-icon{
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1.9px solid #1a1a1a;
+  border-radius:50%;
+  background:#f3ead8;
+}
+.bluetooth-device-icon svg{width:21px;height:21px;display:block;}
+.bluetooth-device-copy{min-width:0;display:flex;flex-direction:column;gap:1px;}
+.bluetooth-device-name{
+  font-family:'Patrick Hand',sans-serif;
+  font-size:17px;
+  line-height:1.1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.bluetooth-device-detail{
+  font-family:'Kalam',sans-serif;
+  font-size:11.5px;
+  color:#78664e;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.bluetooth-device-side{display:flex;align-items:flex-end;flex-direction:column;gap:4px;}
+.bluetooth-device-badge{
+  font-family:'Kalam',sans-serif;
+  font-size:10px;
+  color:#315d7a;
+  background:#e7f2f8;
+  border:1.4px solid #557991;
+  border-radius:999px;
+  padding:1px 6px;
+  white-space:nowrap;
+}
+.bluetooth-device-state{
+  font-family:'Kalam',sans-serif;
+  font-size:10.5px;
+  color:#3a8a6a;
+  white-space:nowrap;
+}
+.bluetooth-empty{
+  padding:22px 12px;
+  text-align:center;
+  font-family:'Kalam',sans-serif;
+  font-size:13px;
+  line-height:1.45;
+  color:#806c54;
+  border:2px dashed #c9b88a;
+  border-radius:13px;
+  background:#fffdf8;
+}
+.bluetooth-modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:13px;
+}
+.bluetooth-modal-actions button{display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+.bluetooth-modal-actions svg{width:18px;height:18px;}
+.bluetooth-note{
+  margin:12px 2px 0;
+  font-family:'Kalam',sans-serif;
+  font-size:11.5px;
+  line-height:1.45;
+  color:#8a755c;
+}
+@media(max-width:560px){
+  .bluetooth-btn span{display:none;}
+  .bluetooth-btn{min-width:44px;padding-left:10px;padding-right:10px;}
+  .bluetooth-modal-card{max-width:95%;}
+  .bluetooth-device{grid-template-columns:38px minmax(0,1fr);}
+  .bluetooth-device-icon{width:36px;height:36px;}
+  .bluetooth-device-side{grid-column:2;align-items:flex-start;flex-direction:row;flex-wrap:wrap;}
+  .bluetooth-modal-actions{justify-content:stretch;}
+  .bluetooth-modal-actions button{flex:1;min-width:120px;}
+}
 </style>
 </head>
 <body>
@@ -2104,7 +2309,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
         <div class="gramophone-wrap">
 
-          <div class="gramo-stickers">
+          <div class="gramo-stickers" aria-hidden="true" inert>
 
             <div class="gramo-sticker sticker-1 sketch-border-tiny">
               <span class="sticker-text">NOW<br>SPINNING</span>
@@ -2279,7 +2484,14 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
           <h2 class="playlist-title">The Crate <span class="crate-count" id="crate-count">• 0 records</span></h2>
           <div class="playlist-actions">
           <button class="share-btn sketch-border-soft" id="btn-share" title="Share doodle card">✦ Share</button>
-          <button class="share-btn sketch-border-soft" id="btn-settings-open" title="Settings & Backup">⚙️</button>
+          <button type="button" class="share-btn bluetooth-btn sketch-border-soft" id="btn-bluetooth-open" title="Pilih headset Bluetooth" aria-label="Pilih headset Bluetooth">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M7 17L17 7L12 2V22L17 17L7 7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
+            <span>Bluetooth</span>
+          </button>
+          <button type="button" class="share-btn settings-button sketch-border-soft" id="btn-settings-open" title="Settings & Backup" aria-label="Settings & Backup">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" aria-hidden="true"><path d="M 50,15 C 53,16 54,23 57,24 C 61,23 64,19 68,21 C 71,23 69,29 71,32 C 75,34 80,33 82,37 C 83,41 78,45 78,48 C 79,52 84,54 83,59 C 82,62 76,62 74,66 C 74,70 77,75 74,78 C 71,81 66,78 63,79 C 60,82 59,88 54,88 C 50,87 49,81 46,80 C 42,81 38,85 34,83 C 31,81 33,75 31,72 C 27,70 22,71 20,67 C 19,63 24,59 24,56 C 23,52 18,50 19,45 C 20,41 26,42 28,38 C 28,34 25,29 28,26 C 31,23 36,26 39,25 C 42,22 43,16 48,15 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M 50,38 C 57,37 63,42 63,49 C 64,56 57,63 49,62 C 42,62 37,56 38,49 C 39,42 44,39 50,38 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span class="sr-only">Settings & Backup</span>
+          </button>
           <button class="add-btn sketch-border-soft" id="btn-add-open">
             <span class="plus">+</span> Add Music
           </button>
@@ -2467,10 +2679,49 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
     </div>
   </div>
 
+  <div class="modal-overlay" id="bluetooth-modal" aria-hidden="true">
+    <div class="modal-card bluetooth-modal-card sketch-border" role="dialog" aria-modal="true" aria-labelledby="bluetooth-modal-title">
+      <button type="button" class="modal-close sketchy" id="btn-bluetooth-close" aria-label="Tutup">✕</button>
+      <h3 class="modal-title bluetooth-modal-title" id="bluetooth-modal-title">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g id="SVGRepo_bgCarrier_modal" stroke-width="0"></g><g id="SVGRepo_tracerCarrier_modal" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier_modal"><path d="M7 17L17 7L12 2V22L17 17L7 7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
+        <span>Bluetooth Headset</span>
+      </h3>
+      <p class="modal-sub">Cek output audio yang tersedia, lalu klik perangkat untuk langsung dipakai player.</p>
+
+      <div class="bluetooth-status-card" role="status" aria-live="polite">
+        <span class="bluetooth-status-dot" id="bluetooth-status-dot" data-state="idle"></span>
+        <div class="bluetooth-status-copy">
+          <strong id="bluetooth-status-title">Memeriksa perangkat audio…</strong>
+          <span id="bluetooth-status-detail">Tunggu sebentar.</span>
+        </div>
+      </div>
+
+      <div class="bluetooth-list-heading">
+        <span>Perangkat output terdeteksi</span>
+        <span class="bluetooth-device-count" id="bluetooth-device-count">0</span>
+      </div>
+      <div class="bluetooth-device-list" id="bluetooth-device-list" aria-live="polite">
+        <div class="bluetooth-empty">Tekan “Pilih headset” untuk memberi izin dan menampilkan perangkat audio.</div>
+      </div>
+
+      <div class="bluetooth-modal-actions">
+        <button type="button" class="btn-secondary sketch-border-soft" id="btn-bluetooth-refresh">↻ Refresh</button>
+               <button type="button" class="btn-secondary sketch-border-soft" id="btn-bluetooth-default">Output default</button>
+        <button type="button" class="btn-primary sketch-border-soft" id="btn-bluetooth-pick">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g id="SVGRepo_bgCarrier_pick" stroke-width="0"></g><g id="SVGRepo_tracerCarrier_pick" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier_pick"><path d="M7 17L17 7L12 2V22L17 17L7 7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
+          <span>Pilih headset</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="settings-modal" aria-hidden="true">
     <div class="modal-card sketch-border" style="max-width:480px;">
       <button class="modal-close sketchy" id="btn-settings-close" aria-label="Close">✕</button>
-      <h3 class="modal-title">⚙️ Backup & Restore</h3>
+      <h3 class="modal-title settings-modal-title">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" aria-hidden="true"><path d="M 50,15 C 53,16 54,23 57,24 C 61,23 64,19 68,21 C 71,23 69,29 71,32 C 75,34 80,33 82,37 C 83,41 78,45 78,48 C 79,52 84,54 83,59 C 82,62 76,62 74,66 C 74,70 77,75 74,78 C 71,81 66,78 63,79 C 60,82 59,88 54,88 C 50,87 49,81 46,80 C 42,81 38,85 34,83 C 31,81 33,75 31,72 C 27,70 22,71 20,67 C 19,63 24,59 24,56 C 23,52 18,50 19,45 C 20,41 26,42 28,38 C 28,34 25,29 28,26 C 31,23 36,26 39,25 C 42,22 43,16 48,15 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M 50,38 C 57,37 63,42 63,49 C 64,56 57,63 49,62 C 42,62 37,56 38,49 C 39,42 44,39 50,38 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Backup & Restore</span>
+      </h3>
       <p class="modal-sub">Pilih untuk memindahkan Crate kamu.</p>
 
       <div style="display:flex; flex-direction:column; gap:16px; margin-top:10px;">
@@ -4927,6 +5178,13 @@ if (btnRefreshLyrics) {
     if (!AC) return false;
     try {
       rctx = new AC();
+      window.__chirootAudioContext = rctx;
+      try {
+        var savedOutput = JSON.parse(localStorage.getItem('chiroot_audio_output_v1') || '{}');
+        if (savedOutput.deviceId && typeof rctx.setSinkId === 'function') {
+          rctx.setSinkId(savedOutput.deviceId).catch(function () {});
+        }
+      } catch (e) {}
       var rSrc = rctx.createMediaElementSource(reverbAudio);
       var rConv = rctx.createConvolver();
       var rLen = Math.floor(rctx.sampleRate * 2.4);
@@ -4970,6 +5228,377 @@ if (btnRefreshLyrics) {
   reverbBtn.addEventListener('click', function () { rSet(!rOn); });
 })();
   </script>
+<script>
+(function () {
+  var modal = document.getElementById('bluetooth-modal');
+  var openBtn = document.getElementById('btn-bluetooth-open');
+  var closeBtn = document.getElementById('btn-bluetooth-close');
+  var pickBtn = document.getElementById('btn-bluetooth-pick');
+  var refreshBtn = document.getElementById('btn-bluetooth-refresh');
+  var defaultBtn = document.getElementById('btn-bluetooth-default');
+  var deviceList = document.getElementById('bluetooth-device-list');
+  var deviceCount = document.getElementById('bluetooth-device-count');
+  var statusDot = document.getElementById('bluetooth-status-dot');
+  var statusTitle = document.getElementById('bluetooth-status-title');
+  var statusDetail = document.getElementById('bluetooth-status-detail');
+  var audioEl = document.getElementById('audio');
+  if (!modal || !openBtn || !closeBtn || !pickBtn || !refreshBtn || !defaultBtn || !deviceList || !deviceCount || !statusDot || !statusTitle || !statusDetail || !audioEl) return;
+
+  var storageKey = 'chiroot_audio_output_v1';
+  var currentDeviceId = typeof audioEl.sinkId === 'string' ? audioEl.sinkId : '';
+  var currentDeviceLabel = '';
+  var lastSignature = '';
+  var busy = false;
+  var bluetoothSvg = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path d="M7 17L17 7L12 2V22L17 17L7 7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>';
+
+  function readStoredOutput() {
+    try {
+      var parsed = JSON.parse(localStorage.getItem(storageKey) || 'null');
+      if (!parsed || typeof parsed !== 'object') return null;
+      return {
+        deviceId: typeof parsed.deviceId === 'string' ? parsed.deviceId : '',
+        label: typeof parsed.label === 'string' ? parsed.label : '',
+        isDefault: !!parsed.isDefault
+      };
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveStoredOutput(deviceId, label, isDefault) {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({
+        deviceId: String(deviceId || ''),
+        label: String(label || ''),
+        isDefault: !!isDefault
+      }));
+    } catch (e) {}
+  }
+
+  function setStatus(state, title, detail) {
+    statusDot.dataset.state = state;
+    statusTitle.textContent = title;
+    statusDetail.textContent = detail;
+  }
+
+  function showBluetoothToast(message) {
+    if (typeof showToast === 'function') showToast(message);
+  }
+
+  function errorText(error) {
+    var name = error && error.name ? error.name : '';
+    if (name === 'NotAllowedError') return 'Izin output audio ditolak. Izinkan pemilihan speaker di browser.';
+    if (name === 'NotFoundError') return 'Perangkat tidak ditemukan. Pastikan headset aktif dan sudah dipasangkan.';
+    if (name === 'AbortError') return 'Peralihan output gagal. Coba hidupkan ulang headset lalu refresh.';
+    if (name === 'InvalidStateError') return 'Fitur ini harus dibuka lewat HTTPS dan dimulai dari klik pengguna.';
+    if (name === 'SecurityError') return 'Browser memblokir akses output audio pada halaman ini.';
+    return error && error.message ? error.message : 'Tidak dapat memilih output audio.';
+  }
+
+  function isLikelyBluetooth(label) {
+    return /bluetooth|headset|headphone|earphone|earbud|airpods|buds|tws|jbl|sony|bose|beats|soundcore|edifier|marshall|freebuds|galaxy buds|redmi buds|nothing ear|qcy|wh[- ]|wf[- ]|xm[0-9]/i.test(String(label || ''));
+  }
+
+  function deviceLabel(device, index) {
+    var label = String(device.label || '').trim();
+    if (label) return label;
+    if (device.deviceId === 'default') return 'Output default';
+    if (device.deviceId === 'communications') return 'Output komunikasi';
+    return 'Perangkat audio ' + (index + 1);
+  }
+
+  function setBusy(next) {
+    busy = next;
+    pickBtn.disabled = next;
+    refreshBtn.disabled = next;
+    defaultBtn.disabled = next;
+    var pickText = pickBtn.querySelector('span');
+    if (pickText) pickText.textContent = next ? 'Membuka…' : 'Pilih headset';
+    deviceList.querySelectorAll('button').forEach(function (button) {
+      button.disabled = next || typeof audioEl.setSinkId !== 'function';
+    });
+  }
+
+  async function setAudioContextOutput(deviceId) {
+    var context = window.__chirootAudioContext;
+    if (context && typeof context.setSinkId === 'function') {
+      try {
+        await context.setSinkId(deviceId);
+      } catch (e) {}
+    }
+  }
+
+  async function applyOutputDevice(device, announce) {
+    if (!window.isSecureContext) throw new DOMException('HTTPS diperlukan untuk memilih output audio.', 'SecurityError');
+    if (typeof audioEl.setSinkId !== 'function') throw new DOMException('Browser tidak mendukung setSinkId.', 'NotSupportedError');
+    var requestedId = String(device && device.deviceId ? device.deviceId : '');
+    var label = String(device && device.label ? device.label : (requestedId ? 'Perangkat audio' : 'Output default'));
+    await audioEl.setSinkId(requestedId);
+    await setAudioContextOutput(requestedId);
+    currentDeviceId = typeof audioEl.sinkId === 'string' ? audioEl.sinkId : requestedId;
+    currentDeviceLabel = label;
+    var isDefault = !requestedId;
+    saveStoredOutput(requestedId, label, isDefault);
+    if (isDefault) {
+      setStatus('ready', 'Output default aktif', 'Audio mengikuti perangkat output utama dari sistem.');
+    } else {
+      setStatus('connected', 'Audio tersambung', label + ' sedang dipakai oleh player.');
+    }
+    if (announce) showBluetoothToast(isDefault ? 'Output dikembalikan ke default' : 'Audio diarahkan ke ' + label + ' ✦');
+  }
+
+  function emptyList(message) {
+    deviceList.innerHTML = '';
+    var empty = document.createElement('div');
+    empty.className = 'bluetooth-empty';
+    empty.textContent = message;
+    deviceList.appendChild(empty);
+  }
+
+  function renderDevices(devices) {
+    deviceList.innerHTML = '';
+    deviceCount.textContent = String(devices.length);
+    if (!devices.length) {
+      emptyList('Belum ada output audio yang dapat ditampilkan. Hidupkan headset, lalu tekan “Pilih headset”.');
+      return;
+    }
+
+    devices.forEach(function (device, index) {
+      var name = deviceLabel(device, index);
+      var isDefaultDevice = device.deviceId === 'default' || device.deviceId === 'communications';
+      var active = currentDeviceId === device.deviceId || (!currentDeviceId && device.deviceId === 'default');
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'bluetooth-device';
+      button.setAttribute('aria-current', active ? 'true' : 'false');
+      button.setAttribute('aria-label', (active ? 'Sedang dipakai: ' : 'Pakai output: ') + name);
+      button.disabled = busy || typeof audioEl.setSinkId !== 'function';
+
+      var icon = document.createElement('span');
+      icon.className = 'bluetooth-device-icon';
+      icon.innerHTML = bluetoothSvg;
+
+      var copy = document.createElement('span');
+      copy.className = 'bluetooth-device-copy';
+      var title = document.createElement('span');
+      title.className = 'bluetooth-device-name';
+      title.textContent = name;
+      var detail = document.createElement('span');
+      detail.className = 'bluetooth-device-detail';
+      if (!device.label) detail.textContent = 'Nama tersembunyi sampai izin diberikan';
+      else if (active) detail.textContent = 'Klik lagi untuk memastikan koneksi output';
+      else detail.textContent = 'Klik untuk langsung dipakai player';
+      copy.appendChild(title);
+      copy.appendChild(detail);
+
+      var side = document.createElement('span');
+      side.className = 'bluetooth-device-side';
+      if (isLikelyBluetooth(name)) {
+        var badge = document.createElement('span');
+        badge.className = 'bluetooth-device-badge';
+        badge.textContent = 'Bluetooth / headset';
+        side.appendChild(badge);
+      } else if (isDefaultDevice) {
+        var systemBadge = document.createElement('span');
+        systemBadge.className = 'bluetooth-device-badge';
+        systemBadge.textContent = 'Sistem';
+        side.appendChild(systemBadge);
+      }
+      if (active) {
+        var activeText = document.createElement('span');
+        activeText.className = 'bluetooth-device-state';
+        activeText.textContent = '✓ Dipakai';
+        side.appendChild(activeText);
+      }
+
+      button.appendChild(icon);
+      button.appendChild(copy);
+      button.appendChild(side);
+      button.addEventListener('click', async function () {
+        if (busy) return;
+        setBusy(true);
+        try {
+          await applyOutputDevice(device, true);
+          await refreshDevices(false, false);
+        } catch (error) {
+          setStatus('error', 'Gagal memakai perangkat', errorText(error));
+          showBluetoothToast(errorText(error));
+        } finally {
+          setBusy(false);
+        }
+      });
+      deviceList.appendChild(button);
+    });
+  }
+
+  function syncStatus(devices) {
+    var stored = readStoredOutput();
+    if (!window.isSecureContext) {
+      setStatus('error', 'HTTPS diperlukan', 'Buka website dari HTTPS atau localhost agar browser mengizinkan pemilihan headset.');
+      return;
+    }
+    if (!navigator.mediaDevices || typeof navigator.mediaDevices.enumerateDevices !== 'function') {
+      setStatus('error', 'Media Devices tidak tersedia', 'Gunakan browser modern dan pilih headset dari pengaturan sistem.');
+      return;
+    }
+    if (typeof audioEl.setSinkId !== 'function') {
+      setStatus('error', 'Pemilihan output tidak didukung', 'Hubungkan headset lewat pengaturan Bluetooth sistem. Browser ini akan mengikuti output default.');
+      return;
+    }
+    if (stored && stored.isDefault) {
+      setStatus('ready', 'Output default aktif', 'Audio mengikuti perangkat output utama dari sistem.');
+      return;
+    }
+    if (stored && stored.deviceId) {
+      var savedDevice = devices.find(function (device) { return device.deviceId === stored.deviceId; });
+      if (savedDevice) {
+        var savedLabel = deviceLabel(savedDevice, devices.indexOf(savedDevice));
+        if (currentDeviceId === stored.deviceId || audioEl.sinkId === stored.deviceId) {
+          setStatus('connected', 'Audio tersambung', savedLabel + ' siap dipakai oleh player.');
+        } else {
+          setStatus('ready', 'Headset tersedia', 'Klik ' + savedLabel + ' untuk menghubungkan audio player.');
+        }
+      } else {
+        setStatus('disconnected', 'Headset belum terdeteksi', (stored.label || 'Perangkat tersimpan') + ' tidak tersedia. Nyalakan headset lalu refresh.');
+      }
+      return;
+    }
+    if (currentDeviceId) {
+      var currentDevice = devices.find(function (device) { return device.deviceId === currentDeviceId; });
+      if (currentDevice) {
+        setStatus('connected', 'Audio tersambung', deviceLabel(currentDevice, devices.indexOf(currentDevice)) + ' sedang dipakai oleh player.');
+        return;
+      }
+    }
+    setStatus('ready', 'Output sistem sedang dipakai', 'Tekan “Pilih headset” untuk memberi izin dan memilih headset Bluetooth.');
+  }
+
+  async function refreshDevices(autoReconnect, announceChange) {
+    if (!navigator.mediaDevices || typeof navigator.mediaDevices.enumerateDevices !== 'function') {
+      deviceCount.textContent = '0';
+      emptyList('Browser ini tidak dapat membaca daftar output audio. Gunakan pengaturan Bluetooth sistem.');
+      syncStatus([]);
+      return [];
+    }
+    try {
+      var allDevices = await navigator.mediaDevices.enumerateDevices();
+      var outputs = allDevices.filter(function (device) { return device.kind === 'audiooutput'; });
+      var signature = outputs.map(function (device) { return device.deviceId + ':' + device.label; }).sort().join('|');
+      if (announceChange && lastSignature && signature !== lastSignature && modal.classList.contains('open')) {
+        showBluetoothToast('Daftar perangkat audio diperbarui');
+      }
+      lastSignature = signature;
+      var stored = readStoredOutput();
+      if (autoReconnect && stored && stored.deviceId) {
+        var found = outputs.find(function (device) { return device.deviceId === stored.deviceId; });
+        if (found && typeof audioEl.setSinkId === 'function' && audioEl.sinkId !== stored.deviceId) {
+          try {
+            await audioEl.setSinkId(stored.deviceId);
+            await setAudioContextOutput(stored.deviceId);
+            currentDeviceId = typeof audioEl.sinkId === 'string' ? audioEl.sinkId : stored.deviceId;
+            currentDeviceLabel = found.label || stored.label;
+            if (modal.classList.contains('open')) showBluetoothToast('Headset tersambung kembali ✦');
+          } catch (e) {}
+        }
+      }
+      renderDevices(outputs);
+      syncStatus(outputs);
+      return outputs;
+    } catch (error) {
+      deviceCount.textContent = '0';
+      emptyList('Daftar perangkat gagal dibaca. ' + errorText(error));
+      setStatus('error', 'Gagal memeriksa perangkat', errorText(error));
+      return [];
+    }
+  }
+
+  async function chooseOutput() {
+    if (!window.isSecureContext) {
+      setStatus('error', 'HTTPS diperlukan', 'Deploy website lewat HTTPS agar pemilih headset dapat dibuka.');
+      showBluetoothToast('Bluetooth audio membutuhkan HTTPS');
+      return;
+    }
+    if (!navigator.mediaDevices || typeof navigator.mediaDevices.selectAudioOutput !== 'function' || typeof audioEl.setSinkId !== 'function') {
+      setStatus('error', 'Browser belum mendukung pemilih headset', 'Pair headset di pengaturan Bluetooth, jadikan sebagai output default, lalu kembali ke website.');
+      showBluetoothToast('Pemilih output tidak didukung browser ini');
+      return;
+    }
+    setBusy(true);
+    try {
+      var device = await navigator.mediaDevices.selectAudioOutput();
+      await applyOutputDevice(device, true);
+      await refreshDevices(false, false);
+    } catch (error) {
+      if (error && (error.name === 'NotAllowedError' || error.name === 'AbortError')) {
+        setStatus('ready', 'Pemilihan belum selesai', 'Pilih perangkat pada dialog browser untuk menghubungkan audio.');
+      } else {
+        setStatus('error', 'Gagal memilih headset', errorText(error));
+      }
+      showBluetoothToast(errorText(error));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function useDefaultOutput() {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await applyOutputDevice({ deviceId: '', label: 'Output default' }, true);
+      await refreshDevices(false, false);
+    } catch (error) {
+      setStatus('error', 'Gagal mengganti output', errorText(error));
+      showBluetoothToast(errorText(error));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function openModal() {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    refreshDevices(false, false);
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    openBtn.focus();
+  }
+
+  async function restoreOutput() {
+    var stored = readStoredOutput();
+    if (stored && stored.deviceId && window.isSecureContext && typeof audioEl.setSinkId === 'function') {
+      try {
+        await audioEl.setSinkId(stored.deviceId);
+        await setAudioContextOutput(stored.deviceId);
+        currentDeviceId = typeof audioEl.sinkId === 'string' ? audioEl.sinkId : stored.deviceId;
+        currentDeviceLabel = stored.label;
+      } catch (e) {}
+    }
+    await refreshDevices(false, false);
+  }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  pickBtn.addEventListener('click', chooseOutput);
+  refreshBtn.addEventListener('click', function () { refreshDevices(false, false); });
+  defaultBtn.addEventListener('click', useDefaultOutput);
+  modal.addEventListener('click', function (event) {
+    if (event.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+  if (navigator.mediaDevices && typeof navigator.mediaDevices.addEventListener === 'function') {
+    navigator.mediaDevices.addEventListener('devicechange', function () {
+      refreshDevices(true, true);
+    });
+  }
+
+  restoreOutput();
+})();
+</script>
 <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a208b2f9a90a3fca',t:'MTc4NDk1NjY1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a265e69f8fb1fe09',t:'MTc4NTkzMzk0Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30af0a1f9e0fe0c',t:'MTc4NzY2NDUwNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a312ccc35ed79a98',t:'MTc4Nzc0NjkyNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
