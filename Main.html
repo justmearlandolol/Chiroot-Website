@@ -1608,7 +1608,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   font-size: 6.5px;
   margin-top: 1px;
   font-family: 'Kalam', cursive;
-  color: #e82c71;
+  color: #3a8a6a;
   font-weight: 600;
   letter-spacing: 0.8px;
 }
@@ -1958,6 +1958,37 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   padding:11px 13px;
   background:linear-gradient(180deg,#fffaf0,#f6ead0);
   box-shadow:0 4px 14px rgba(118,86,36,.09);
+  position:relative;
+  padding-top:24px;
+}
+.backup-dock.hidden{
+  display:none;
+}
+.backup-dock-close{
+  position:absolute;
+  top:4px;
+  right:10px;
+  width:24px;
+  height:24px;
+  background:#fff8e7;
+  border:2px solid #1a1a1a;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:12px;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .12s ease, background .15s;
+  z-index:3;
+  padding:0;
+}
+.backup-dock-close:hover{
+  transform:translateY(-1px);
+  background:#fff1d6;
+}
+.backup-dock-close:active{
+  transform:translateY(1px);
 }
 .backup-dock-copy{display:flex;flex-direction:column;gap:1px;min-width:0;font-family:'Kalam',sans-serif;color:#5b4630;}
 .backup-dock-copy strong{font-family:'Caveat',cursive;font-size:25px;line-height:1;color:#1a1a1a;}
@@ -1994,7 +2025,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
           <div class="logo-wrapper">
             <div class="logo-inner">
-              <img src="Chiroot.png" alt="Chiroot Logo" />
+              <img src="Logos-removebg-preview.png" alt="Chiroot Logo" />
             </div>
           </div>
 
@@ -2042,7 +2073,8 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       <div class="corner-doodle bl">✧</div>
       <div class="corner-doodle br">✦</div>
 
-      <section class="backup-dock sketch-border-soft" aria-label="Backup dan Restore JSON">
+      <section class="backup-dock sketch-border-soft" id="backup-dock" aria-label="Backup dan Restore JSON">
+        <button type="button" class="backup-dock-close sketchy" id="btn-close-backup" title="Tutup panel" aria-label="Tutup panel Save Your Song">✕</button>
         <div class="backup-dock-copy">
           <span class="backup-dock-kicker">✦ Save Your song</span>
           <strong>Backup &amp; Restore ZIP</strong>
@@ -2080,7 +2112,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
             </div>
 
             <div class="gramo-sticker sticker-2">
-              <img src="Chiroot.png" alt="sticker-emoji" class="sticker-label" style="width: 67px; height: 67px;">
+              <img src="Logos-removebg-preview.png" alt="sticker-emoji" class="sticker-label" style="width: 67px; height: 67px;">
               <span class="chopper-label"></span>
             </div>
 
@@ -2265,7 +2297,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
       <section class="top10-section">
         <div class="top10-header">
-          <h2 class="top10-title"> Top 5 Song of the Month {as of August} </h2>
+          <h2 class="top10-title"> Top 5 Song of the Month {as of July} </h2>
         </div>
         <div class="top10-wrap sketch-border-soft" id="top10-wrap">
           <ul class="top10-list" id="top10-list"></ul>
@@ -2284,7 +2316,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
     <div class="modal-card sketch-border">
       <button class="modal-close sketchy" id="btn-add-close" aria-label="Close">✕</button>
       <h3 class="modal-title" id="add-modal-title">Add a new record</h3>
-      <p class="modal-sub">Drop your own 78, it gets its own label :>.</p>
+      <p class="modal-sub">Drop your own 78 – it gets its own label :>.</p>
 
       <div class="report-box" style="margin-bottom: 20px; background: #f0f7ff; border-style: dashed;">
         <div style="font-family:'Kalam',sans-serif; font-size:12px; color:#5b7da8; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;"> Quick Auto-fill • Spotify </div>
@@ -2351,6 +2383,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
           <button type="button" class="btn-secondary sketch-border-soft" id="btn-add-cancel">Cancel</button>
           <button type="submit" class="btn-primary sketch-border-soft" id="add-submit-btn">Press Record →</button>
         </div>
+        <p class="form-note" id="add-form-note">Songs are saved in your browser (IndexedDB). Large files may take a moment.</p><input type="hidden" id="edit-track-id" value="">
       </form>
     </div>
   </div>
@@ -2442,6 +2475,14 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
       <div style="display:flex; flex-direction:column; gap:16px; margin-top:10px;">
 
+        <div class="report-box">
+          <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">✦ Save Your Song</div>
+          <p style="font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630; margin:4px 0 12px;">Panel di atas ketutup? Tetap bisa backup & restore koleksi kamu dari sini.</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn-primary sketch-border-soft" id="btn-export-data-settings" style="flex:1;">↓ Backup ZIP</button>
+            <button type="button" class="btn-secondary sketch-border-soft" id="btn-import-data-settings" style="flex:1;">↑ Restore ZIP</button>
+          </div>
+        </div>
 
         <div class="report-box" style="background:#fff4f0;">
           <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">️ Danger Zone</div>
@@ -2565,10 +2606,10 @@ const TOP10_SONGS = [
     vinylColor: "#1e1e24"
   },
   {
-    title: "Harvey",
-    artist: "Her's",
-    src: "Harvey.mp3",
-    cover: "Harvey.jpeg",
+    title: "Feels",
+    artist: "Calvin Harris, Pharrell Williams ,Katy Perry , Big Sean",
+    src: "vidssave.com Calvin Harris - Feels ft. Pharrell Williams, Katy Perry, Big Sean LOW.mp3",
+    cover: "Feel.jpeg",
     labelColor: "#c9a227",
     vinylColor: "#1e1e24"
   },
@@ -4642,6 +4683,21 @@ function setupSettings(){
     } finally { clearImportInput(); }
   });
 
+  const backupDock = document.getElementById('backup-dock');
+  const btnCloseBackup = document.getElementById('btn-close-backup');
+  const btnExportSettings = document.getElementById('btn-export-data-settings');
+  const btnImportSettings = document.getElementById('btn-import-data-settings');
+
+  if (btnCloseBackup && backupDock) {
+    btnCloseBackup.addEventListener('click', () => {
+      backupDock.classList.add('hidden');
+      if (typeof showToast === 'function') showToast('Panel Save Your Song ditutup. Fitur backup tetap bisa lewat ⚙️ Settings.');
+    });
+  }
+
+  if (btnExportSettings) btnExportSettings.addEventListener('click', () => { const b = document.getElementById('btn-export-data'); if (b) b.click(); });
+  if (btnImportSettings) btnImportSettings.addEventListener('click', () => { const b = document.getElementById('btn-import-data'); if (b) b.click(); });
+
   $('#btn-reset-settings').addEventListener('click', () => {
     close();
     resetCrate();
@@ -4916,5 +4972,5 @@ if (btnRefreshLyrics) {
 })();
   </script>
 <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a208b2f9a90a3fca',t:'MTc4NDk1NjY1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a265e69f8fb1fe09',t:'MTc4NTkzMzk0Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30af0a1f9e0fe0c',t:'MTc4NzY2NDUwNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a265e69f8fb1fe09',t:'MTc4NTkzMzk0Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30af0a1f9e0fe0c',t:'MTc4NzY2NDUwNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a312ccc35ed79a98',t:'MTc4Nzc0NjkyNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
