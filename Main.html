@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'self'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://i.scdn.co https://*.scdn.co https://astuagdezahmuuwjoghf.supabase.co; media-src 'self' data: blob: https://astuagdezahmuuwjoghf.supabase.co; connect-src 'self' https://astuagdezahmuuwjoghf.supabase.co https://lrclib.net https://*.scdn.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <title>Chiroot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1148,104 +1150,6 @@ button:focus-visible, input:focus-visible{
 }
 .vswatch.active{ outline:3px solid #f3d87a; outline-offset:2px;}
 .custom-vinyl{ display:inline-block; }
-.auth-bar{
-  position:fixed;
-  top:0; right:0;
-  z-index:200;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 16px;
-}
-.auth-btn{
-  background:#fbf6e8;
-  border:2.2px solid var(--ink);
-  color:var(--ink);
-  border-radius:16px 14px 17px 15px / 14px 17px 14px 16px;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:8px 14px;
-  font-family:'Kalam',sans-serif;
-  font-size:14px;
-  transition:transform .12s ease,background .15s ease,box-shadow .15s ease;
-  box-shadow:0 3px 0 #c8b78a,0 4px 8px rgba(80,54,20,0.09);
-  white-space:nowrap;
-}
-.auth-btn:hover{transform:translateY(-2px);background:#fff9ef}
-.auth-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #c8b78a}
-.auth-btn.windows-auth{
-  background:linear-gradient(180deg,#eef3fb,#dde6f5);
-  border-color:#5b7bb8;
-  color:#2b4a8a;
-  box-shadow:0 3px 0 #7a9fd4,0 4px 8px rgba(60,90,160,0.09);
-}
-.auth-btn.windows-auth:hover{background:linear-gradient(180deg,#f4f7fd,#e6ecf7)}
-.auth-user-menu{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  background:#fff9ef;
-  border:2.2px solid var(--ink);
-  border-radius:16px 14px 17px 15px / 14px 17px 14px 16px;
-  padding:6px 14px 6px 6px;
-  box-shadow:0 3px 0 #c8b78a;
-  font-family:'Kalam',sans-serif;
-  font-size:14px;
-  cursor:pointer;
-  transition:transform .12s ease;
-  position:relative;
-}
-.auth-user-menu:hover{transform:translateY(-2px)}
-.auth-avatar{
-  width:32px;height:32px;border-radius:50%;border:2px solid var(--ink);
-  background:#f2e0a8;display:flex;align-items:center;justify-content:center;
-  font-family:'Caveat',cursive;font-size:16px;font-weight:700;color:#5a3f1f;
-  overflow:hidden;flex-shrink:0;
-}
-.auth-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.auth-username{
-  max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  color:#4a3b23;font-weight:600;
-}
-.auth-dropdown{
-  position:absolute;top:100%;right:0;margin-top:6px;
-  background:linear-gradient(180deg,#fffdf7,#f8f0dc);
-  border:2.2px solid var(--ink);border-radius:14px;
-  padding:8px;min-width:160px;
-  box-shadow:0 8px 24px rgba(40,24,8,.18);
-  display:none;z-index:210;
-  font-family:'Kalam',sans-serif;
-}
-.auth-dropdown.show{display:block}
-.auth-dropdown-item{
-  display:flex;align-items:center;gap:8px;
-  padding:8px 12px;border-radius:10px;
-  cursor:pointer;font-size:14px;color:#4a3b23;
-  transition:background .12s;
-  border:none;background:none;width:100%;text-align:left;font-family:inherit;
-}
-.auth-dropdown-item:hover{background:#fff3d6}
-.auth-dropdown-item.danger{color:#b42318}
-.auth-dropdown-item.danger:hover{background:#ffe3e3}
-.auth-status{
-  font-family:'Kalam',sans-serif;font-size:12px;
-  color:#7a6548;padding:4px 12px;
-  display:flex;align-items:center;gap:4px;
-}
-.auth-status .dot{
-  width:8px;height:8px;border-radius:50%;display:inline-block;
-  background:#ccc;
-}
-.auth-status .dot.online{background:#4a8a4a}
-.auth-status .dot.offline{background:#b42318}
-.clerk-signin-container{
-  margin-top:8px;
-}
-.clerk-signin-container .cl-component{
-  max-width:100% !important;
-}
 .auth-overlay{
   position:fixed;inset:0;
   background:rgba(30,20,8,0.42);
@@ -1264,12 +1168,6 @@ button:focus-visible, input:focus-visible{
   animation:paperPop .34s cubic-bezier(.22,1.2,.36,1);
   max-height:90vh;overflow:auto;
 }
-.auth-overlay-close{
-  position:absolute;right:12px;top:10px;
-  background:#fff8e7;border:2px solid #1a1a1a;
-  width:36px;height:34px;border-radius:12px;
-  cursor:pointer;font-size:16px;
-}
 .auth-overlay-title{
   margin:0 28px 2px 0;
   font-family:'Caveat',cursive;font-size:32px;
@@ -1284,30 +1182,7 @@ button:focus-visible, input:focus-visible{
 .auth-overlay-content .cl-root{
   font-family:'Kalam',sans-serif !important;
 }
-.auth-sync-banner{
-  position:fixed;
-  bottom:60px;left:50%;
-  transform:translateX(-50%);
-  background:#eef7eb;
-  border:2px solid #4a8a4a;
-  border-radius:14px;
-  padding:8px 16px;
-  font-family:'Kalam',sans-serif;
-  font-size:13px;
-  color:#2a6a2a;
-  z-index:250;
-  opacity:0;
-  transition:opacity .3s ease,transform .3s ease;
-  pointer-events:none;
-  white-space:nowrap;
-}
-.auth-sync-banner.show{
-  opacity:1;transform:translateX(-50%) translateY(0);
-}
 @media(max-width:560px){
-  .auth-bar{padding:8px 10px}
-  .auth-btn{font-size:13px;padding:6px 10px}
-  .auth-username{max-width:70px}
   .auth-overlay-card{max-width:95%;padding:20px 16px 18px}
 }
 
@@ -1939,55 +1814,157 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
         height: 34px;
       }
     }
-.backup-dock{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  margin:4px auto 18px;
-  max-width:700px;
-  padding:11px 13px;
-  background:linear-gradient(180deg,#fffaf0,#f6ead0);
-  box-shadow:0 4px 14px rgba(118,86,36,.09);
-  position:relative;
-  padding-top:24px;
+/* Chiroot topbar: greeting + akun */
+.chiroot-topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px 6px 12px;margin:0 0 12px;
+  border-bottom:2px dashed #d8c9a3;
+  flex-wrap:wrap;
 }
-.backup-dock.hidden{
-  display:none;
+.topbar-greeting{
+  font-family:'Caveat',cursive;font-size:30px;line-height:1;color:#1a1a1a;
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
-.backup-dock-close{
-  position:absolute;
-  top:4px;
-  right:10px;
-  width:24px;
-  height:24px;
-  background:#fff8e7;
-  border:2px solid #1a1a1a;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:12px;
-  line-height:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:transform .12s ease, background .15s;
-  z-index:3;
-  padding:0;
+.topbar-auth{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.google-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  background:#fff;border:2.2px solid var(--ink);
+  border-radius:14px 12px 15px 13px / 12px 15px 12px 14px;
+  padding:9px 16px;cursor:pointer;
+  font-family:'Kalam',sans-serif;font-size:15px;font-weight:600;color:#1a1a1a;
+  box-shadow:0 3px 0 #c8b78a;transition:transform .12s ease, box-shadow .12s ease;
 }
-.backup-dock-close:hover{
-  transform:translateY(-1px);
-  background:#fff1d6;
+.google-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 #c8b78a;}
+.google-btn:active{transform:translateY(0);box-shadow:0 2px 0 #c8b78a;}
+.google-btn:disabled{opacity:.55;cursor:wait;transform:none;}
+.google-btn svg{flex-shrink:0;display:block;}
+.topbar-user{display:flex;align-items:center;gap:10px;}
+.topbar-avatar{
+  width:40px;height:40px;border-radius:50%;
+  border:2.4px solid var(--ink);background:#f2e0a8;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Caveat',cursive;font-size:19px;font-weight:700;color:#5a3f1f;
+  overflow:hidden;cursor:pointer;padding:0;flex-shrink:0;
+  box-shadow:0 2px 0 #c8b78a;transition:transform .12s ease;
 }
-.backup-dock-close:active{
-  transform:translateY(1px);
+.topbar-avatar:hover{transform:scale(1.07) rotate(-3deg);}
+.topbar-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.topbar-logout{
+  background:#fff4ec;border:2.2px solid var(--ink);
+  border-radius:14px 12px 15px 13px / 12px 15px 12px 14px;
+  padding:8px 14px;cursor:pointer;
+  font-family:'Kalam',sans-serif;font-size:14.5px;font-weight:700;color:#8a3a2a;
+  box-shadow:0 3px 0 #dcb9a4;transition:transform .12s ease, box-shadow .12s ease;
 }
-.backup-dock-copy{display:flex;flex-direction:column;gap:1px;min-width:0;font-family:'Kalam',sans-serif;color:#5b4630;}
-.backup-dock-copy strong{font-family:'Caveat',cursive;font-size:25px;line-height:1;color:#1a1a1a;}
-.backup-dock-copy span:last-child{font-size:12px;color:#7a6548;}
-.backup-dock-kicker{font-size:10px!important;letter-spacing:.12em;text-transform:uppercase;color:#a47b2c!important;}
-.backup-dock-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
-.backup-dock-actions .btn-primary,.backup-dock-actions .btn-secondary{font-size:15px;padding:8px 12px;white-space:nowrap;}
-@media(max-width:560px){.backup-dock{align-items:stretch;flex-direction:column;margin-bottom:14px}.backup-dock-actions{justify-content:stretch}.backup-dock-actions button{flex:1}}
+.topbar-logout:hover{transform:translateY(-2px);box-shadow:0 5px 0 #dcb9a4;background:#ffe9dc;}
+.topbar-logout:active{transform:translateY(0);box-shadow:0 2px 0 #dcb9a4;}
+@media(max-width:560px){
+  .chiroot-topbar{padding:8px 2px 10px;}
+  .topbar-greeting{font-size:24px;width:100%;}
+}
+/* Gate login */
+.gate-brand{text-align:center;margin-bottom:10px;}
+.gate-logo{width:84px;height:84px;margin:0 auto 10px;display:block;}
+.gate-status{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Kalam',sans-serif;font-size:15px;color:#7a6548;
+  padding:14px 0 4px;min-height:52px;text-align:center;flex-wrap:wrap;
+}
+.gate-spinner{
+  width:22px;height:22px;flex-shrink:0;border-radius:50%;
+  border:3px solid #d8c9a3;border-top-color:#1a1a1a;
+  animation:gateSpin .8s linear infinite;
+}
+@keyframes gateSpin{to{transform:rotate(360deg);}}
+.gate-btn-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:8px;}
+.gate-note{font-family:'Kalam',sans-serif;font-size:12.5px;color:#9a8264;margin:0;text-align:center;}
+.gate-error{
+  font-family:'Kalam',sans-serif;font-size:13.5px;color:#b42318;
+  background:#ffe9e5;border:2px dashed #d84a3a;border-radius:12px;
+  padding:8px 12px;margin-top:10px;text-align:center;
+}
+/* Onboarding */
+.ob-body{display:flex;flex-direction:column;gap:14px;margin-top:6px;}
+.ob-avatar-row{display:flex;align-items:center;gap:16px;}
+.ob-avatar{
+  width:76px;height:76px;border-radius:50%;flex-shrink:0;
+  border:3px solid var(--ink);background:#f2e0a8;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Caveat',cursive;font-size:34px;font-weight:700;color:#5a3f1f;
+  overflow:hidden;
+}
+.ob-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.ob-avatar-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
+.ob-pick-btn{display:inline-flex;align-items:center;cursor:pointer;}
+/* Edit profil (panel kiri + preview kanan) */
+.profile-modal-card{max-width:920px;width:100%;}
+.profile-grid{
+  display:grid;grid-template-columns:minmax(300px,430px) minmax(270px,1fr);
+  gap:22px;margin-top:14px;align-items:start;
+}
+.profile-panel{display:flex;flex-direction:column;gap:14px;}
+.pp-kicker{
+  font-family:'Kalam',sans-serif;font-size:12px;letter-spacing:.12em;
+  text-transform:uppercase;color:#a47b2c;font-weight:700;
+}
+.pp-avatar-block{
+  display:flex;align-items:center;gap:16px;
+  background:#fff8e7;border:2px solid var(--ink);border-radius:16px;padding:12px;
+}
+.pp-avatar-big{
+  width:84px;height:84px;border-radius:50%;flex-shrink:0;
+  border:3px solid var(--ink);background:#f2e0a8;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Caveat',cursive;font-size:38px;font-weight:700;color:#5a3f1f;overflow:hidden;
+}
+.pp-avatar-big img{width:100%;height:100%;object-fit:cover;display:block;}
+.pp-avatar-side{display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
+.pf-desc{resize:vertical;min-height:64px;font-family:'Kalam',sans-serif;}
+.pf-count{display:block;text-align:right;font-family:'Kalam',sans-serif;font-size:11.5px;color:#9a8264;margin-top:3px;}
+.pf-swatches{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.pf-swatch{
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid rgba(26,26,26,.55);cursor:pointer;padding:0;
+  transition:transform .1s ease;
+}
+.pf-swatch:hover{transform:scale(1.12);}
+.pf-swatch.active{border:2.6px solid var(--ink);box-shadow:0 0 0 3px #fff,0 0 0 5px var(--ink);transform:scale(1.08);}
+.pf-swatch.custom{position:relative;overflow:hidden;background:conic-gradient(red,orange,yellow,green,blue,indigo,violet,red);}
+.pf-swatch.custom input{opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer;border:none;}
+.profile-preview-wrap{position:sticky;top:16px;}
+.pp-card{background:#fffdf7;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px rgba(48,34,16,.14);}
+.pp-banner{position:relative;height:96px;background:#d84a3a;}
+.pp-banner-edit{
+  position:absolute;top:8px;right:8px;width:30px;height:30px;
+  background:rgba(255,253,247,.9);border:2px solid var(--ink);border-radius:10px;
+  cursor:pointer;font-size:15px;line-height:1;color:#1a1a1a;
+  display:flex;align-items:center;justify-content:center;
+}
+.pp-banner-edit:hover{background:#fff3d6;}
+.pp-avatar-overlay{position:relative;width:84px;margin-left:18px;margin-top:-42px;}
+.pp-avatar-mid{
+  width:84px;height:84px;border-radius:50%;
+  border:4px solid #fffdf7;outline:3px solid var(--ink);
+  background:#f2e0a8;display:flex;align-items:center;justify-content:center;
+  font-family:'Caveat',cursive;font-size:38px;font-weight:700;color:#5a3f1f;overflow:hidden;
+}
+.pp-avatar-mid img{width:100%;height:100%;object-fit:cover;display:block;}
+.pp-online-dot{
+  position:absolute;right:2px;bottom:2px;width:16px;height:16px;border-radius:50%;
+  background:#4a8a4a;border:2.6px solid #fffdf7;
+}
+.pp-meta{padding:10px 18px 18px;}
+.pp-name{font-family:'Caveat',cursive;font-size:30px;line-height:1.05;color:#1a1a1a;word-break:break-word;}
+.pp-since{font-family:'Kalam',sans-serif;font-size:12px;color:#9a8264;margin-top:2px;}
+.pf-desc-text{
+  font-family:'Kalam',sans-serif;font-size:14px;color:#4a3b23;margin-top:8px;line-height:1.5;
+  white-space:pre-wrap;word-break:break-word;
+  border-top:2px dashed #e0d2ac;padding-top:8px;
+}
+@media(max-width:760px){
+  .profile-grid{grid-template-columns:1fr;}
+  .profile-preview-wrap{position:static;}
+}
 .gramo-stickers,
 .gramo-stickers *{
   pointer-events:none!important;
@@ -2278,18 +2255,9 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       <div class="corner-doodle bl">✧</div>
       <div class="corner-doodle br">✦</div>
 
-      <section class="backup-dock sketch-border-soft" id="backup-dock" aria-label="Backup dan Restore JSON">
-        <button type="button" class="backup-dock-close sketchy" id="btn-close-backup" title="Tutup panel" aria-label="Tutup panel Save Your Song">✕</button>
-        <div class="backup-dock-copy">
-          <span class="backup-dock-kicker">✦ Save Your song</span>
-          <strong>Backup &amp; Restore ZIP</strong>
-          <span>Simpan atau pulihkan koleksi kamu</span>
-        </div>
-        <div class="backup-dock-actions">
-          <button type="button" class="btn-primary sketch-border-soft" id="btn-export-data">↓ Backup ZIP</button>
-          <button type="button" class="btn-secondary sketch-border-soft" id="btn-import-data">↑ Restore ZIP</button>
-          <input type="file" id="input-import-file" accept="application/zip,.zip,application/json,.json" style="display:none;">
-        </div>
+      <section class="chiroot-topbar" id="chiroot-topbar" aria-label="Sapaan dan akun">
+        <div class="topbar-greeting" id="greeting-text">✦ Selamat datang di Chiroot</div>
+        <div class="topbar-auth" id="topbar-auth" aria-live="polite"></div>
       </section>
 
       <header class="track-header">
@@ -2488,9 +2456,9 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M7 17L17 7L12 2V22L17 17L7 7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
             <span>Bluetooth</span>
           </button>
-          <button type="button" class="share-btn settings-button sketch-border-soft" id="btn-settings-open" title="Settings & Backup" aria-label="Settings & Backup">
+          <button type="button" class="share-btn settings-button sketch-border-soft" id="btn-settings-open" title="Settings" aria-label="Settings">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" aria-hidden="true"><path d="M 50,15 C 53,16 54,23 57,24 C 61,23 64,19 68,21 C 71,23 69,29 71,32 C 75,34 80,33 82,37 C 83,41 78,45 78,48 C 79,52 84,54 83,59 C 82,62 76,62 74,66 C 74,70 77,75 74,78 C 71,81 66,78 63,79 C 60,82 59,88 54,88 C 50,87 49,81 46,80 C 42,81 38,85 34,83 C 31,81 33,75 31,72 C 27,70 22,71 20,67 C 19,63 24,59 24,56 C 23,52 18,50 19,45 C 20,41 26,42 28,38 C 28,34 25,29 28,26 C 31,23 36,26 39,25 C 42,22 43,16 48,15 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M 50,38 C 57,37 63,42 63,49 C 64,56 57,63 49,62 C 42,62 37,56 38,49 C 39,42 44,39 50,38 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-            <span class="sr-only">Settings & Backup</span>
+            <span class="sr-only">Settings</span>
           </button>
           <button class="add-btn sketch-border-soft" id="btn-add-open">
             <span class="plus">+</span> Add Music
@@ -2509,7 +2477,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
       <section class="top10-section">
         <div class="top10-header">
-          <h2 class="top10-title"> Top 5 Song of the Month {as of July} </h2>
+          <h2 class="top10-title"> Top 5 Song of the Month {August} </h2>
         </div>
         <div class="top10-wrap sketch-border-soft" id="top10-wrap">
           <ul class="top10-list" id="top10-list"></ul>
@@ -2552,12 +2520,12 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
           <label class="field file-field">
             <span>MP3 File *</span>
             <input type="file" id="input-audio" accept=".mp3,audio/mpeg,audio/mp3" required>
-            <span class="file-hint" id="audio-hint">MP3 only – max 12 MB</span>
+            <span class="file-hint" id="audio-hint">MP3 only – max 25 MB</span>
           </label>
           <label class="field file-field">
             <span>Cover Image (optional)</span>
             <input type="file" id="input-cover" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
-            <span class="file-hint" id="cover-hint">JPG / PNG only – max 5 MB</span>
+            <span class="file-hint" id="cover-hint">JPG / PNG – max 8 MB</span>
           </label>
         </div>
 
@@ -2595,7 +2563,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
           <button type="button" class="btn-secondary sketch-border-soft" id="btn-add-cancel">Cancel</button>
           <button type="submit" class="btn-primary sketch-border-soft" id="add-submit-btn">Press Record →</button>
         </div>
-        <p class="form-note" id="add-form-note">Songs are saved in your browser (IndexedDB). Large files may take a moment.</p><input type="hidden" id="edit-track-id" value="">
+        <p class="form-note" id="add-form-note">Lagu tersimpan di cloud akun Google kamu. File besar bisa butuh sebentar.</p><input type="hidden" id="edit-track-id" value="">
       </form>
     </div>
   </div>
@@ -2720,20 +2688,11 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       <button class="modal-close sketchy" id="btn-settings-close" aria-label="Close">✕</button>
       <h3 class="modal-title settings-modal-title">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" aria-hidden="true"><path d="M 50,15 C 53,16 54,23 57,24 C 61,23 64,19 68,21 C 71,23 69,29 71,32 C 75,34 80,33 82,37 C 83,41 78,45 78,48 C 79,52 84,54 83,59 C 82,62 76,62 74,66 C 74,70 77,75 74,78 C 71,81 66,78 63,79 C 60,82 59,88 54,88 C 50,87 49,81 46,80 C 42,81 38,85 34,83 C 31,81 33,75 31,72 C 27,70 22,71 20,67 C 19,63 24,59 24,56 C 23,52 18,50 19,45 C 20,41 26,42 28,38 C 28,34 25,29 28,26 C 31,23 36,26 39,25 C 42,22 43,16 48,15 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M 50,38 C 57,37 63,42 63,49 C 64,56 57,63 49,62 C 42,62 37,56 38,49 C 39,42 44,39 50,38 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        <span>Backup & Restore</span>
+        <span>Settings</span>
       </h3>
-      <p class="modal-sub">Pilih untuk memindahkan Crate kamu.</p>
+      <p class="modal-sub">Kelola crate dan data kamu. Lagu tersinkron di akun Google.</p>
 
       <div style="display:flex; flex-direction:column; gap:16px; margin-top:10px;">
-
-        <div class="report-box">
-          <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">✦ Save Your Song</div>
-          <p style="font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630; margin:4px 0 12px;">Backup atau Import zip lagu kamu di sini</p>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button type="button" class="btn-primary sketch-border-soft" id="btn-export-data-settings" style="flex:1;">↓ Backup ZIP</button>
-            <button type="button" class="btn-secondary sketch-border-soft" id="btn-import-data-settings" style="flex:1;">↑ Restore ZIP</button>
-          </div>
-        </div>
 
         <div class="report-box" style="background:#fff4f0;">
           <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">️ Danger Zone</div>
@@ -2758,18 +2717,1151 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
     </div>
   </div>
 
-  <audio id="audio" preload="metadata"></audio>
-
-  <div class="auth-overlay" id="auth-overlay" aria-hidden="true">
-    <div class="auth-overlay-card sketch-border">
-      <button class="auth-overlay-close" id="auth-overlay-close" aria-label="Close">✕</button>
-      <h3 class="auth-overlay-title">Masuk ke Chiroot</h3>
-      <p class="auth-overlay-sub">Login untuk menyimpan lagu ke cloud & sync antar device.</p>
-      <div class="auth-overlay-content" id="auth-overlay-content"></div>
+  <div class="modal-overlay" id="onboard-modal" aria-hidden="true">
+    <div class="modal-card sketch-border" style="max-width:470px;">
+      <h3 class="modal-title">Halo! Buat profil kamu ✦</h3>
+      <p class="modal-sub" id="onboard-sub">Akun Google baru terdeteksi. Lengkapi profil dulu untuk membuka Chiroot.</p>
+      <div class="ob-body">
+        <div class="ob-avatar-row">
+          <div class="ob-avatar" id="ob-avatar-preview">?</div>
+          <div class="ob-avatar-actions">
+            <label class="btn-primary sketch-border-soft ob-pick-btn" for="ob-pfp-input">Pilih Foto Profil</label>
+            <input type="file" id="ob-pfp-input" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" hidden>
+            <p class="file-hint" id="ob-pfp-hint">PNG / JPEG / WEBP – max 5 MB</p>
+          </div>
+        </div>
+        <label class="field">
+          <span>Nama *</span>
+          <input type="text" id="ob-name" class="sketch-input" maxlength="60" placeholder="e.g. Arlando" autocomplete="name">
+        </label>
+        <label class="field">
+          <span>Email *</span>
+          <input type="email" id="ob-email" class="sketch-input" maxlength="100" placeholder="nama@gmail.com" autocomplete="email">
+        </label>
+      </div>
+      <div class="modal-actions" style="margin-top:16px;">
+        <button type="button" class="btn-primary sketch-border-soft" id="ob-save" style="width:100%;">Simpan &amp; Mulai →</button>
+      </div>
     </div>
   </div>
 
-  <div class="auth-sync-banner" id="auth-sync-banner"></div>
+  <div class="modal-overlay" id="profile-modal" aria-hidden="true">
+    <div class="modal-card profile-modal-card sketch-border">
+      <button class="modal-close sketchy" id="profile-close" aria-label="Close">✕</button>
+      <h3 class="modal-title">Edit Profil</h3>
+      <p class="modal-sub">Ubah nama, foto, deskripsi &amp; warna banner. Preview langsung berubah di sebelah kanan.</p>
+      <div class="profile-grid">
+        <section class="profile-panel" aria-label="Pengaturan profil">
+          <div class="pp-kicker">✦ Pengaturan</div>
+          <div class="pp-avatar-block">
+            <div class="pp-avatar-big" id="pf-avatar">?</div>
+            <div class="pp-avatar-side">
+              <label class="btn-secondary sketch-border-soft" for="pf-pfp-input">Ganti Foto</label>
+              <input type="file" id="pf-pfp-input" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" hidden>
+              <p class="file-hint" id="pf-pfp-hint">PNG / JPEG / WEBP – max 5 MB</p>
+            </div>
+          </div>
+          <label class="field">
+            <span>Display Name</span>
+            <input type="text" id="pf-name" class="sketch-input" maxlength="60" autocomplete="name">
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input type="email" id="pf-email" class="sketch-input" maxlength="100" autocomplete="email">
+          </label>
+          <label class="field">
+            <span>Description</span>
+            <textarea id="pf-desc" class="sketch-input pf-desc" rows="3" maxlength="300" placeholder="Tulisan kecil yang muncul di profil kamu…"></textarea>
+            <span class="pf-count" id="pf-desc-count">0/300</span>
+          </label>
+          <div class="field">
+            <span>Banner Color</span>
+            <div class="pf-swatches" id="pf-swatches">
+              <button type="button" class="pf-swatch" data-color="#d84a3a" style="background:#d84a3a" aria-label="Cherry"></button>
+              <button type="button" class="pf-swatch" data-color="#c9a227" style="background:#c9a227" aria-label="Gold"></button>
+              <button type="button" class="pf-swatch" data-color="#3a8a6a" style="background:#3a8a6a" aria-label="Teal"></button>
+              <button type="button" class="pf-swatch" data-color="#5b6ee1" style="background:#5b6ee1" aria-label="Blue"></button>
+              <button type="button" class="pf-swatch" data-color="#b65a9a" style="background:#b65a9a" aria-label="Plum"></button>
+              <button type="button" class="pf-swatch" data-color="#d28a3a" style="background:#d28a3a" aria-label="Amber"></button>
+              <button type="button" class="pf-swatch" data-color="#a66b3a" style="background:#a66b3a" aria-label="Wood"></button>
+              <button type="button" class="pf-swatch" data-color="#1f1e26" style="background:#1f1e26" aria-label="Ink"></button>
+              <label class="pf-swatch custom" title="Warna custom" aria-label="Warna custom">
+                <input type="color" id="pf-banner-custom" value="#d84a3a">
+              </label>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary sketch-border-soft" id="pf-cancel">Batal</button>
+            <button type="button" class="btn-primary sketch-border-soft" id="pf-save">Simpan Profil</button>
+          </div>
+        </section>
+        <section class="profile-preview-wrap" aria-label="Preview profil">
+          <div class="pp-card sketch-border-soft" id="pf-preview-card">
+            <div class="pp-banner" id="pf-preview-banner">
+              <button type="button" class="pp-banner-edit" id="pf-banner-edit" title="Ganti warna banner" aria-label="Ganti warna banner">✎</button>
+            </div>
+            <div class="pp-avatar-overlay">
+              <div class="pp-avatar-mid" id="pf-preview-avatar">?</div>
+              <span class="pp-online-dot" title="Online"></span>
+            </div>
+            <div class="pp-meta">
+              <div class="pp-name" id="pf-preview-name">—</div>
+              <div class="pp-since" id="pf-preview-since">Member since —</div>
+              <div class="pf-desc-text" id="pf-preview-desc"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audio" preload="metadata"></audio>
+
+  <div class="auth-overlay open" id="auth-overlay" aria-hidden="false" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <div class="auth-overlay-card sketch-border">
+      <div class="gate-brand">
+        <img src="Chiroot.png" alt="Chiroot" class="gate-logo">
+        <h3 class="auth-overlay-title" id="gate-title">Masuk ke Chiroot</h3>
+      </div>
+      <p class="auth-overlay-sub">Lagu &amp; profil kamu disimpan di cloud lalu disinkronkan lewat akun Google. Satu akun, semua device.</p>
+      <div class="auth-overlay-content" id="auth-overlay-content">
+        <div class="gate-status"><span class="gate-spinner"></span> Memeriksa sesi…</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const CHIROOT_AUTH_KEY = 'chiroot_auth_v1';
+const CHIROOT_PKCE_KEY = 'chiroot_pkce_v1';
+const CHIROOT_CRATE_BUCKET = 'chiroot-crate';
+
+const GOOGLE_G_SVG = '<svg viewBox="0 0 48 48" width="19" height="19" aria-hidden="true" focusable="false"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg>';
+
+const ChirootAuth = {
+  session: null,
+  profile: null,
+  _settled: false,
+  _settledValue: false,
+  _waiters: [],
+  _crateResolve: null,
+  crateLoaded: null,
+  waitReady: function () {
+    if (ChirootAuth._settled) return Promise.resolve(ChirootAuth._settledValue);
+    return new Promise(function (resolve) { ChirootAuth._waiters.push(resolve); });
+  },
+  isAuthed: function () { return !!(ChirootAuth.session && ChirootAuth.profile); },
+  resolveCrateLoaded: function () {
+    if (ChirootAuth._crateResolve) {
+      const r = ChirootAuth._crateResolve;
+      ChirootAuth._crateResolve = null;
+      r();
+    }
+  }
+};
+ChirootAuth.crateLoaded = new Promise(function (resolve) { ChirootAuth._crateResolve = resolve; });
+
+function caBase() { return String(SUPABASE_URL).trim().replace(/\/+$/, ''); }
+function caApiKey() { return String(SUPABASE_PUBLISHABLE_KEY).trim(); }
+
+function caB64Url(bytes) {
+  let out = '';
+  for (let i = 0; i < bytes.length; i++) out += String.fromCharCode(bytes[i]);
+  return btoa(out).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function caPkcePair() {
+  const bytes = new Uint8Array(48);
+  crypto.getRandomValues(bytes);
+  const verifier = caB64Url(bytes);
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
+  return { verifier: verifier, challenge: caB64Url(new Uint8Array(digest)) };
+}
+
+function caErrorFrom(data, fallback) {
+  if (data && typeof data === 'object') {
+    const msg = data.error_description || data.msg || data.message || data.error;
+    if (typeof msg === 'string' && msg.trim()) return msg.replace(/\+/g, ' ').trim();
+  }
+  if (typeof data === 'string' && data.trim()) return data.trim();
+  return fallback;
+}
+
+function caValidateSessionShape(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const user = raw.user;
+  if (!user || typeof user !== 'object') return null;
+  if (typeof user.id !== 'string' || !user.id) return null;
+  if (typeof raw.access_token !== 'string' || !raw.access_token) return null;
+  if (typeof raw.refresh_token !== 'string' || !raw.refresh_token) return null;
+  const expiresAt = Number(raw.expires_at);
+  if (!isFinite(expiresAt) || expiresAt <= 0) return null;
+  return {
+    access_token: raw.access_token,
+    refresh_token: raw.refresh_token,
+    expires_at: expiresAt,
+    user: { id: user.id, email: typeof user.email === 'string' ? user.email : '' }
+  };
+}
+
+function caLoadSession() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CHIROOT_AUTH_KEY) || 'null');
+    const session = caValidateSessionShape(raw);
+    if (session && session.expires_at - Date.now() > 5000) return session;
+  } catch (e) {}
+  return null;
+}
+
+function caSaveSession(session) {
+  const valid = caValidateSessionShape(session);
+  if (valid) { try { localStorage.setItem(CHIROOT_AUTH_KEY, JSON.stringify(valid)); } catch (e) {} }
+}
+
+function caClearSession() {
+  try { localStorage.removeItem(CHIROOT_AUTH_KEY); } catch (e) {}
+}
+
+let caRefreshPromise = null;
+async function caEnsureFreshToken(force) {
+  const current = ChirootAuth.session;
+  if (!current) throw new Error('Belum masuk.');
+  if (!force && current.expires_at - Date.now() > 60000) return current;
+  if (caRefreshPromise) return caRefreshPromise;
+  caRefreshPromise = (async () => {
+    try {
+      const res = await fetch(caBase() + '/auth/v1/token?grant_type=refresh_token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': caApiKey() },
+        body: JSON.stringify({ refresh_token: current.refresh_token })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data || typeof data.access_token !== 'string') {
+        throw new Error(caErrorFrom(data, 'Sesi habis. Silakan login lagi.'));
+      }
+      ChirootAuth.session = {
+        access_token: data.access_token,
+        refresh_token: (typeof data.refresh_token === 'string' && data.refresh_token) ? data.refresh_token : current.refresh_token,
+        expires_at: Number(data.expires_at) || Date.now() + (Number(data.expires_in) || 3600) * 1000,
+        user: (data.user && typeof data.user.id === 'string' && data.user.id === current.user.id)
+          ? { id: data.user.id, email: typeof data.user.email === 'string' ? data.user.email : current.user.email }
+          : current.user
+      };
+      caSaveSession(ChirootAuth.session);
+      return ChirootAuth.session;
+    } finally {
+      caRefreshPromise = null;
+    }
+  })();
+  return caRefreshPromise;
+}
+
+async function caFetch(url, options, retried) {
+  options = options || {};
+  await caEnsureFreshToken(false);
+  const headers = Object.assign({}, options.headers || {});
+  headers['apikey'] = caApiKey();
+  headers['Authorization'] = 'Bearer ' + ChirootAuth.session.access_token;
+  let res;
+  try {
+    res = await fetch(url, Object.assign({}, options, { headers: headers }));
+  } catch (netErr) {
+    throw new Error('Tidak bisa terhubung ke server. Periksa koneksi internetmu.');
+  }
+  if (res.status === 401 && !retried) {
+    await caEnsureFreshToken(true);
+    return caFetch(url, options, true);
+  }
+  return res;
+}
+
+async function caApiCall(path, method, body) {
+  const headers = {};
+  if (body !== undefined) {
+    headers['Content-Type'] = 'application/json';
+    headers['Prefer'] = 'return=representation';
+  }
+  const res = await caFetch(caBase() + path, {
+    method: method,
+    headers: headers,
+    body: body === undefined ? undefined : JSON.stringify(body)
+  });
+  const text = await res.text();
+  let data = null;
+  if (text) { try { data = JSON.parse(text); } catch (e) { data = null; } }
+  if (!res.ok) {
+    let detail = caErrorFrom(data, 'HTTP ' + res.status);
+    if (Array.isArray(data) && data.length && data[0] && typeof data[0].message === 'string') detail = data[0].message;
+    throw new Error(detail);
+  }
+  return data;
+}
+
+async function caStorageUpload(path, blob, contentType) {
+  const res = await caFetch(caBase() + '/storage/v1/object/' + CHIROOT_CRATE_BUCKET + '/' + path, {
+    method: 'POST',
+    headers: { 'Content-Type': contentType, 'x-upsert': 'false' },
+    body: blob
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(caErrorFrom(data, 'Upload file gagal (HTTP ' + res.status + ')'));
+  }
+  return path;
+}
+
+async function caStorageDelete(path) {
+  const res = await caFetch(caBase() + '/storage/v1/object/' + CHIROOT_CRATE_BUCKET + '/' + path, { method: 'DELETE' });
+  return res.ok || res.status === 404 || res.status === 400 || res.status === 406;
+}
+
+function caCratePublicUrl(path) {
+  return caBase() + '/storage/v1/object/public/' + CHIROOT_CRATE_BUCKET + '/' + path;
+}
+
+function caCleanText(value, maxLen) {
+  return String(value == null ? '' : value).replace(/[\u0000-\u001F\u007F]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, maxLen);
+}
+
+function caCleanEmail(value) {
+  const e = caCleanText(value, 100).toLowerCase();
+  return /^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/.test(e) ? e : '';
+}
+
+function caCleanColor(value, fallback) {
+  let c = String(value == null ? '' : value).trim().toLowerCase();
+  if (/^#([0-9a-f]{3})$/.test(c)) c = '#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3];
+  return /^#([0-9a-f]{6})$/.test(c) ? c : fallback;
+}
+
+function caSafePfp(value) {
+  if (typeof value !== 'string') return '';
+  const comma = value.indexOf(',');
+  if (comma <= 0) return '';
+  if (!/^data:image\/(png|jpe?g|webp);base64,$/.test(value.slice(0, comma + 1))) return '';
+  if (value.length > 400000) return '';
+  if (!/^[A-Za-z0-9+/]+=*$/.test(value.slice(comma + 1))) return '';
+  return value;
+}
+
+function caSafeImageUrl(value) {
+  if (typeof value !== 'string' || !value) return '';
+  if (/^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/]+=*$/.test(value) && value.length <= 400000) return value;
+  if (/^https:\/\/[^\s"'<>\\]+$/i.test(value) && value.length <= 1024) return value;
+  return '';
+}
+
+function caSanitizeProfile(row, expectedUid) {
+  if (!row || typeof row !== 'object') return null;
+  if (String(row.id) !== String(expectedUid)) return null;
+  return {
+    id: String(row.id),
+    display_name: caCleanText(row.display_name, 60),
+    email: caCleanEmail(row.email),
+    pfp: caSafePfp(row.pfp),
+    description: caCleanText(row.description, 300),
+    banner_color: caCleanColor(row.banner_color, '#d84a3a'),
+    created_at: (typeof row.created_at === 'string' && row.created_at) ? row.created_at : new Date().toISOString()
+  };
+}
+
+async function caFetchProfile() {
+  const uid = ChirootAuth.session.user.id;
+  const rows = await caApiCall('/rest/v1/profiles?select=*&id=eq.' + encodeURIComponent(uid) + '&limit=1', 'GET');
+  if (!Array.isArray(rows) || !rows.length) return null;
+  return caSanitizeProfile(rows[0], uid);
+}
+
+async function caCreateProfile(fields) {
+  const uid = ChirootAuth.session.user.id;
+  const rows = await caApiCall('/rest/v1/profiles', 'POST', Object.assign({ id: uid }, fields));
+  const row = (Array.isArray(rows) && rows.length) ? rows[0] : Object.assign({ id: uid }, fields);
+  return caSanitizeProfile(row, uid);
+}
+
+async function caUpdateProfile(fields) {
+  const uid = ChirootAuth.session.user.id;
+  const rows = await caApiCall('/rest/v1/profiles?id=eq.' + encodeURIComponent(uid), 'PATCH', fields);
+  const row = (Array.isArray(rows) && rows.length) ? rows[0] : Object.assign({}, ChirootAuth.profile, fields);
+  return caSanitizeProfile(row, uid);
+}
+
+function caLoadImage(url) {
+  return new Promise(function (resolve, reject) {
+    const img = new Image();
+    img.onload = function () { resolve(img); };
+    img.onerror = function () { reject(new Error('Gagal memuat gambar.')); };
+    img.src = url;
+  });
+}
+
+async function caProcessPfpFile(file) {
+  if (!file) throw new Error('Pilih file foto dulu.');
+  const typeOk = ['image/png', 'image/jpeg', 'image/webp'].indexOf(file.type) !== -1;
+  const nameOk = /\.(png|jpe?g|webp)$/i.test(file.name || '');
+  if (!typeOk && !nameOk) throw new Error('Format foto harus PNG, JPEG, atau WEBP.');
+  if (file.size > 5 * 1024 * 1024) throw new Error('Foto terlalu besar. Maksimal 5 MB.');
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    const img = await caLoadImage(objectUrl);
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    const side = Math.min(w, h);
+    if (!side) throw new Error('Gambar tidak valid.');
+    const size = 256;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Browser tidak mendukung canvas.');
+    ctx.drawImage(img, (w - side) / 2, (h - side) / 2, side, side, 0, 0, size, size);
+    return canvas.toDataURL('image/jpeg', 0.86);
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
+function caMapCrateRow(row) {
+  if (!row || typeof row !== 'object') return null;
+  const title = caCleanText(row.title, 80);
+  if (!title) return null;
+  const artist = caCleanText(row.artist, 80) || 'Unknown Artist';
+  let src = '';
+  if (typeof row.audio_url === 'string' && row.audio_url.length <= 2048 && /^https:\/\/[^\s"'<>]+$/i.test(row.audio_url)) {
+    src = row.audio_url;
+  } else if (typeof row.audio_path === 'string' && row.audio_path.length <= 512 && /^[a-zA-Z0-9_-]+\/[a-zA-Z0-9._-]+$/.test(row.audio_path)) {
+    src = caCratePublicUrl(row.audio_path);
+  }
+  if (!src) return null;
+  let cover = null;
+  if (typeof row.cover_path === 'string' && row.cover_path.length <= 512 && /^[a-zA-Z0-9_-]+\/[a-zA-Z0-9._-]+$/.test(row.cover_path)) {
+    cover = caCratePublicUrl(row.cover_path);
+  }
+  return {
+    id: String(row.id || ('r_' + Date.now())),
+    title: title,
+    artist: artist,
+    src: src,
+    cover: cover,
+    labelColor: caCleanColor(row.label_color, '#d84a3a'),
+    vinylColor: caCleanColor(row.vinyl_color, '#1e1e24'),
+    isDemo: false,
+    _audioPath: (typeof row.audio_path === 'string' && row.audio_path) ? row.audio_path : null,
+    _coverPath: (typeof row.cover_path === 'string' && row.cover_path) ? row.cover_path : null,
+    _audioUrl: (typeof row.audio_url === 'string' && row.audio_url) ? row.audio_url : null
+  };
+}
+
+async function caFetchCrate() {
+  const uid = ChirootAuth.session.user.id;
+  const rows = await caApiCall('/rest/v1/crate_tracks?select=*&user_id=eq.' + encodeURIComponent(uid) + '&order=position.asc', 'GET');
+  if (!Array.isArray(rows)) return [];
+  return rows.map(caMapCrateRow).filter(Boolean);
+}
+
+async function caNextPosition() {
+  const uid = ChirootAuth.session.user.id;
+  const rows = await caApiCall('/rest/v1/crate_tracks?select=position&user_id=eq.' + encodeURIComponent(uid) + '&order=position.desc&limit=1', 'GET');
+  if (Array.isArray(rows) && rows.length && isFinite(Number(rows[0].position))) return Number(rows[0].position) + 1;
+  return 0;
+}
+
+async function caCrateAdd(fields, audioBlob, coverBlob, audioUrl) {
+  const uid = ChirootAuth.session.user.id;
+  const id = (window.crypto && typeof crypto.randomUUID === 'function')
+    ? crypto.randomUUID()
+    : 't_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+  const audioPath = uid + '/' + id + '.mp3';
+  let coverPath = null;
+  try {
+    if (audioBlob) {
+      await caStorageUpload(audioPath, audioBlob, 'audio/mpeg');
+    }
+    if (coverBlob) {
+      coverPath = uid + '/' + id + '_cover.jpg';
+      await caStorageUpload(coverPath, coverBlob, 'image/jpeg');
+    }
+    const rows = await caApiCall('/rest/v1/crate_tracks', 'POST', {
+      id: id,
+      user_id: uid,
+      title: fields.title,
+      artist: fields.artist,
+      label_color: fields.labelColor,
+      vinyl_color: fields.vinylColor,
+      audio_path: audioBlob ? audioPath : null,
+      audio_url: audioUrl || null,
+      cover_path: coverPath,
+      position: fields.position
+    });
+    const row = (Array.isArray(rows) && rows.length) ? rows[0] : null;
+    const mapped = row ? caMapCrateRow(row) : null;
+    return mapped || {
+      id: id,
+      title: fields.title,
+      artist: fields.artist,
+      src: audioUrl || caCratePublicUrl(audioPath),
+      cover: coverPath ? caCratePublicUrl(coverPath) : null,
+      labelColor: fields.labelColor,
+      vinylColor: fields.vinylColor,
+      isDemo: false,
+      _audioPath: audioBlob ? audioPath : null,
+      _coverPath: coverPath,
+      _audioUrl: audioUrl || null
+    };
+  } catch (err) {
+    if (audioBlob) { try { await caStorageDelete(audioPath); } catch (e) {} }
+    if (coverBlob && coverPath) { try { await caStorageDelete(coverPath); } catch (e) {} }
+    throw err;
+  }
+}
+
+async function caCrateUpdate(track, fields, audioBlob, coverBlob) {
+  const uid = ChirootAuth.session.user.id;
+  let audioPath = track._audioPath || null;
+  let coverPath = track._coverPath || null;
+  let audioUrl = track._audioUrl || null;
+  if (audioBlob) {
+    if (!audioPath) audioPath = uid + '/' + track.id + '.mp3';
+    await caStorageUpload(audioPath, audioBlob, 'audio/mpeg');
+    audioUrl = null;
+  }
+  if (coverBlob) {
+    if (!coverPath) coverPath = uid + '/' + track.id + '_cover.jpg';
+    await caStorageUpload(coverPath, coverBlob, 'image/jpeg');
+  }
+  const rows = await caApiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(track.id), 'PATCH', {
+    title: fields.title,
+    artist: fields.artist,
+    label_color: fields.labelColor,
+    vinyl_color: fields.vinylColor,
+    audio_path: audioPath,
+    audio_url: audioUrl,
+    cover_path: coverPath
+  });
+  const row = (Array.isArray(rows) && rows.length) ? rows[0] : null;
+  if (row) {
+    const mapped = caMapCrateRow(row);
+    if (mapped) return mapped;
+  }
+  return Object.assign({}, track, fields, { _audioPath: audioPath, _coverPath: coverPath, _audioUrl: audioUrl });
+}
+
+async function caCrateDelete(track) {
+  await caApiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(track.id), 'DELETE');
+  if (track._audioPath) { try { await caStorageDelete(track._audioPath); } catch (e) {} }
+  if (track._coverPath) { try { await caStorageDelete(track._coverPath); } catch (e) {} }
+}
+
+async function caCrateReset() {
+  const rows = await caFetchCrate();
+  for (const t of rows) {
+    try { await caApiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(t.id), 'DELETE'); } catch (e) {}
+    if (t._audioPath) { try { await caStorageDelete(t._audioPath); } catch (e) {} }
+    if (t._coverPath) { try { await caStorageDelete(t._coverPath); } catch (e) {} }
+  }
+}
+
+function caLoginRedirect() {
+  if (!isSupabaseConfigured()) {
+    caGateError('Konfigurasi Supabase belum benar. Hubungi developer Chiroot.');
+    return;
+  }
+  const proto = window.location.protocol;
+  if (proto !== 'https:' && !(proto === 'http:' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))) {
+    caGateError('Login Google butuh alamat HTTPS. Deploy Chiroot ke web, atau buka lewat http://localhost untuk testing.');
+    return;
+  }
+  if (!window.crypto || !crypto.subtle || typeof crypto.getRandomValues !== 'function') {
+    caGateError('Browser kamu tidak mendukung kriptografi aman. Pakai browser terbaru.');
+    return;
+  }
+  caSetLoginButtonsBusy(true);
+  caPkcePair().then(function (pair) {
+    try { sessionStorage.setItem(CHIROOT_PKCE_KEY, pair.verifier); } catch (e) {}
+    const params = new URLSearchParams();
+    params.set('provider', 'google');
+    params.set('code_challenge', pair.challenge);
+    params.set('code_challenge_method', 'S256');
+    params.set('redirect_to', window.location.origin + window.location.pathname);
+    window.location.assign(caBase() + '/auth/v1/authorize?' + params.toString());
+  }).catch(function () {
+    caSetLoginButtonsBusy(false);
+    caGateError('Gagal menyiapkan login. Coba lagi.');
+  });
+}
+
+async function caHandleAuthCallback() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const err = params.get('error');
+  if (!code && !err) return false;
+  const cleanUrl = function () {
+    try { history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (e) {}
+  };
+  if (err) {
+    cleanUrl();
+    throw new Error(caErrorFrom({ error: err, error_description: params.get('error_description') }, 'Login dibatalkan atau gagal.'));
+  }
+  let verifier = '';
+  try { verifier = sessionStorage.getItem(CHIROOT_PKCE_KEY) || ''; } catch (e) {}
+  cleanUrl();
+  try { sessionStorage.removeItem(CHIROOT_PKCE_KEY); } catch (e) {}
+  if (!verifier) throw new Error('Sesi login tidak ditemukan. Silakan login ulang.');
+  const res = await fetch(caBase() + '/auth/v1/token?grant_type=pkce', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': caApiKey() },
+    body: JSON.stringify({ code: code, code_verifier: verifier })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data || typeof data.access_token !== 'string' || !data.user || typeof data.user.id !== 'string') {
+    throw new Error(caErrorFrom(data, 'Login gagal (HTTP ' + res.status + ').'));
+  }
+  const session = {
+    access_token: data.access_token,
+    refresh_token: typeof data.refresh_token === 'string' ? data.refresh_token : '',
+    expires_at: Number(data.expires_at) || Date.now() + (Number(data.expires_in) || 3600) * 1000,
+    user: { id: data.user.id, email: typeof data.user.email === 'string' ? data.user.email : '' }
+  };
+  ChirootAuth.session = caValidateSessionShape(session);
+  caSaveSession(session);
+  return true;
+}
+
+async function caSignOut() {
+  const session = ChirootAuth.session;
+  ChirootAuth.session = null;
+  ChirootAuth.profile = null;
+  caClearSession();
+  if (session) {
+    try {
+      await fetch(caBase() + '/auth/v1/logout', {
+        method: 'POST',
+        headers: { 'apikey': caApiKey(), 'Authorization': 'Bearer ' + session.access_token }
+      });
+    } catch (e) {}
+  }
+}
+
+function caSettled(value) {
+  if (ChirootAuth._settled) return;
+  ChirootAuth._settled = true;
+  ChirootAuth._settledValue = !!value;
+  const waiters = ChirootAuth._waiters.slice();
+  ChirootAuth._waiters = [];
+  waiters.forEach(function (fn) { try { fn(ChirootAuth._settledValue); } catch (e) {} });
+}
+
+function caFireHook(name, arg) {
+  const hooks = window.ChirootHooks;
+  if (hooks && typeof hooks[name] === 'function') {
+    try { hooks[name](arg); } catch (e) { console.warn('ChirootHooks.' + name + ' error', e); }
+  }
+}
+
+function caGateShow(mode) {
+  const gate = document.getElementById('auth-overlay');
+  const content = document.getElementById('auth-overlay-content');
+  if (!gate || !content) return;
+  gate.classList.add('open');
+  gate.setAttribute('aria-hidden', 'false');
+  content.innerHTML = '';
+  if (mode === 'checking') {
+    content.innerHTML = '<div class="gate-status"><span class="gate-spinner"></span> Memeriksa sesi…</div>';
+    return;
+  }
+  const wrap = document.createElement('div');
+  wrap.className = 'gate-btn-wrap';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'google-btn';
+  btn.id = 'gate-login-btn';
+  btn.innerHTML = GOOGLE_G_SVG + '<span>Login with Google</span>';
+  btn.addEventListener('click', caLoginRedirect);
+  wrap.appendChild(btn);
+  const note = document.createElement('p');
+  note.className = 'gate-note';
+  note.textContent = 'Dengan login, lagu & profil kamu tersimpan di akun Google dan bisa dibuka dari device lain.';
+  wrap.appendChild(note);
+  content.appendChild(wrap);
+}
+
+function caGateHide() {
+  const gate = document.getElementById('auth-overlay');
+  if (!gate) return;
+  gate.classList.remove('open');
+  gate.setAttribute('aria-hidden', 'true');
+}
+
+function caGateError(message) {
+  const content = document.getElementById('auth-overlay-content');
+  if (!content) return;
+  let err = content.querySelector('.gate-error');
+  if (!err) {
+    err = document.createElement('div');
+    err.className = 'gate-error';
+    content.appendChild(err);
+  }
+  err.textContent = message;
+}
+
+function caAddGateRetry(fn) {
+  const content = document.getElementById('auth-overlay-content');
+  if (!content) return;
+  let wrap = content.querySelector('.gate-btn-wrap');
+  if (!wrap) {
+    wrap = document.createElement('div');
+    wrap.className = 'gate-btn-wrap';
+    content.appendChild(wrap);
+  }
+  let btn = document.getElementById('gate-retry-btn');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'google-btn';
+    btn.id = 'gate-retry-btn';
+    wrap.appendChild(btn);
+  }
+  btn.innerHTML = '<span>↻ Coba Lagi</span>';
+  btn.disabled = false;
+  btn.onclick = fn;
+}
+
+function caSetLoginButtonsBusy(busy) {
+  ['gate-login-btn', 'topbar-login-btn'].forEach(function (id) {
+    const b = document.getElementById(id);
+    if (!b) return;
+    b.disabled = busy;
+    const span = b.querySelector('span');
+    if (span) span.textContent = busy ? 'Membuka Google…' : 'Login with Google';
+  });
+}
+
+function caAvatarInner(profile) {
+  if (profile && profile.pfp) {
+    return '<img src="' + escapeHtmlAttr(profile.pfp) + '" alt="">';
+  }
+  let name = '';
+  if (profile && profile.display_name) name = profile.display_name;
+  else if (profile && profile.email) name = profile.email.split('@')[0];
+  const init = String(name).trim().split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join('') || '?';
+  return escapeHtml(init);
+}
+
+function caRenderTopbar() {
+  const el = document.getElementById('topbar-auth');
+  if (!el) return;
+  el.innerHTML = '';
+  if (!(ChirootAuth.session && ChirootAuth.profile)) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'google-btn';
+    btn.id = 'topbar-login-btn';
+    btn.innerHTML = GOOGLE_G_SVG + '<span>Login with Google</span>';
+    btn.addEventListener('click', caLoginRedirect);
+    el.appendChild(btn);
+    return;
+  }
+  const user = document.createElement('div');
+  user.className = 'topbar-user';
+  const avatar = document.createElement('button');
+  avatar.type = 'button';
+  avatar.className = 'topbar-avatar';
+  avatar.title = 'Edit profil';
+  avatar.setAttribute('aria-label', 'Edit profil');
+  avatar.innerHTML = caAvatarInner(ChirootAuth.profile);
+  avatar.addEventListener('click', caOpenProfileModal);
+  const out = document.createElement('button');
+  out.type = 'button';
+  out.className = 'topbar-logout';
+  out.textContent = 'Log Out';
+  out.addEventListener('click', caAskSignOut);
+  user.appendChild(avatar);
+  user.appendChild(out);
+  el.appendChild(user);
+}
+
+function caGreetingFor(date) {
+  const h = date.getHours();
+  if (h >= 4 && h < 11) return 'Good Morning';
+  if (h >= 11 && h < 15) return 'Good Afternoon';
+  if (h >= 15 && h < 19) return 'Good Evening';
+  return 'Good Night';
+}
+
+function caGreetName() {
+  const p = ChirootAuth.profile;
+  if (p && p.display_name) return p.display_name.split(/\s+/)[0];
+  let local = '';
+  if (p && p.email) local = p.email.split('@')[0];
+  else if (ChirootAuth.session && ChirootAuth.session.user && ChirootAuth.session.user.email) local = ChirootAuth.session.user.email.split('@')[0];
+  local = String(local || '').replace(/[._%+-]+/g, ' ').trim();
+  if (local) return local.charAt(0).toUpperCase() + local.slice(1);
+  return 'Music Lover';
+}
+
+function caRenderGreeting() {
+  const el = document.getElementById('greeting-text');
+  if (!el) return;
+  if (ChirootAuth.session && ChirootAuth.profile) {
+    el.textContent = caGreetingFor(new Date()) + ', ' + caGreetName() + '! ✦';
+  } else {
+    el.textContent = '✦ Selamat datang di Chiroot';
+  }
+}
+
+let obPfpDataUrl = '';
+
+function caOpenOnboarding() {
+  const modal = document.getElementById('onboard-modal');
+  if (!modal) return;
+  const email = (ChirootAuth.session && ChirootAuth.session.user && ChirootAuth.session.user.email) || '';
+  const sub = document.getElementById('onboard-sub');
+  if (sub) sub.textContent = 'Akun ' + (email || 'Google') + ' baru di Chiroot. Lengkapi profil dulu untuk mulai.';
+  obPfpDataUrl = '';
+  const preview = document.getElementById('ob-avatar-preview');
+  if (preview) preview.textContent = '?';
+  const nameEl = document.getElementById('ob-name');
+  const emailEl = document.getElementById('ob-email');
+  if (nameEl) nameEl.value = '';
+  if (emailEl) emailEl.value = email;
+  const input = document.getElementById('ob-pfp-input');
+  if (input) input.value = '';
+  const hint = document.getElementById('ob-pfp-hint');
+  if (hint) { hint.textContent = 'PNG / JPEG / WEBP – max 5 MB'; hint.style.color = ''; }
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(function () { if (nameEl) nameEl.focus(); }, 60);
+}
+
+function caCloseOnboarding() {
+  const modal = document.getElementById('onboard-modal');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+}
+
+async function caOnboardingSave() {
+  const nameEl = document.getElementById('ob-name');
+  const emailEl = document.getElementById('ob-email');
+  const saveBtn = document.getElementById('ob-save');
+  const name = caCleanText(nameEl ? nameEl.value : '', 60);
+  const email = caCleanEmail(emailEl ? emailEl.value : '');
+  if (!name) { showToast('Nama wajib diisi ya.'); if (nameEl) nameEl.focus(); return; }
+  if (!email) { showToast('Email tidak valid.'); if (emailEl) emailEl.focus(); return; }
+  if (!obPfpDataUrl) { showToast('Pilih foto profil dulu (PNG / JPEG / WEBP).'); return; }
+  if (!consumeClientRateLimit('onboardSave', RATE_LIMITS.onboardSave)) return;
+  if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan…'; }
+  try {
+    const profile = await caCreateProfile({ display_name: name, email: email, pfp: obPfpDataUrl, description: '', banner_color: '#d84a3a' });
+    if (!profile) throw new Error('Gagal menyimpan profil.');
+    ChirootAuth.profile = profile;
+    caCloseOnboarding();
+    caGateHide();
+    caRenderTopbar();
+    caRenderGreeting();
+    caFireHook('onProfileReady');
+    caSettled(true);
+    showToast('Selamat datang, ' + name.split(/\s+/)[0] + '! ✦');
+  } catch (err) {
+    console.error(err);
+    showToast('Gagal menyimpan profil: ' + (err && err.message ? err.message : err));
+  } finally {
+    if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Simpan & Mulai →'; }
+  }
+}
+
+let pfDraft = { name: '', email: '', description: '', bannerColor: '#d84a3a', pfp: '' };
+
+function caMemberSince(iso) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return 'Member since —';
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  return 'Member since ' + months[d.getMonth()] + ' ' + d.getFullYear();
+}
+
+function caRenderProfilePreview() {
+  const name = pfDraft.name.trim() || '—';
+  const nameEl = document.getElementById('pf-preview-name');
+  const descEl = document.getElementById('pf-preview-desc');
+  const bannerEl = document.getElementById('pf-preview-banner');
+  const avatarEl = document.getElementById('pf-preview-avatar');
+  const sinceEl = document.getElementById('pf-preview-since');
+  const bigAvatar = document.getElementById('pf-avatar');
+  if (nameEl) nameEl.textContent = name;
+  if (descEl) {
+    const d = pfDraft.description.trim();
+    descEl.textContent = d;
+    descEl.style.display = d ? 'block' : 'none';
+  }
+  if (bannerEl) bannerEl.style.background = pfDraft.bannerColor;
+  const avatarHtml = pfDraft.pfp ? '<img src="' + escapeHtmlAttr(pfDraft.pfp) + '" alt="">' : escapeHtml(initials(name));
+  if (avatarEl) avatarEl.innerHTML = avatarHtml;
+  if (bigAvatar) bigAvatar.innerHTML = avatarHtml;
+  if (sinceEl) sinceEl.textContent = caMemberSince(ChirootAuth.profile ? ChirootAuth.profile.created_at : '');
+}
+
+function caOpenProfileModal() {
+  const modal = document.getElementById('profile-modal');
+  const p = ChirootAuth.profile;
+  if (!modal || !p) return;
+  pfDraft = { name: p.display_name, email: p.email, description: p.description, bannerColor: p.banner_color, pfp: p.pfp };
+  const nameEl = document.getElementById('pf-name');
+  const emailEl = document.getElementById('pf-email');
+  const descEl = document.getElementById('pf-desc');
+  const countEl = document.getElementById('pf-desc-count');
+  const input = document.getElementById('pf-pfp-input');
+  const hint = document.getElementById('pf-pfp-hint');
+  const custom = document.getElementById('pf-banner-custom');
+  if (nameEl) nameEl.value = p.display_name;
+  if (emailEl) emailEl.value = p.email;
+  if (descEl) descEl.value = p.description;
+  if (countEl) countEl.textContent = String(p.description.length) + '/300';
+  if (input) input.value = '';
+  if (hint) { hint.textContent = 'PNG / JPEG / WEBP – max 5 MB'; hint.style.color = ''; }
+  if (custom) custom.value = p.banner_color;
+  let presetMatched = false;
+  document.querySelectorAll('#pf-swatches .pf-swatch').forEach(function (sw) {
+    if (sw.classList.contains('custom')) return;
+    const match = sw.getAttribute('data-color') === p.banner_color;
+    sw.classList.toggle('active', match);
+    if (match) presetMatched = true;
+  });
+  if (custom && custom.closest('.pf-swatch')) custom.closest('.pf-swatch').classList.toggle('active', !presetMatched);
+  caRenderProfilePreview();
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(function () { if (nameEl) nameEl.focus(); }, 60);
+}
+
+function caCloseProfileModal() {
+  const modal = document.getElementById('profile-modal');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+}
+
+async function caProfileSave() {
+  const nameEl = document.getElementById('pf-name');
+  const emailEl = document.getElementById('pf-email');
+  const descEl = document.getElementById('pf-desc');
+  const saveBtn = document.getElementById('pf-save');
+  const name = caCleanText(nameEl ? nameEl.value : '', 60);
+  const email = caCleanEmail(emailEl ? emailEl.value : '');
+  if (!name) { showToast('Nama tidak boleh kosong.'); if (nameEl) nameEl.focus(); return; }
+  if (!email) { showToast('Email tidak valid.'); if (emailEl) emailEl.focus(); return; }
+  if (!consumeClientRateLimit('profileSave', RATE_LIMITS.profileSave)) return;
+  if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan…'; }
+  try {
+    const updated = await caUpdateProfile({
+      display_name: name,
+      email: email,
+      pfp: pfDraft.pfp || (ChirootAuth.profile ? ChirootAuth.profile.pfp : ''),
+      description: caCleanText(descEl ? descEl.value : '', 300),
+      banner_color: pfDraft.bannerColor
+    });
+    if (!updated) throw new Error('Gagal memperbarui profil.');
+    ChirootAuth.profile = updated;
+    caRenderTopbar();
+    caRenderGreeting();
+    caCloseProfileModal();
+    showToast('Profil tersimpan ✦');
+    caFireHook('onProfileUpdated', updated);
+  } catch (err) {
+    console.error(err);
+    showToast('Gagal menyimpan profil: ' + (err && err.message ? err.message : err));
+  } finally {
+    if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Simpan Profil'; }
+  }
+}
+
+function caAskSignOut() {
+  if (!ChirootAuth.session) return;
+  const ok = window.confirm('Yakin mau keluar dari ' + caGreetName() + '?\nLagu & profil tetap aman di akun Google kamu.');
+  if (!ok) return;
+  caDoSignOut();
+}
+
+function caDoSignOut() {
+  caSignOut().then(function () {
+    tracks = [];
+    currentIndex = 0;
+    isPlaying = false;
+    isLoop = false;
+    isShuffle = false;
+    playOrder = [];
+    try { audio.pause(); audio.loop = false; } catch (e) {}
+    try {
+      loopBtn.classList.remove('active');
+      shuffleBtn.classList.remove('active');
+    } catch (e) {}
+    try { audio.removeAttribute('src'); audio.load(); } catch (e) {}
+    document.body.classList.remove('is-playing');
+    showEmptyState();
+    renderPlaylist();
+    renderTop10();
+    caGateShow('login');
+    caRenderTopbar();
+    caRenderGreeting();
+    showToast('Sampai jumpa lagi!');
+  }).catch(function (err) {
+    showToast('Gagal keluar: ' + (err && err.message ? err.message : err));
+  });
+}
+
+async function caBootProfileStep(fresh) {
+  caGateShow('checking');
+  if (!fresh) {
+    try {
+      await caEnsureFreshToken(true);
+    } catch (err) {
+      ChirootAuth.session = null;
+      caClearSession();
+      caGateShow('login');
+      caGateError('Sesi tidak valid lagi. Silakan login lagi.');
+      caSettled(false);
+      return;
+    }
+  }
+  let profile = null;
+  try {
+    profile = await caFetchProfile();
+  } catch (err) {
+    console.warn('profile fetch failed', err);
+    caGateShow('login');
+    caGateError('Gagal memuat profil: ' + (err && err.message ? err.message : 'terjadi kesalahan') + '. Periksa koneksi, lalu coba lagi.');
+    caAddGateRetry(function () { return caBootProfileStep(true); });
+    caSettled(false);
+    return;
+  }
+  if (profile) {
+    ChirootAuth.profile = profile;
+    caGateHide();
+    caRenderTopbar();
+    caRenderGreeting();
+    caFireHook('onProfileReady');
+    caSettled(true);
+    return;
+  }
+  caGateHide();
+  caOpenOnboarding();
+}
+
+async function caBoot() {
+  caGateShow('checking');
+  caRenderTopbar();
+  caRenderGreeting();
+  let fromCallback = false;
+  try {
+    fromCallback = await caHandleAuthCallback();
+  } catch (err) {
+    ChirootAuth.session = null;
+    caGateShow('login');
+    caGateError(err && err.message ? err.message : 'Login gagal. Silakan coba lagi.');
+    caSettled(false);
+    return;
+  }
+  if (!fromCallback) {
+    ChirootAuth.session = caLoadSession();
+  }
+  if (!ChirootAuth.session) {
+    caGateShow('login');
+    caSettled(false);
+    return;
+  }
+  await caBootProfileStep(fromCallback);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const obInput = document.getElementById('ob-pfp-input');
+  if (obInput) obInput.addEventListener('change', function () {
+    const f = obInput.files && obInput.files[0];
+    const hint = document.getElementById('ob-pfp-hint');
+    const preview = document.getElementById('ob-avatar-preview');
+    if (!f) return;
+    caProcessPfpFile(f).then(function (dataUrl) {
+      obPfpDataUrl = dataUrl;
+      if (preview) preview.innerHTML = '<img src="' + escapeHtmlAttr(dataUrl) + '" alt="">';
+      if (hint) { hint.textContent = '✓ ' + f.name; hint.style.color = '#2a7a3a'; }
+    }).catch(function (err) {
+      obInput.value = '';
+      if (hint) { hint.textContent = '❌ ' + (err && err.message ? err.message : 'File tidak valid'); hint.style.color = '#b42318'; }
+    });
+  });
+
+  const pfInput = document.getElementById('pf-pfp-input');
+  if (pfInput) pfInput.addEventListener('change', function () {
+    const f = pfInput.files && pfInput.files[0];
+    const hint = document.getElementById('pf-pfp-hint');
+    if (!f) return;
+    caProcessPfpFile(f).then(function (dataUrl) {
+      pfDraft.pfp = dataUrl;
+      if (hint) { hint.textContent = '✓ ' + f.name; hint.style.color = '#2a7a3a'; }
+      caRenderProfilePreview();
+    }).catch(function (err) {
+      pfInput.value = '';
+      if (hint) { hint.textContent = '❌ ' + (err && err.message ? err.message : 'File tidak valid'); hint.style.color = '#b42318'; }
+    });
+  });
+
+  const pfName = document.getElementById('pf-name');
+  if (pfName) pfName.addEventListener('input', function () { pfDraft.name = pfName.value; caRenderProfilePreview(); });
+  const pfEmail = document.getElementById('pf-email');
+  if (pfEmail) pfEmail.addEventListener('input', function () { pfDraft.email = pfEmail.value; });
+  const pfDesc = document.getElementById('pf-desc');
+  if (pfDesc) pfDesc.addEventListener('input', function () {
+    pfDraft.description = pfDesc.value;
+    const c = document.getElementById('pf-desc-count');
+    if (c) c.textContent = String(pfDesc.value.length) + '/300';
+    caRenderProfilePreview();
+  });
+
+  const swatches = document.getElementById('pf-swatches');
+  if (swatches) swatches.addEventListener('click', function (e) {
+    const sw = e.target.closest('.pf-swatch[data-color]');
+    if (!sw || sw.classList.contains('custom')) return;
+    document.querySelectorAll('#pf-swatches .pf-swatch').forEach(function (x) { x.classList.remove('active'); });
+    sw.classList.add('active');
+    pfDraft.bannerColor = sw.getAttribute('data-color');
+    caRenderProfilePreview();
+  });
+
+  const customColor = document.getElementById('pf-banner-custom');
+  if (customColor) customColor.addEventListener('input', function () {
+    pfDraft.bannerColor = customColor.value;
+    document.querySelectorAll('#pf-swatches .pf-swatch').forEach(function (x) { x.classList.remove('active'); });
+    const wrap = customColor.closest('.pf-swatch');
+    if (wrap) wrap.classList.add('active');
+    caRenderProfilePreview();
+  });
+
+  const bannerEdit = document.getElementById('pf-banner-edit');
+  if (bannerEdit) bannerEdit.addEventListener('click', function () {
+    if (customColor) { try { customColor.focus(); } catch (e) {} }
+  });
+
+  const obSave = document.getElementById('ob-save');
+  if (obSave) obSave.addEventListener('click', caOnboardingSave);
+  const pfSave = document.getElementById('pf-save');
+  if (pfSave) pfSave.addEventListener('click', caProfileSave);
+  const pfClose = document.getElementById('profile-close');
+  if (pfClose) pfClose.addEventListener('click', caCloseProfileModal);
+  const pfCancel = document.getElementById('pf-cancel');
+  if (pfCancel) pfCancel.addEventListener('click', caCloseProfileModal);
+  const pfModal = document.getElementById('profile-modal');
+  if (pfModal) pfModal.addEventListener('click', function (e) { if (e.target === pfModal) caCloseProfileModal(); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    const pf = document.getElementById('profile-modal');
+    if (pf && pf.classList.contains('open')) caCloseProfileModal();
+  });
+
+  setInterval(function () { caRenderGreeting(); }, 30000);
+
+  caBoot();
+});
+</script>
 
   <script>
 
@@ -2890,22 +3982,15 @@ const TOP10_SONGS = [
   }
 ];
 
-const LS_KEY = 'gramophone_playlist_v2';
 const LS_STATE = 'gramophone_state_v2';
-
-const MAX_IMPORT_BACKUP_BYTES = 200 * 1024 * 1024;
-const MAX_IMPORTED_TRACKS = 150;
-const MAX_AUDIO_DATA_URL_CHARS = 18 * 1024 * 1024;
-const MAX_COVER_DATA_URL_CHARS = 7 * 1024 * 1024;
-const AUDIO_DATA_MIME_RE = /^(audio\/(mpeg|mp3|mpeg3|x-mpeg)|application\/octet-stream)$/i;
-const IMAGE_DATA_MIME_RE = /^image\/(png|jpe?g|webp)$/i;
 
 const RATE_LIMIT_STORAGE_KEY = 'gramophone_rate_limit_v1';
 const RATE_LIMITS = {
   spotifyFetch: { max: 5, windowMs: 60 * 1000, label: 'Spotify auto-fill' },
-  importBackup: { max: 3, windowMs: 10 * 60 * 1000, label: 'Restore backup' },
   addTrack: { max: 12, windowMs: 10 * 60 * 1000, label: 'Add/Edit Music' },
-  top10Add: { max: 30, windowMs: 5 * 60 * 1000, label: 'Top 5 add' }
+  top10Add: { max: 30, windowMs: 5 * 60 * 1000, label: 'Top 5 add' },
+  profileSave: { max: 10, windowMs: 60 * 1000, label: 'Simpan profil' },
+  onboardSave: { max: 5, windowMs: 10 * 60 * 1000, label: 'Buat profil' }
 };
 let __rateLimitMemory = {};
 
@@ -2917,6 +4002,25 @@ let isLoop = false;
 let isSeeking = false;
 let playOrder = [];
 let shufflePointer = 0;
+
+window.ChirootHooks = {
+  async onProfileReady() {
+    cleanupLegacyStorage();
+    try {
+      await loadPlaylist();
+      restoreState();
+      renderPlaylist();
+      renderTop10();
+      if (tracks.length) loadTrack(currentIndex, false, true);
+    } catch (err) {
+      console.error('crate load failed', err);
+      if (typeof showToast === 'function') showToast('Gagal memuat crate: ' + (err && err.message ? err.message : err));
+    } finally {
+      if (window.ChirootAuth) ChirootAuth.resolveCrateLoaded();
+    }
+  },
+  onProfileUpdated() {}
+};
 
 function renderTop10(){
   var list = document.getElementById('top10-list');
@@ -2934,7 +4038,7 @@ function renderTop10(){
     var rankClass = i === 0 ? ' rank-1' : (i === 1 ? ' rank-2' : (i === 2 ? ' rank-3' : ''));
     var thumb = song.cover
       ? '<img src="' + escapeHtmlAttr(song.cover) + '" alt="">'
-      : '<div style="background:' + (song.labelColor || '#d84a3a') + ';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:Kalam,sans-serif;color:#fff6e2;border-radius:50%;">' + initials(song.title) + '</div>';
+      : '<div style="background:' + (song.labelColor || '#d84a3a') + ';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:Kalam,sans-serif;color:#fff6e2;border-radius:50%;">' + escapeHtml(initials(song.title)) + '</div>';
     li.innerHTML =
       '<div class="top10-rank' + rankClass + '">#' + (i + 1) + '</div>' +
       '<div class="top10-thumb" style="background:' + (song.cover ? '#15151c' : '#1f1f26') + '">' + thumb + '</div>' +
@@ -2969,147 +4073,99 @@ async function addTop10ToCrate(idx){
     showToast('"' + song.title + '" sudah ada di Crate – memutar...');
     return;
   }
+  if(!(window.ChirootAuth && ChirootAuth.isAuthed())){
+    showToast('Login dulu dengan Google.');
+    return;
+  }
   if(!consumeClientRateLimit('top10Add', RATE_LIMITS.top10Add)) return;
 
   if(/^https?:\/\//i.test(String(song.src || ''))){
-    tracks.push({
-      id: 'top10_' + Date.now(),
-      title: song.title,
-      artist: song.artist,
-      src: String(song.src).trim(),
-      labelColor: song.labelColor || '#c9a227',
-      vinylColor: song.vinylColor || '#1e1e24',
-      cover: (song.cover && /^https?:\/\//i.test(String(song.cover))) ? String(song.cover).trim() : null,
-      isDemo: false
-    });
-    await savePlaylist();
-    renderPlaylist();
-    renderTop10();
-    loadTrack(tracks.length - 1, true, true);
-    showToast('✦ "' + song.title + '" ditambahkan – diputar dari URL!');
+    if(!consumeClientRateLimit('addTrack', RATE_LIMITS.addTrack)) return;
+    showToast('Menambahkan "' + song.title + '" ke Crate…');
+    try {
+      var pos = await caNextPosition();
+      var newTrack = await caCrateAdd({
+        title: song.title,
+        artist: song.artist,
+        labelColor: song.labelColor || '#c9a227',
+        vinylColor: song.vinylColor || '#1e1e24',
+        position: pos
+      }, null, null, String(song.src).trim());
+      tracks.push(newTrack);
+      renderPlaylist();
+      renderTop10();
+      loadTrack(tracks.length - 1, true, true);
+      showToast('✦ "' + song.title + '" ditambahkan – diputar dari URL!');
+    } catch (err) {
+      console.error(err);
+      showToast('Gagal menambah track: ' + (err && err.message ? err.message : err));
+    }
     return;
   }
 
   showToast('Menambahkan "' + song.title + '" ke Crate…');
-  var audioDataUrl = null;
   try {
     var res = await fetch(song.src);
     if(!res.ok) throw new Error('HTTP ' + res.status);
-    var blob = await res.blob();
-    audioDataUrl = await new Promise(function(resolve, reject){
-      var reader = new FileReader();
-      reader.onload = function(){ resolve(reader.result); };
-      reader.onerror = function(){ reject(reader.error || new Error('Gagal baca file')); };
-      reader.readAsDataURL(blob);
-    });
+    var audioBlob = await res.blob();
+    if(!audioBlob || !audioBlob.size) throw new Error('File MP3 kosong');
+    var coverBlob = null;
+    if(song.cover){
+      try {
+        var imgRes = await fetch(song.cover);
+        if(imgRes.ok){
+          var imgBlob = await imgRes.blob();
+          if(imgBlob.type && imgBlob.type.indexOf('image') === 0){
+            coverBlob = await imageBlobToJpegBlob(imgBlob, 900);
+          }
+        }
+      } catch(e){}
+    }
+    var pos2 = await caNextPosition();
+    var newTrack2 = await caCrateAdd({
+      title: song.title,
+      artist: song.artist,
+      labelColor: song.labelColor || '#c9a227',
+      vinylColor: song.vinylColor || '#1e1e24',
+      position: pos2
+    }, audioBlob, coverBlob, null);
+    tracks.push(newTrack2);
+    renderPlaylist();
+    renderTop10();
+    loadTrack(tracks.length - 1, true, true);
+    showToast('✦ "' + song.title + '" ditambahkan ke Crate!');
   } catch(e){
-    showToast('Gagal mengambil MP3: ' + e.message + '. Pastikan file ada di "' + song.src + '"');
-    return;
+    console.error(e);
+    showToast('Gagal menambah track: ' + (e && e.message ? e.message : e) + '. Pastikan file ada di "' + song.src + '"');
   }
-  var coverDataUrl = null;
-  if(song.cover){
-    try {
-      var imgRes = await fetch(song.cover);
-      if(imgRes.ok){
-        var imgBlob = await imgRes.blob();
-        coverDataUrl = await new Promise(function(resolve, reject){
-          var reader = new FileReader();
-          reader.onload = function(){ resolve(reader.result); };
-          reader.onerror = function(){ reject(reader.error); };
-          reader.readAsDataURL(imgBlob);
-        });
-      }
-    } catch(e){}
-  }
-  var newTrack = {
-    id: 'top10_' + Date.now(),
-    title: song.title,
-    artist: song.artist,
-    src: audioDataUrl,
-    labelColor: song.labelColor || '#c9a227',
-    vinylColor: song.vinylColor || '#1e1e24',
-    cover: coverDataUrl,
-    isDemo: false
-  };
-  tracks.push(newTrack);
-  await savePlaylist();
-  renderPlaylist();
-  renderTop10();
-  loadTrack(tracks.length - 1, true, true);
-  showToast('✦ "' + song.title + '" ditambahkan ke Crate!');
 }
 
 async function init() {
   try {
+    audio.volume = parseFloat(volumeInput.value) || 0.82;
+    bindEvents();
+    updateVolumeUI();
+    renderTop10();
 
-  audio.volume = parseFloat(volumeInput.value) || 0.82;
-  await loadPlaylist();
-  restoreState();
-  renderPlaylist();
-  renderTop10();
-  loadTrack(currentIndex, false, false);
-  bindEvents();
-  updateVolumeUI();
+    var authed = (window.ChirootAuth && typeof ChirootAuth.waitReady === 'function') ? await ChirootAuth.waitReady() : false;
+    if (authed) {
+      await ChirootAuth.crateLoaded;
+      renderPlaylist();
+      renderTop10();
+    } else {
+      renderPlaylist();
+    }
 
-  loopBtn.classList.toggle('active', isLoop);
-  shuffleBtn.classList.toggle('active', isShuffle);
-  if (isShuffle) buildShuffleOrder();
-  if(typeof setupSettings === 'function') setupSettings();
-  if(typeof setupMonthlyReport === 'function') setupMonthlyReport();
-  if(typeof checkMonthlyReportTrigger === 'function') checkMonthlyReportTrigger();
-  } catch(err){ console.error("init failed", err); alert("Init error: "+err.message); try{ tracks = [];  renderPlaylist(); loadTrack(0,false,false); bindEvents(); }catch(e){} }
-
-}
-
-function cloneTracks(src){
-  try { return structuredClone(src); } catch(e){ return JSON.parse(JSON.stringify(src)); }
-}
-
-function cleanImportedText(value, fallback, maxLen){
-  var text = String(value || '').replace(/[\u0000-\u001F\u007F]/g, ' ').replace(/\s+/g, ' ').trim();
-  if(!text) text = fallback;
-  return text.slice(0, maxLen);
-}
-function cleanImportedId(value, fallback){
-  var id = String(value || fallback || '').replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 90);
-  return id || fallback || ('s_' + Date.now());
-}
-function safeDataUrl(value, allowedMimeRe, maxChars){
-  if(typeof value !== 'string') return '';
-  var dataUrl = value.trim();
-  if(!dataUrl || dataUrl.length > maxChars) return '';
-  var comma = dataUrl.indexOf(',');
-  if(comma <= 5 || comma > 96) return '';
-  var meta = dataUrl.slice(0, comma).toLowerCase();
-  if(!meta.startsWith('data:') || !meta.endsWith(';base64')) return '';
-  var mime = meta.slice(5, -7);
-  if(!allowedMimeRe.test(mime)) return '';
-  var payload = dataUrl.slice(comma + 1);
-  if(payload.length < 16 || !/^[a-z0-9+/]+={0,2}$/i.test(payload)) return '';
-  return dataUrl;
-}
-function safeExternalUrl(value, maxChars){
-  if(typeof value !== 'string') return '';
-  var u = value.trim();
-  if(!u || u.length > (maxChars || 2048)) return '';
-  if(!/^https?:\/\//i.test(u)) return '';
-  if(/[\s"'<>\\]/.test(u)) return '';
-  return u;
-}
-function sanitizeTrack(t, i){
-  if(!t || typeof t !== 'object') t = {};
-  var safeAudio = safeDataUrl(t.src, AUDIO_DATA_MIME_RE, MAX_AUDIO_DATA_URL_CHARS) || safeExternalUrl(t.src, 2048);
-  var safeCover = safeDataUrl(t.cover, IMAGE_DATA_MIME_RE, MAX_COVER_DATA_URL_CHARS) || safeExternalUrl(t.cover, 2048);
-  return {
-    id: cleanImportedId(t.id, 's_' + i + '_' + Date.now()),
-    title: cleanImportedText(t.title, 'Untitled', 80),
-    artist: cleanImportedText(t.artist, 'Unknown Artist', 80),
-    src: safeAudio,
-    labelColor: /^#([0-9a-f]{3}){1,2}$/i.test(t.labelColor || '') ? t.labelColor : '#d84a3a',
-    vinylColor: /^#([0-9a-f]{3}){1,2}$/i.test(t.vinylColor || '') ? t.vinylColor : '#1e1e24',
-    cover: safeCover || null,
-    isDemo: !!t.isDemo
-  };
+    loopBtn.classList.toggle('active', isLoop);
+    shuffleBtn.classList.toggle('active', isShuffle);
+    if (isShuffle) buildShuffleOrder();
+    if(typeof setupSettings === 'function') setupSettings();
+    if(typeof setupMonthlyReport === 'function') setupMonthlyReport();
+    if(typeof checkMonthlyReportTrigger === 'function') checkMonthlyReportTrigger();
+  } catch(err){
+    console.error('init failed', err);
+    try { renderPlaylist(); } catch(e) {}
+  }
 }
 
 function isValidMp3(file){
@@ -3166,122 +4222,17 @@ function consumeClientRateLimit(action, config){
   return true;
 }
 
-function extractImportTrackList(parsed){
-  if(Array.isArray(parsed)) return parsed;
-  if(parsed && typeof parsed === 'object' && Array.isArray(parsed.tracks)) return parsed.tracks;
-  return null;
-}
-function sanitizeCrate(list){
-  if(!Array.isArray(list)) return [];
-  return list.slice(0, MAX_IMPORTED_TRACKS).map(sanitizeTrack).filter(function(t){ return !!t.src; });
-}
-
-const IDB_DB = 'gramophone_v3';
-const IDB_STORE = 'crate';
-function idbOpen(){
-  return new Promise((resolve, reject)=>{
-    const req = indexedDB.open(IDB_DB, 1);
-    req.onupgradeneeded = e => {
-      const db = e.target.result;
-      if(!db.objectStoreNames.contains(IDB_STORE)){
-        db.createObjectStore(IDB_STORE);
-      }
-    };
-    req.onsuccess = ()=> resolve(req.result);
-    req.onerror = ()=> reject(req.error);
-  });
-}
-async function idbSet(key, val){
-  const db = await idbOpen();
-  return new Promise((resolve, reject)=>{
-    const tx = db.transaction(IDB_STORE, 'readwrite');
-    tx.objectStore(IDB_STORE).put(val, key);
-    tx.oncomplete = ()=> resolve(true);
-    tx.onerror = ()=> reject(tx.error);
-  });
-}
-async function idbGet(key){
-  const db = await idbOpen();
-  return new Promise((resolve, reject)=>{
-    const tx = db.transaction(IDB_STORE, 'readonly');
-    const rq = tx.objectStore(IDB_STORE).get(key);
-    rq.onsuccess = ()=> resolve(rq.result);
-    rq.onerror = ()=> reject(rq.error);
-  });
-}
-async function idbDel(key){
-  const db = await idbOpen();
-  return new Promise((res,rej)=>{
-    const tx = db.transaction(IDB_STORE,'readwrite');
-    tx.objectStore(IDB_STORE).delete(key);
-    tx.oncomplete=()=>res(true);
-    tx.onerror=()=>rej(tx.error);
-  });
-}
-
-function estimateCrateSizeMB(list){
-  try{
-    const str = JSON.stringify(list);
-    return (new Blob([str]).size / 1024 / 1024);
-  }catch(e){ return 0; }
-}
-
 async function loadPlaylist() {
-
-  try {
-    const idbTracks = await idbGet('playlist');
-    if (Array.isArray(idbTracks) && idbTracks.length) {
-      tracks = sanitizeCrate(idbTracks);
-      if (tracks.length) return;
-    }
-  } catch(e) { console.warn('IDB load failed', e); }
-
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length) {
-        tracks = sanitizeCrate(parsed);
-        if (tracks.length) {
-
-          idbSet('playlist', tracks).then(()=>{ try{ localStorage.removeItem(LS_KEY); }catch(e){} }).catch(()=>{});
-          return;
-        }
-      }
-    }
-  } catch(e) {
-    console.warn('LocalStorage read failed', e);
-  }
   tracks = [];
-
-  if (!Array.isArray(tracks) || tracks.length === 0) {
-    tracks = [];
-  }
+  if (!(window.ChirootAuth && ChirootAuth.isAuthed())) return tracks;
+  tracks = await caFetchCrate();
+  return tracks;
 }
 
-async function savePlaylist() {
-
-  try{
-    await idbSet('playlist', tracks);
-
-    try{
-      const meta = tracks.map(t=>({id:t.id,title:t.title,artist:t.artist,labelColor:t.labelColor,vinylColor:t.vinylColor,hasCover:!!t.cover,hasAudio:!!t.src, isDemo:!!t.isDemo}));
-      localStorage.setItem(LS_KEY+'_meta', JSON.stringify(meta));
-    }catch(e){}
-    return true;
-  }catch(e){
-    console.error('IDB save failed', e);
-
-    try {
-      localStorage.setItem(LS_KEY, JSON.stringify(tracks));
-      return true;
-    } catch(err){
-      const sizeMB = estimateCrateSizeMB(tracks).toFixed(2);
-      alert('Penyimpanan penuh!\n\nCrate kamu sekarang ~' + sizeMB + ' MB.\n\n• Browser LocalStorage cuma 5–10 MB.\n• Sekarang sudah pakai IndexedDB (bisa 50–500 MB tergantung browser).\n\nKalau masih muncul ini, berarti file MP3 terlalu besar. Coba:\n- pakai MP3 <5 MB / 128kbps\n- hapus cover besar\n- hapus track lama dulu\n\nTip: di Chrome, IndexedDB biasanya kasih 60% disk gratis.');
-      console.warn(err);
-      return false;
-    }
-  }
+function cleanupLegacyStorage() {
+  try { localStorage.removeItem('gramophone_playlist_v2'); } catch (e) {}
+  try { localStorage.removeItem('gramophone_playlist_v2_meta'); } catch (e) {}
+  try { if (window.indexedDB && indexedDB.deleteDatabase) indexedDB.deleteDatabase('gramophone_v3'); } catch (e) {}
 }
 
 function saveState() {
@@ -3330,7 +4281,7 @@ function renderPlaylist(){
 
     const thumb = t.cover
       ? `<img src="${escapeHtmlAttr(t.cover)}" alt="">`
-      : `<div class="pt-label" style="background:${t.labelColor}">${initials(t.title)}</div>`;
+      : `<div class="pt-label" style="background:${t.labelColor}">${escapeHtml(initials(t.title))}</div>`;
 
     li.innerHTML = `
       <div class="playlist-thumb" style="background:${t.cover ? '#15151c' : '#1f1f26'}">
@@ -3752,9 +4703,19 @@ function bindEvents(){
 function removeTrack(idx){
   const track = tracks[idx];
   if (!track) return;
-  showDeleteConfirm(track, ()=>{
+  if (!(window.ChirootAuth && ChirootAuth.isAuthed())) {
+    showToast('Login dulu untuk menghapus lagu.');
+    return;
+  }
+  showDeleteConfirm(track, async ()=>{
+    try {
+      await caCrateDelete(track);
+    } catch (err) {
+      console.error(err);
+      showToast('Gagal menghapus: ' + (err && err.message ? err.message : err));
+      return;
+    }
     tracks.splice(idx,1);
-
     if (!tracks.length){
       tracks = [];
       showToast('Crate is now empty.');
@@ -3765,14 +4726,12 @@ function removeTrack(idx){
     if (idx < currentIndex) {
       currentIndex--;
     }
-    savePlaylist();
     renderPlaylist();
     renderTop10();
     if (wasCurrent) {
       stop();
       loadTrack(currentIndex, false, true);
     }
-
     showToast(`"${track.title}" removed.`);
   });
 }
@@ -3794,7 +4753,7 @@ function setupAddModal(){
   const spotifyInput = $('#input-spotify-url');
   const spotifyBtn = $('#btn-spotify-fetch');
 
-  let spotifyCoverDataUrl = null;
+  let spotifyCoverBlob = null;
 
   if(spotifyBtn){
     spotifyBtn.addEventListener('click', async function() {
@@ -3811,7 +4770,7 @@ function setupAddModal(){
 
       spotifyBtn.disabled = true;
       spotifyBtn.textContent = "Mengambil...";
-      spotifyCoverDataUrl = null;
+      spotifyCoverBlob = null;
 
       try {
         var functionUrl = String(SUPABASE_URL).trim().replace(/\/+$/, '')
@@ -3859,12 +4818,7 @@ function setupAddModal(){
             var blob = await imgRes.blob();
             if(!blob.type.startsWith('image/')) throw new Error('Respons cover bukan gambar');
 
-            spotifyCoverDataUrl = await new Promise(function(resolve, reject) {
-              var reader = new FileReader();
-              reader.onload = function() { resolve(reader.result); };
-              reader.onerror = function() { reject(reader.error || new Error('Gagal membaca cover')); };
-              reader.readAsDataURL(blob);
-            });
+            spotifyCoverBlob = await imageBlobToJpegBlob(blob, 900);
 
             coverHint.textContent = "✓ Cover loaded from Spotify";
             coverHint.style.color = "#2a7a3a";
@@ -3894,7 +4848,7 @@ function setupAddModal(){
   function open(mode='add', idx=-1){
     editMode = (mode==='edit');
     editIndex = idx;
-    spotifyCoverDataUrl = null;
+    spotifyCoverBlob = null;
     if(spotifyInput) spotifyInput.value = '';
     modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
     if(editMode && tracks[idx]){
@@ -3918,7 +4872,7 @@ function setupAddModal(){
     } else {
       if(titleEl) titleEl.textContent = 'Add a new record';
       if(submitBtn) submitBtn.textContent = 'Press Record →';
-      if(formNote) formNote.textContent = 'Songs are saved in your browser (LocalStorage). Large files may take a moment.';
+      if(formNote) formNote.textContent = 'Lagu tersimpan di cloud akun Google kamu. File besar bisa butuh sebentar.';
       form.reset();
       if(editIdInput) editIdInput.value = '';
       chosenColor = '#d84a3a';
@@ -3928,7 +4882,7 @@ function setupAddModal(){
       const vhex = document.getElementById('vinyl-color-hex'); if(vhex) vhex.textContent = chosenVinyl;
       if(audioInput) audioInput.required = true;
       const ah = document.getElementById('audio-hint'); if(ah) ah.textContent = 'Choose an .mp3';
-      const ch = document.getElementById('cover-hint'); if(ch) ch.textContent = 'jpg / png ';
+      const ch = document.getElementById('cover-hint'); if(ch) ch.textContent = 'JPG / PNG – max 8 MB';
     }
     setTimeout(()=>$('#input-title').focus(), 40);
   }
@@ -3983,7 +4937,7 @@ function setupAddModal(){
   audioInput.addEventListener('change', ()=>{
     const f = audioInput.files[0];
     if(!f){
-      audioHint.textContent = editMode ? 'Kosongkan jika tidak ganti audio' : 'MP3 only – max 12 MB';
+      audioHint.textContent = editMode ? 'Kosongkan jika tidak ganti audio' : 'MP3 only – max 25 MB';
       audioHint.style.color = '';
       audioInput.setCustomValidity('');
       return;
@@ -3997,19 +4951,22 @@ function setupAddModal(){
       showToast('Upload ditolak – hanya MP3');
       return;
     }
-    if(f.size > 12 * 1024 * 1024){
-      audioHint.textContent = '️ ' + f.name + ' • ' + formatBytes(f.size) + ' – >12MB, mungkin gagal simpan';
-      audioHint.style.color = '#b36b00';
-    } else {
-      audioHint.textContent = '✓ ' + f.name + ' • ' + formatBytes(f.size);
-      audioHint.style.color = '#2a7a3a';
+    if(f.size > 25 * 1024 * 1024){
+      audioHint.textContent = '❌ ' + f.name + ' • ' + formatBytes(f.size) + ' – maksimal 25 MB';
+      audioHint.style.color = '#b42318';
+      audioInput.value = '';
+      audioInput.setCustomValidity('Audio maksimal 25 MB');
+      try{ audioInput.reportValidity(); }catch(e){}
+      return;
     }
+    audioHint.textContent = '✓ ' + f.name + ' • ' + formatBytes(f.size);
+    audioHint.style.color = '#2a7a3a';
     audioInput.setCustomValidity('');
   });
   coverInput.addEventListener('change', ()=>{
     const f = coverInput.files[0];
     if(!f){
-      coverHint.textContent = 'JPG / PNG only – max 5 MB';
+      coverHint.textContent = 'JPG / PNG – max 8 MB';
       coverHint.style.color = '';
       coverInput.setCustomValidity('');
       return;
@@ -4023,20 +4980,22 @@ function setupAddModal(){
       showToast('Cover ditolak – harus JPG/PNG');
       return;
     }
-    if(f.size > 5 * 1024 * 1024){
-      coverHint.textContent = '️ ' + f.name + ' • ' + formatBytes(f.size) + ' – >5MB, akan di-compress';
-      coverHint.style.color = '#b36b00';
-    } else {
-      coverHint.textContent = '✓ ' + f.name + ' • ' + formatBytes(f.size);
-      coverHint.style.color = '#2a7a3a';
+    if(f.size > 8 * 1024 * 1024){
+      coverHint.textContent = '❌ ' + f.name + ' • ' + formatBytes(f.size) + ' – maksimal 8 MB';
+      coverHint.style.color = '#b42318';
+      coverInput.value = '';
+      coverInput.setCustomValidity('Cover maksimal 8 MB');
+      try{ coverInput.reportValidity(); }catch(e){}
+      return;
     }
+    coverHint.textContent = '✓ ' + f.name + ' • ' + formatBytes(f.size);
+    coverHint.style.color = '#2a7a3a';
     coverInput.setCustomValidity('');
   });
-
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
-    const title = $('#input-title').value.trim();
-    const artist = $('#input-artist').value.trim();
+    const title = caCleanText($('#input-title').value, 80);
+    const artist = caCleanText($('#input-artist').value, 80);
     const af = audioInput.files[0];
     const cf = coverInput.files[0];
 
@@ -4055,72 +5014,53 @@ function setupAddModal(){
         alert('Ekstensi harus .mp3 – terdeteksi: .' + ext);
         return;
       }
+      if(af.size > 25 * 1024 * 1024){
+        alert('Audio maksimal 25 MB. File kamu ' + formatBytes(af.size) + '.');
+        return;
+      }
     }
+
     if(cf){
       if(!isValidCoverImage(cf)){
         alert('Cover ditolak.\n\nHarus JPG / JPEG / PNG\nTerdeteksi: ' + (cf.name||'') + ' (' + (cf.type||'') + ')');
         return;
       }
-      if(cf.size > 5 * 1024 * 1024){
-        if(!confirm('Cover ' + formatBytes(cf.size) + ' >5MB, akan di-compress otomatis. Lanjut?')) return;
+      if(cf.size > 8 * 1024 * 1024){
+        alert('Cover maksimal 8 MB. File kamu ' + formatBytes(cf.size) + '.');
+        return;
       }
     }
 
-    if (af && af.size > 12 * 1024 * 1024){
-      if(!confirm('This audio file is >12MB. Storing it in the browser may fail or be slow. Continue?')) return;
+    if(!(window.ChirootAuth && ChirootAuth.isAuthed())){
+      alert('Login dulu dengan Google sebelum menyimpan lagu.');
+      return;
     }
 
     if(!consumeClientRateLimit('addTrack', RATE_LIMITS.addTrack)) return;
 
     const submitBtnEl = form.querySelector('button[type=submit]');
     submitBtnEl.disabled = true;
-    submitBtnEl.textContent = editMode ? 'Saving…' : 'Encoding…';
+    submitBtnEl.textContent = editMode ? 'Saving…' : 'Uploading…';
 
     try{
-      let audioDataUrl = null;
-      if(af){
-        showToast('Encoding audio…');
-        audioDataUrl = await new Promise((resolve,reject)=>{
-          const r=new FileReader();
-          r.onload=()=>resolve(r.result);
-          r.onerror=reject;
-          r.readAsDataURL(af);
-        });
-      }
-      let coverDataUrl = spotifyCoverDataUrl || null;
+      let coverBlob = null;
       if (cf) {
-        coverDataUrl = await imageFileToDataURL_worker(cf, 900);
+        showToast('Mempersiapkan cover…');
+        coverBlob = await imageBlobToJpegBlob(cf, 900);
+      } else if (spotifyCoverBlob) {
+        coverBlob = spotifyCoverBlob;
       }
 
       if(editMode && editIndex >=0){
         const t = tracks[editIndex];
-        t.title = title;
-        t.artist = artist;
-        t.labelColor = chosenColor;
-        t.vinylColor = chosenVinyl;
-        if(audioDataUrl) t.src = audioDataUrl;
-        if(coverDataUrl) t.cover = coverDataUrl;
-        savePlaylist();
+        const audioBlob = af || null;
+        showToast(audioBlob ? 'Mengupload audio baru…' : 'Menyimpan perubahan…');
+        const updated = await caCrateUpdate(t, { title, artist, labelColor: chosenColor, vinylColor: chosenVinyl }, audioBlob, coverBlob);
+        tracks[editIndex] = updated;
         renderPlaylist();
         renderTop10();
-
         if(editIndex === currentIndex){
-          const labelEl = document.getElementById('record-label');
-          if(labelEl) labelEl.style.background = chosenColor;
-          applyVinylColor(chosenVinyl);
-          songTitleEl.textContent = title;
-          artistNameEl.textContent = artist;
-
-          const li = document.getElementById('label-inner');
-          if(li){
-            li.classList.toggle('has-cover', !!t.cover);
-            li.innerHTML = buildLabel(t);
-          }
-
-          const npT = document.getElementById('np-track');
-          const npA = document.getElementById('np-artist-live');
-          if(npT){ npT.textContent = title; npT.setAttribute('title', title); }
-          if(npA){ npA.textContent = artist; npA.setAttribute('title', artist); }
+          loadTrack(currentIndex, false, true);
         }
         close();
         showToast('Record updated ✦');
@@ -4128,28 +5068,25 @@ function setupAddModal(){
         return;
       }
 
-      if(!audioDataUrl){
+      if(!af){
         alert('MP3 required for new track.');
-        submitBtnEl.disabled = false;
-        submitBtnEl.textContent = 'Press Record →';
         return;
       }
-      const newTrack = {
-        id: 'u_' + Date.now(),
+
+      showToast('Mengupload audio…');
+      const newTrack = await caCrateAdd({
         title,
         artist,
-        src: audioDataUrl,
         labelColor: chosenColor,
         vinylColor: chosenVinyl,
-        cover: coverDataUrl,
-        isDemo: false
-      };
+        position: await caNextPosition()
+      }, af, coverBlob, null);
+
       tracks.push(newTrack);
-      savePlaylist();
       renderPlaylist();
       renderTop10();
       form.reset();
-      audioHint.textContent = 'Choose an .mp3';
+      audioHint.textContent = 'MP3 only – max 25 MB';
       coverHint.textContent = 'jpg / png – doodle label will use it';
 
       $$('.swatch').forEach((s,i)=> s.classList.toggle('active', i===0));
@@ -4162,7 +5099,7 @@ function setupAddModal(){
       loadTrack(tracks.length-1, true, true);
     } catch(err){
       console.error(err);
-      alert('Could not save track: ' + err.message);
+      alert('Gagal menyimpan track: ' + (err && err.message ? err.message : err));
     } finally {
       submitBtnEl.disabled = false;
       submitBtnEl.textContent = editMode ? 'Save changes →' : 'Press Record →';
@@ -4170,34 +5107,30 @@ function setupAddModal(){
   });
 }
 
-function fileToDataURL(file){
+function imageBlobToJpegBlob(blob, maxSide){
+  maxSide = maxSide || 600;
   return new Promise((res, rej)=>{
-    const r = new FileReader();
-    r.onload = ()=>res(r.result);
-    r.onerror = rej;
-    r.readAsDataURL(file);
-  });
-}
-function imageFileToDataURL(file, maxSide=600){
-  return new Promise((res, rej)=>{
-    const url = URL.createObjectURL(file);
+    const url = URL.createObjectURL(blob);
     const img = new Image();
     img.onload = ()=>{
-      URL.revokeObjectURL(url);
-      const {width, height} = img;
-      let w = width, h = height;
-      if (Math.max(w,h) > maxSide){
-        if (w > h) { h = Math.round(h * maxSide / w); w = maxSide; }
-        else { w = Math.round(w * maxSide / h); h = maxSide; }
-      }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0,0,w,h);
       try{
-        const mime = (file && (file.type === 'image/png' || /\.png$/i.test(file.name || ''))) ? 'image/png' : 'image/jpeg';
-        res(canvas.toDataURL(mime, 0.85));
-      } catch(e){ rej(e); }
+        const w = img.naturalWidth || img.width;
+        const h = img.naturalHeight || img.height;
+        let tw = w, th = h;
+        if (Math.max(tw, th) > maxSide){
+          if (tw > th) { th = Math.round(th * maxSide / tw); tw = maxSide; }
+          else { tw = Math.round(tw * maxSide / th); th = maxSide; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = tw; canvas.height = th;
+        const ctx = canvas.getContext('2d');
+        if(!ctx){ URL.revokeObjectURL(url); rej(new Error('Canvas tidak didukung')); return; }
+        ctx.drawImage(img, 0, 0, tw, th);
+        canvas.toBlob((b)=>{
+          URL.revokeObjectURL(url);
+          if(b) res(b); else rej(new Error('Gagal mengompres gambar'));
+        }, 'image/jpeg', 0.85);
+      }catch(e){ URL.revokeObjectURL(url); rej(e); }
     };
     img.onerror = ()=>{ URL.revokeObjectURL(url); rej(new Error('Image load failed')); };
     img.src = url;
@@ -4213,7 +5146,7 @@ function showDeleteConfirm(track, onConfirm){
   overlay.innerHTML = `
     <div class="delete-confirm-box sketch-border-soft" role="dialog" aria-modal="true">
       <h4>Scratch this record?</h4>
-      <p><strong>${escapeHtml(track.title)}</strong><br><em>${escapeHtml(track.artist)}</em><br><br>This will remove it from your crate.<br>${track.isDemo ? 'Demo tracks can be restored with Reset Crate.' : 'Custom uploads are deleted from browser storage.'}</p>
+      <p><strong>${escapeHtml(track.title)}</strong><br><em>${escapeHtml(track.artist)}</em><br><br>This will remove it from your crate.<br>${track.isDemo ? '' : 'File audio &amp; cover akan dihapus permanen dari crate cloud kamu.'}</p>
       <div class="confirm-actions">
         <button class="btn-cancel" id="dc-cancel">Cancel</button>
         <button class="btn-danger" id="dc-confirm"><svg class="doodle-trash" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:4px;"><path d="M3.5 6.5h17"/><path d="M8 6.5l1-2.5h6l1 2.5"/><path d="M19.2 6.5c-.3 3.8-.9 9-1.4 13.2-.1 1-1 1.8-2 1.8H8.2c-1 0-1.9-.8-2-1.8C5.7 15.5 5.1 10.3 4.8 6.5"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M7 6.5l.8 13" opacity=".45"/><path d="M17 6.5l-.8 13" opacity=".45"/></svg> Hapus</button>
@@ -4242,119 +5175,26 @@ function showToast(msg){
 }
 
 function resetCrate(){
-  showDeleteConfirm({title:'Reset entire crate?', artist:'All custom songs will be removed', isDemo:false}, ()=>{
-    try{ localStorage.removeItem('gramophone_playlist_v2'); localStorage.removeItem('gramophone_state_v2'); }catch(e){}
-    tracks = [];
-    currentIndex = 0;
-    savePlaylist();
-    renderPlaylist();
-    renderTop10();
-    stop();
-    loadTrack(0,false,true);
-    showToast('Crate reset to 1924 demo records ✦');
-  });
-}
-
-document.addEventListener('DOMContentLoaded', ()=>{
-  setTimeout(()=>{
-    const rb = document.getElementById('btn-reset');
-    if(rb) rb.addEventListener('click', resetCrate);
-  }, 150);
-}, {once:true});
-
-const EncodeWorker = (() => {
-  const workerSrc = `
-  self.onmessage = async (e) => {
-    const {id, type} = e.data;
-    try {
-      if(type==='resize'){
-        const bitmap = e.data.bitmap;
-        const maxSide = e.data.maxSide || 600;
-        let w = bitmap.width, h = bitmap.height;
-        if(Math.max(w,h) > maxSide){
-          if(w>h){ h = Math.round(h * maxSide / w); w = maxSide; }
-          else { w = Math.round(w * maxSide / h); h = maxSide; }
-        }
-        const canvas = new OffscreenCanvas(w, h);
-        const ctx = canvas.getContext('2d');
-
-        ctx.fillStyle = '#f7f3e9';
-        ctx.fillRect(0,0,w,h);
-        ctx.drawImage(bitmap, 0, 0, w, h);
-        const blob = await canvas.convertToBlob({type:'image/jpeg', quality:0.82});
-        const buf = await blob.arrayBuffer();
-        self.postMessage({id, ok:true, buf, w, h, mime: blob.type}, [buf]);
-        bitmap.close();
-        return;
-      }
-      if(type==='audioPass'){
-
-        const buffer = e.data.buffer;
-
-        const view = new Uint8Array(buffer);
-        let c = 0;
-        for(let i=0;i<view.length;i+=8192) c = (c + view[i]) & 255;
-        self.postMessage({id, ok:true, buffer, checksum:c}, [buffer]);
-        return;
-      }
-    } catch(err){
-      self.postMessage({id, ok:false, error: err.message || String(err)});
+  showDeleteConfirm({title:'Reset entire crate?', artist:'All custom songs will be removed', isDemo:false}, async ()=>{
+    if(!(window.ChirootAuth && ChirootAuth.isAuthed())){
+      showToast('Login dulu untuk reset crate.');
+      return;
     }
-  };
-  `;
-  try {
-    const blob = new Blob([workerSrc], {type:'text/javascript'});
-    return new Worker(URL.createObjectURL(blob));
-  } catch(e){
-    console.warn('EncodeWorker failed, fallback main thread', e);
-    return null;
-  }
-})();
-
-let __ew_id = 1;
-const __ew_pending = new Map();
-if(EncodeWorker){
-  EncodeWorker.onmessage = (e)=>{
-    const {id} = e.data;
-    const p = __ew_pending.get(id);
-    if(p){ __ew_pending.delete(id); p.resolve(e.data); }
-  };
-  EncodeWorker.onerror = (e)=>{
-    console.error('EncodeWorker error', e);
-  };
-}
-function workerResizeImage(bitmap, maxSide=600){
-  return new Promise((resolve, reject)=>{
-    if(!EncodeWorker){ reject(new Error('no worker')); return; }
-    const id = __ew_id++;
-    __ew_pending.set(id, {resolve, reject});
-
     try{
-      EncodeWorker.postMessage({id, type:'resize', bitmap, maxSide}, [bitmap]);
+      showToast('Menghapus crate…');
+      await caCrateReset();
+      tracks = [];
+      currentIndex = 0;
+      renderPlaylist();
+      renderTop10();
+      stop();
+      loadTrack(0,false,true);
+      showToast('Crate dikosongkan ✦');
     }catch(err){
-      __ew_pending.delete(id);
-      reject(err);
+      console.error(err);
+      showToast('Gagal reset crate: ' + (err && err.message ? err.message : err));
     }
-    setTimeout(()=>{ if(__ew_pending.has(id)){ __ew_pending.delete(id); reject(new Error('worker timeout')); } }, 8000);
   });
-}
-function workerAudioPass(arrayBuffer){
-  return new Promise((resolve, reject)=>{
-    if(!EncodeWorker){ resolve({buffer:arrayBuffer}); return; }
-    const id = __ew_id++;
-    __ew_pending.set(id, {resolve, reject});
-    try{
-      EncodeWorker.postMessage({id, type:'audioPass', buffer: arrayBuffer}, [arrayBuffer]);
-    }catch(err){
-      __ew_pending.delete(id);
-      reject(err);
-    }
-    setTimeout(()=>{ if(__ew_pending.has(id)){ __ew_pending.delete(id); reject(new Error('audio worker timeout')); } }, 15000);
-  });
-}
-
-async function imageFileToDataURL_worker(file, maxSide=600){
-  return imageFileToDataURL(file, maxSide);
 }
 
 function drawWobblyRect(ctx, x, y, w, h, r=24, wobble=4){
@@ -4615,7 +5455,7 @@ window.addEventListener('error', e=>{
   const t = document.getElementById('doodle-toast') || document.body;
   const div = document.createElement('div');
   div.style.cssText='position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#ffe3e3;border:2px solid #c00;padding:8px 14px;z-index:9999;font-family:Kalam,sans-serif;border-radius:10px;max-width:90vw;';
-  div.textContent = 'Error: ' + (e.error?.message || e.message);
+  div.textContent = 'Terjadi kesalahan tak terduga – coba refresh halaman.';
   document.body.appendChild(div);
   setTimeout(()=>div.remove(), 6000);
 });
@@ -4654,6 +5494,9 @@ function updateTransportDisabled(disabled){
 }
 
 const STATS_KEY = 'gramophone_monthly_stats_v1';
+function smallCoverForStats(url){
+  return caSafeImageUrl(url) || null;
+}
 function getMonthlyStats(){
   const nowMonth = new Date().toISOString().slice(0, 7);
   let stats = null;
@@ -4680,11 +5523,12 @@ function recordTrackPlay(track){
   if(!track || !track.id) return;
   const stats = getMonthlyStats();
   if(!stats.tracks[track.id]){
-    stats.tracks[track.id] = { title: track.title, artist: track.artist, cover: track.cover || null, labelColor: track.labelColor || '#d84a3a', playCount: 0, playSeconds: 0 };
+    stats.tracks[track.id] = { title: track.title, artist: track.artist, cover: smallCoverForStats(track.cover), labelColor: track.labelColor || '#d84a3a', playCount: 0, playSeconds: 0 };
   }
   stats.tracks[track.id].title = track.title;
   stats.tracks[track.id].artist = track.artist;
-  if(track.cover) stats.tracks[track.id].cover = track.cover;
+  var stCover = smallCoverForStats(track.cover);
+  if(stCover) stats.tracks[track.id].cover = stCover;
   stats.tracks[track.id].playCount += 1;
   saveMonthlyStats(stats);
 }
@@ -4714,8 +5558,9 @@ function renderMonthlyReportModal(stats){
     const minsPlay = Math.max(1, Math.floor((topTrack.playSeconds || 60) / 60));
     if(topStatsEl) topStatsEl.textContent = (topTrack.playCount || 1) + ' kali diputar • ' + minsPlay + ' menit didengarkan';
     if(topCoverEl){
-      if(topTrack.cover){
-        topCoverEl.style.backgroundImage = 'url(' + topTrack.cover + ')';
+      const safeReportCover = caSafeImageUrl(topTrack.cover);
+      if(safeReportCover){
+        topCoverEl.style.backgroundImage = 'url("' + safeReportCover + '")';
         topCoverEl.style.backgroundSize = 'cover';
         topCoverEl.style.backgroundPosition = 'center';
         topCoverEl.textContent = '';
@@ -4770,97 +5615,6 @@ function hideMonthlyReportModal(){
     modal.setAttribute('aria-hidden', 'true');
   }
 }
-function zipCrc32(bytes){
-  var c = -1;
-  for(var i=0;i<bytes.length;i++){
-    c ^= bytes[i];
-    for(var j=0;j<8;j++) c = (c >>> 1) ^ (c & 1 ? 0xEDB88320 : 0);
-  }
-  return (c ^ -1) >>> 0;
-}
-function zipU16(view, offset){ return view.getUint16(offset, true); }
-function zipU32(view, offset){ return view.getUint32(offset, true); }
-function zipDataUrlToBytes(value){
-  var comma = value.indexOf(',');
-  var raw = atob(value.slice(comma + 1));
-  var bytes = new Uint8Array(raw.length);
-  for(var i=0;i<raw.length;i++) bytes[i] = raw.charCodeAt(i);
-  return bytes;
-}
-function zipExtFromDataUrl(value, fallback){
-  var type = String(value.slice(5, value.indexOf(';'))).toLowerCase();
-  if(type.includes('png')) return 'png';
-  if(type.includes('webp')) return 'webp';
-  if(type.includes('jpeg') || type.includes('jpg')) return 'jpg';
-  if(type.includes('mpeg') || type.includes('mp3')) return 'mp3';
-  return fallback;
-}
-function zipSafeName(value){ return String(value || 'track').replace(/[^a-z0-9_-]/gi,'_').slice(0,60) || 'track'; }
-async function createCrateZip(backup){
-  var files = [];
-  var manifest = { version:2, exportedAt:backup.exportedAt, tracks:[] };
-  backup.tracks.forEach(function(track, index){
-    var item = Object.assign({}, track);
-    var stem = String(index + 1).padStart(3,'0') + '-' + zipSafeName(track.id || track.title);
-    if(typeof track.src === 'string' && track.src.startsWith('data:')){
-      var audioPath = 'audio/' + stem + '.' + zipExtFromDataUrl(track.src, 'mp3');
-      files.push({name:audioPath, bytes:zipDataUrlToBytes(track.src)});
-      item.src = audioPath;
-    }
-    if(typeof track.cover === 'string' && track.cover.startsWith('data:')){
-      var coverPath = 'covers/' + stem + '.' + zipExtFromDataUrl(track.cover, 'jpg');
-      files.push({name:coverPath, bytes:zipDataUrlToBytes(track.cover)});
-      item.cover = coverPath;
-    }
-    manifest.tracks.push(item);
-  });
-  files.unshift({name:'crate.json', bytes:new TextEncoder().encode(JSON.stringify(manifest))});
-  var local = [], central = [], offset = 0;
-  files.forEach(function(file){
-    var name = new TextEncoder().encode(file.name), bytes = file.bytes, crc = zipCrc32(bytes);
-    var head = new Uint8Array(30 + name.length);
-    var view = new DataView(head.buffer);
-    view.setUint32(0,0x04034b50,true); view.setUint16(4,20,true); view.setUint16(6,0,true); view.setUint16(8,0,true);
-    view.setUint32(14,crc,true); view.setUint32(18,bytes.length,true); view.setUint32(22,bytes.length,true);
-    view.setUint16(26,name.length,true); name.forEach(function(v,i){head[30+i]=v;});
-    local.push(head,bytes);
-    var dir = new Uint8Array(46 + name.length), dv = new DataView(dir.buffer);
-    dv.setUint32(0,0x02014b50,true); dv.setUint16(4,20,true); dv.setUint16(6,20,true); dv.setUint16(8,0,true); dv.setUint16(10,0,true);
-    dv.setUint32(16,crc,true); dv.setUint32(20,bytes.length,true); dv.setUint32(24,bytes.length,true); dv.setUint16(28,name.length,true); dv.setUint32(42,offset,true);
-    name.forEach(function(v,i){dir[46+i]=v;}); central.push(dir); offset += head.length + bytes.length;
-  });
-  var centralSize = central.reduce(function(n,v){return n+v.length;},0), end = new Uint8Array(22), endView = new DataView(end.buffer);
-  endView.setUint32(0,0x06054b50,true); endView.setUint16(8,files.length,true); endView.setUint16(10,files.length,true); endView.setUint32(12,centralSize,true); endView.setUint32(16,offset,true);
-  return new Blob(local.concat(central,[end]),{type:'application/zip'});
-}
-async function readCrateZip(file){
-  var bytes = new Uint8Array(await file.arrayBuffer()), view = new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength), end = -1;
-  for(var i=bytes.length-22;i>=Math.max(0,bytes.length-65557);i--){ if(zipU32(view,i)===0x06054b50){end=i;break;} }
-  if(end<0) throw new Error('File ZIP tidak valid.');
-  var total=zipU16(view,end+10), pos=zipU32(view,end+16), decoder=new TextDecoder(), map={};
-  for(var n=0;n<total;n++){
-    if(zipU32(view,pos)!==0x02014b50) throw new Error('Struktur ZIP tidak valid.');
-    var method=zipU16(view,pos+10), size=zipU32(view,pos+24), nameLen=zipU16(view,pos+28), extraLen=zipU16(view,pos+30), commentLen=zipU16(view,pos+32), localOffset=zipU32(view,pos+42);
-    if(method!==0) throw new Error('ZIP ini memakai kompresi yang belum didukung. Buat backup dari Chiroot.');
-    var name=decoder.decode(bytes.slice(pos+46,pos+46+nameLen)), localNameLen=zipU16(view,localOffset+26), localExtraLen=zipU16(view,localOffset+28), dataStart=localOffset+30+localNameLen+localExtraLen;
-    map[name]=bytes.slice(dataStart,dataStart+size); pos+=46+nameLen+extraLen+commentLen;
-  }
-  if(!map['crate.json']) throw new Error('crate.json tidak ditemukan dalam ZIP.');
-  var manifest=JSON.parse(decoder.decode(map['crate.json']));
-  if(!manifest || !Array.isArray(manifest.tracks)) throw new Error('Manifest backup tidak valid.');
-  manifest.tracks.forEach(function(track){
-    ['src','cover'].forEach(function(key){
-      if(typeof track[key] === 'string' && map[track[key]]){
-        var path=track[key], ext=path.split('.').pop().toLowerCase(), mime=key==='src'?'audio/mpeg':(ext==='png'?'image/png':ext==='webp'?'image/webp':'image/jpeg');
-        var raw=map[path], binary='';
-        for(var j=0;j<raw.length;j+=32768) binary+=String.fromCharCode.apply(null,raw.subarray(j,j+32768));
-        track[key]='data:'+mime+';base64,'+btoa(binary);
-      }
-    });
-  });
-  return manifest.tracks;
-}
-
 function setupSettings(){
   const modal = $('#settings-modal');
   const btnOpen = $('#btn-settings-open');
@@ -4881,74 +5635,8 @@ function setupSettings(){
   if(btnOk) btnOk.addEventListener('click', close);
   if(modal) modal.addEventListener('click', (e) => { if(e.target === modal) close(); });
 
-  $('#btn-export-data').addEventListener('click', async () => {
-    const data = Array.isArray(tracks) && tracks.length ? tracks : await idbGet('playlist');
-    if(!data || data.length === 0) return alert('Crate masih kosong!');
-    const backup = { version: 1, exportedAt: new Date().toISOString(), tracks: data };
-    const blob = await createCrateZip(backup);
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'chiroot-crate-' + new Date().toISOString().slice(0,10) + '.zip';
-    a.rel = 'noopener noreferrer';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showToast('Backup ZIP berhasil dibuat ✦');
-  });
-
-  const inputImport = $('#input-import-file');
-  $('#btn-import-data').addEventListener('click', () => inputImport.click());
-  inputImport.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    const clearImportInput = () => { inputImport.value = ''; };
-    try {
-      if(!file) return;
-      if(file.size > MAX_IMPORT_BACKUP_BYTES) throw new Error('File backup terlalu besar. Maksimal ' + formatBytes(MAX_IMPORT_BACKUP_BYTES) + '.');
-      if(!consumeClientRateLimit('importBackup', RATE_LIMITS.importBackup)) return;
-      var isZip = /\.zip$/i.test(file.name || '') || file.type === 'application/zip';
-      var importList;
-      if(isZip){
-        importList = await readCrateZip(file);
-      } else if(/\.json$/i.test(file.name || '')) {
-        importList = extractImportTrackList(JSON.parse(await file.text()));
-      } else {
-        throw new Error('Pilih file backup .zip atau .json.');
-      }
-      if(!importList) throw new Error('Format backup tidak valid.');
-      const sanitized = sanitizeCrate(importList);
-      const dropped = importList.length - sanitized.length;
-      if(!sanitized.length) throw new Error('Tidak ada track valid di backup.');
-      const limited = importList.length > MAX_IMPORTED_TRACKS ? ' Import dibatasi ke ' + MAX_IMPORTED_TRACKS + ' track pertama.' : '';
-      const droppedMsg = dropped > 0 ? '\n\n' + dropped + ' track tidak valid dibuang.' : '';
-      if(!confirm('Restore akan mengganti Crate saat ini dengan ' + sanitized.length + ' track.' + limited + droppedMsg + '\n\nLanjut?')) return;
-      tracks = sanitized;
-      currentIndex = 0;
-      await savePlaylist();
-      renderPlaylist();
-      renderTop10();
-      loadTrack(0, false, true);
-      showToast('Crate berhasil dipulihkan ✦');
-      close();
-    } catch(err) {
-      alert('Gagal memulihkan backup: ' + (err && err.message ? err.message : err));
-    } finally { clearImportInput(); }
-  });
-
-  const backupDock = document.getElementById('backup-dock');
-  const btnCloseBackup = document.getElementById('btn-close-backup');
-  const btnExportSettings = document.getElementById('btn-export-data-settings');
-  const btnImportSettings = document.getElementById('btn-import-data-settings');
-
-  if (btnCloseBackup && backupDock) {
-    btnCloseBackup.addEventListener('click', () => {
-      backupDock.classList.add('hidden');
-    });
-  }
-
-  if (btnExportSettings) btnExportSettings.addEventListener('click', () => { const b = document.getElementById('btn-export-data'); if (b) b.click(); });
-  if (btnImportSettings) btnImportSettings.addEventListener('click', () => { const b = document.getElementById('btn-import-data'); if (b) b.click(); });
-
-  $('#btn-reset-settings').addEventListener('click', () => {
+  const btnReset = document.getElementById('btn-reset-settings');
+  if (btnReset) btnReset.addEventListener('click', () => {
     close();
     resetCrate();
   });
@@ -4981,7 +5669,7 @@ function setupMonthlyReport(){
       const tr = tracks[currentIndex];
       if(tr && tr.id){
         if(!stats.tracks[tr.id]){
-          stats.tracks[tr.id] = { title: tr.title, artist: tr.artist, cover: tr.cover || null, labelColor: tr.labelColor || '#d84a3a', playCount: 0, playSeconds: 0 };
+          stats.tracks[tr.id] = { title: tr.title, artist: tr.artist, cover: smallCoverForStats(tr.cover), labelColor: tr.labelColor || '#d84a3a', playCount: 0, playSeconds: 0 };
         }
         stats.tracks[tr.id].playSeconds = (stats.tracks[tr.id].playSeconds || 0) + 1;
       }
@@ -5599,6 +6287,6 @@ if (btnRefreshLyrics) {
   restoreOutput();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a208b2f9a90a3fca',t:'MTc4NDk1NjY1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a265e69f8fb1fe09',t:'MTc4NTkzMzk0Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30af0a1f9e0fe0c',t:'MTc4NzY2NDUwNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a312ccc35ed79a98',t:'MTc4Nzc0NjkyNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+</body>
 </html>
