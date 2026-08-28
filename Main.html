@@ -1814,7 +1814,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
         height: 34px;
       }
     }
-/* Chiroot topbar: greeting + akun */
 .chiroot-topbar{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:10px 6px 12px;margin:0 0 12px;
@@ -1862,7 +1861,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   .chiroot-topbar{padding:8px 2px 10px;}
   .topbar-greeting{font-size:24px;width:100%;}
 }
-/* Gate login */
 .gate-brand{text-align:center;margin-bottom:10px;}
 .gate-logo{width:84px;height:84px;margin:0 auto 10px;display:block;}
 .gate-status{
@@ -1883,7 +1881,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   background:#ffe9e5;border:2px dashed #d84a3a;border-radius:12px;
   padding:8px 12px;margin-top:10px;text-align:center;
 }
-/* Onboarding */
 .ob-body{display:flex;flex-direction:column;gap:14px;margin-top:6px;}
 .ob-avatar-row{display:flex;align-items:center;gap:16px;}
 .ob-avatar{
@@ -1896,11 +1893,14 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 .ob-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
 .ob-avatar-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
 .ob-pick-btn{display:inline-flex;align-items:center;cursor:pointer;}
-/* Edit profil (panel kiri + preview kanan) */
-.profile-modal-card{max-width:920px;width:100%;}
+.profile-modal-card{
+  max-width:560px;width:min(560px,100%);
+  aspect-ratio:1/1;overflow-y:auto;
+  padding:14px 12px 12px;
+}
 .profile-grid{
-  display:grid;grid-template-columns:minmax(300px,430px) minmax(270px,1fr);
-  gap:22px;margin-top:14px;align-items:start;
+  display:grid;grid-template-columns:minmax(200px,1fr) minmax(180px,1fr);
+  gap:12px;margin-top:10px;align-items:start;
 }
 .profile-panel{display:flex;flex-direction:column;gap:14px;}
 .pp-kicker{
@@ -1908,18 +1908,18 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   text-transform:uppercase;color:#a47b2c;font-weight:700;
 }
 .pp-avatar-block{
-  display:flex;align-items:center;gap:16px;
-  background:#fff8e7;border:2px solid var(--ink);border-radius:16px;padding:12px;
+  display:flex;align-items:center;gap:12px;
+  background:#fff8e7;border:2px solid var(--ink);border-radius:16px;padding:10px;
 }
 .pp-avatar-big{
-  width:84px;height:84px;border-radius:50%;flex-shrink:0;
+  width:70px;height:70px;border-radius:50%;flex-shrink:0;
   border:3px solid var(--ink);background:#f2e0a8;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Caveat',cursive;font-size:38px;font-weight:700;color:#5a3f1f;overflow:hidden;
+  font-family:'Caveat',cursive;font-size:32px;font-weight:700;color:#5a3f1f;overflow:hidden;
 }
 .pp-avatar-big img{width:100%;height:100%;object-fit:cover;display:block;}
 .pp-avatar-side{display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
-.pf-desc{resize:vertical;min-height:64px;font-family:'Kalam',sans-serif;}
+.pf-desc{resize:vertical;min-height:52px;font-family:'Kalam',sans-serif;}
 .pf-count{display:block;text-align:right;font-family:'Kalam',sans-serif;font-size:11.5px;color:#9a8264;margin-top:3px;}
 .pf-swatches{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 .pf-swatch{
@@ -1933,7 +1933,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 .pf-swatch.custom input{opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer;border:none;}
 .profile-preview-wrap{position:sticky;top:16px;}
 .pp-card{background:#fffdf7;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px rgba(48,34,16,.14);}
-.pp-banner{position:relative;height:96px;background:#d84a3a;}
+.pp-banner{position:relative;height:80px;background:#d84a3a;}
 .pp-banner-edit{
   position:absolute;top:8px;right:8px;width:30px;height:30px;
   background:rgba(255,253,247,.9);border:2px solid var(--ink);border-radius:10px;
@@ -1941,20 +1941,20 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   display:flex;align-items:center;justify-content:center;
 }
 .pp-banner-edit:hover{background:#fff3d6;}
-.pp-avatar-overlay{position:relative;width:84px;margin-left:18px;margin-top:-42px;}
+.pp-avatar-overlay{position:relative;width:70px;margin-left:14px;margin-top:-36px;}
 .pp-avatar-mid{
-  width:84px;height:84px;border-radius:50%;
-  border:4px solid #fffdf7;outline:3px solid var(--ink);
+  width:70px;height:70px;border-radius:50%;
+  border:3px solid #fffdf7;outline:3px solid var(--ink);
   background:#f2e0a8;display:flex;align-items:center;justify-content:center;
-  font-family:'Caveat',cursive;font-size:38px;font-weight:700;color:#5a3f1f;overflow:hidden;
+  font-family:'Caveat',cursive;font-size:32px;font-weight:700;color:#5a3f1f;overflow:hidden;
 }
 .pp-avatar-mid img{width:100%;height:100%;object-fit:cover;display:block;}
 .pp-online-dot{
   position:absolute;right:2px;bottom:2px;width:16px;height:16px;border-radius:50%;
   background:#4a8a4a;border:2.6px solid #fffdf7;
 }
-.pp-meta{padding:10px 18px 18px;}
-.pp-name{font-family:'Caveat',cursive;font-size:30px;line-height:1.05;color:#1a1a1a;word-break:break-word;}
+.pp-meta{padding:8px 14px 14px;}
+.pp-name{font-family:'Caveat',cursive;font-size:25px;line-height:1.05;color:#1a1a1a;word-break:break-word;}
 .pp-since{font-family:'Kalam',sans-serif;font-size:12px;color:#9a8264;margin-top:2px;}
 .pf-desc-text{
   font-family:'Kalam',sans-serif;font-size:14px;color:#4a3b23;margin-top:8px;line-height:1.5;
@@ -1962,8 +1962,22 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   border-top:2px dashed #e0d2ac;padding-top:8px;
 }
 @media(max-width:760px){
-  .profile-grid{grid-template-columns:1fr;}
+  .profile-grid{grid-template-columns:1fr;gap:14px;}
   .profile-preview-wrap{position:static;}
+}
+@media(max-width:560px){
+  .modal-overlay{padding:12px;align-items:flex-start;}
+  .modal-overlay .modal-card{max-height:calc(100dvh - 24px);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .modal-card{padding:14px 12px 12px;}
+  .profile-modal-card{max-width:100%;padding:12px 10px 10px;}
+  .profile-grid{gap:10px;}
+  .pp-avatar-block{padding:8px;gap:10px;}
+  .pp-avatar-big{width:56px;height:56px;font-size:26px;}
+  .pp-banner{height:64px;}
+  .pp-avatar-overlay{width:56px;margin-left:10px;margin-top:-28px;}
+  .pp-avatar-mid{width:56px;height:56px;font-size:26px;}
+  .pp-name{font-size:21px;}
+  .pp-meta{padding:6px 12px 12px;}
 }
 .gramo-stickers,
 .gramo-stickers *{
@@ -2245,7 +2259,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
     </div>
   </div>
 
-  <div id="wifi-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:99999;padding:7px 14px;font-size:13px;text-align:center;font-family:'Kalam',sans-serif;border-bottom:2px solid #1a1a1a;background:#fff9e8;color:#5a4630;box-shadow:0 2px 6px rgba(0,0,0,0.1);"></div>
 
   <main class="player-shell">
     <div class="paper-card sketch-border">
@@ -2496,7 +2509,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
     <div class="modal-card sketch-border">
       <button class="modal-close sketchy" id="btn-add-close" aria-label="Close">✕</button>
       <h3 class="modal-title" id="add-modal-title">Add a new record</h3>
-      <p class="modal-sub">Drop your own 78 – it gets its own label :>.</p>
+      <p class="modal-sub">Drop your own 78 – it gets its own label :&gt;</p>
 
       <div class="report-box" style="margin-bottom: 20px; background: #f0f7ff; border-style: dashed;">
         <div style="font-family:'Kalam',sans-serif; font-size:12px; color:#5b7da8; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;"> Quick Auto-fill • Spotify </div>
@@ -2694,6 +2707,17 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
       <div style="display:flex; flex-direction:column; gap:16px; margin-top:10px;">
 
+        <div class="report-box" style="background:#eef6ea;">
+          <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">✦ Backup &amp; Restore ZIP</div>
+          <p style="font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630; margin: 4px 0 12px;">Simpan semua lagu crate ke satu file ZIP, atau pulihkan lagu dari file ZIP backup.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="btn-secondary sketch-border-soft" id="btn-crate-export" style="flex:1 1 150px; display:inline-flex; align-items:center; justify-content:center; gap:8px; text-align:center;">⬇ Export ZIP</button>
+            <button type="button" class="btn-secondary sketch-border-soft" id="btn-crate-import" style="flex:1 1 150px; display:inline-flex; align-items:center; justify-content:center; gap:8px; text-align:center;">⬆ Import ZIP</button>
+          </div>
+          <input type="file" id="crate-zip-input" accept=".zip,application/zip,application/x-zip-compressed" hidden>
+          <p id="crate-zip-status" style="font-family:'Kalam',sans-serif; font-size:12.5px; color:#7a6548; margin:10px 0 0; min-height:1.2em; word-break:break-word;"></p>
+        </div>
+
         <div class="report-box" style="background:#fff4f0;">
           <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">️ Danger Zone</div>
           <p style="font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630; margin: 4px 0 12px;">Hapus seluruh data dan kembalikan ke piringan hitam demo.</p>
@@ -2886,6 +2910,12 @@ function caErrorFrom(data, fallback) {
   return fallback;
 }
 
+function caExpireMs(value, fallbackMs) {
+  let n = Number(value);
+  if (isFinite(n) && n > 0) { if (n < 1e12) n *= 1000; return n; }
+  return fallbackMs;
+}
+
 function caValidateSessionShape(raw) {
   if (!raw || typeof raw !== 'object') return null;
   const user = raw.user;
@@ -2893,8 +2923,8 @@ function caValidateSessionShape(raw) {
   if (typeof user.id !== 'string' || !user.id) return null;
   if (typeof raw.access_token !== 'string' || !raw.access_token) return null;
   if (typeof raw.refresh_token !== 'string' || !raw.refresh_token) return null;
-  const expiresAt = Number(raw.expires_at);
-  if (!isFinite(expiresAt) || expiresAt <= 0) return null;
+  const expiresAt = caExpireMs(raw.expires_at, 0);
+  if (expiresAt <= 0) return null;
   return {
     access_token: raw.access_token,
     refresh_token: raw.refresh_token,
@@ -2941,7 +2971,7 @@ async function caEnsureFreshToken(force) {
       ChirootAuth.session = {
         access_token: data.access_token,
         refresh_token: (typeof data.refresh_token === 'string' && data.refresh_token) ? data.refresh_token : current.refresh_token,
-        expires_at: Number(data.expires_at) || Date.now() + (Number(data.expires_in) || 3600) * 1000,
+        expires_at: caExpireMs(data.expires_at, Date.now() + (Number(data.expires_in) || 3600) * 1000),
         user: (data.user && typeof data.user.id === 'string' && data.user.id === current.user.id)
           ? { id: data.user.id, email: typeof data.user.email === 'string' ? data.user.email : current.user.email }
           : current.user
@@ -3309,7 +3339,7 @@ async function caHandleAuthCallback() {
   const res = await fetch(caBase() + '/auth/v1/token?grant_type=pkce', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'apikey': caApiKey() },
-    body: JSON.stringify({ code: code, code_verifier: verifier })
+    body: JSON.stringify({ auth_code: code, code_verifier: verifier })
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || !data || typeof data.access_token !== 'string' || !data.user || typeof data.user.id !== 'string') {
@@ -3318,7 +3348,7 @@ async function caHandleAuthCallback() {
   const session = {
     access_token: data.access_token,
     refresh_token: typeof data.refresh_token === 'string' ? data.refresh_token : '',
-    expires_at: Number(data.expires_at) || Date.now() + (Number(data.expires_in) || 3600) * 1000,
+    expires_at: caExpireMs(data.expires_at, Date.now() + (Number(data.expires_in) || 3600) * 1000),
     user: { id: data.user.id, email: typeof data.user.email === 'string' ? data.user.email : '' }
   };
   ChirootAuth.session = caValidateSessionShape(session);
@@ -4160,6 +4190,7 @@ async function init() {
     shuffleBtn.classList.toggle('active', isShuffle);
     if (isShuffle) buildShuffleOrder();
     if(typeof setupSettings === 'function') setupSettings();
+    if(typeof setupCrateBackup === 'function') setupCrateBackup();
     if(typeof setupMonthlyReport === 'function') setupMonthlyReport();
     if(typeof checkMonthlyReportTrigger === 'function') checkMonthlyReportTrigger();
   } catch(err){
@@ -5615,6 +5646,304 @@ function hideMonthlyReportModal(){
     modal.setAttribute('aria-hidden', 'true');
   }
 }
+const CRATE_ZIP_META = 'chiroot-backup.json';
+let __crateZipBusy = false;
+let __crcTable = null;
+
+function cbCrcTable(){
+  if (__crcTable) return __crcTable;
+  const t = new Uint32Array(256);
+  for (let i = 0; i < 256; i++) {
+    let c = i;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    t[i] = c >>> 0;
+  }
+  __crcTable = t;
+  return t;
+}
+function cbCrc32(u8){
+  const t = cbCrcTable();
+  let c = 0xFFFFFFFF;
+  for (let i = 0; i < u8.length; i++) c = t[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function cbTextBytes(str){ return new TextEncoder().encode(str); }
+function cbSafeId(id){
+  const s = String(id == null ? '' : id).replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
+  return s || ('track_' + Date.now().toString(36));
+}
+function cbStatus(msg, isErr){
+  const el = document.getElementById('crate-zip-status');
+  if (el) { el.textContent = msg || ''; el.style.color = isErr ? '#b42318' : '#5a7a4a'; }
+}
+async function cbFetchBlob(url){
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return await res.blob();
+}
+function cbZipStore(files){
+  const enc = new TextEncoder();
+  const now = new Date();
+  const dosTime = ((now.getHours() & 31) << 11) | ((now.getMinutes() & 63) << 5) | ((Math.floor(now.getSeconds() / 2)) & 31);
+  const dosDate = (((now.getFullYear() - 1980) & 127) << 9) | (((now.getMonth() + 1) & 15) << 5) | (now.getDate() & 31);
+  const locals = [];
+  const centrals = [];
+  let offset = 0;
+  for (const f of files) {
+    const nameB = enc.encode(f.name);
+    const data = f.data;
+    const crc = cbCrc32(data);
+    const lh = new Uint8Array(30 + nameB.length);
+    const ldv = new DataView(lh.buffer);
+    ldv.setUint32(0, 0x04034b50, true);
+    ldv.setUint16(4, 20, true);
+    ldv.setUint16(6, 0x0800, true);
+    ldv.setUint16(10, dosTime, true);
+    ldv.setUint16(12, dosDate, true);
+    ldv.setUint32(14, crc, true);
+    ldv.setUint32(18, data.length, true);
+    ldv.setUint32(22, data.length, true);
+    ldv.setUint16(26, nameB.length, true);
+    lh.set(nameB, 30);
+    locals.push(lh, data);
+    const ch = new Uint8Array(46 + nameB.length);
+    const cdv = new DataView(ch.buffer);
+    cdv.setUint32(0, 0x02014b50, true);
+    cdv.setUint16(4, 20, true);
+    cdv.setUint16(6, 20, true);
+    cdv.setUint16(8, 0x0800, true);
+    cdv.setUint16(12, dosTime, true);
+    cdv.setUint16(14, dosDate, true);
+    cdv.setUint32(16, crc, true);
+    cdv.setUint32(20, data.length, true);
+    cdv.setUint32(24, data.length, true);
+    cdv.setUint16(28, nameB.length, true);
+    cdv.setUint32(42, offset, true);
+    ch.set(nameB, 46);
+    centrals.push(ch);
+    offset += lh.length + data.length;
+  }
+  let cdSize = 0;
+  for (const c of centrals) cdSize += c.length;
+  const eocd = new Uint8Array(22);
+  const edv = new DataView(eocd.buffer);
+  edv.setUint32(0, 0x06054b50, true);
+  edv.setUint16(8, files.length, true);
+  edv.setUint16(10, files.length, true);
+  edv.setUint32(12, cdSize, true);
+  edv.setUint32(16, offset, true);
+  const out = new Uint8Array(offset + cdSize + 22);
+  let p = 0;
+  for (const chunk of locals) { out.set(chunk, p); p += chunk.length; }
+  for (const chunk of centrals) { out.set(chunk, p); p += chunk.length; }
+  out.set(eocd, p);
+  return out;
+}
+async function cbZipRead(buffer){
+  const u8 = new Uint8Array(buffer);
+  const dv = new DataView(buffer);
+  const n = u8.length;
+  let eocd = -1;
+  const minPos = Math.max(0, n - 65558);
+  for (let i = n - 22; i >= minPos; i--) {
+    if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+  }
+  if (eocd < 0) throw new Error('File bukan ZIP yang valid.');
+  const count = dv.getUint16(eocd + 10, true);
+  let ptr = dv.getUint32(eocd + 16, true);
+  const out = {};
+  const dec = new TextDecoder();
+  for (let e = 0; e < count; e++) {
+    if (ptr + 46 > n || dv.getUint32(ptr, true) !== 0x02014b50) break;
+    const method = dv.getUint16(ptr + 10, true);
+    const compSize = dv.getUint32(ptr + 20, true);
+    const nameLen = dv.getUint16(ptr + 28, true);
+    const extraLen = dv.getUint16(ptr + 30, true);
+    const commentLen = dv.getUint16(ptr + 32, true);
+    const localOff = dv.getUint32(ptr + 42, true);
+    const name = dec.decode(u8.subarray(ptr + 46, ptr + 46 + nameLen));
+    if (localOff + 30 > n) throw new Error('Struktur ZIP rusak.');
+    const lNameLen = dv.getUint16(localOff + 26, true);
+    const lExtraLen = dv.getUint16(localOff + 28, true);
+    const dataStart = localOff + 30 + lNameLen + lExtraLen;
+    const raw = u8.subarray(dataStart, dataStart + compSize);
+    let data;
+    if (method === 0) {
+      data = raw;
+    } else if (method === 8) {
+      if (typeof DecompressionStream === 'undefined') throw new Error('Browser kamu tidak mendukung decompress ZIP. Pakai browser terbaru.');
+      const stream = new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+      data = new Uint8Array(await new Response(stream).arrayBuffer());
+    } else {
+      throw new Error('Metode kompresi ZIP tidak didukung (method ' + method + ').');
+    }
+    out[name] = data;
+    ptr += 46 + nameLen + extraLen + commentLen;
+  }
+  return out;
+}
+async function cbExportCrateZip(){
+  if (__crateZipBusy) return;
+  if (!(window.ChirootAuth && ChirootAuth.isAuthed())) { showToast('Login dulu untuk export crate.'); return; }
+  __crateZipBusy = true;
+  try {
+    cbStatus('Memuat daftar lagu…');
+    const crate = await caFetchCrate();
+    if (!crate.length) { cbStatus('Crate masih kosong, tidak ada yang bisa di-backup.', true); return; }
+    const files = [];
+    const metaTracks = [];
+    let failed = 0;
+    for (let i = 0; i < crate.length; i++) {
+      const t = crate[i];
+      cbStatus('Menyiapkan backup ' + (i + 1) + '/' + crate.length + ' lagu…');
+      const sid = cbSafeId(t.id);
+      const meta = {
+        id: String(t.id),
+        title: t.title,
+        artist: t.artist,
+        labelColor: t.labelColor,
+        vinylColor: t.vinylColor,
+        position: i,
+        audio_url: t._audioUrl || null,
+        audio_file: null,
+        cover_file: null
+      };
+      try {
+        const b = await cbFetchBlob(t.src);
+        meta.audio_file = 'audio/' + sid + '.mp3';
+        files.push({ name: meta.audio_file, data: new Uint8Array(await b.arrayBuffer()) });
+      } catch (e) { failed++; }
+      if (t.cover) {
+        try {
+          const c = await cbFetchBlob(t.cover);
+          meta.cover_file = 'covers/' + sid + '_cover.jpg';
+          files.push({ name: meta.cover_file, data: new Uint8Array(await c.arrayBuffer()) });
+        } catch (e) {}
+      }
+      metaTracks.push(meta);
+    }
+    const meta = { app: 'chiroot', type: 'crate-backup', version: 1, exported_at: new Date().toISOString(), tracks: metaTracks };
+    files.unshift({ name: CRATE_ZIP_META, data: cbTextBytes(JSON.stringify(meta)) });
+    cbStatus('Membungkus ZIP…');
+    const blob = new Blob([cbZipStore(files)], { type: 'application/zip' });
+    const d = new Date();
+    const pad = function (x) { return String(x).padStart(2, '0'); };
+    const fname = 'chiroot-backup-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.zip';
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fname;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    cbStatus('✓ Backup diunduh: ' + fname + ' (' + crate.length + ' lagu' + (failed ? ', ' + failed + ' gagal diambil' : '') + ')');
+    showToast('Backup ZIP dibuat ✦');
+  } catch (err) {
+    cbStatus('Gagal export: ' + (err && err.message ? err.message : err), true);
+  } finally {
+    __crateZipBusy = false;
+  }
+}
+async function cbImportCrateZip(file){
+  if (__crateZipBusy) return;
+  if (!(window.ChirootAuth && ChirootAuth.isAuthed())) { showToast('Login dulu untuk restore crate.'); return; }
+  if (!file) return;
+  if (file.size > 300 * 1024 * 1024) { cbStatus('File ZIP terlalu besar (maks 300 MB).', true); return; }
+  __crateZipBusy = true;
+  try {
+    cbStatus('Membaca file ZIP…');
+    const entries = await cbZipRead(await file.arrayBuffer());
+    let metaKey = null;
+    for (const k in entries) {
+      const lk = k.toLowerCase();
+      if (lk === CRATE_ZIP_META || lk.endsWith('/' + CRATE_ZIP_META)) { metaKey = k; break; }
+    }
+    if (!metaKey) throw new Error('chiroot-backup.json tidak ditemukan di ZIP. Pastikan ini file backup Chiroot.');
+    let meta;
+    try { meta = JSON.parse(new TextDecoder().decode(entries[metaKey])); } catch (e) { throw new Error('Metadata di dalam ZIP rusak.'); }
+    if (!meta || meta.type !== 'crate-backup' || !Array.isArray(meta.tracks)) throw new Error('Format backup tidak dikenali.');
+    const lower = {};
+    for (const k in entries) lower[k.toLowerCase()] = k;
+    const grab = function (name) {
+      if (!name) return null;
+      const k = lower[String(name).toLowerCase()];
+      return k ? entries[k] : null;
+    };
+    const existing = await caFetchCrate();
+    const usedIds = new Set(existing.map(function (t) { return String(t.id); }));
+    let pos = 0;
+    for (const t of existing) { const p = Number(t.position); if (isFinite(p) && p >= pos) pos = p + 1; }
+    const uid = ChirootAuth.session.user.id;
+    let ok = 0, skipped = 0;
+    for (let i = 0; i < meta.tracks.length; i++) {
+      const m = meta.tracks[i] || {};
+      cbStatus('Mengimpor ' + (i + 1) + '/' + meta.tracks.length + ' lagu…');
+      const title = caCleanText(m.title, 80);
+      if (!title) { skipped++; continue; }
+      let audioBytes = grab(m.audio_file);
+      const audioUrl = (typeof m.audio_url === 'string' && /^https:\/\//.test(m.audio_url) && m.audio_url.length <= 2048) ? m.audio_url : null;
+      if (!audioBytes && audioUrl) {
+        try { audioBytes = new Uint8Array(await (await cbFetchBlob(audioUrl)).arrayBuffer()); } catch (e) {}
+      }
+      if (!audioBytes) { skipped++; continue; }
+      try {
+        let id = cbSafeId(m.id);
+        if (usedIds.has(id)) id = 't_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        usedIds.add(id);
+        const audioPath = uid + '/' + id + '.mp3';
+        await caStorageUpload(audioPath, new Blob([audioBytes], { type: 'audio/mpeg' }), 'audio/mpeg');
+        let coverPath = null;
+        const coverBytes = grab(m.cover_file);
+        if (coverBytes) {
+          coverPath = uid + '/' + id + '_cover.jpg';
+          try {
+            await caStorageUpload(coverPath, new Blob([coverBytes], { type: 'image/jpeg' }), 'image/jpeg');
+          } catch (e) { coverPath = null; }
+        }
+        await caApiCall('/rest/v1/crate_tracks', 'POST', {
+          id: id,
+          user_id: uid,
+          title: title,
+          artist: caCleanText(m.artist, 80) || 'Unknown Artist',
+          label_color: caCleanColor(m.labelColor, '#d84a3a'),
+          vinyl_color: caCleanColor(m.vinylColor, '#1e1e24'),
+          audio_path: audioPath,
+          audio_url: null,
+          cover_path: coverPath,
+          position: pos++
+        });
+        ok++;
+      } catch (e) { skipped++; }
+    }
+    if (ok) {
+      tracks = await loadPlaylist();
+      renderPlaylist();
+      renderTop10();
+    }
+    cbStatus('✓ Selesai: ' + ok + ' lagu diimpor' + (skipped ? ', ' + skipped + ' dilewati' : '') + '.');
+    showToast(ok ? 'Restore berhasil ✦ (' + ok + ' lagu)' : 'Tidak ada lagu yang bisa diimpor.');
+  } catch (err) {
+    cbStatus('Gagal import: ' + (err && err.message ? err.message : err), true);
+  } finally {
+    __crateZipBusy = false;
+  }
+}
+function setupCrateBackup(){
+  const btnExport = document.getElementById('btn-crate-export');
+  const btnImport = document.getElementById('btn-crate-import');
+  const input = document.getElementById('crate-zip-input');
+  if (btnExport) btnExport.addEventListener('click', cbExportCrateZip);
+  if (btnImport && input) btnImport.addEventListener('click', function () {
+    if (!__crateZipBusy) input.click();
+  });
+  if (input) input.addEventListener('change', function () {
+    const f = input.files && input.files[0];
+    input.value = '';
+    if (f) cbImportCrateZip(f);
+  });
+}
+
 function setupSettings(){
   const modal = $('#settings-modal');
   const btnOpen = $('#btn-settings-open');
@@ -6288,5 +6617,5 @@ if (btnRefreshLyrics) {
 })();
 </script>
 
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
