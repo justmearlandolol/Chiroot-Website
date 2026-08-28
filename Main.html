@@ -2883,6 +2883,7 @@ const ChirootAuth = {
   }
 };
 ChirootAuth.crateLoaded = new Promise(function (resolve) { ChirootAuth._crateResolve = resolve; });
+window.ChirootAuth = ChirootAuth;
 
 function caBase() { return String(SUPABASE_URL).trim().replace(/\/+$/, ''); }
 function caApiKey() { return String(SUPABASE_PUBLISHABLE_KEY).trim(); }
@@ -3179,6 +3180,224 @@ function caMapCrateRow(row) {
     _coverPath: (typeof row.cover_path === 'string' && row.cover_path) ? row.cover_path : null,
     _audioUrl: (typeof row.audio_url === 'string' && row.audio_url) ? row.audio_url : null
   };
+}
+
+// ================= GUEST MODE (akses tanpa login) =================
+const GUEST_IDB_NAME = 'chiroot_guest_v1';
+const GUEST_IDB_STORE = 'tracks';
+let caGuestMem = null; // fallback jika IndexedDB tidak tersedia
+
+function caIsGuest() {
+  return !(ChirootAuth.session && ChirootAuth.profile);
+}
+
+function caGuestMemAll() {
+  if (!Array.isArray(caGuestMem)) caGuestMem = [];
+  return caGuestMem;
+}
+
+function caGuestIdbOpen() {
+  return new Promise(function (resolve, reject) {
+    if (!window.indexedDB) { reject(new Error('IndexedDB tidak tersedia')); return; }
+    let req;
+    try { req = indexedDB.open(GUEST_IDB_NAME, 1); } catch (e) { reject(e); return; }
+    req.onupgradeneeded = function () {
+      try {
+        if (!req.result.objectStoreNames.contains(GUEST_IDB_STORE)) req.result.createObjectStore(GUEST_IDB_STORE, { keyPath: 'id' });
+      } catch (e) {}
+    };
+    req.onsuccess = function () { resolve(req.result); };
+    req.onerror = function () { reject(req.error || new Error('IndexedDB error')); };
+    req.onblocked = function () { reject(new Error('IndexedDB blocked')); };
+  });
+}
+
+async function caGuestIdbRun(mode, run) {
+  const db = await caGuestIdbOpen();
+  try {
+    return await new Promise(function (resolve, reject) {
+      let rq;
+      try { rq = run(db.transaction(GUEST_IDB_STORE, mode).objectStore(GUEST_IDB_STORE)); }
+      catch (e) { reject(e); return; }
+      rq.onsuccess = function () { resolve(rq.result); };
+      rq.onerror = function () { reject(rq.error); };
+    });
+  } finally {
+    try { db.close(); } catch (e) {}
+  }
+}
+
+async function caGuestAll() {
+  try { return (await caGuestIdbRun('readonly', function (s) { return s.getAll(); })) || []; }
+  catch (e) { return caGuestMemAll().slice(); }
+}
+
+async function caGuestPut(rec) {
+  try { await caGuestIdbRun('readwrite', function (s) { return s.put(rec); }); }
+  catch (e) {
+    const mem = caGuestMemAll();
+    const i = mem.findIndex(function (r) { return r.id === rec.id; });
+    if (i >= 0) mem[i] = rec; else mem.push(rec);
+  }
+}
+
+async function caGuestDeleteById(id) {
+  try { await caGuestIdbRun('readwrite', function (s) { return s.delete(id); }); }
+  catch (e) {
+    const mem = caGuestMemAll();
+    const i = mem.findIndex(function (r) { return r.id === id; });
+    if (i >= 0) mem.splice(i, 1);
+  }
+}
+
+async function caGuestClear() {
+  try { await caGuestIdbRun('readwrite', function (s) { return s.clear(); }); }
+  catch (e) { caGuestMem = []; }
+}
+
+function caGuestNextId() {
+  return 'g_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+}
+
+function caGuestTrackFromRec(rec) {
+  const title = caCleanText(rec.title, 80);
+  if (!title) return null;
+  let src = '';
+  if (rec.audioBlob) { try { src = URL.createObjectURL(rec.audioBlob); } catch (e) {} }
+  if (!src && rec.srcRef) src = String(rec.srcRef);
+  if (!src) return null;
+  let cover = null;
+  if (rec.coverBlob) { try { cover = URL.createObjectURL(rec.coverBlob); } catch (e) {} }
+  if (!cover && rec.coverRef) cover = String(rec.coverRef);
+  return {
+    id: String(rec.id),
+    title: title,
+    artist: caCleanText(rec.artist, 80) || 'Unknown Artist',
+    src: src,
+    cover: cover,
+    labelColor: caCleanColor(rec.labelColor, '#d84a3a'),
+    vinylColor: caCleanColor(rec.vinylColor, '#1e1e24'),
+    isDemo: false,
+    _guest: true,
+    _srcRef: rec.srcRef || null,
+    _audioUrl: (rec.srcRef && /^https:\/\//i.test(rec.srcRef)) ? rec.srcRef : null
+  };
+}
+
+async function caGuestLoadCrate() {
+  const recs = await caGuestAll();
+  recs.sort(function (a, b) { return (Number(a.position) || 0) - (Number(b.position) || 0); });
+  return recs.map(caGuestTrackFromRec).filter(Boolean);
+}
+
+async function caGuestNextPosition() {
+  const recs = await caGuestAll();
+  let pos = 0;
+  for (const r of recs) { const p = Number(r.position); if (isFinite(p) && p >= pos) pos = p + 1; }
+  return pos;
+}
+
+async function caGuestAddTrack(fields, audioBlob, coverBlob, srcRef, coverRef) {
+  const rec = {
+    id: caGuestNextId(),
+    title: caCleanText(fields.title, 80),
+    artist: caCleanText(fields.artist, 80) || 'Unknown Artist',
+    labelColor: caCleanColor(fields.labelColor, '#d84a3a'),
+    vinylColor: caCleanColor(fields.vinylColor, '#1e1e24'),
+    position: isFinite(Number(fields.position)) ? Number(fields.position) : await caGuestNextPosition(),
+    srcRef: (typeof srcRef === 'string' && srcRef) ? srcRef : null,
+    coverRef: (typeof coverRef === 'string' && coverRef) ? coverRef : null,
+    audioBlob: audioBlob || null,
+    coverBlob: coverBlob || null
+  };
+  const track = caGuestTrackFromRec(rec);
+  if (!track) throw new Error('Track guest tidak valid (audio kosong).');
+  await caGuestPut(rec);
+  return track;
+}
+
+async function caGuestUpdateTrack(track, fields, audioBlob, coverBlob) {
+  const recs = await caGuestAll();
+  const rec = recs.find(function (r) { return String(r.id) === String(track.id); });
+  if (!rec) throw new Error('Track tidak ditemukan di crate guest.');
+  if (fields.title) rec.title = caCleanText(fields.title, 80) || rec.title;
+  if (fields.artist) rec.artist = caCleanText(fields.artist, 80) || rec.artist;
+  if (fields.labelColor) rec.labelColor = caCleanColor(fields.labelColor, rec.labelColor);
+  if (fields.vinylColor) rec.vinylColor = caCleanColor(fields.vinylColor, rec.vinylColor);
+  if (audioBlob) { rec.audioBlob = audioBlob; rec.srcRef = null; }
+  if (coverBlob) { rec.coverBlob = coverBlob; rec.coverRef = null; }
+  await caGuestPut(rec);
+  const updated = caGuestTrackFromRec(rec);
+  if (!updated) throw new Error('Track guest tidak valid setelah update.');
+  return updated;
+}
+
+async function caGuestDeleteTrack(track) {
+  await caGuestDeleteById(track.id);
+}
+
+async function caGuestReset() {
+  await caGuestClear();
+}
+
+async function caEnterGuestMode(note) {
+  caGateHide();
+  caRenderTopbar();
+  caRenderGreeting();
+  caSettled(false);
+  try {
+    tracks = await caGuestLoadCrate();
+    restoreState();
+  } catch (err) {
+    console.error('guest crate load failed', err);
+    tracks = [];
+  }
+  renderPlaylist();
+  renderTop10();
+  if (tracks.length) loadTrack(currentIndex, false, true);
+  showToast(note || 'Mode Guest ✦ lagu tersimpan di device ini. Login untuk sinkron ke cloud.');
+}
+
+async function caMigrateGuestCrateToAccount() {
+  if (!(ChirootAuth.session && ChirootAuth.profile)) return;
+  const recs = await caGuestAll();
+  if (!recs || !recs.length) return;
+  showToast('Memindahkan ' + recs.length + ' lagu dari mode Guest ke akunmu…');
+  let moved = 0, failed = 0;
+  for (const rec of recs) {
+    try {
+      let audioBlob = rec.audioBlob || null;
+      if (!audioBlob && rec.srcRef) {
+        try { audioBlob = await cbFetchBlob(rec.srcRef); } catch (e) { audioBlob = null; }
+      }
+      let coverBlob = rec.coverBlob || null;
+      if (!coverBlob && rec.coverRef) {
+        try { coverBlob = await imageBlobToJpegBlob(await cbFetchBlob(rec.coverRef), 900); } catch (e) { coverBlob = null; }
+      }
+      if (!audioBlob) { failed++; continue; }
+      await caCrateAdd({
+        title: rec.title,
+        artist: rec.artist,
+        labelColor: rec.labelColor || '#d84a3a',
+        vinylColor: rec.vinylColor || '#1e1e24',
+        position: await caNextPosition()
+      }, audioBlob, coverBlob, null);
+      await caGuestDeleteById(rec.id);
+      moved++;
+    } catch (e) {
+      console.warn('guest migrate failed for', rec && rec.id, e);
+      failed++;
+    }
+  }
+  if (moved) {
+    try {
+      tracks = await loadPlaylist();
+      if (currentIndex >= tracks.length) currentIndex = Math.max(0, tracks.length - 1);
+      renderPlaylist();
+      renderTop10();
+    } catch (e) {}
+    showToast('✦ ' + moved + ' lagu dari mode Guest dipindah ke akunmu' + (failed ? ' (' + failed + ' gagal)' : ''));
+  }
 }
 
 async function caFetchCrate() {
@@ -3713,7 +3932,7 @@ function caAskSignOut() {
 }
 
 function caDoSignOut() {
-  caSignOut().then(function () {
+  caSignOut().then(async function () {
     tracks = [];
     currentIndex = 0;
     isPlaying = false;
@@ -3728,12 +3947,9 @@ function caDoSignOut() {
     try { audio.removeAttribute('src'); audio.load(); } catch (e) {}
     document.body.classList.remove('is-playing');
     showEmptyState();
-    renderPlaylist();
-    renderTop10();
-    caGateShow('login');
     caRenderTopbar();
     caRenderGreeting();
-    showToast('Sampai jumpa lagi!');
+    await caEnterGuestMode('Sampai jumpa lagi! Kamu masih bisa dengar musik sebagai Guest.');
   }).catch(function (err) {
     showToast('Gagal keluar: ' + (err && err.message ? err.message : err));
   });
@@ -3747,9 +3963,7 @@ async function caBootProfileStep(fresh) {
     } catch (err) {
       ChirootAuth.session = null;
       caClearSession();
-      caGateShow('login');
-      caGateError('Sesi tidak valid lagi. Silakan login lagi.');
-      caSettled(false);
+      await caEnterGuestMode('Sesi login sudah tidak valid — lanjut sebagai Guest. Login lagi buat sinkron cloud.');
       return;
     }
   }
@@ -3758,10 +3972,7 @@ async function caBootProfileStep(fresh) {
     profile = await caFetchProfile();
   } catch (err) {
     console.warn('profile fetch failed', err);
-    caGateShow('login');
-    caGateError('Gagal memuat profil: ' + (err && err.message ? err.message : 'terjadi kesalahan') + '. Periksa koneksi, lalu coba lagi.');
-    caAddGateRetry(function () { return caBootProfileStep(true); });
-    caSettled(false);
+    await caEnterGuestMode('Gagal memuat profil (' + (err && err.message ? err.message : 'terjadi kesalahan') + ') — lanjut sebagai Guest.');
     return;
   }
   if (profile) {
@@ -3786,17 +3997,14 @@ async function caBoot() {
     fromCallback = await caHandleAuthCallback();
   } catch (err) {
     ChirootAuth.session = null;
-    caGateShow('login');
-    caGateError(err && err.message ? err.message : 'Login gagal. Silakan coba lagi.');
-    caSettled(false);
+    await caEnterGuestMode('Login gagal' + (err && err.message ? ': ' + err.message : '') + ' — lanjut sebagai Guest. Coba login lagi dari tombol di atas.');
     return;
   }
   if (!fromCallback) {
     ChirootAuth.session = caLoadSession();
   }
   if (!ChirootAuth.session) {
-    caGateShow('login');
-    caSettled(false);
+    await caEnterGuestMode();
     return;
   }
   await caBootProfileStep(fromCallback);
@@ -4048,6 +4256,7 @@ window.ChirootHooks = {
     } finally {
       if (window.ChirootAuth) ChirootAuth.resolveCrateLoaded();
     }
+    try { await caMigrateGuestCrateToAccount(); } catch (err) { console.warn('guest crate migrate failed', err); }
   },
   onProfileUpdated() {}
 };
@@ -4104,7 +4313,24 @@ async function addTop10ToCrate(idx){
     return;
   }
   if(!(window.ChirootAuth && ChirootAuth.isAuthed())){
-    showToast('Login dulu dengan Google.');
+    if(!consumeClientRateLimit('top10Add', RATE_LIMITS.top10Add)) return;
+    showToast('Menambahkan "' + song.title + '" ke Crate (Guest)…');
+    try {
+      const gTrack = await caGuestAddTrack({
+        title: song.title,
+        artist: song.artist,
+        labelColor: song.labelColor || '#c9a227',
+        vinylColor: song.vinylColor || '#1e1e24'
+      }, null, null, String(song.src).trim(), song.cover ? String(song.cover).trim() : null);
+      tracks.push(gTrack);
+      renderPlaylist();
+      renderTop10();
+      loadTrack(tracks.length - 1, true, true);
+      showToast('✦ "' + song.title + '" ditambahkan — tersimpan di device ini');
+    } catch (err) {
+      console.error(err);
+      showToast('Gagal menambah track: ' + (err && err.message ? err.message : err));
+    }
     return;
   }
   if(!consumeClientRateLimit('top10Add', RATE_LIMITS.top10Add)) return;
@@ -4255,8 +4481,11 @@ function consumeClientRateLimit(action, config){
 
 async function loadPlaylist() {
   tracks = [];
-  if (!(window.ChirootAuth && ChirootAuth.isAuthed())) return tracks;
-  tracks = await caFetchCrate();
+  if (window.ChirootAuth && ChirootAuth.isAuthed()) {
+    tracks = await caFetchCrate();
+  } else {
+    tracks = await caGuestLoadCrate();
+  }
   return tracks;
 }
 
@@ -4734,13 +4963,10 @@ function bindEvents(){
 function removeTrack(idx){
   const track = tracks[idx];
   if (!track) return;
-  if (!(window.ChirootAuth && ChirootAuth.isAuthed())) {
-    showToast('Login dulu untuk menghapus lagu.');
-    return;
-  }
   showDeleteConfirm(track, async ()=>{
     try {
-      await caCrateDelete(track);
+      if (window.ChirootAuth && ChirootAuth.isAuthed()) await caCrateDelete(track);
+      else await caGuestDeleteTrack(track);
     } catch (err) {
       console.error(err);
       showToast('Gagal menghapus: ' + (err && err.message ? err.message : err));
@@ -5062,10 +5288,10 @@ function setupAddModal(){
       }
     }
 
-    if(!(window.ChirootAuth && ChirootAuth.isAuthed())){
-      alert('Login dulu dengan Google sebelum menyimpan lagu.');
-      return;
-    }
+    const authed = (window.ChirootAuth && ChirootAuth.isAuthed());
+    const crateAdd = authed ? caCrateAdd : caGuestAddTrack;
+    const crateUpdate = authed ? caCrateUpdate : caGuestUpdateTrack;
+    const crateNextPos = authed ? caNextPosition : caGuestNextPosition;
 
     if(!consumeClientRateLimit('addTrack', RATE_LIMITS.addTrack)) return;
 
@@ -5086,7 +5312,7 @@ function setupAddModal(){
         const t = tracks[editIndex];
         const audioBlob = af || null;
         showToast(audioBlob ? 'Mengupload audio baru…' : 'Menyimpan perubahan…');
-        const updated = await caCrateUpdate(t, { title, artist, labelColor: chosenColor, vinylColor: chosenVinyl }, audioBlob, coverBlob);
+        const updated = await crateUpdate(t, { title, artist, labelColor: chosenColor, vinylColor: chosenVinyl }, audioBlob, coverBlob);
         tracks[editIndex] = updated;
         renderPlaylist();
         renderTop10();
@@ -5104,13 +5330,13 @@ function setupAddModal(){
         return;
       }
 
-      showToast('Mengupload audio…');
-      const newTrack = await caCrateAdd({
+      showToast('Menyimpan audio…');
+      const newTrack = await crateAdd({
         title,
         artist,
         labelColor: chosenColor,
         vinylColor: chosenVinyl,
-        position: await caNextPosition()
+        position: await crateNextPos()
       }, af, coverBlob, null);
 
       tracks.push(newTrack);
@@ -5128,6 +5354,7 @@ function setupAddModal(){
       close();
 
       loadTrack(tracks.length-1, true, true);
+      if(!authed) showToast('✦ Tersimpan di device ini (mode Guest)');
     } catch(err){
       console.error(err);
       alert('Gagal menyimpan track: ' + (err && err.message ? err.message : err));
@@ -5207,13 +5434,10 @@ function showToast(msg){
 
 function resetCrate(){
   showDeleteConfirm({title:'Reset entire crate?', artist:'All custom songs will be removed', isDemo:false}, async ()=>{
-    if(!(window.ChirootAuth && ChirootAuth.isAuthed())){
-      showToast('Login dulu untuk reset crate.');
-      return;
-    }
     try{
       showToast('Menghapus crate…');
-      await caCrateReset();
+      if (window.ChirootAuth && ChirootAuth.isAuthed()) await caCrateReset();
+      else await caGuestReset();
       tracks = [];
       currentIndex = 0;
       renderPlaylist();
@@ -5784,11 +6008,11 @@ async function cbZipRead(buffer){
 }
 async function cbExportCrateZip(){
   if (__crateZipBusy) return;
-  if (!(window.ChirootAuth && ChirootAuth.isAuthed())) { showToast('Login dulu untuk export crate.'); return; }
+  const authed = (window.ChirootAuth && ChirootAuth.isAuthed());
   __crateZipBusy = true;
   try {
     cbStatus('Memuat daftar lagu…');
-    const crate = await caFetchCrate();
+    const crate = authed ? await caFetchCrate() : (tracks || []).slice();
     if (!crate.length) { cbStatus('Crate masih kosong, tidak ada yang bisa di-backup.', true); return; }
     const files = [];
     const metaTracks = [];
@@ -5847,7 +6071,7 @@ async function cbExportCrateZip(){
 }
 async function cbImportCrateZip(file){
   if (__crateZipBusy) return;
-  if (!(window.ChirootAuth && ChirootAuth.isAuthed())) { showToast('Login dulu untuk restore crate.'); return; }
+  const authed = (window.ChirootAuth && ChirootAuth.isAuthed());
   if (!file) return;
   if (file.size > 300 * 1024 * 1024) { cbStatus('File ZIP terlalu besar (maks 300 MB).', true); return; }
   __crateZipBusy = true;
@@ -5870,11 +6094,11 @@ async function cbImportCrateZip(file){
       const k = lower[String(name).toLowerCase()];
       return k ? entries[k] : null;
     };
-    const existing = await caFetchCrate();
+    const existing = authed ? await caFetchCrate() : (tracks || []).slice();
     const usedIds = new Set(existing.map(function (t) { return String(t.id); }));
     let pos = 0;
     for (const t of existing) { const p = Number(t.position); if (isFinite(p) && p >= pos) pos = p + 1; }
-    const uid = ChirootAuth.session.user.id;
+    const uid = authed ? ChirootAuth.session.user.id : null;
     let ok = 0, skipped = 0;
     for (let i = 0; i < meta.tracks.length; i++) {
       const m = meta.tracks[i] || {};
@@ -5891,10 +6115,21 @@ async function cbImportCrateZip(file){
         let id = cbSafeId(m.id);
         if (usedIds.has(id)) id = 't_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
         usedIds.add(id);
+        const coverBytes = grab(m.cover_file);
+        if (!authed) {
+          await caGuestAddTrack({
+            title: title,
+            artist: caCleanText(m.artist, 80) || 'Unknown Artist',
+            labelColor: caCleanColor(m.labelColor, '#d84a3a'),
+            vinylColor: caCleanColor(m.vinylColor, '#1e1e24'),
+            position: pos++
+          }, new Blob([audioBytes], { type: 'audio/mpeg' }), coverBytes ? new Blob([coverBytes], { type: 'image/jpeg' }) : null, null);
+          ok++;
+          continue;
+        }
         const audioPath = uid + '/' + id + '.mp3';
         await caStorageUpload(audioPath, new Blob([audioBytes], { type: 'audio/mpeg' }), 'audio/mpeg');
         let coverPath = null;
-        const coverBytes = grab(m.cover_file);
         if (coverBytes) {
           coverPath = uid + '/' + id + '_cover.jpg';
           try {
