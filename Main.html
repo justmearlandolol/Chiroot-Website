@@ -4,7 +4,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://i.scdn.co https://*.scdn.co https://astuagdezahmuuwjoghf.supabase.co; media-src 'self' data: blob: https://astuagdezahmuuwjoghf.supabase.co; connect-src 'self' https://astuagdezahmuuwjoghf.supabase.co https://lrclib.net https://*.scdn.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://i.ytimg.com https://i.scdn.co https://*.scdn.co https://astuagdezahmuuwjoghf.supabase.co; media-src 'self' data: blob: https://astuagdezahmuuwjoghf.supabase.co; connect-src 'self' https://astuagdezahmuuwjoghf.supabase.co https://www.googleapis.com https://lrclib.net https://*.scdn.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <title>Chiroot</title>
@@ -2511,13 +2511,13 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       <h3 class="modal-title" id="add-modal-title">Add a new record</h3>
       <p class="modal-sub">Drop your own 78 – it gets its own label :&gt;</p>
 
-      <div class="report-box" style="margin-bottom: 20px; background: #f0f7ff; border-style: dashed;">
-        <div style="font-family:'Kalam',sans-serif; font-size:12px; color:#5b7da8; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;"> Quick Auto-fill • Spotify </div>
+      <div class="report-box" style="margin-bottom: 20px; background: #fff5f5; border-style: dashed;">
+        <div style="font-family:'Kalam',sans-serif; font-size:12px; color:#c4302b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;"> ▶ Quick Auto-fill • YouTube </div>
         <div style="display: flex; gap: 10px; flex-wrap:wrap;">
-          <input type="url" id="input-spotify-url" class="sketch-input" placeholder="https://open.spotify.com/track/..." inputmode="url" autocomplete="off" style="flex: 1; min-width:220px; font-size: 14px;">
-          <button type="button" id="btn-spotify-fetch" class="btn-primary sketch-border-soft" style="padding: 0 15px; min-height:44px; white-space: nowrap;">Ambil Data</button>
+          <input type="url" id="input-youtube-url" class="sketch-input" placeholder="https://www.youtube.com/watch?v=..." inputmode="url" autocomplete="off" style="flex: 1; min-width:220px; font-size: 14px;">
+          <button type="button" id="btn-youtube-fetch" class="btn-primary sketch-border-soft" style="padding: 0 15px; min-height:44px; white-space: nowrap;">Ambil Data</button>
         </div>
-        <p class="file-hint" style="margin-top:5px;">Tempel link track Spotify untuk mengisi Judul, Artis, & Cover. Tapi masih harus download mp3 nya ya lol</p>
+        <p class="file-hint" style="margin-top:5px;">Tempel link YouTube untuk mengisi Judul, Artis (channel), & Thumbnail. Tetap harus upload MP3 nya ya!</p>
       </div>
 
       <form id="add-form" class="add-form" novalidate>
@@ -2838,6 +2838,40 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       </div>
     </div>
   </div>
+
+  <div class="modal-overlay" id="guest-save-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="guest-save-title">
+    <div class="modal-card sketch-border" style="max-width:440px;">
+      <button type="button" class="modal-close sketchy" id="btn-guest-save-close" aria-label="Tutup">✕</button>
+      <h3 class="modal-title" id="guest-save-title">Lagu tersimpan di device ini ✦</h3>
+      <p class="modal-sub">Kamu masih mode Guest, record ini masih kesimpen di browser sekarang, bukan di cloud. Kalau cache dibersihin atau ganti device, lagunya ikut hilang.</p>
+      <p class="modal-sub" style="margin-top:-8px;">Login Google biar semua record kamu diinget & bisa dibuka lagi dari device manapun.</p>
+      <div class="modal-actions" style="flex-direction:column;gap:8px;margin-top:16px;">
+        <button type="button" class="google-btn" id="btn-guest-save-login" style="width:100%;justify-content:center;"><svg viewBox="0 0 48 48" width="19" height="19" aria-hidden="true" focusable="false"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg><span>Login with Google</span></button>
+        <button type="button" class="btn-secondary sketch-border-soft" id="btn-guest-save-dismiss" style="width:100%;">Lanjut sebagai Guest</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  var modal = document.getElementById('guest-save-modal');
+  var shown = false;
+  function close() { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); }
+  window.caShowGuestSaveReminder = function () {
+    if (shown) return;
+    shown = true;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  };
+  document.getElementById('btn-guest-save-close').addEventListener('click', close);
+  document.getElementById('btn-guest-save-dismiss').addEventListener('click', close);
+  document.getElementById('btn-guest-save-login').addEventListener('click', function () {
+    close();
+    if (typeof caLoginRedirect === 'function') caLoginRedirect();
+  });
+  modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+})();
+  </script>
 
   <audio id="audio" preload="metadata"></audio>
 
@@ -4129,7 +4163,7 @@ const $$ = (sel) => [...document.querySelectorAll(sel)];
 
 const SUPABASE_URL = 'https://astuagdezahmuuwjoghf.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_NXhR-MquEMwYDrCBPAOgAQ_MZ4BXQlT';
-const SPOTIFY_FUNCTION_NAME = 'spotify-track';
+const YOUTUBE_API_KEY = 'YOUR_YOUTUBE_API_KEY'; // ← Ganti dengan API Key YouTube Data v3 lo bro!
 
 function isSupabaseConfigured(){
   const projectUrl = String(SUPABASE_URL || '').trim();
@@ -4224,7 +4258,7 @@ const LS_STATE = 'gramophone_state_v2';
 
 const RATE_LIMIT_STORAGE_KEY = 'gramophone_rate_limit_v1';
 const RATE_LIMITS = {
-  spotifyFetch: { max: 5, windowMs: 60 * 1000, label: 'Spotify auto-fill' },
+  youtubeFetch: { max: 5, windowMs: 60 * 1000, label: 'YouTube auto-fill' },
   addTrack: { max: 12, windowMs: 10 * 60 * 1000, label: 'Add/Edit Music' },
   top10Add: { max: 30, windowMs: 5 * 60 * 1000, label: 'Top 5 add' },
   profileSave: { max: 10, windowMs: 60 * 1000, label: 'Simpan profil' },
@@ -4724,12 +4758,21 @@ function jumpTo(index, autoPlay){
 function play(){
   if(!tracks || !tracks.length){ if(typeof showToast==="function") showToast("Crate kosong – Add Music dulu ya!"); const b=document.getElementById("btn-add-open"); if(b){ b.style.transform="scale(1.06)"; setTimeout(()=>b.style.transform="",220); } return; }
 
+  // FIX: Resume AudioContext kalau suspended (Web Audio API bug - suara gak keluar)
+  if(window.__ChirootAudioContext && window.__ChirootAudioContext.state === 'suspended'){
+    window.__ChirootAudioContext.resume().catch(function(){});
+  }
+
   tonearm.classList.add('on-record');
   recordEl.classList.add('playing');
   document.body.classList.add('is-playing');
   updatePlayPauseUI();
   audio.play().then(()=>{
     isPlaying = true;
+    // Pastikan AudioContext running setelah play berhasil
+    if(window.__ChirootAudioContext && window.__ChirootAudioContext.state === 'suspended'){
+      window.__ChirootAudioContext.resume().catch(function(){});
+    }
     if(typeof recordTrackPlay === 'function' && tracks && tracks[currentIndex]){
       recordTrackPlay(tracks[currentIndex]);
     }
@@ -4909,7 +4952,7 @@ function bindEvents(){
     if (pd) pd.textContent = fmtTime(audio.duration);
     saveState();
   });
-  safeOn(audio,'play', ()=>{ isPlaying=true; recordEl.classList.add('playing'); tonearm.classList.add('on-record'); document.body.classList.add('is-playing'); updatePlayPauseUI(); });
+  safeOn(audio,'play', ()=>{ isPlaying=true; recordEl.classList.add('playing'); tonearm.classList.add('on-record'); document.body.classList.add('is-playing'); updatePlayPauseUI(); if(window.__ChirootAudioContext && window.__ChirootAudioContext.state==='suspended'){window.__ChirootAudioContext.resume().catch(function(){});} });
   safeOn(audio,'pause', ()=>{ isPlaying=false; updatePlayPauseUI(); recordEl.classList.remove('playing'); document.body.classList.remove('is-playing'); });
   safeOn(audio,'ended', ()=>{
     recordEl.classList.remove('playing');
@@ -4941,6 +4984,10 @@ function bindEvents(){
 
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
+      // FIX: Selalu resume AudioContext saat tab aktif lagi
+      if(window.__ChirootAudioContext && window.__ChirootAudioContext.state === 'suspended'){
+        window.__ChirootAudioContext.resume().catch(function(){});
+      }
       if (window._playNextOnVisible && tracks && tracks.length > 0) {
         window._playNextOnVisible = false;
         nextTrack();
@@ -4950,6 +4997,9 @@ function bindEvents(){
           tonearm.classList.add('on-record');
           document.body.classList.add('is-playing');
           updatePlayPauseUI();
+          if(window.__ChirootAudioContext && window.__ChirootAudioContext.state==='suspended'){
+            window.__ChirootAudioContext.resume().catch(function(){});
+          }
         }).catch(err => {
           console.warn('Auto-resume playback failed:', err);
         });
@@ -5007,92 +5057,165 @@ function setupAddModal(){
   const submitBtn = document.getElementById('add-submit-btn');
   const formNote = document.getElementById('add-form-note');
   const editIdInput = document.getElementById('edit-track-id');
-  const spotifyInput = $('#input-spotify-url');
-  const spotifyBtn = $('#btn-spotify-fetch');
+  const youtubeInput = $('#input-youtube-url');
+  const youtubeBtn = $('#btn-youtube-fetch');
 
-  let spotifyCoverBlob = null;
+  let youtubeCoverBlob = null;
 
-  if(spotifyBtn){
-    spotifyBtn.addEventListener('click', async function() {
-      var url = spotifyInput.value.trim();
+  function extractYouTubeVideoId(url) {
+    if (!url) return null;
+    var s = String(url).trim();
+    // Standard: youtube.com/watch?v=ID
+    var m = s.match(/[?&]v=([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    // Short: youtu.be/ID
+    m = s.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    // Embed: youtube.com/embed/ID
+    m = s.match(/youtube\.com\/embed\/([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    // Shorts: youtube.com/shorts/ID
+    m = s.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    // Music: music.youtube.com/watch?v=ID
+    m = s.match(/music\.youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    // Direct 11-char ID
+    if (/^[A-Za-z0-9_-]{11}$/.test(s)) return s;
+    return null;
+  }
 
-      if(!url) return showToast("Paste link track Spotify dulu bro!");
-      if(!/^https:\/\/open\.spotify\.com\/(?:intl-[a-z]{2}\/)?track\/[A-Za-z0-9]{22}(?:[/?#].*)?$/i.test(url)){
-        return showToast("Link harus berupa track dari open.spotify.com");
+  function parseYouTubeTitleArtist(rawTitle, channelTitle) {
+    // Many music videos use "Artist - Title" or "Title - Artist" format
+    var title = String(rawTitle || '').trim();
+    var artist = String(channelTitle || '').trim();
+
+    // Try to split "Artist - Title" pattern
+    var dashMatch = title.match(/^(.+?)\s*[-–—]\s*(.+)$/);
+    if (dashMatch) {
+      var left = dashMatch[1].trim();
+      var right = dashMatch[2].trim();
+      // Remove common suffixes like (Official Video), [Lyrics], etc from the title part
+      var cleanExtra = function(s) {
+        return s.replace(/\s*[\(\[]\s*(official\s*(music\s*)?video|official\s*audio|lyrics?|visualizer|audio|mv|m\/v|hd|hq|4k|music\s*video)[\s\)\]]*$/i, '').trim();
+      };
+      // Heuristic: if channel name is similar to left part, left is artist, right is title
+      var leftNorm = left.toLowerCase().replace(/[^a-z0-9]/g, '');
+      var chanNorm = artist.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (leftNorm && chanNorm && (leftNorm.indexOf(chanNorm.slice(0, 5)) >= 0 || chanNorm.indexOf(leftNorm.slice(0, 5)) >= 0)) {
+        return { title: cleanExtra(right), artist: left };
       }
-      if(!isSupabaseConfigured()){
-        return showToast("Isi SUPABASE_URL dan Publishable Key di Main.html dulu");
-      }
-      if(!consumeClientRateLimit('spotifyFetch', RATE_LIMITS.spotifyFetch)) return;
+      // Default: left = artist, right = title
+      return { title: cleanExtra(right), artist: cleanExtra(left) };
+    }
 
-      spotifyBtn.disabled = true;
-      spotifyBtn.textContent = "Mengambil...";
-      spotifyCoverBlob = null;
+    // Remove common junk from title
+    var cleaned = title
+      .replace(/\s*[\(\[]\s*(official\s*(music\s*)?video|official\s*audio|lyrics?|visualizer|audio|mv|m\/v|hd|hq|4k|music\s*video)[\s\)\]]*/gi, '')
+      .trim();
+
+    // Clean channel name (remove - Topic suffix)
+    var cleanArtist = artist.replace(/\s*-\s*Topic$/i, '').trim();
+
+    return {
+      title: cleaned || title,
+      artist: cleanArtist || artist || 'Unknown Artist'
+    };
+  }
+
+  if(youtubeBtn){
+    youtubeBtn.addEventListener('click', async function() {
+      var url = youtubeInput.value.trim();
+
+      if(!url) return showToast("Paste link YouTube dulu bro!");
+
+      var videoId = extractYouTubeVideoId(url);
+      if(!videoId){
+        return showToast("Link YouTube tidak valid. Pastikan format: youtube.com/watch?v=... atau youtu.be/...");
+      }
+
+      if(!YOUTUBE_API_KEY || YOUTUBE_API_KEY === 'YOUR_YOUTUBE_API_KEY'){
+        return showToast("YouTube API Key belum diatur! Isi YOUTUBE_API_KEY di source code dulu.");
+      }
+
+      if(!consumeClientRateLimit('youtubeFetch', RATE_LIMITS.youtubeFetch)) return;
+
+      youtubeBtn.disabled = true;
+      youtubeBtn.textContent = "Mengambil...";
+      youtubeCoverBlob = null;
 
       try {
-        var functionUrl = String(SUPABASE_URL).trim().replace(/\/+$/, '')
-          + '/functions/v1/' + SPOTIFY_FUNCTION_NAME;
+        var apiUrl = 'https://www.googleapis.com/youtube/v3/videos'
+          + '?part=snippet'
+          + '&id=' + encodeURIComponent(videoId)
+          + '&key=' + encodeURIComponent(YOUTUBE_API_KEY);
 
-        var response = await fetch(functionUrl, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'apikey': String(SUPABASE_PUBLISHABLE_KEY).trim()
-          },
-          body: JSON.stringify({ url: url })
+        var response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
         });
 
-        var rawResponse = await response.text();
         var data = {};
         try {
-          data = rawResponse ? JSON.parse(rawResponse) : {};
+          data = await response.json();
         } catch(parseError) {
           data = {};
         }
 
         if(!response.ok){
-          var serverMessage = data.error || data.message || rawResponse.trim();
-          console.error('spotify-track HTTP error', {
-            status: response.status,
-            statusText: response.statusText,
-            response: serverMessage || '(empty response)'
-          });
-          throw new Error(
-            'HTTP ' + response.status + ': ' +
-            (serverMessage || 'Gagal ambil data Spotify')
-          );
+          var errorMsg = (data.error && data.error.message) ? data.error.message : 'HTTP ' + response.status;
+          console.error('YouTube API error', data);
+          throw new Error('YouTube API: ' + errorMsg);
         }
 
-        document.getElementById('input-title').value = data.title || "";
-        document.getElementById('input-artist').value = data.artist || "";
+        if(!data.items || !data.items.length){
+          throw new Error('Video tidak ditemukan. Cek link YouTube-nya ya!');
+        }
 
-        if(data.cover_url){
-          showToast("Metadata ditemukan, mengambil cover...");
+        var snippet = data.items[0].snippet;
+        var rawTitle = snippet.title || '';
+        var channelTitle = snippet.channelTitle || '';
+
+        var parsed = parseYouTubeTitleArtist(rawTitle, channelTitle);
+
+        document.getElementById('input-title').value = parsed.title.slice(0, 60);
+        document.getElementById('input-artist').value = parsed.artist.slice(0, 60);
+
+        // Get best thumbnail: maxresdefault > standard > high > medium > default
+        var thumbs = snippet.thumbnails || {};
+        var thumbUrl = (thumbs.maxres && thumbs.maxres.url)
+          || (thumbs.standard && thumbs.standard.url)
+          || (thumbs.high && thumbs.high.url)
+          || (thumbs.medium && thumbs.medium.url)
+          || (thumbs['default'] && thumbs['default'].url)
+          || '';
+
+        if(thumbUrl){
+          showToast("Metadata ditemukan, mengambil thumbnail...");
           try {
-            var imgRes = await fetch(data.cover_url, { mode: 'cors' });
+            var imgRes = await fetch(thumbUrl, { mode: 'cors' });
             if(!imgRes.ok) throw new Error('HTTP ' + imgRes.status);
             var blob = await imgRes.blob();
             if(!blob.type.startsWith('image/')) throw new Error('Respons cover bukan gambar');
 
-            spotifyCoverBlob = await imageBlobToJpegBlob(blob, 900);
+            youtubeCoverBlob = await imageBlobToJpegBlob(blob, 900);
 
-            coverHint.textContent = "✓ Cover loaded from Spotify";
+            coverHint.textContent = "✓ Thumbnail loaded from YouTube";
             coverHint.style.color = "#2a7a3a";
           } catch(coverError) {
-            console.warn('Spotify cover download failed', coverError);
-            coverHint.textContent = " Metadata terisi, tetapi cover gagal diunduh. Upload manual jika perlu.";
+            console.warn('YouTube thumbnail download failed', coverError);
+            coverHint.textContent = "Metadata terisi, tapi thumbnail gagal diunduh. Upload manual jika perlu.";
             coverHint.style.color = "#b36b00";
           }
         }
 
-        showToast("Auto-fill Spotify berhasil! ✦");
+        showToast("Auto-fill YouTube berhasil! ✦");
       } catch (err) {
-        console.error('Supabase Spotify request failed', err);
-        showToast(err.message || "Supabase Edge Function error");
+        console.error('YouTube API request failed', err);
+        showToast(err.message || "YouTube API error");
       } finally {
-        spotifyBtn.disabled = false;
-        spotifyBtn.textContent = "Ambil Data";
+        youtubeBtn.disabled = false;
+        youtubeBtn.textContent = "Ambil Data";
       }
     });
   }
@@ -5105,8 +5228,8 @@ function setupAddModal(){
   function open(mode='add', idx=-1){
     editMode = (mode==='edit');
     editIndex = idx;
-    spotifyCoverBlob = null;
-    if(spotifyInput) spotifyInput.value = '';
+    youtubeCoverBlob = null;
+    if(youtubeInput) youtubeInput.value = '';
     modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
     if(editMode && tracks[idx]){
       const t = tracks[idx];
@@ -5304,8 +5427,8 @@ function setupAddModal(){
       if (cf) {
         showToast('Mempersiapkan cover…');
         coverBlob = await imageBlobToJpegBlob(cf, 900);
-      } else if (spotifyCoverBlob) {
-        coverBlob = spotifyCoverBlob;
+      } else if (youtubeCoverBlob) {
+        coverBlob = youtubeCoverBlob;
       }
 
       if(editMode && editIndex >=0){
@@ -5354,7 +5477,7 @@ function setupAddModal(){
       close();
 
       loadTrack(tracks.length-1, true, true);
-      if(!authed) showToast('✦ Tersimpan di device ini (mode Guest)');
+      if(!authed){ showToast('✦ Tersimpan di device ini (mode Guest)'); if (typeof caShowGuestSaveReminder === 'function') caShowGuestSaveReminder(); }
     } catch(err){
       console.error(err);
       alert('Gagal menyimpan track: ' + (err && err.message ? err.message : err));
@@ -6430,7 +6553,7 @@ if (btnRefreshLyrics) {
     if (!AC) return false;
     try {
       rctx = new AC();
-      window.__chirootAudioContext = rctx;
+      window.__ChirootAudioContext = rctx;
       try {
         var savedOutput = JSON.parse(localStorage.getItem('chiroot_audio_output_v1') || '{}');
         if (savedOutput.deviceId && typeof rctx.setSinkId === 'function') {
@@ -6461,6 +6584,10 @@ if (btnRefreshLyrics) {
       rSend.connect(rWet);
       rWet.connect(rctx.destination);
       rBuilt = true;
+      // FIX: Langsung resume AudioContext setelah dibuat biar suara keluar
+      if (rctx.state === 'suspended') {
+        rctx.resume().catch(function(){});
+      }
       return true;
     } catch (e) {
       return false;
@@ -6478,6 +6605,17 @@ if (btnRefreshLyrics) {
     if (typeof showToast === 'function') showToast(next ? 'Reverb aktif ✦' : 'Reverb nonaktif');
   }
   reverbBtn.addEventListener('click', function () { rSet(!rOn); });
+
+  // FIX: Global user gesture handler - resume AudioContext kapanpun user interact
+  // Ini penting karena browser butuh user gesture buat resume AudioContext
+  function resumeAudioCtxOnGesture() {
+    if (window.__ChirootAudioContext && window.__ChirootAudioContext.state === 'suspended') {
+      window.__ChirootAudioContext.resume().catch(function(){});
+    }
+  }
+  document.addEventListener('click', resumeAudioCtxOnGesture, true);
+  document.addEventListener('touchstart', resumeAudioCtxOnGesture, true);
+  document.addEventListener('keydown', resumeAudioCtxOnGesture, true);
 })();
   </script>
 <script>
@@ -6572,7 +6710,7 @@ if (btnRefreshLyrics) {
   }
 
   async function setAudioContextOutput(deviceId) {
-    var context = window.__chirootAudioContext;
+    var context = window.__ChirootAudioContext;
     if (context && typeof context.setSinkId === 'function') {
       try {
         await context.setSinkId(deviceId);
