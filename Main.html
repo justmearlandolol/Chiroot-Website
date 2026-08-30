@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" type="image/svg+xml" href="Chiroot.ico">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <script src="chiroot-config.js"></script>
   <style>:root{
   --paper: #f7f3e9;
   --paper-2: #f1e9d6;
@@ -1857,6 +1859,23 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 }
 .topbar-logout:hover{transform:translateY(-2px);box-shadow:0 5px 0 #dcb9a4;background:#ffe9dc;}
 .topbar-logout:active{transform:translateY(0);box-shadow:0 2px 0 #dcb9a4;}
+.admin-badge{
+  display:inline-block;vertical-align:middle;margin-left:10px;
+  font-family:'Kalam',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;
+  color:#6a4a08;background:linear-gradient(180deg,#f7df8e,#e2c86a);
+  border:2px solid #1a1a1a;border-radius:11px 14px 10px 13px / 13px 10px 14px 11px;
+  padding:2px 10px;transform:rotate(-2deg);box-shadow:0 2px 0 #c8b78a;white-space:nowrap;
+}
+.admin-panel-btn{
+  background:linear-gradient(180deg,#f7df8e,#e2c86a);
+  border:2.2px solid var(--ink);
+  border-radius:14px 12px 15px 13px / 12px 15px 12px 14px;
+  padding:8px 14px;cursor:pointer;
+  font-family:'Kalam',sans-serif;font-size:14.5px;font-weight:700;color:#5a4008;
+  box-shadow:0 3px 0 #c8a84a;transition:transform .12s ease, box-shadow .12s ease;
+}
+.admin-panel-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 #c8a84a;background:#f9e6a4;}
+.admin-panel-btn:active{transform:translateY(0);box-shadow:0 2px 0 #c8a84a;}
 @media(max-width:560px){
   .chiroot-topbar{padding:8px 2px 10px;}
   .topbar-greeting{font-size:24px;width:100%;}
@@ -2576,7 +2595,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
           <button type="button" class="btn-secondary sketch-border-soft" id="btn-add-cancel">Cancel</button>
           <button type="submit" class="btn-primary sketch-border-soft" id="add-submit-btn">Press Record →</button>
         </div>
-        <p class="form-note" id="add-form-note">Lagu tersimpan di cloud akun Google kamu. File besar bisa butuh sebentar.</p><input type="hidden" id="edit-track-id" value="">
+        <p class="form-note" id="add-form-note"> File .mp3 besar bisa butuh waktu sebentar, sabar yaaa.</p><input type="hidden" id="edit-track-id" value="">
       </form>
     </div>
   </div>
@@ -2843,7 +2862,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
     <div class="modal-card sketch-border" style="max-width:440px;">
       <button type="button" class="modal-close sketchy" id="btn-guest-save-close" aria-label="Tutup">✕</button>
       <h3 class="modal-title" id="guest-save-title">Lagu tersimpan di device ini ✦</h3>
-      <p class="modal-sub">Kamu masih mode Guest — record ini cuma kesimpen di browser sekarang, bukan di cloud. Kalau cache dibersihin atau ganti device, lagunya ikut hilang.</p>
+      <p class="modal-sub">Kamu masih mode Guest record ini cuma kesimpen di browser sekarang,Kalau cache dibersihin atau ganti device, lagunya ikut hilang.</p>
       <p class="modal-sub" style="margin-top:-8px;">Login Google biar semua record kamu diinget & bisa dibuka lagi dari device manapun.</p>
       <div class="modal-actions" style="flex-direction:column;gap:8px;margin-top:16px;">
         <button type="button" class="google-btn" id="btn-guest-save-login" style="width:100%;justify-content:center;"><svg viewBox="0 0 48 48" width="19" height="19" aria-hidden="true" focusable="false"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg><span>Login with Google</span></button>
@@ -2890,6 +2909,30 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
   <script>
 const CHIROOT_AUTH_KEY = 'chiroot_auth_v1';
+let caAdminRole = '';
+let caAdminChecked = false;
+function caAdminPanelHref() {
+  const cfgPath = (window.CHIROOT_CONFIG && window.CHIROOT_CONFIG.ADMIN_PANEL_PATH) || '';
+  const p = cfgPath || window.atob('cGFuZWwtZ3JhbW8tN3hrNHEuaHRtbA==');
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') return './' + p;
+  return p;
+}
+async function caLoadAdminRole(force) {
+  if (caAdminChecked && !force) return;
+  caAdminChecked = true;
+  caAdminRole = '';
+  if (!(ChirootAuth.session && ChirootAuth.session.user)) return;
+  const email = String(ChirootAuth.session.user.email || '').toLowerCase().trim();
+  if (!email) return;
+  try {
+    const rows = await caApiCall('/rest/v1/chiroot_admins?select=role&email=eq.' + encodeURIComponent(email), 'GET');
+    if (Array.isArray(rows) && rows.length && rows[0].role) caAdminRole = String(rows[0].role);
+  } catch (e) { caAdminRole = ''; }
+}
+function caAdminRefreshUI() {
+  caRenderGreeting();
+  caRenderTopbar();
+}
 const CHIROOT_PKCE_KEY = 'chiroot_pkce_v1';
 const CHIROOT_CRATE_BUCKET = 'chiroot-crate';
 
@@ -3216,7 +3259,6 @@ function caMapCrateRow(row) {
   };
 }
 
-// ================= GUEST MODE (akses tanpa login) =================
 const GUEST_IDB_NAME = 'chiroot_guest_v1';
 const GUEST_IDB_STORE = 'tracks';
 let caGuestMem = null; // fallback jika IndexedDB tidak tersedia
@@ -3757,6 +3799,15 @@ function caRenderTopbar() {
   out.className = 'topbar-logout';
   out.textContent = 'Log Out';
   out.addEventListener('click', caAskSignOut);
+  if (caAdminRole) {
+    const ap = document.createElement('button');
+    ap.type = 'button';
+    ap.className = 'admin-panel-btn';
+    ap.title = 'Buka Chiroot Admin Studio';
+    ap.innerHTML = '<span>★ Admin Panel</span>';
+    ap.addEventListener('click', function () { window.location.href = caAdminPanelHref(); });
+    user.appendChild(ap);
+  }
   user.appendChild(avatar);
   user.appendChild(out);
   el.appendChild(user);
@@ -3786,7 +3837,17 @@ function caRenderGreeting() {
   if (!el) return;
   if (ChirootAuth.session && ChirootAuth.profile) {
     el.textContent = caGreetingFor(new Date()) + ', ' + caGreetName() + '! ✦';
+    if (caAdminRole) {
+      const badge = document.createElement('span');
+      badge.className = 'admin-badge';
+      badge.textContent = caAdminRole + ' ✦';
+      el.appendChild(badge);
+    } else if (!caAdminChecked) {
+      caLoadAdminRole().then(function () { if (caAdminRole) caAdminRefreshUI(); });
+    }
   } else {
+    caAdminRole = '';
+    caAdminChecked = false;
     el.textContent = '✦ Selamat datang di Chiroot';
   }
 }
@@ -4161,9 +4222,8 @@ window.addEventListener('load', function () {
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
 
-const SUPABASE_URL = 'https://astuagdezahmuuwjoghf.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_NXhR-MquEMwYDrCBPAOgAQ_MZ4BXQlT';
-const YOUTUBE_API_KEY = 'YOUR_YOUTUBE_API_KEY'; // ← Ganti dengan API Key YouTube Data v3 lo bro!
+const SUPABASE_URL = (window.CHIROOT_CONFIG && window.CHIROOT_CONFIG.SUPABASE_URL) || 'https://astuagdezahmuuwjoghf.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = (window.CHIROOT_CONFIG && window.CHIROOT_CONFIG.SUPABASE_ANON_KEY) || 'sb_publishable_NXhR-MquEMwYDrCBPAOgAQ_MZ4BXQlT';
 
 function isSupabaseConfigured(){
   const projectUrl = String(SUPABASE_URL || '').trim();
@@ -4759,7 +4819,6 @@ function jumpTo(index, autoPlay){
 function play(){
   if(!tracks || !tracks.length){ if(typeof showToast==="function") showToast("Crate kosong – Add Music dulu ya!"); const b=document.getElementById("btn-add-open"); if(b){ b.style.transform="scale(1.06)"; setTimeout(()=>b.style.transform="",220); } return; }
 
-  // FIX: Resume AudioContext kalau suspended (Web Audio API bug - suara gak keluar)
   if(window.__ChirootAudioContext && window.__ChirootAudioContext.state === 'suspended'){
     window.__ChirootAudioContext.resume().catch(function(){});
   }
@@ -4770,7 +4829,6 @@ function play(){
   updatePlayPauseUI();
   audio.play().then(()=>{
     isPlaying = true;
-    // Pastikan AudioContext running setelah play berhasil
     if(window.__ChirootAudioContext && window.__ChirootAudioContext.state === 'suspended'){
       window.__ChirootAudioContext.resume().catch(function(){});
     }
@@ -4985,7 +5043,6 @@ function bindEvents(){
 
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-      // FIX: Selalu resume AudioContext saat tab aktif lagi
       if(window.__ChirootAudioContext && window.__ChirootAudioContext.state === 'suspended'){
         window.__ChirootAudioContext.resume().catch(function(){});
       }
@@ -5066,56 +5123,43 @@ function setupAddModal(){
   function extractYouTubeVideoId(url) {
     if (!url) return null;
     var s = String(url).trim();
-    // Standard: youtube.com/watch?v=ID
     var m = s.match(/[?&]v=([A-Za-z0-9_-]{11})/);
     if (m) return m[1];
-    // Short: youtu.be/ID
     m = s.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
     if (m) return m[1];
-    // Embed: youtube.com/embed/ID
     m = s.match(/youtube\.com\/embed\/([A-Za-z0-9_-]{11})/);
     if (m) return m[1];
-    // Shorts: youtube.com/shorts/ID
     m = s.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/);
     if (m) return m[1];
-    // Music: music.youtube.com/watch?v=ID
     m = s.match(/music\.youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/);
     if (m) return m[1];
-    // Direct 11-char ID
     if (/^[A-Za-z0-9_-]{11}$/.test(s)) return s;
     return null;
   }
 
   function parseYouTubeTitleArtist(rawTitle, channelTitle) {
-    // Many music videos use "Artist - Title" or "Title - Artist" format
     var title = String(rawTitle || '').trim();
     var artist = String(channelTitle || '').trim();
 
-    // Try to split "Artist - Title" pattern
     var dashMatch = title.match(/^(.+?)\s*[-–—]\s*(.+)$/);
     if (dashMatch) {
       var left = dashMatch[1].trim();
       var right = dashMatch[2].trim();
-      // Remove common suffixes like (Official Video), [Lyrics], etc from the title part
       var cleanExtra = function(s) {
         return s.replace(/\s*[\(\[]\s*(official\s*(music\s*)?video|official\s*audio|lyrics?|visualizer|audio|mv|m\/v|hd|hq|4k|music\s*video)[\s\)\]]*$/i, '').trim();
       };
-      // Heuristic: if channel name is similar to left part, left is artist, right is title
       var leftNorm = left.toLowerCase().replace(/[^a-z0-9]/g, '');
       var chanNorm = artist.toLowerCase().replace(/[^a-z0-9]/g, '');
       if (leftNorm && chanNorm && (leftNorm.indexOf(chanNorm.slice(0, 5)) >= 0 || chanNorm.indexOf(leftNorm.slice(0, 5)) >= 0)) {
         return { title: cleanExtra(right), artist: left };
       }
-      // Default: left = artist, right = title
       return { title: cleanExtra(right), artist: cleanExtra(left) };
     }
 
-    // Remove common junk from title
     var cleaned = title
       .replace(/\s*[\(\[]\s*(official\s*(music\s*)?video|official\s*audio|lyrics?|visualizer|audio|mv|m\/v|hd|hq|4k|music\s*video)[\s\)\]]*/gi, '')
       .trim();
 
-    // Clean channel name (remove - Topic suffix)
     var cleanArtist = artist.replace(/\s*-\s*Topic$/i, '').trim();
 
     return {
@@ -5135,10 +5179,6 @@ function setupAddModal(){
         return showToast("Link YouTube tidak valid. Pastikan format: youtube.com/watch?v=... atau youtu.be/...");
       }
 
-      if(!YOUTUBE_API_KEY || YOUTUBE_API_KEY === 'YOUR_YOUTUBE_API_KEY'){
-        return showToast("YouTube API Key belum diatur! Isi YOUTUBE_API_KEY di source code dulu.");
-      }
-
       if(!consumeClientRateLimit('youtubeFetch', RATE_LIMITS.youtubeFetch)) return;
 
       youtubeBtn.disabled = true;
@@ -5146,14 +5186,16 @@ function setupAddModal(){
       youtubeCoverBlob = null;
 
       try {
-        var apiUrl = 'https://www.googleapis.com/youtube/v3/videos'
-          + '?part=snippet'
-          + '&id=' + encodeURIComponent(videoId)
-          + '&key=' + encodeURIComponent(YOUTUBE_API_KEY);
+        var apiUrl = SUPABASE_URL + '/functions/v1/youtube-fetch';
 
         var response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: { 'Accept': 'application/json' }
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + SUPABASE_PUBLISHABLE_KEY,
+            'apikey': SUPABASE_PUBLISHABLE_KEY
+          },
+          body: JSON.stringify({ videoId: videoId })
         });
 
         var data = {};
@@ -5164,7 +5206,7 @@ function setupAddModal(){
         }
 
         if(!response.ok){
-          var errorMsg = (data.error && data.error.message) ? data.error.message : 'HTTP ' + response.status;
+          var errorMsg = (data.error && data.error.message) ? data.error.message : (data.error || 'HTTP ' + response.status);
           console.error('YouTube API error', data);
           throw new Error('YouTube API: ' + errorMsg);
         }
@@ -5182,21 +5224,16 @@ function setupAddModal(){
         document.getElementById('input-title').value = parsed.title.slice(0, 60);
         document.getElementById('input-artist').value = parsed.artist.slice(0, 60);
 
-        // Get best thumbnail: maxresdefault > standard > high > medium > default
-        var thumbs = snippet.thumbnails || {};
-        var thumbUrl = (thumbs.maxres && thumbs.maxres.url)
-          || (thumbs.standard && thumbs.standard.url)
-          || (thumbs.high && thumbs.high.url)
-          || (thumbs.medium && thumbs.medium.url)
-          || (thumbs['default'] && thumbs['default'].url)
-          || '';
-
-        if(thumbUrl){
+        if(data.thumbnailBase64){
           showToast("Metadata ditemukan, mengambil thumbnail...");
           try {
-            var imgRes = await fetch(thumbUrl, { mode: 'cors' });
-            if(!imgRes.ok) throw new Error('HTTP ' + imgRes.status);
-            var blob = await imgRes.blob();
+            var base64Parts = data.thumbnailBase64.split(',');
+            var mimeMatch = base64Parts[0].match(/data:(.*?);base64/);
+            var mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+            var binary = atob(base64Parts[1]);
+            var bytes = new Uint8Array(binary.length);
+            for(var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            var blob = new Blob([bytes], { type: mime });
             if(!blob.type.startsWith('image/')) throw new Error('Respons cover bukan gambar');
 
             youtubeCoverBlob = await imageBlobToJpegBlob(blob, 900);
@@ -5213,7 +5250,11 @@ function setupAddModal(){
         showToast("Auto-fill YouTube berhasil! ✦");
       } catch (err) {
         console.error('YouTube API request failed', err);
-        showToast(err.message || "YouTube API error");
+        var friendlyMsg = err.message || "YouTube API error";
+        if (err.message === 'Failed to fetch') {
+          friendlyMsg = 'Gagal konek ke server (cek CORS/deploy Edge Function, atau JWT verification)';
+        }
+        showToast(friendlyMsg);
       } finally {
         youtubeBtn.disabled = false;
         youtubeBtn.textContent = "Ambil Data";
@@ -5253,7 +5294,7 @@ function setupAddModal(){
     } else {
       if(titleEl) titleEl.textContent = 'Add a new record';
       if(submitBtn) submitBtn.textContent = 'Press Record →';
-      if(formNote) formNote.textContent = 'Lagu tersimpan di cloud akun Google kamu. File besar bisa butuh sebentar.';
+      if(formNote) formNote.textContent = 'File .mp3 besar bisa butuh waktu sebentar, Sabar yaa';
       form.reset();
       if(editIdInput) editIdInput.value = '';
       chosenColor = '#d84a3a';
@@ -5910,6 +5951,18 @@ function recordTrackPlay(track){
   if(stCover) stats.tracks[track.id].cover = stCover;
   stats.tracks[track.id].playCount += 1;
   saveMonthlyStats(stats);
+  caPushPlayEventCloud(track);
+}
+function caPushPlayEventCloud(track) {
+  if (!(ChirootAuth.session && ChirootAuth.session.user && track && track.id)) return;
+  try {
+    caApiCall('/rest/v1/play_events', 'POST', {
+      user_id: ChirootAuth.session.user.id,
+      track_id: String(track.id),
+      title: String(track.title || '').slice(0, 120),
+      artist: String(track.artist || '').slice(0, 120)
+    }).catch(function () {});
+  } catch (e) {}
 }
 function renderMonthlyReportModal(stats){
   const modal = $('#report-modal');
@@ -6585,7 +6638,6 @@ if (btnRefreshLyrics) {
       rSend.connect(rWet);
       rWet.connect(rctx.destination);
       rBuilt = true;
-      // FIX: Langsung resume AudioContext setelah dibuat biar suara keluar
       if (rctx.state === 'suspended') {
         rctx.resume().catch(function(){});
       }
@@ -6607,8 +6659,6 @@ if (btnRefreshLyrics) {
   }
   reverbBtn.addEventListener('click', function () { rSet(!rOn); });
 
-  // FIX: Global user gesture handler - resume AudioContext kapanpun user interact
-  // Ini penting karena browser butuh user gesture buat resume AudioContext
   function resumeAudioCtxOnGesture() {
     if (window.__ChirootAudioContext && window.__ChirootAudioContext.state === 'suspended') {
       window.__ChirootAudioContext.resume().catch(function(){});
@@ -6864,6 +6914,21 @@ if (btnRefreshLyrics) {
     setStatus('ready', 'Output sistem sedang dipakai', 'Tekan “Pilih headset” untuk memberi izin dan memilih headset Bluetooth.');
   }
 
+  var permissionRequested = false;
+
+  async function ensureDeviceLabels() {
+    if (permissionRequested) return;
+    if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') return;
+    try {
+      var probe = await navigator.mediaDevices.enumerateDevices();
+      var hasLabels = probe.some(function (device) { return device.kind === 'audiooutput' && device.label; });
+      if (hasLabels) { permissionRequested = true; return; }
+      var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(function (track) { track.stop(); });
+    } catch (e) {}
+    permissionRequested = true;
+  }
+
   async function refreshDevices(autoReconnect, announceChange) {
     if (!navigator.mediaDevices || typeof navigator.mediaDevices.enumerateDevices !== 'function') {
       deviceCount.textContent = '0';
@@ -6872,6 +6937,7 @@ if (btnRefreshLyrics) {
       return [];
     }
     try {
+      await ensureDeviceLabels();
       var allDevices = await navigator.mediaDevices.enumerateDevices();
       var outputs = allDevices.filter(function (device) { return device.kind === 'audiooutput'; });
       var signature = outputs.map(function (device) { return device.deviceId + ':' + device.label; }).sort().join('|');
@@ -6991,5 +7057,5 @@ if (btnRefreshLyrics) {
 })();
 </script>
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
