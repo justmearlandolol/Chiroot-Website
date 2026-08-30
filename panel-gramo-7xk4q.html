@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://i.ytimg.com https://i.scdn.co https://*.scdn.co https://astuagdezahmuuwjoghf.supabase.co https://chiroot.netlify.app; connect-src 'self' https://astuagdezahmuuwjoghf.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="no-referrer">
+  <title>Chiroot • Admin Studio</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%231e1e24' stroke='%231a1a1a' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='11' fill='%23c9a227' stroke='%231a1a1a' stroke-width='2'/%3E%3Ccircle cx='32' cy='32' r='3' fill='%23f7f3e9'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <script src="chiroot-config.js"></script>
+  <style>
+:root{
+  --paper: #f7f3e9;
+  --paper-2: #f1e9d6;
+  --ink: #1a1a1a;
+  --ink-soft: #33323a;
+  --wood: #a66b3a;
+  --wood-dark: #7a4b26;
+  --wood-light: #d2a772;
+  --gold: #c9a227;
+  --gold-soft: #e2c86a;
+  --vinyl: #1e1e24;
+  --vinyl-edge: #2b2b33;
+  --shadow: rgba(40,28,12,0.18);
+  --card-shadow: rgba(48,34,16,0.16);
+  --muted: #7b6f5f;
+  --red-label: #d84a3a;
+  --teal: #3a8a6a;
+  --blue: #5b6ee1;
+  --plum: #b65a9a;
+  --amber: #d28a3a;
+  --radius-sketch: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --radius-sketch-soft: 22px 26px 20px 24px / 24px 20px 26px 22px;
+  --radius-tiny: 13px 16px 14px 15px / 15px 14px 16px 13px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{
+  margin:0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Patrick Hand', 'Kalam', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+.paper-texture{
+  position:fixed; inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:.95;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(200,170,120,0.07) 0 120px, transparent 121px),
+    radial-gradient(circle at 80% 70%, rgba(190,150,100,0.05) 0 180px, transparent 181px),
+    repeating-linear-gradient(0deg, rgba(64,42,18,0.012) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(90deg, rgba(64,42,18,0.008) 0 1px, transparent 1px 4px);
+}
+.paper-texture::after{
+  content:"";
+  position:absolute; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+.doodle-notes{
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  font-family: 'Gloria Hallelujah', cursive;
+  color: rgba(26,26,26,0.24);
+  font-size: 28px;
+}
+.doodle-notes .note{position:absolute; animation: floatNote 7s ease-in-out infinite;}
+.n1{ left:9%; top:13%; animation-delay:.1s; transform:rotate(-12deg);}
+.n2{ right:11%; top:19%; font-size:34px; animation-delay:1.2s;}
+.n3{ left:6%; top:52%; font-size:30px; animation-delay:2.6s;}
+.n4{ right:8%; top:58%; animation-delay:.8s;}
+.n5{ left:14%; bottom:14%; animation-delay:1.8s;}
+.n6{ right:15%; bottom:18%; font-size:32px; animation-delay:3s;}
+@keyframes floatNote{
+  0%,100%{ transform: translateY(0) rotate(-6deg); opacity:.78;}
+  50%{ transform: translateY(-14px) rotate(2deg); opacity:1;}
+}
+.sketch-border{ border:3px solid var(--ink); border-radius: var(--radius-sketch); }
+.sketch-border-soft{ border:2.4px solid var(--ink); border-radius: var(--radius-sketch-soft); }
+.sketch-border-tiny{ border:2px solid var(--ink); border-radius: var(--radius-tiny); }
+.corner-doodle{
+  position:absolute; font-size:20px; color:var(--gold); z-index:3; pointer-events:none;
+  font-family:'Gloria Hallelujah',cursive;
+}
+.corner-doodle.tl{ left:10px; top:6px; }
+.corner-doodle.tr{ right:10px; top:6px; }
+.corner-doodle.bl{ left:10px; bottom:6px; }
+.corner-doodle.br{ right:10px; bottom:6px; }
+.gate-overlay{
+  position:relative; z-index:5;
+  min-height:100dvh; display:flex; align-items:center; justify-content:center;
+  padding:34px 18px 44px;
+}
+.gate-card{
+  width:100%; max-width:470px;
+  background: linear-gradient(180deg, #fdf9f0 0%, #f7f0df 100%);
+  padding:30px 28px 26px; position:relative;
+  box-shadow: 0 18px 50px var(--card-shadow);
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+}
+.gate-logo{ width:92px; height:92px; margin-bottom:6px; animation: gateSpinSlow 14s linear infinite; }
+@keyframes gateSpinSlow{ to{ transform: rotate(360deg);} }
+.gate-title{
+  font-family:'Caveat',cursive; font-size:40px; margin:4px 0 0; line-height:1;
+  transform: rotate(-0.8deg);
+}
+.gate-title .sub{ color:var(--wood-dark); }
+.gate-brand-plate{
+  display:inline-block; margin-top:8px; padding:3px 12px;
+  font-family:'Kalam',sans-serif; font-size:11.5px; letter-spacing:.14em;
+  background:#efe3c2; color:#5a4630;
+}
+.gate-sub{
+  font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; margin:12px 0 4px;
+}
+.gate-status{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  font-family:'Kalam',sans-serif; font-size:14.5px; color:#7a6548;
+  padding:14px 0 4px; min-height:52px; text-align:center; flex-wrap:wrap;
+}
+.gate-spinner{
+  width:22px; height:22px; flex-shrink:0; border-radius:50%;
+  border:3px solid #d8c9a3; border-top-color:#1a1a1a;
+  animation: gateSpin .8s linear infinite;
+}
+@keyframes gateSpin{ to{transform:rotate(360deg);} }
+.gate-btn-wrap{display:flex; flex-direction:column; align-items:center; gap:10px; padding-top:8px; width:100%;}
+.gate-demo-link{
+  background:none; border:none; cursor:pointer; padding:4px 8px;
+  font-family:'Kalam',sans-serif; font-size:12.5px; color:#9a8264;
+  text-decoration:underline dotted;
+}
+.gate-demo-link:hover{ color:#5a4630; }
+.gate-error{
+  font-family:'Kalam',sans-serif; font-size:13.5px; color:#b42318;
+  background:#ffe9e5; border:2px dashed #d84a3a; border-radius:12px;
+  padding:8px 12px; margin-top:10px; text-align:center; max-width:100%;
+}
+.gate-form{ width:100%; display:flex; flex-direction:column; gap:12px; margin-top:10px; text-align:left; }
+.gate-form .field{ display:flex; flex-direction:column; gap:5px; font-family:'Kalam',sans-serif; font-size:14px; color:#5b4630;}
+.gate-form .sketch-input{ width:100%; }
+.pw-wrap{ position:relative; }
+.pw-wrap .sketch-input{ padding-right:46px; }
+.pw-toggle{
+  position:absolute; right:6px; top:50%; transform:translateY(-50%);
+  background:none; border:none; cursor:pointer; font-size:17px; padding:4px 6px;
+}
+.gate-submit{ width:100%; margin-top:4px; }
+.gate-divider{
+  display:flex; align-items:center; gap:12px; width:100%; margin-top:16px;
+  font-family:'Kalam',sans-serif; font-size:12px; color:#9a8264;
+}
+.gate-divider::before, .gate-divider::after{
+  content:""; flex:1; border-top:2px dashed #d8c9a3;
+}
+.google-btn.full{ width:100%; justify-content:center; padding:11px 18px; margin-top:10px; }
+.gate-links{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:6px; }
+.gate-denied{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+.gate-denied-icon{ font-size:42px; line-height:1; }
+.gate-denied-title{ font-family:'Caveat',cursive; font-size:32px; color:#8a3a2a; margin:2px 0 0; }
+.gate-denied-mail{
+  font-family:'Kalam',sans-serif; font-size:13px; color:#5a4630;
+  background:#fff8e7; border:2px dashed #c9b88a; border-radius:10px; padding:5px 12px;
+  word-break:break-all;
+}
+.tfa-qr-wrap{
+  background:#fffdf7; border:2.4px solid var(--ink);
+  border-radius:18px 16px 19px 17px / 17px 19px 16px 18px;
+  padding:12px; margin:6px auto 0; width:fit-content;
+}
+.tfa-qr-wrap img{ display:block; width:172px; height:172px; }
+.tfa-secret{
+  font-family:'Kalam',monospace; font-size:13px; letter-spacing:.08em;
+  background:#fff8e7; border:2px dashed #c9b88a; border-radius:10px;
+  padding:6px 12px; word-break:break-all; margin-top:10px; color:#5a4630;
+}
+.tfa-steps{
+  font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630; text-align:left;
+  background:#fff9ee; border:2px dashed #c9b88a; border-radius:14px;
+  padding:12px 16px; margin-top:12px; line-height:1.7;
+}
+.code-input{
+  font-family:'Kalam',sans-serif; font-size:26px; letter-spacing:.45em; text-align:center;
+  padding:10px 12px 10px 20px;
+}
+.google-btn{
+  display:inline-flex; align-items:center; gap:9px;
+  background:#fff; border:2.2px solid var(--ink);
+  border-radius:14px 12px 15px 13px / 12px 15px 12px 14px;
+  padding:10px 18px; cursor:pointer;
+  font-family:'Kalam',sans-serif; font-size:15px; font-weight:600; color:#1a1a1a;
+  box-shadow:0 3px 0 #c8b78a; transition:transform .12s ease, box-shadow .12s ease;
+}
+.google-btn:hover{transform:translateY(-2px); box-shadow:0 5px 0 #c8b78a;}
+.google-btn:active{transform:translateY(0); box-shadow:0 2px 0 #c8b78a;}
+.admin-shell{
+  position:relative; z-index:5;
+  min-height:100dvh;
+  display:flex; align-items:flex-start; justify-content:center;
+  padding:26px 14px 40px;
+}
+.admin-card{
+  width:100%; max-width:1060px;
+  background: linear-gradient(180deg, #fdf9f0 0%, #f7f0df 100%);
+  padding:24px 22px 20px; position:relative;
+  box-shadow: 0 18px 50px var(--card-shadow);
+  animation: paperBounce .6s cubic-bezier(.2,1.2,.35,1) both;
+}
+@keyframes paperBounce{
+  0%{ transform: translateY(8px) rotate(-0.8deg); opacity:0;}
+  60%{ transform: translateY(-3px) rotate(0.4deg); opacity:1;}
+  100%{ transform: translateY(0) rotate(-0.5deg);}
+}
+.chiroot-topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:8px 6px 12px; margin:0 0 12px;
+  border-bottom:2px dashed #d8c9a3;
+  flex-wrap:wrap;
+}
+.topbar-left{display:flex; flex-direction:column; gap:4px; min-width:0;}
+.topbar-greeting{
+  font-family:'Caveat',cursive; font-size:30px; line-height:1; color:#1a1a1a;
+  min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.admin-badge{
+  display:inline-block; font-family:'Kalam',sans-serif; font-size:12px; font-weight:700;
+  letter-spacing:.08em; color:#6a4a08; background:linear-gradient(180deg,#f7df8e,#e2c86a);
+  border:2px solid #1a1a1a; border-radius:11px 14px 10px 13px / 13px 10px 14px 11px;
+  padding:2px 10px; transform: rotate(-2deg); box-shadow:0 2px 0 #c8b78a; white-space:nowrap;
+}
+.topbar-sub{ font-family:'Kalam',sans-serif; font-size:12.5px; color:#9a8264; }
+.topbar-auth{display:flex; align-items:center; gap:10px; flex-shrink:0; flex-wrap:wrap;}
+.topbar-user{display:flex; align-items:center; gap:10px;}
+.topbar-avatar{
+  width:40px; height:40px; border-radius:50%;
+  border:2.4px solid var(--ink); background:#f2e0a8;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Caveat',cursive; font-size:19px; font-weight:700; color:#5a3f1f;
+  overflow:hidden; cursor:default; padding:0; flex-shrink:0;
+  box-shadow:0 2px 0 #c8b78a;
+}
+.topbar-avatar img{width:100%; height:100%; object-fit:cover; display:block;}
+.topbar-logout{
+  background:#fff4ec; border:2.2px solid var(--ink);
+  border-radius:14px 12px 15px 13px / 12px 15px 12px 14px;
+  padding:8px 14px; cursor:pointer;
+  font-family:'Kalam',sans-serif; font-size:14.5px; font-weight:700; color:#8a3a2a;
+  box-shadow:0 3px 0 #dcb9a4; transition:transform .12s ease, box-shadow .12s ease;
+}
+.topbar-logout:hover{transform:translateY(-2px); box-shadow:0 5px 0 #dcb9a4; background:#ffe9dc;}
+.topbar-logout:active{transform:translateY(0); box-shadow:0 2px 0 #dcb9a4;}
+.player-link{
+  background:#eef4fb; border:2.2px solid var(--ink);
+  border-radius:14px 12px 15px 13px / 12px 15px 12px 14px;
+  padding:8px 14px; cursor:pointer; text-decoration:none;
+  font-family:'Kalam',sans-serif; font-size:14.5px; font-weight:700; color:#2a4a8a;
+  box-shadow:0 3px 0 #b9c8e4; transition:transform .12s ease, box-shadow .12s ease;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.player-link:hover{transform:translateY(-2px); box-shadow:0 5px 0 #b9c8e4; background:#f2f8ff;}
+.src-chip{
+  font-family:'Kalam',sans-serif; font-size:11.5px; font-weight:700; letter-spacing:.06em;
+  border:2px solid var(--ink); border-radius:10px 12px 9px 11px / 11px 9px 12px 10px;
+  padding:3px 9px; transform: rotate(1.2deg); white-space:nowrap;
+}
+.src-chip.live{ background:#e5f4ea; color:#22633e; box-shadow:0 2px 0 #a9d5b8;}
+.src-chip.demo{ background:#fdf0dc; color:#8a5514; box-shadow:0 2px 0 #e3c795;}
+.admin-tabs{
+  display:flex; gap:10px; flex-wrap:wrap; margin:4px 0 18px;
+}
+.admin-tab{
+  font-family:'Patrick Hand',sans-serif; font-size:16.5px; color:#4a3b23;
+  background:#fff6df; border:2.3px solid var(--ink);
+  border-radius:15px 13px 16px 14px / 13px 16px 14px 15px;
+  padding:8px 16px; cursor:pointer; box-shadow:0 3px 0 #d7c18a;
+  transition:transform .13s ease, background .15s, box-shadow .15s;
+  display:inline-flex; align-items:center; gap:7px;
+}
+.admin-tab:hover{ transform:translateY(-2px); background:#fffbf0;}
+.admin-tab.active{
+  background:linear-gradient(180deg,#f7df8e,#e2c86a); color:#3a2c08;
+  box-shadow:0 3px 0 #c8a84a; transform:rotate(-0.8deg);
+}
+.view{ display:none; }
+.view.active{ display:block; animation: viewIn .3s ease both; }
+@keyframes viewIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+.view-head{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:14px;
+  flex-wrap:wrap; margin-bottom:12px;
+}
+.view-title{
+  margin:0; font-family:'Caveat',cursive; font-size:32px; transform:rotate(-0.7deg); line-height:1;
+}
+.crate-count{ font-family:'Kalam',sans-serif; font-size:14px; color:var(--muted); font-weight:400; }
+.view-tools{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.field-inline{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Kalam',sans-serif; font-size:13.5px; color:#5b4630;
+}
+.sketch-input{
+  font-family:'Patrick Hand',sans-serif; font-size:16px;
+  padding:8px 12px; background:#fffdf7;
+  border:2.2px solid #1a1a1a; border-radius: var(--radius-tiny);
+  outline:none; color:var(--ink);
+}
+.sketch-input:focus{ background:#fff9e6; box-shadow:0 0 0 3px rgba(201,162,39,.18);}
+.btn-primary, .btn-secondary{
+  font-family:'Patrick Hand',sans-serif; font-size:17px;
+  padding:10px 16px; cursor:pointer; transition:transform .12s ease;
+  border:2.3px solid #1a1a1a;
+}
+.btn-primary{ background:#f3d986; }
+.btn-secondary{ background:#fff8ea; }
+.btn-primary:hover, .btn-secondary:hover{ transform:translateY(-1px);}
+.btn-primary:disabled{ opacity:.45; cursor:default; transform:none; }
+.btn-danger{
+  font-family:'Patrick Hand',sans-serif; font-size:16px;
+  padding:9px 15px; cursor:pointer; background:#f6cfc7; color:#7a2418; border:2.3px solid #1a1a1a;
+  transition:transform .12s ease;
+}
+.btn-danger:hover{ transform:translateY(-1px); background:#f3beb2;}
+.hint-text{
+  text-align:center; font-family:'Kalam',sans-serif; font-size:13px; color:#8a7560;
+  margin:14px 4px 10px;
+}
+.hint-text b{ color:#5a3f1f; font-weight:700; }
+.metric-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin-bottom:16px;
+}
+.metric-card{
+  background:#fffcf5; border:2.4px solid var(--ink);
+  border-radius:20px 24px 18px 22px / 22px 18px 24px 20px;
+  padding:14px 16px 12px; position:relative; overflow:hidden;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.metric-card:hover{ transform:translateY(-3px) rotate(-.4deg); box-shadow:0 8px 18px rgba(90,60,20,.12);}
+.metric-icon{
+  width:38px; height:38px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:19px; border:2.2px solid var(--ink); margin-bottom:8px;
+}
+.metric-value{ font-family:'Caveat',cursive; font-size:42px; line-height:1; font-weight:700; }
+.metric-label{ font-family:'Kalam',sans-serif; font-size:12.5px; color:#7a6548; margin-top:3px; }
+.metric-foot{ font-family:'Kalam',sans-serif; font-size:11.5px; color:#9a8264; margin-top:5px; }
+.dash-grid{
+  display:grid; grid-template-columns:1.55fr 1fr; gap:14px; align-items:start;
+}
+.panel{
+  background:#fffcf5; padding:14px; margin-bottom:14px; position:relative;
+}
+.panel-head{
+  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.panel-title{
+  margin:0; font-family:'Caveat',cursive; font-size:26px; transform:rotate(-.5deg); line-height:1.05;
+}
+.panel-note{ font-family:'Kalam',sans-serif; font-size:12px; color:#9a8264; }
+.chart-wrap{ overflow-x:auto; padding:4px 2px 2px; }
+.chart-wrap svg{ display:block; width:100%; height:auto; }
+.chart-bar-anim{ transform-box:fill-box; transform-origin:center bottom; animation:chartRise .55s cubic-bezier(.2,1.1,.4,1) both; }
+@keyframes chartRise{ from{ transform:scaleY(0);} to{ transform:scaleY(1);} }
+.spark-wrap svg{ display:block; width:100%; height:auto; }
+.activity-list{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.activity-item{
+  display:flex; gap:10px; align-items:center;
+  font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630;
+  background:#fff9ee; border:2px solid #2c261c;
+  border-radius:14px 12px 15px 13px / 13px 15px 12px 14px;
+  padding:8px 12px;
+}
+.activity-item .act-ico{
+  width:30px; height:30px; border-radius:50%; flex-shrink:0;
+  border:2px solid var(--ink); background:#f2e0a8;
+  display:flex; align-items:center; justify-content:center; font-size:14px;
+}
+.activity-item .act-time{ margin-left:auto; color:#9a8264; font-size:11.5px; white-space:nowrap; }
+.mini-plays{ display:flex; flex-direction:column; gap:8px; }
+.mini-play-row{
+  display:grid; grid-template-columns:34px 44px 1fr auto; gap:10px; align-items:center;
+  background:#fff9ee; border:2px solid #2c261c;
+  border-radius:16px 14px 17px 15px / 14px 16px 14px 17px;
+  padding:8px 12px;
+}
+.mini-rank{ font-family:'Caveat',cursive; font-size:26px; font-weight:700; text-align:center; line-height:1; }
+.mini-rank.r1{ color:#c9a227; text-shadow:0 1px 0 #e2c86a;}
+.mini-rank.r2{ color:#8a8a8a;}
+.mini-rank.r3{ color:#b87333;}
+.thumb{
+  width:44px; height:44px; border-radius:50%;
+  border:2px solid #1a1a1a; background:#1f1f26; position:relative; overflow:hidden; flex-shrink:0;
+  box-shadow: inset 0 0 0 3px #111, 0 0 0 2px #1a1a1a, 0 2px 6px rgba(0,0,0,.18);
+}
+.thumb img{ width:100%; height:100%; object-fit:cover; display:block;}
+.thumb .t-label{
+  position:absolute; inset:12px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; font-family:'Kalam',sans-serif; color:#fff6e2; text-align:center; line-height:1.05;
+}
+.mini-meta{ min-width:0; }
+.mini-title{ font-family:'Caveat',cursive; font-size:20px; line-height:1.05; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.mini-artist{ font-family:'Kalam',sans-serif; font-size:12px; color:#6b5a40; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.mini-bar-wrap{ height:7px; background:#efe3c2; border:1.6px solid #1a1a1a; border-radius:6px; margin-top:5px; overflow:hidden; max-width:230px;}
+.mini-bar{ height:100%; background:linear-gradient(90deg,#e2c86a,#c9a227); border-radius:5px; }
+.mini-count{ font-family:'Caveat',cursive; font-size:24px; font-weight:700; text-align:right; line-height:1;}
+.mini-count small{ font-family:'Kalam',sans-serif; font-size:11px; color:#9a8264; display:block; font-weight:400;}
+.track-list{ display:flex; flex-direction:column; gap:10px; }
+.group-box{ display:flex; flex-direction:column; gap:8px; }
+.user-box{ margin-bottom:18px; }
+.user-box-head{ display:flex; justify-content:space-between; font-family:'Kalam',sans-serif; font-weight:700; font-size:13.5px; color:#5a4630; padding:6px 2px; border-bottom:2px dashed var(--wood-light); margin-bottom:8px; }
+.group-head{
+  display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;
+  font-family:'Caveat',cursive; font-size:23px; color:#3a2c14;
+  background:#f4ead0; border:2px dashed #b8a476; border-radius:14px;
+  padding:7px 14px; margin-top:4px; flex-wrap:wrap;
+}
+.group-head .g-ico{ font-size:17px; }
+.group-head .g-count{ font-family:'Kalam',sans-serif; font-size:12px; color:#8a7560; font-weight:400;}
+.group-head .g-caret{ margin-left:auto; font-size:14px; color:#8a7560; transition:transform .18s ease;}
+.group-box.collapsed .g-caret{ transform:rotate(-90deg);}
+.group-box.collapsed .group-body{ display:none;}
+.group-body{ display:flex; flex-direction:column; gap:8px; }
+.adm-track{
+  display:grid; grid-template-columns:34px 46px 1fr auto; gap:12px; align-items:center;
+  padding:10px 12px; background:#fff9ee;
+  border:2px solid #2c261c; border-radius:16px 14px 17px 15px / 14px 16px 14px 17px;
+  transition:transform .12s ease, background .15s, box-shadow .15s, opacity .15s;
+  position:relative; touch-action:manipulation;
+}
+.adm-track:hover{ background:#fff3d6; transform:translateY(-1px) rotate(-.3deg); box-shadow:0 4px 10px rgba(90,60,20,.08);}
+.adm-track.dragging{ opacity:.35; background:#f7e6b6; }
+.adm-track .pos-num{
+  font-family:'Caveat',cursive; font-size:24px; font-weight:700; color:#8a7560; text-align:center; line-height:1;
+}
+.drag-handle{
+  width:26px; height:34px; margin:0 auto; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:grab; color:#7a6548; font-size:15px; letter-spacing:1px;
+  touch-action:none; user-select:none;
+}
+.drag-handle:hover{ background:#f4ead0; color:#3a2c14;}
+.drag-ghost{
+  position:fixed; left:0; top:0; z-index:120; pointer-events:none;
+  transform-origin:center; opacity:.96; margin:0;
+  box-shadow:0 16px 34px rgba(40,24,8,.3); background:#fff3d6;
+}
+.track-meta{ min-width:0; }
+.track-title{ font-family:'Caveat',cursive; font-size:22px; line-height:1.05; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.track-artist{ font-family:'Kalam',sans-serif; font-size:13px; color:#6b5a40; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.chip-row{ display:flex; gap:6px; flex-wrap:wrap; margin-top:5px; }
+.chip{
+  font-family:'Kalam',sans-serif; font-size:11px; font-weight:700;
+  border:1.8px solid #1a1a1a; border-radius:9px 11px 8px 10px / 10px 8px 11px 9px;
+  padding:1px 8px; background:#fff; color:#4a3b23; white-space:nowrap;
+}
+.chip.album{ background:#eef4fb; color:#2a4a8a;}
+.chip.genre{ background:#f6ecf4; color:#8a3a6a;}
+.chip.plays{ background:#e5f4ea; color:#22633e;}
+.track-right{ display:flex; align-items:center; gap:8px; }
+.icon-btn{
+  width:36px; height:34px; border-radius:11px;
+  border:2.2px solid var(--ink); background:#fff8e7; cursor:pointer;
+  font-size:15px; line-height:1; display:inline-flex; align-items:center; justify-content:center;
+  transition:transform .12s ease, background .15s;
+}
+.icon-btn:hover{ transform:translateY(-2px) rotate(-4deg); background:#fff3d6;}
+.icon-btn.del:hover{ background:#ffe3dc; color:#8a3a2a;}
+.empty-state{
+  text-align:center; padding:30px 14px; color:#7a6548; font-family:'Kalam',sans-serif;
+  border:2px dashed #c9b88a; border-radius:16px; background:#fffcf5;
+}
+.empty-icon{ font-size:36px; margin-bottom:6px; }
+.empty-title{ font-family:'Caveat',cursive; font-size:27px; color:#4a3b23;}
+.ana-table{ display:flex; flex-direction:column; gap:8px; }
+.ana-row{
+  display:grid; grid-template-columns:40px 48px 1.4fr 1fr 118px; gap:12px; align-items:center;
+  background:#fff9ee; border:2px solid #2c261c;
+  border-radius:16px 14px 17px 15px / 14px 16px 14px 17px;
+  padding:9px 13px;
+}
+.ana-rank{ font-family:'Caveat',cursive; font-size:27px; font-weight:700; text-align:center; line-height:1;}
+.ana-rank.r1{ color:#c9a227; text-shadow:0 1px 0 #e2c86a;}
+.ana-rank.r2{ color:#8a8a8a;}
+.ana-rank.r3{ color:#b87333;}
+.ana-cat{ font-family:'Kalam',sans-serif; font-size:11.5px; color:#6b5a40; line-height:1.5; min-width:0;}
+.ana-cat b{ display:block; font-size:12.5px; color:#4a3b23;}
+.ana-num{ font-family:'Caveat',cursive; font-size:26px; font-weight:700; text-align:right; line-height:1;}
+.ana-num small{ display:block; font-family:'Kalam',sans-serif; font-size:11px; color:#9a8264; font-weight:400;}
+.user-list{ display:flex; flex-direction:column; gap:9px; }
+.user-row{
+  display:grid; grid-template-columns:52px 1.5fr 1fr 190px; gap:12px; align-items:center;
+  background:#fff9ee; border:2px solid #2c261c;
+  border-radius:16px 14px 17px 15px / 14px 16px 14px 17px;
+  padding:10px 13px;
+}
+.user-avatar{
+  width:48px; height:48px; border-radius:50%;
+  border:2.4px solid var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Caveat',cursive; font-size:21px; font-weight:700; color:#fffdf7;
+  overflow:hidden; flex-shrink:0; box-shadow:0 2px 0 #c8b78a;
+}
+.user-avatar img{ width:100%; height:100%; object-fit:cover; display:block;}
+.user-name{ font-family:'Caveat',cursive; font-size:22px; line-height:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.user-mail{ font-family:'Kalam',sans-serif; font-size:12px; color:#6b5a40; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.user-joined{ font-family:'Kalam',sans-serif; font-size:11.5px; color:#9a8264; margin-top:2px;}
+.role-badge{
+  display:inline-block; font-family:'Kalam',sans-serif; font-size:11.5px; font-weight:700; letter-spacing:.05em;
+  border:2px solid #1a1a1a; border-radius:10px 12px 9px 11px / 11px 9px 12px 10px;
+  padding:3px 10px; white-space:nowrap;
+}
+.role-badge.dev{ background:linear-gradient(180deg,#f7df8e,#e2c86a); color:#5a4008; transform:rotate(-1.4deg);}
+.role-badge.uploader{ background:#e5f4ea; color:#22633e;}
+.role-badge.listener{ background:#eef0f6; color:#3a4a6a;}
+.role-select{
+  font-family:'Kalam',sans-serif; font-size:13px; font-weight:600;
+  padding:7px 10px; background:#fffdf7; color:var(--ink);
+  border:2.2px solid #1a1a1a; border-radius:var(--radius-tiny); outline:none; cursor:pointer; width:100%;
+}
+.status-dot{ display:inline-block; width:9px; height:9px; border-radius:50%; border:1.6px solid #1a1a1a; margin-right:5px; vertical-align:middle;}
+.status-dot.on{ background:#3a8a6a;}
+.status-dot.off{ background:#c9c2b4;}
+.role-summary{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.access-note{
+  font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630; line-height:1.75;
+  background:#fff9ee; border:2px dashed #c9b88a; border-radius:14px; padding:12px 16px;
+}
+.access-note b{ color:#3a2c14;}
+.modal-overlay{
+  position:fixed; inset:0;
+  background: rgba(30,20,8,0.38);
+  display:none; align-items:center; justify-content:center;
+  z-index:50; padding:18px;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.open{ display:flex; }
+.modal-card{
+  width:100%; max-width:480px;
+  background: linear-gradient(180deg, #fffdf7, #f8f0dc);
+  padding:16px 14px 14px; position:relative;
+  box-shadow: 0 18px 50px rgba(40,24,8,.28);
+  animation: paperPop .34s cubic-bezier(.22,1.2,.36,1);
+  border-radius:6px;
+}
+@keyframes paperPop{
+  from{ transform: translateY(16px) scale(.97) rotate(-1deg); opacity:0;}
+  to{ transform: translateY(0) scale(1) rotate(-0.5deg); opacity:1;}
+}
+.modal-close{
+  position:absolute; right:12px; top:10px;
+  background:#fff8e7; border:2px solid #1a1a1a;
+  width:36px; height:34px; border-radius:12px; cursor:pointer; font-size:16px;
+}
+.modal-title{ margin:0 28px 2px 0; font-family:'Caveat',cursive; font-size:32px;}
+.modal-sub{ margin:0 0 16px; font-family:'Kalam',sans-serif; color:#7a6548; font-size:14px;}
+.form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.field{ display:flex; flex-direction:column; gap:5px; font-family:'Kalam',sans-serif; font-size:14px; color:#5b4630;}
+.field .sketch-input{ width:100%; }
+.label-picker{ margin-top:14px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; font-family:'Kalam',sans-serif; font-size:14px;}
+.swatches{ display:flex; gap:8px; flex-wrap:wrap;}
+.swatch{
+  width:30px; height:30px; border-radius:50%;
+  border:2.4px solid #1a1a1a; cursor:pointer;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.25);
+}
+.swatch.active{ outline:3px solid #f3d87a; outline-offset:2px;}
+.modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:18px; flex-wrap:wrap;}
+.toasts{
+  position:fixed; right:16px; bottom:16px; z-index:200;
+  display:flex; flex-direction:column; gap:9px; max-width:330px;
+}
+.toast{
+  font-family:'Kalam',sans-serif; font-size:13.5px; color:#3a2c14;
+  background:linear-gradient(180deg,#fffdf7,#f8f0dc);
+  border:2.4px solid #1a1a1a; border-radius:14px 16px 13px 15px / 15px 13px 16px 14px;
+  padding:10px 15px; box-shadow:0 6px 18px rgba(40,24,8,.22);
+  animation: toastIn .3s cubic-bezier(.2,1.2,.4,1) both;
+}
+.toast.err{ background:#ffe9e5; color:#8a2418; border-color:#8a2418;}
+@keyframes toastIn{ from{ transform:translateY(12px) rotate(1deg); opacity:0;} to{ transform:none; opacity:1;} }
+.toast.out{ animation: toastOut .3s ease both;}
+@keyframes toastOut{ to{ transform:translateY(10px); opacity:0;} }
+.player-footer{
+  margin-top:18px; text-align:center; font-family:'Kalam',sans-serif; font-size:12.5px; color:#9b8264;
+  letter-spacing:.04em; display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+}
+.footer-dot{ color:var(--gold); }
+.demo-banner{
+  position:fixed; left:14px; top:14px; z-index:150;
+  font-family:'Kalam',sans-serif; font-size:12px; font-weight:700; letter-spacing:.06em;
+  background:#fdf0dc; color:#8a5514; border:2.4px solid #1a1a1a;
+  border-radius:12px 14px 11px 13px / 13px 11px 14px 12px;
+  padding:6px 13px; transform:rotate(-2deg); box-shadow:0 4px 0 #e3c795; pointer-events:none;
+}
+.admin-sticker{
+  position:absolute; right:26px; top:56px; z-index:4; pointer-events:none;
+  font-family:'Gloria Hallelujah',cursive; font-size:12px; color:#6a4a08;
+  background:linear-gradient(180deg,#f7df8e,#e2c86a);
+  border:2.2px solid #1a1a1a; border-radius:10px 13px 9px 12px / 12px 9px 13px 10px;
+  padding:5px 11px; transform:rotate(7deg); box-shadow:0 3px 0 #c8a84a;
+}
+::-webkit-scrollbar{ width:9px; height:9px;}
+::-webkit-scrollbar-track{ background:transparent;}
+::-webkit-scrollbar-thumb{ background:#dcc29a; border-radius:6px; border:2px solid #fffcf5;}
+button:focus-visible, input:focus-visible, select:focus-visible{ outline:3px solid #e2b84a; outline-offset:2px;}
+.sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);}
+@media (max-width:880px){
+  .dash-grid{ grid-template-columns:1fr; }
+  .ana-row{ grid-template-columns:34px 44px 1.3fr 1fr 92px; gap:8px;}
+  .user-row{ grid-template-columns:48px 1.4fr 1fr; }
+  .user-row .u-role{ grid-column:1 / -1; }
+}
+@media (max-width:640px){
+  .admin-card{ padding:16px 12px 14px;}
+  .topbar-greeting{ font-size:24px; width:100%;}
+  .metric-grid{ grid-template-columns:repeat(auto-fit,minmax(140px,1fr));}
+  .form-grid{ grid-template-columns:1fr;}
+  .adm-track{ grid-template-columns:30px 40px 1fr; }
+  .track-right{ grid-column:1 / -1; justify-content:flex-end;}
+  .ana-row{ grid-template-columns:30px 42px 1.2fr 86px;}
+  .ana-row .ana-cat{ display:none;}
+  .admin-sticker{ display:none;}
+}
+  </style>
+</head>
+<body>
+
+  <div class="paper-texture"></div>
+
+  <div class="doodle-notes" aria-hidden="true">
+    <span class="note n1">♪</span>
+    <span class="note n2">♫</span>
+    <span class="note n3">♬</span>
+    <span class="note n4">♪</span>
+    <span class="note n5">♩</span>
+    <span class="note n6">♫</span>
+  </div>
+
+  <div id="demo-banner" class="demo-banner" hidden>MODE DEMO ✦ DATA CONTOH</div>
+
+  <div class="gate-overlay" id="gate">
+    <div class="gate-card sketch-border">
+      <div class="corner-doodle tl">✦</div>
+      <div class="corner-doodle tr">✧</div>
+      <div class="corner-doodle bl">✧</div>
+      <div class="corner-doodle br">✦</div>
+      <svg class="gate-logo" viewBox="0 0 96 96" aria-hidden="true">
+        <circle cx="48" cy="48" r="44" fill="#1e1e24" stroke="#1a1a1a" stroke-width="3.4"/>
+        <circle cx="48" cy="48" r="36" fill="none" stroke="#33323c" stroke-width="1.6"/>
+        <circle cx="48" cy="48" r="29" fill="none" stroke="#33323c" stroke-width="1.4"/>
+        <circle cx="48" cy="48" r="22" fill="none" stroke="#3c3b46" stroke-width="1.6"/>
+        <circle cx="48" cy="48" r="15" fill="#c9a227" stroke="#1a1a1a" stroke-width="2.6"/>
+        <path d="M40 46 q8 -5 16 0 q-8 6 -16 0" fill="none" stroke="#5a4008" stroke-width="1.6"/>
+        <circle cx="48" cy="48" r="4" fill="#f7f3e9" stroke="#1a1a1a" stroke-width="1.8"/>
+        <text x="76" y="20" font-size="13" fill="#c9a227">✦</text>
+      </svg>
+      <h1 class="gate-title">Chiroot <span class="sub">Admin Studio</span></h1>
+      <div class="gate-brand-plate sketch-border-tiny">STUDIO • 1924</div>
+      <p class="gate-sub">Panel khusus developer — login email / Google + verifikasi 2 langkah (2FA) ✦</p>
+      <div id="gate-dyn"></div>
+    </div>
+  </div>
+
+  <main class="admin-shell" id="app" hidden>
+    <div class="admin-card sketch-border">
+      <div class="corner-doodle tl">✦</div>
+      <div class="corner-doodle tr">✧</div>
+      <div class="corner-doodle bl">✧</div>
+      <div class="corner-doodle br">✦</div>
+      <div class="admin-sticker">ADMIN ONLY ✦</div>
+
+      <section class="chiroot-topbar" aria-label="Sapaan dan akun">
+        <div class="topbar-left">
+          <div class="topbar-greeting" id="greeting-text"><span id="greet-main">✦ Admin Studio</span></div>
+          <div class="topbar-sub" id="topbar-sub">Gramophone control room</div>
+        </div>
+        <div class="topbar-auth" id="topbar-auth" aria-live="polite"></div>
+      </section>
+
+      <nav class="admin-tabs" id="admin-tabs" aria-label="Menu admin">
+        <button type="button" class="admin-tab active" data-tab="dashboard">✦ Dashboard</button>
+        <button type="button" class="admin-tab" data-tab="playlist">♫ Crate &amp; Kategori</button>
+        <button type="button" class="admin-tab" data-tab="analytics">📈 Analitik</button>
+        <button type="button" class="admin-tab" data-tab="users">👥 Pengguna</button>
+      </nav>
+
+      <section class="view active" id="view-dashboard" aria-label="Dashboard">
+        <div class="metric-grid" id="metrics"></div>
+        <div class="dash-grid">
+          <div>
+            <div class="panel sketch-border-soft">
+              <div class="panel-head">
+                <h2 class="panel-title">Lagu Paling Populer Minggu Ini</h2>
+                <span class="panel-note" id="week-note"></span>
+              </div>
+              <div class="chart-wrap" id="week-chart"></div>
+            </div>
+            <div class="panel sketch-border-soft">
+              <div class="panel-head">
+                <h2 class="panel-title">Metrik Play Count per Lagu</h2>
+                <span class="panel-note">total sepanjang waktu</span>
+              </div>
+              <div class="mini-plays" id="dash-plays"></div>
+            </div>
+          </div>
+          <div>
+            <div class="panel sketch-border-soft">
+              <div class="panel-head">
+                <h2 class="panel-title">Aktivitas 7 Hari</h2>
+                <span class="panel-note" id="spark-note"></span>
+              </div>
+              <div class="spark-wrap" id="spark"></div>
+            </div>
+            <div class="panel sketch-border-soft">
+              <div class="panel-head"><h2 class="panel-title">Aktivitas Terbaru</h2></div>
+              <div class="activity-list" id="activity"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-playlist" aria-label="Playlist dan kategori">
+        <div class="view-head">
+          <h2 class="view-title">The Crate <span class="crate-count" id="pl-count">• 0 records</span></h2>
+          <div class="view-tools">
+            <label class="field-inline">Kelompokkan
+              <select id="group-select" class="sketch-input">
+                <option value="none">Urutan crate (default)</option>
+                <option value="album">Album</option>
+                <option value="genre">Genre</option>
+                <option value="artist">Artis</option>
+              </select>
+            </label>
+            <button type="button" class="btn-primary sketch-border-soft" id="btn-save-order" disabled>Simpan Urutan</button>
+          </div>
+        </div>
+        <p class="hint-text">Tarik tombol <b>⠿</b> untuk <b>drag &amp; drop</b> urutan lagu ✦ klik <b>✎</b> untuk edit album &amp; genre</p>
+        <div id="track-area"></div>
+      </section>
+
+      <section class="view" id="view-analytics" aria-label="Analitik">
+        <div class="view-head">
+          <h2 class="view-title">Analitik &amp; Laporan</h2>
+          <div class="view-tools">
+            <label class="field-inline">Rentang
+              <select id="range-select" class="sketch-input">
+                <option value="week">Minggu ini</option>
+                <option value="month">30 hari terakhir</option>
+                <option value="all">Semua waktu</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="panel sketch-border-soft">
+          <div class="panel-head">
+            <h2 class="panel-title" id="ana-chart-title">Grafik Lagu Terpopuler</h2>
+            <span class="panel-note" id="ana-src-note"></span>
+          </div>
+          <div class="chart-wrap" id="ana-chart"></div>
+        </div>
+        <div class="panel sketch-border-soft">
+          <div class="panel-head"><h2 class="panel-title">Metrik Play Count per Lagu</h2></div>
+          <div class="ana-table" id="ana-table"></div>
+        </div>
+        <div class="panel sketch-border-soft">
+          <div class="panel-head">
+            <h2 class="panel-title">Pengguna Aktif — Supabase Auth</h2>
+            <span class="panel-note" id="auth-src-note"></span>
+          </div>
+          <div class="metric-grid" id="ana-users" style="margin-bottom:2px;"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-users" aria-label="Pengguna">
+        <div class="view-head">
+          <h2 class="view-title">Manajemen Pengguna</h2>
+          <div class="view-tools">
+            <input type="search" id="user-search" class="sketch-input" placeholder="Cari nama / email…" style="width:210px;">
+          </div>
+        </div>
+        <div class="role-summary" id="role-summary"></div>
+        <div class="panel sketch-border-soft">
+          <div class="user-list" id="user-list"></div>
+        </div>
+        <div class="access-note">
+          <b>Aturan akses Chiroot ✦</b><br>
+          ★ <b>Developer / Admin</b> — akun yang terdaftar di tabel <b>chiroot_admins</b> (kelola lewat SQL, bukan di kode): akses penuh panel ini, wajib login email + password + 2FA, dan disapa sebagai Developer di player.<br>
+          ▲ <b>Uploader</b> — boleh login &amp; meng-upload lagu ke crate.<br>
+          ● <b>Listener</b> — hanya bisa mendengarkan, tombol upload disembunyikan.
+        </div>
+      </section>
+
+      <footer class="player-footer">
+        <span>Made by ChirootDevTeam</span>
+        <span class="footer-dot">✦</span>
+        <span>Admin Studio • GRAMO 1924</span>
+      </footer>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="edit-modal" aria-hidden="true">
+    <div class="modal-card sketch-border">
+      <button type="button" class="modal-close" data-close="edit-modal" aria-label="Close">✕</button>
+      <h3 class="modal-title">Edit Record</h3>
+      <p class="modal-sub">Ubah judul, artis, album, genre, &amp; warna label ✦</p>
+      <div class="form-grid">
+        <label class="field">Judul Lagu
+          <input type="text" id="edit-title" class="sketch-input" maxlength="80">
+        </label>
+        <label class="field">Artis
+          <input type="text" id="edit-artist" class="sketch-input" maxlength="80">
+        </label>
+        <label class="field">Album
+          <input type="text" id="edit-album" class="sketch-input" maxlength="80" list="dl-albums">
+        </label>
+        <label class="field">Genre
+          <input type="text" id="edit-genre" class="sketch-input" maxlength="60" list="dl-genres">
+        </label>
+      </div>
+      <div class="label-picker">Label:
+        <div class="swatches" id="edit-swatches"></div>
+      </div>
+      <div class="label-picker">Vinyl:
+        <div class="swatches" id="edit-vinyl-swatches"></div>
+      </div>
+      <datalist id="dl-albums"></datalist>
+      <datalist id="dl-genres"></datalist>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary sketch-border-soft" data-close="edit-modal">Cancel</button>
+        <button type="button" class="btn-primary sketch-border-soft" id="btn-edit-save">Simpan Record →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="confirm-modal" aria-hidden="true">
+    <div class="modal-card sketch-border" style="max-width:420px;">
+      <button type="button" class="modal-close" data-close="confirm-modal" aria-label="Close">✕</button>
+      <h3 class="modal-title" id="confirm-title">Yakin?</h3>
+      <p class="modal-sub" id="confirm-msg"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary sketch-border-soft" data-close="confirm-modal">Cancel</button>
+        <button type="button" class="btn-danger" id="confirm-ok">Ya, Lanjutkan</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+
+<script>
+(function(){
+'use strict';
+
+const CFG = window.CHIROOT_CONFIG || {};
+const SUPABASE_URL = String(CFG.SUPABASE_URL || 'https://astuagdezahmuuwjoghf.supabase.co').trim().replace(/\/+$/, '');
+const SUPABASE_ANON_KEY = String(CFG.SUPABASE_ANON_KEY || 'sb_publishable_NXhR-MquEMwYDrCBPAOgAQ_MZ4BXQlT').trim();
+const CFG_ADMIN_EMAILS = (Array.isArray(CFG.ADMIN_EMAILS) ? CFG.ADMIN_EMAILS : []).map(normMail).filter(Boolean);
+const AUTH_KEY = 'chiroot_auth_v1';
+const PKCE_KEY = 'chiroot_pkce_v1';
+const GOOGLE_G_SVG = '<svg viewBox="0 0 48 48" width="19" height="19" aria-hidden="true" focusable="false"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg>';
+const LS_ORDER = 'chiroot_admin_order_v1';
+const LS_META = 'chiroot_admin_meta_v1';
+const LS_ROLES = 'chiroot_admin_roles_v1';
+const LS_COLLAPSED = 'chiroot_admin_collapsed_v1';
+const LABEL_COLORS = ['#d84a3a', '#3a8a6a', '#5b6ee1', '#b65a9a', '#d28a3a', '#c9a227'];
+const VINYL_COLORS = ['#1e1e24', '#3a3a44', '#5a2a2a', '#2a3a5a', '#2a4a3a', '#4a3a2a'];
+
+const state = {
+  session: null,
+  profile: null,
+  demo: false,
+  adminRole: '',
+  adminList: [],
+  factorId: null,
+  challengeId: null,
+  enroll: null,
+  tab: 'dashboard',
+  group: 'none',
+  range: 'week',
+  dirty: false,
+  metaCloud: true,
+  collapsed: {},
+  tracks: [],
+  users: [],
+  events: [],
+  roles: {},
+  sources: { tracks: 'demo', plays: 'demo', users: 'demo', roles: 'local' },
+  stats: {},
+  weekDays: [],
+  editing: null,
+  confirmCb: null
+};
+
+function $(sel, root){ return (root || document).querySelector(sel); }
+function $all(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+function esc(v){
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function fmtNum(n){ return Number(n || 0).toLocaleString('id-ID'); }
+function normMail(v){ return String(v || '').toLowerCase().trim(); }
+function hashStr(s){
+  let h = 2166136261;
+  s = String(s || '');
+  for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function seeded(seed){
+  let x = (seed || 1) >>> 0;
+  return function(){
+    x ^= x << 13; x >>>= 0;
+    x ^= x >>> 17;
+    x ^= x << 5; x >>>= 0;
+    return x / 4294967296;
+  };
+}
+function lsGet(key, fb){
+  try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fb; } catch(e){ return fb; }
+}
+function lsSet(key, val){
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){}
+}
+function timeAgo(iso){
+  const t = new Date(iso).getTime();
+  if (!t || isNaN(t)) return '—';
+  const m = Math.max(0, Math.floor((Date.now() - t) / 60000));
+  if (m < 1) return 'baru saja';
+  if (m < 60) return m + ' menit lalu';
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + ' jam lalu';
+  const d = Math.floor(h / 24);
+  if (d < 30) return d + ' hari lalu';
+  return new Date(t).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function fmtDate(iso){
+  const t = new Date(iso).getTime();
+  if (!iso || isNaN(t)) return '—';
+  return new Date(t).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function weekLabel(){
+  const days = state.weekDays;
+  if (!days.length) return '';
+  const a = days[0].toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+  const b = days[6].toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+  return a + ' – ' + b;
+}
+function toast(msg, type){
+  const box = $('#toasts');
+  const t = document.createElement('div');
+  t.className = 'toast' + (type === 'err' ? ' err' : '');
+  t.textContent = msg;
+  box.appendChild(t);
+  setTimeout(function(){
+    t.classList.add('out');
+    setTimeout(function(){ t.remove(); }, 320);
+  }, 3400);
+}
+function openModal(id){ const m = document.getElementById(id); if (m){ m.classList.add('open'); m.setAttribute('aria-hidden', 'false'); } }
+function closeModal(id){ const m = document.getElementById(id); if (m){ m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); } }
+function playerHref(){
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') return './main';
+  return './Main.html';
+}
+
+function mapAuthSession(data){
+  if (!data || typeof data.access_token !== 'string' || !data.user || typeof data.user.id !== 'string') return null;
+  const rawExp = Number(data.expires_at);
+  const expMs = isFinite(rawExp) && rawExp > 0 ? (rawExp < 1e12 ? rawExp * 1000 : rawExp) : (Date.now() + (Number(data.expires_in) || 3600) * 1000);
+  if (expMs - Date.now() < 30000) return null;
+  return {
+    access_token: data.access_token,
+    refresh_token: typeof data.refresh_token === 'string' ? data.refresh_token : '',
+    expires_at: expMs,
+    user: {
+      id: data.user.id,
+      email: typeof data.user.email === 'string' ? data.user.email : '',
+      factors: Array.isArray(data.user.factors) ? data.user.factors : []
+    }
+  };
+}
+function loadSession(){
+  try {
+    const raw = JSON.parse(localStorage.getItem(AUTH_KEY) || 'null');
+    if (!raw || typeof raw.access_token !== 'string' || !raw.user || typeof raw.user.id !== 'string') return null;
+    if (Number(raw.expires_at) - Date.now() < 30000) return null;
+    return raw;
+  } catch(e){ return null; }
+}
+function saveSession(s){
+  if (s) lsSet(AUTH_KEY, s);
+}
+function clearSession(){
+  try { localStorage.removeItem(AUTH_KEY); } catch(e){}
+}
+let refreshPromise = null;
+async function ensureFresh(force){
+  const s = state.session;
+  if (!s) throw new Error('NO_SESSION');
+  if (!force && s.expires_at - Date.now() > 120000) return s;
+  if (refreshPromise) return refreshPromise;
+  if (!SUPABASE_URL) throw new Error('NO_CONFIG');
+  refreshPromise = (async () => {
+    if (!s.refresh_token) throw new Error('NO_REFRESH');
+    const res = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+      body: JSON.stringify({ refresh_token: s.refresh_token })
+    });
+    const data = await res.json().catch(function(){ return {}; });
+    if (!res.ok || !data || typeof data.access_token !== 'string') throw new Error('REFRESH_FAILED');
+    const next = mapAuthSession(data);
+    if (!next) throw new Error('REFRESH_INVALID');
+    state.session = next;
+    saveSession(next);
+    return next;
+  })();
+  try { return await refreshPromise; } finally { refreshPromise = null; }
+}
+async function apiCall(path, method, body, extraHeaders){
+  const sess = await ensureFresh(false);
+  const headers = {
+    'apikey': SUPABASE_ANON_KEY,
+    'Authorization': 'Bearer ' + sess.access_token,
+    'Content-Type': 'application/json'
+  };
+  if (extraHeaders) Object.keys(extraHeaders).forEach(function(k){ headers[k] = extraHeaders[k]; });
+  const res = await fetch(SUPABASE_URL + path, {
+    method: method || 'GET',
+    headers: headers,
+    body: body ? JSON.stringify(body) : undefined
+  });
+  let data = null;
+  try { data = await res.json(); } catch(e){}
+  if (!res.ok){
+    const err = new Error((data && (data.message || data.hint || data.error_description || data.error)) || ('HTTP ' + res.status));
+    err.status = res.status;
+    err.code = data && data.code;
+    err.data = data;
+    throw err;
+  }
+  return data;
+}
+function storagePublicUrl(path){
+  return SUPABASE_URL + '/storage/v1/object/public/chiroot-crate/' + encodeURIComponent(String(path || ''));
+}
+function loginErrMsg(data){
+  const code = String((data && (data.error_code || data.error)) || '');
+  const msg = String((data && (data.msg || data.message || data.error_description)) || '');
+  if (code === 'invalid_credentials' || /invalid login credentials/i.test(msg)) return 'Email atau password salah.';
+  if (code === 'email_not_confirmed' || /email not confirmed/i.test(msg)) return 'Email belum dikonfirmasi. Buka Supabase → Authentication → Users → centang “Confirmed”.';
+  if (code === 'over_request_rate_limit' || /rate limit/i.test(msg)) return 'Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.';
+  if (code === 'validation_failed') return 'Format email atau password belum benar.';
+  return msg || 'Login gagal. Coba lagi.';
+}
+function b64url(bytes){
+  let s = '';
+  const arr = new Uint8Array(bytes);
+  for (let i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i]);
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+async function pkcePair(){
+  const buf = new Uint8Array(48);
+  crypto.getRandomValues(buf);
+  const verifier = b64url(buf);
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
+  return { verifier: verifier, challenge: b64url(digest) };
+}
+function googleLoginRedirect(){
+  const proto = window.location.protocol;
+  if (proto !== 'https:' && !(proto === 'http:' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))){
+    renderGate('error', 'Login Google butuh alamat HTTPS. Deploy ke web, atau buka lewat http://localhost.');
+    return;
+  }
+  if (!window.crypto || !crypto.subtle || typeof crypto.getRandomValues !== 'function'){
+    renderGate('error', 'Browser kamu tidak mendukung kriptografi aman. Pakai browser terbaru.');
+    return;
+  }
+  renderGate('checking', 'Membuka Google…');
+  pkcePair().then(function(pair){
+    try { sessionStorage.setItem(PKCE_KEY, pair.verifier); } catch(e){}
+    const params = new URLSearchParams();
+    params.set('provider', 'google');
+    params.set('code_challenge', pair.challenge);
+    params.set('code_challenge_method', 'S256');
+    params.set('redirect_to', window.location.origin + window.location.pathname);
+    window.location.assign(SUPABASE_URL + '/auth/v1/authorize?' + params.toString());
+  }).catch(function(){
+    renderGate('login');
+    const box = $('#login-err');
+    if (box){ box.textContent = 'Gagal menyiapkan login Google. Coba lagi.'; box.hidden = false; }
+  });
+}
+async function handleAuthCallback(){
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const errParam = params.get('error');
+  if (!code && !errParam) return false;
+  const clean = function(){ try { history.replaceState(null, '', window.location.pathname + window.location.hash); } catch(e){} };
+  if (errParam){
+    clean();
+    throw new Error(params.get('error_description') || 'Login Google dibatalkan atau gagal.');
+  }
+  let verifier = '';
+  try { verifier = sessionStorage.getItem(PKCE_KEY) || ''; } catch(e){}
+  clean();
+  try { sessionStorage.removeItem(PKCE_KEY); } catch(e){}
+  if (!verifier) throw new Error('Sesi login tidak ditemukan. Coba login ulang.');
+  const res = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=pkce', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+    body: JSON.stringify({ auth_code: code, code_verifier: verifier })
+  });
+  const data = await res.json().catch(function(){ return {}; });
+  if (!res.ok || !data || typeof data.access_token !== 'string' || !data.user || typeof data.user.id !== 'string'){
+    throw new Error('Login Google gagal (HTTP ' + res.status + ').');
+  }
+  const sess = mapAuthSession(data);
+  if (!sess) throw new Error('Sesi login tidak valid.');
+  state.session = sess;
+  saveSession(sess);
+  return true;
+}
+async function passwordLogin(email, password){
+  const res = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+    body: JSON.stringify({ email: email, password: password })
+  });
+  const data = await res.json().catch(function(){ return {}; });
+  if (!res.ok) throw new Error(loginErrMsg(data));
+  const sess = mapAuthSession(data);
+  if (!sess) throw new Error('Sesi login tidak valid.');
+  return sess;
+}
+async function requestPasswordReset(email){
+  const res = await fetch(SUPABASE_URL + '/auth/v1/recover', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+    body: JSON.stringify({ email: email })
+  });
+  return res.ok;
+}
+function jwtPayload(token){
+  try {
+    const seg = String(token || '').split('.')[1] || '';
+    let b64 = seg.replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    const bin = atob(b64);
+    const json = decodeURIComponent(Array.prototype.map.call(bin, function(c){ return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); }).join(''));
+    return JSON.parse(json);
+  } catch(e){ return null; }
+}
+async function fetchAAL(){
+  const sess = await ensureFresh(false);
+  const payload = jwtPayload(sess.access_token);
+  const current = payload && payload.aal === 'aal2' ? 'aal2' : 'aal1';
+  const factors = await listTotpFactors();
+  const hasVerified = factors.some(function(f){ return f.status === 'verified'; });
+  return { current: current, next: hasVerified ? 'aal2' : current };
+}
+async function listTotpFactors(){
+  const sess = await ensureFresh(false);
+  let factors = sess.user && Array.isArray(sess.user.factors) ? sess.user.factors : [];
+  try {
+    const res = await fetch(SUPABASE_URL + '/auth/v1/user', {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + sess.access_token }
+    });
+    if (res.ok){
+      const data = await res.json().catch(function(){ return null; });
+      if (data && Array.isArray(data.factors)) factors = data.factors;
+    }
+  } catch(e){}
+  return factors.filter(function(f){ return f && f.factor_type === 'totp'; });
+}
+async function totpEnroll(){
+  const sess = await ensureFresh(false);
+  const res = await fetch(SUPABASE_URL + '/auth/v1/factors', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + sess.access_token },
+    body: JSON.stringify({ factor_type: 'totp', friendly_name: 'Chiroot Admin', issuer: 'Chiroot Admin' })
+  });
+  const data = await res.json().catch(function(){ return {}; });
+  if (!res.ok) throw new Error((data && (data.msg || data.message)) || 'Gagal membuat faktor 2FA.');
+  return data;
+}
+async function totpUnenroll(factorId){
+  const sess = await ensureFresh(false);
+  const res = await fetch(SUPABASE_URL + '/auth/v1/factors/' + encodeURIComponent(factorId), {
+    method: 'DELETE',
+    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + sess.access_token }
+  });
+  if (!res.ok){ const data = await res.json().catch(function(){ return {}; }); throw new Error((data && (data.msg || data.message)) || 'Gagal menghapus faktor lama.'); }
+}
+async function totpChallenge(factorId){
+  const sess = await ensureFresh(false);
+  const res = await fetch(SUPABASE_URL + '/auth/v1/factors/' + encodeURIComponent(factorId) + '/challenge', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + sess.access_token },
+    body: '{}'
+  });
+  const data = await res.json().catch(function(){ return {}; });
+  if (!res.ok) throw new Error((data && (data.msg || data.message)) || 'Gagal meminta kode tantangan.');
+  return String(data.id || '');
+}
+async function totpVerify(factorId, challengeId, code){
+  const sess = await ensureFresh(false);
+  const body = { code: String(code || '').replace(/\s+/g, '') };
+  if (challengeId) body.challenge_id = challengeId;
+  const res = await fetch(SUPABASE_URL + '/auth/v1/factors/' + encodeURIComponent(factorId) + '/verify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + sess.access_token },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json().catch(function(){ return {}; });
+  if (!res.ok){
+    const msg = String((data && (data.msg || data.message || data.error_description)) || '');
+    if (/invalid.*code|code is invalid|verification code/i.test(msg)) throw new Error('Kode salah atau sudah kedaluwarsa. Coba kode terbaru di app kamu.');
+    throw new Error(msg || 'Verifikasi kode gagal.');
+  }
+  return data;
+}
+async function loadAdminMembership(){
+  const sess = await ensureFresh(false);
+  const email = normMail(sess.user.email);
+  const res = await fetch(SUPABASE_URL + '/rest/v1/chiroot_admins?select=role&email=eq.' + encodeURIComponent(email), {
+    headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + sess.access_token }
+  });
+  if (res.status === 404){
+    const e = new Error('Tabel chiroot_admins belum ada. Jalankan supabase-setup.sql di Supabase SQL Editor dulu.');
+    e.kind = 'setup';
+    throw e;
+  }
+  if (res.status === 401 || res.status === 403) return CFG_ADMIN_EMAILS.indexOf(email) !== -1 ? 'Developer' : '';
+  if (!res.ok) throw new Error('Gagal memeriksa akses akun (HTTP ' + res.status + ').');
+  const rows = await res.json().catch(function(){ return []; });
+  const dbRole = (Array.isArray(rows) && rows.length && rows[0].role) ? String(rows[0].role) : '';
+  if (dbRole) return dbRole;
+  return CFG_ADMIN_EMAILS.indexOf(email) !== -1 ? 'Developer' : '';
+}
+async function signOutBestEffort(){
+  const sess = state.session;
+  state.session = null;
+  state.profile = null;
+  clearSession();
+  if (sess && SUPABASE_URL){
+    try {
+      await fetch(SUPABASE_URL + '/auth/v1/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + sess.access_token }
+      });
+    } catch(e){}
+  }
+}
+
+const IDLE_MS = (Number(CFG.ADMIN_IDLE_MINUTES) > 0 ? Number(CFG.ADMIN_IDLE_MINUTES) : 30) * 60000;
+let idleTimer = null;
+function armIdleLogout(){
+  if (state.demo || !state.session) return;
+  if (idleTimer) clearTimeout(idleTimer);
+  idleTimer = setTimeout(function(){
+    signOutBestEffort().then(function(){ window.location.reload(); });
+  }, IDLE_MS);
+}
+
+function gateDyn(html){
+  $('#gate-dyn').innerHTML = html;
+}
+function spinnerStatus(text){
+  return '<div class="gate-status"><span class="gate-spinner"></span><span>' + esc(text) + '</span></div>';
+}
+function renderGate(mode, info){
+  const dyn = $('#gate-dyn');
+  if (mode === 'checking'){
+    gateDyn(spinnerStatus(info || 'Memeriksa sesi…'));
+    return;
+  }
+  if (mode === 'config'){
+    gateDyn(
+      '<div class="gate-status" style="color:#b42318;">chiroot-config.js belum ditemukan</div>' +
+      '<div class="tfa-steps">Buat file <b>chiroot-config.js</b> di folder yang sama dengan halaman ini, lalu isi:<br><b>SUPABASE_URL</b> dan <b>SUPABASE_ANON_KEY</b> dari Project Settings → API di Supabase.</div>'
+    );
+    return;
+  }
+  if (mode === 'error'){
+    gateDyn(
+      '<div class="gate-error">' + esc(info || 'Terjadi kesalahan.') + '</div>' +
+      '<div class="gate-btn-wrap"><button type="button" class="google-btn" id="g-retry"><span>↻ Coba Lagi</span></button></div>'
+    );
+    $('#g-retry').addEventListener('click', function(){ window.location.reload(); });
+    return;
+  }
+  if (mode === 'login'){
+    gateDyn(
+      '<form id="login-form" class="gate-form" novalidate>' +
+      '<label class="field">Email<input type="email" id="li-email" class="sketch-input" autocomplete="username" placeholder="nama@email.com" required></label>' +
+      '<label class="field">Password<div class="pw-wrap"><input type="password" id="li-pass" class="sketch-input" autocomplete="current-password" placeholder="••••••••" required>' +
+      '<button type="button" class="pw-toggle" id="pw-eye" aria-label="Tampilkan password">👁</button></div></label>' +
+      '<div class="gate-error" id="login-err" hidden></div>' +
+      '<button type="submit" class="btn-primary sketch-border-soft gate-submit" id="li-btn">Masuk →</button>' +
+      '</form>' +
+      '<div class="gate-links"><button type="button" class="gate-demo-link" id="g-forgot">Lupa password?</button></div>' +
+      '<div class="gate-divider">atau login dengan</div>' +
+      '<button type="button" class="google-btn full" id="g-google">' + GOOGLE_G_SVG + '<span>Login with Google</span></button>'
+    );
+    $('#pw-eye').addEventListener('click', function(){
+      const p = $('#li-pass');
+      p.type = p.type === 'password' ? 'text' : 'password';
+    });
+    $('#g-forgot').addEventListener('click', function(){ renderGate('forgot'); });
+    $('#g-google').addEventListener('click', googleLoginRedirect);
+    $('#login-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      doPasswordLogin();
+    });
+    $('#li-email').focus();
+    return;
+  }
+  if (mode === 'forgot'){
+    gateDyn(
+      '<form id="forgot-form" class="gate-form" novalidate>' +
+      '<label class="field">Email akun<input type="email" id="fg-email" class="sketch-input" autocomplete="username" placeholder="nama@email.com" required></label>' +
+      '<div class="gate-error" id="fg-err" hidden></div>' +
+      '<button type="submit" class="btn-primary sketch-border-soft gate-submit" id="fg-btn">Kirim Tautan Reset →</button>' +
+      '</form>' +
+      '<div class="gate-links"><button type="button" class="gate-demo-link" id="g-back">← Kembali login</button></div>'
+    );
+    $('#g-back').addEventListener('click', function(){ renderGate('login'); });
+    $('#forgot-form').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const email = normMail($('#fg-email').value);
+      const err = $('#fg-err');
+      err.hidden = true;
+      if (!email){ err.textContent = 'Isi email dulu.'; err.hidden = false; return; }
+      const btn = $('#fg-btn');
+      btn.disabled = true;
+      btn.textContent = 'Mengirim…';
+      try {
+        await requestPasswordReset(email);
+        gateDyn('<div class="gate-status" style="color:#22633e;">Kalau email terdaftar, tautan reset sudah terkirim ✦<br>Cek inbox (dan folder spam).</div><div class="gate-links"><button type="button" class="gate-demo-link" id="g-back">← Kembali login</button></div>');
+        $('#g-back').addEventListener('click', function(){ renderGate('login'); });
+      } catch(err2){
+        err.textContent = 'Gagal mengirim tautan reset.';
+        err.hidden = false;
+        btn.disabled = false;
+        btn.textContent = 'Kirim Tautan Reset →';
+      }
+    });
+    return;
+  }
+  if (mode === 'denied'){
+    gateDyn(
+      '<div class="gate-status"><div class="gate-denied">' +
+      '<div class="gate-denied-icon">✕</div>' +
+      '<div class="gate-denied-title">Akses Ditolak</div>' +
+      '<div class="gate-denied-mail">' + esc(info || '') + '</div>' +
+      '<div style="font-family:Kalam,sans-serif;font-size:12.5px;color:#9a8264;">Akun ini belum terdaftar sebagai admin — daftarkan email-nya di tabel chiroot_admins (SQL) atau isi CHIROOT_ADMIN_EMAILS di chiroot-config.js.</div>' +
+      '</div></div>' +
+      '<div class="gate-btn-wrap">' +
+      '<button type="button" class="google-btn" id="g-switch"><span>Ganti Akun</span></button>' +
+      '<button type="button" class="google-btn" id="g-player"><span>♪ Kembali ke Player</span></button>' +
+      '</div>'
+    );
+    $('#g-switch').addEventListener('click', async function(){ await signOutBestEffort(); renderGate('login'); });
+    $('#g-player').addEventListener('click', function(){ window.location.href = playerHref(); });
+    return;
+  }
+  if (mode === 'enroll'){
+    const f = state.enroll || {};
+    const totp = f.totp || {};
+    gateDyn(
+      '<div class="gate-status" style="min-height:0;color:#5a4630;font-weight:700;">Aktifkan 2FA — wajib untuk admin ✦</div>' +
+      '<div class="tfa-steps">1. Buka app authenticator (Google Authenticator, Authy, 1Password, dll).<br>2. Pilih “Tambah akun” lalu scan QR di bawah — atau masukkan kode secret secara manual.<br>3. Masukkan 6 digit kode dari app untuk memverifikasi.</div>' +
+      (totp.qr_code ? '<div class="tfa-qr-wrap"><img src="' + esc('data:image/svg+xml;utf-8,' + encodeURIComponent(totp.qr_code)) + '" alt="QR Code 2FA"></div>' : '') +
+      (totp.secret ? '<div class="tfa-secret">Secret: <b>' + esc(totp.secret) + '</b></div>' : '') +
+      '<form id="enroll-form" class="gate-form" novalidate>' +
+      '<label class="field">Kode 6 digit dari app<input type="text" id="en-code" class="sketch-input code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="••••••" required></label>' +
+      '<div class="gate-error" id="en-err" hidden></div>' +
+      '<button type="submit" class="btn-primary sketch-border-soft gate-submit" id="en-btn">Verifikasi &amp; Aktifkan 2FA →</button>' +
+      '</form>' +
+      '<div class="gate-links"><button type="button" class="gate-demo-link" id="g-out2">Keluar akun</button></div>'
+    );
+    $('#g-out2').addEventListener('click', async function(){ await signOutBestEffort(); renderGate('login'); });
+    $('#en-code').focus();
+    $('#enroll-form').addEventListener('submit', function(e){ e.preventDefault(); doEnrollVerify(); });
+    return;
+  }
+  if (mode === 'verify'){
+    gateDyn(
+      '<div class="gate-status" style="min-height:0;color:#5a4630;font-weight:700;">Verifikasi 2 Langkah ✦</div>' +
+      '<p class="gate-sub" style="margin:4px 0 0;">Masukkan kode 6 digit dari app authenticator kamu.</p>' +
+      '<form id="verify-form" class="gate-form" novalidate>' +
+      '<label class="field">Kode autentikasi<input type="text" id="vf-code" class="sketch-input code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="••••••" required></label>' +
+      '<div class="gate-error" id="vf-err" hidden></div>' +
+      '<button type="submit" class="btn-primary sketch-border-soft gate-submit" id="vf-btn">Verifikasi →</button>' +
+      '</form>' +
+      '<div class="gate-links"><button type="button" class="gate-demo-link" id="g-out3">Ganti akun</button></div>'
+    );
+    $('#g-out3').addEventListener('click', async function(){ await signOutBestEffort(); renderGate('login'); });
+    $('#vf-code').focus();
+    $('#verify-form').addEventListener('submit', function(e){ e.preventDefault(); doMfaVerify(); });
+    return;
+  }
+}
+
+async function doPasswordLogin(){
+  const email = normMail($('#li-email').value);
+  const pass = $('#li-pass').value;
+  const err = $('#login-err');
+  const btn = $('#li-btn');
+  err.hidden = true;
+  if (!email || !pass){ err.textContent = 'Isi email dan password dulu.'; err.hidden = false; return; }
+  btn.disabled = true;
+  btn.textContent = 'Memeriksa…';
+  try {
+    const sess = await passwordLogin(email, pass);
+    state.session = sess;
+    saveSession(sess);
+    renderGate('checking', 'Memeriksa akses…');
+    await continueAfterSession();
+  } catch(e){
+    err.textContent = e.message;
+    err.hidden = false;
+    btn.disabled = false;
+    btn.textContent = 'Masuk →';
+  }
+}
+async function doMfaVerify(){
+  const code = $('#vf-code').value;
+  const err = $('#vf-err');
+  const btn = $('#vf-btn');
+  err.hidden = true;
+  if (!code){ err.textContent = 'Masukkan kode dari app authenticator.'; err.hidden = false; return; }
+  btn.disabled = true;
+  btn.textContent = 'Memverifikasi…';
+  try {
+    const data = await totpVerify(state.factorId, state.challengeId, code);
+    const sess = mapAuthSession(data);
+    if (!sess) throw new Error('Sesi 2FA tidak valid.');
+    state.session = sess;
+    saveSession(sess);
+    state.factorId = null;
+    state.challengeId = null;
+    renderGate('checking', 'Menyiapkan studio…');
+    await openApp();
+  } catch(e){
+    err.textContent = e.message;
+    err.hidden = false;
+    btn.disabled = false;
+    btn.textContent = 'Verifikasi →';
+  }
+}
+async function doEnrollVerify(){
+  const code = $('#en-code').value;
+  const err = $('#en-err');
+  const btn = $('#en-btn');
+  err.hidden = true;
+  if (!code){ err.textContent = 'Masukkan kode 6 digit dari app.'; err.hidden = false; return; }
+  btn.disabled = true;
+  btn.textContent = 'Memverifikasi…';
+  try {
+    if (!state.enroll || !state.enroll.id) throw new Error('Faktor 2FA belum dibuat. Muat ulang halaman.');
+    let chId = state.enrollChallengeId;
+    if (!chId) chId = await totpChallenge(state.enroll.id);
+    state.enrollChallengeId = chId;
+    const data = await totpVerify(state.enroll.id, chId, code);
+    const sess = mapAuthSession(data);
+    if (!sess) throw new Error('Sesi 2FA tidak valid.');
+    state.session = sess;
+    saveSession(sess);
+    state.enroll = null;
+    state.enrollChallengeId = null;
+    toast('2FA aktif ✦ login berikutnya akan minta kode');
+    renderGate('checking', 'Menyiapkan studio…');
+    await openApp();
+  } catch(e){
+    err.textContent = e.message;
+    err.hidden = false;
+    btn.disabled = false;
+    btn.textContent = 'Verifikasi & Aktifkan 2FA →';
+  }
+}
+async function continueAfterSession(){
+  try {
+    let fresh = null;
+    try { fresh = await ensureFresh(false); } catch(e){ try { fresh = await ensureFresh(true); } catch(e2){} }
+    if (!fresh){
+      clearSession();
+      state.session = null;
+      renderGate('login');
+      return;
+    }
+    const role = await loadAdminMembership();
+    if (!role){
+      await signOutBestEffort();
+      renderGate('denied', fresh.user.email || 'akun tanpa email');
+      return;
+    }
+    state.adminRole = role;
+    const aal = await fetchAAL();
+    if (aal.current === 'aal2'){
+      renderGate('checking', 'Menyiapkan studio…');
+      await openApp();
+      return;
+    }
+    const factors = await listTotpFactors();
+    const verified = factors.filter(function(f){ return f.status === 'verified'; })[0] || null;
+    if (verified){
+      state.factorId = verified.id;
+      state.challengeId = await totpChallenge(verified.id);
+      renderGate('verify');
+      return;
+    }
+    const unverified = factors.filter(function(f){ return f.status !== 'verified'; });
+    for (const f of unverified){ try { await totpUnenroll(f.id); } catch(e){} }
+    state.enroll = await totpEnroll();
+    state.enrollChallengeId = null;
+    renderGate('enroll');
+  } catch(e){
+    if (e && e.kind === 'setup') renderGate('error', e.message);
+    else renderGate('error', (e && e.message) || 'Terjadi kesalahan saat memeriksa akses.');
+  }
+}
+async function tryLoadProfile(){
+  if (!state.session) return;
+  try {
+    const rows = await apiCall('/rest/v1/profiles?select=*&id=eq.' + encodeURIComponent(state.session.user.id) + '&limit=1', 'GET');
+    if (Array.isArray(rows) && rows.length){
+      state.profile = {
+        display_name: rows[0].display_name || '',
+        pfp: /^https:\/\/|^data:image\//.test(String(rows[0].pfp || '')) ? rows[0].pfp : null
+      };
+    }
+  } catch(e){}
+}
+
+const DEMO_TRACKS = [
+  { id: 'd_niscaya', title: 'Niscaya', artist: 'Bilal Indrajaya & Nadin Amizah', album: 'Niscaya (Single)', genre: 'Indie Folk', color: '#d84a3a', vinyl: '#1e1e24', cover: 'https://chiroot.netlify.app/niscaya.jpg' },
+  { id: 'd_day1', title: 'Day 1', artist: 'Red Velvet', album: 'The ReVe Festival 2022', genre: 'K-Pop', color: '#b65a9a', vinyl: '#1e1e24', cover: 'https://chiroot.netlify.app/reze.png' },
+  { id: 'd_harvey', title: 'Harvey', artist: "Her's", album: 'Songs of Her’s', genre: 'Indie Rock', color: '#5b6ee1', vinyl: '#1e1e24', cover: 'https://chiroot.netlify.app/Harvey.jpeg' },
+  { id: 'd_sweetboy', title: 'Sweet Boy', artist: 'Malcolm Todd', album: 'Sweet Boy', genre: 'Bedroom Pop', color: '#3a8a6a', vinyl: '#1e1e24', cover: 'https://chiroot.netlify.app/sweetboy.jpeg' },
+  { id: 'd_smile', title: 'Smile', artist: 'Lily Allen', album: 'It’s Not Me, It’s You', genre: 'Pop', color: '#d28a3a', vinyl: '#1e1e24', cover: 'https://chiroot.netlify.app/Smile.jpeg' },
+  { id: 'd_lalalostyou', title: 'La La Lost You', artist: 'NIKI', album: 'Nicole', genre: 'R&B', color: '#c9a227', vinyl: '#1e1e24', cover: null },
+  { id: 'd_evaluasi', title: 'Evaluasi', artist: 'Hindia', album: 'Menari dengan Bayangan', genre: 'Indie', color: '#5b6ee1', vinyl: '#3a3a44', cover: null },
+  { id: 'd_bertaut', title: 'Bertaut', artist: 'Nadin Amizah', album: 'Selamat Ulang Tahun', genre: 'Folk', color: '#d84a3a', vinyl: '#5a2a2a', cover: null }
+];
+const DEMO_USERS = [
+  { id: 'u_arlando', name: 'Arlando D.A', email: 'arlando@chiroot.id', joined: '2024-11-02T09:00:00Z', last: Date.now() - 11 * 60000 },
+  { id: 'u_devteam', name: 'Chiroot Dev Team', email: 'devteam@chiroot.id', joined: '2024-11-02T09:05:00Z', last: Date.now() - 2 * 3600000 },
+  { id: 'u_raka', name: 'Raka Pratama', email: 'raka.pratama@gmail.com', joined: '2025-01-14T10:20:00Z', last: Date.now() - 3 * 3600000 },
+  { id: 'u_sinta', name: 'Sinta Maharani', email: 'sinta.mhrn@gmail.com', joined: '2025-02-03T08:41:00Z', last: Date.now() - 26 * 3600000 },
+  { id: 'u_budi', name: 'Budi Santoso', email: 'budisantoso96@gmail.com', joined: '2025-03-21T14:02:00Z', last: Date.now() - 2 * 86400000 },
+  { id: 'u_dewi', name: 'Dewi Lestari', email: 'dewi.lestari@gmail.com', joined: '2025-05-08T16:55:00Z', last: Date.now() - 5 * 3600000 },
+  { id: 'u_fajar', name: 'Fajar Nugraha', email: 'fajarnugraha@gmail.com', joined: '2025-06-17T11:34:00Z', last: Date.now() - 6 * 86400000 },
+  { id: 'u_alya', name: 'Alya Rahma', email: 'alyarahma@gmail.com', joined: '2025-08-02T07:12:00Z', last: Date.now() - 12 * 86400000 },
+  { id: 'u_mochi', name: 'Mochi', email: 'mochi@proton.me', joined: '2025-08-20T19:48:00Z', last: Date.now() - 2 * 86400000 }
+];
+const DEMO_ADMIN_LIST = [
+  { email: 'devteam@chiroot.id', role: 'Developer' },
+  { email: 'arlando@chiroot.id', role: 'Admin & Developer' }
+];
+const DEMO_ROLES = {
+  u_arlando: { role: 'developer' },
+  u_devteam: { role: 'developer' },
+  u_raka: { role: 'uploader' },
+  u_sinta: { role: 'uploader' },
+  u_budi: { role: 'listener' },
+  u_dewi: { role: 'listener' },
+  u_fajar: { role: 'listener' },
+  u_alya: { role: 'listener' },
+  u_mochi: { role: 'uploader' }
+};
+
+function mapCrateRow(row){
+  if (!row || typeof row !== 'object') return null;
+  const title = String(row.title || '').trim().slice(0, 80);
+  if (!title) return null;
+  const meta = lsGet(LS_META, {})[String(row.id)] || {};
+  return {
+    id: String(row.id),
+    cloud: true,
+    title: title,
+    artist: String(row.artist || 'Unknown Artist').slice(0, 80),
+    album: row.album != null ? String(row.album || '') : (meta.album || ''),
+    genre: row.genre != null ? String(row.genre || '') : (meta.genre || ''),
+    color: /^#[0-9a-fA-F]{3,8}$/.test(row.label_color || '') ? row.label_color : '#d84a3a',
+    vinyl: /^#[0-9a-fA-F]{3,8}$/.test(row.vinyl_color || '') ? row.vinyl_color : '#1e1e24',
+    cover: row.cover_path ? storagePublicUrl(row.cover_path) : null,
+    position: isFinite(Number(row.position)) ? Number(row.position) : 9999,
+    userId: row.user_id != null ? String(row.user_id) : ''
+  };
+}
+function applyOverlay(tracks){
+  const order = lsGet(LS_ORDER, {});
+  const meta = lsGet(LS_META, {});
+  tracks.forEach(function(t){
+    if (order[t.id] != null && isFinite(Number(order[t.id]))) t.position = Number(order[t.id]);
+    if (meta[t.id]){
+      if (meta[t.id].album != null) t.album = meta[t.id].album;
+      if (meta[t.id].genre != null) t.genre = meta[t.id].genre;
+      if (meta[t.id].title) t.title = meta[t.id].title;
+      if (meta[t.id].artist) t.artist = meta[t.id].artist;
+    }
+  });
+  tracks.sort(function(a, b){ return a.position - b.position; });
+  return tracks;
+}
+function initWeekDays(){
+  const now = new Date();
+  const dow = (now.getDay() + 6) % 7;
+  const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dow);
+  const days = [];
+  for (let i = 0; i < 7; i++){
+    days.push(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i));
+  }
+  state.weekDays = days;
+}
+function buildDemoStats(){
+  const stats = {};
+  const todayIdx = Math.min(6, ((new Date().getDay() + 6) % 7));
+  DEMO_TRACKS.forEach(function(t){
+    const rnd = seeded(hashStr(t.id + 'salt'));
+    const weekly = 26 + Math.floor(rnd() * 150);
+    const days = [0, 0, 0, 0, 0, 0, 0];
+    let left = weekly;
+    for (let d = 0; d <= todayIdx; d++){
+      const isToday = d === todayIdx;
+      const cut = isToday ? left : Math.floor(left * (d === todayIdx - 1 ? 0.55 : 0.35));
+      const v = Math.max(0, Math.min(left, cut + Math.floor(rnd() * 9)));
+      days[d] = v;
+      left -= v;
+      if (left <= 0) break;
+    }
+    if (left > 0) days[todayIdx] += left;
+    stats[t.id] = { total: weekly * 3 + Math.floor(rnd() * 700), month: weekly + Math.floor(rnd() * 260), days: days };
+  });
+  return stats;
+}
+function statsFromEvents(events){
+  const stats = {};
+  const now = Date.now();
+  const monday = state.weekDays[0] ? state.weekDays[0].getTime() : now - 6 * 86400000;
+  const monthAgo = now - 30 * 86400000;
+  (events || []).forEach(function(ev){
+    if (!ev || !ev.track_id) return;
+    const key = String(ev.track_id);
+    if (!stats[key]) stats[key] = { total: 0, month: 0, days: [0, 0, 0, 0, 0, 0, 0], title: ev.title || '', artist: ev.artist || '' };
+    stats[key].total++;
+    const t = new Date(ev.created_at).getTime();
+    if (t >= monthAgo) stats[key].month++;
+    if (t >= monday){
+      const d = new Date(t);
+      const idx = Math.floor((new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime() - monday) / 86400000);
+      if (idx >= 0 && idx < 7) stats[key].days[idx]++;
+    }
+  });
+  return stats;
+}
+function statFor(trackId){
+  return state.stats[trackId] || { total: 0, month: 0, days: [0, 0, 0, 0, 0, 0, 0] };
+}
+function weekTotal(trackId){
+  return statFor(trackId).days.reduce(function(a, b){ return a + b; }, 0);
+}
+function rangeValue(trackId){
+  if (state.range === 'week') return weekTotal(trackId);
+  if (state.range === 'month') return statFor(trackId).month;
+  return statFor(trackId).total;
+}
+function totalPlays(){
+  return state.tracks.reduce(function(a, t){ return a + statFor(t.id).total; }, 0);
+}
+function weekPlays(){
+  return state.tracks.reduce(function(a, t){ return a + weekTotal(t.id); }, 0);
+}
+function activeUsersCount(){
+  const lim = Date.now() - 7 * 86400000;
+  return state.users.filter(function(u){ return (u.last || 0) >= lim; }).length;
+}
+function demoActivity(){
+  const rnd = seeded(hashStr(new Date().toDateString() + 'act'));
+  const items = [];
+  const names = DEMO_USERS.map(function(u){ return u.name; });
+  for (let i = 0; i < 6; i++){
+    const t = DEMO_TRACKS[Math.floor(rnd() * DEMO_TRACKS.length)];
+    items.push({ title: t.title, who: names[Math.floor(rnd() * names.length)], at: new Date(Date.now() - Math.floor(rnd() * 20 * 3600000) - i * 900000).toISOString() });
+  }
+  return items;
+}
+function liveActivity(events){
+  const byId = {};
+  state.users.forEach(function(u){ byId[u.id] = u.name; });
+  return (events || []).slice(0, 8).map(function(ev){
+    return { title: ev.title || '—', who: byId[ev.user_id] || 'Pendengar', at: ev.created_at };
+  });
+}
+
+async function loadAllData(){
+  const jobs = await Promise.allSettled([
+    apiCall('/rest/v1/crate_tracks?select=*&order=position.asc', 'GET'),
+    apiCall('/rest/v1/play_events?select=*&order=created_at.desc&limit=1000', 'GET'),
+    apiCall('/rest/v1/profiles?select=*&order=created_at.desc', 'GET'),
+    apiCall('/rest/v1/user_roles?select=*', 'GET'),
+    apiCall('/rest/v1/chiroot_admins?select=email,role&order=email.asc', 'GET')
+  ]);
+  if (jobs[4].status === 'fulfilled' && Array.isArray(jobs[4].value)){
+    state.adminList = jobs[4].value.map(function(r){ return { email: normMail(r.email), role: String(r.role || 'Developer') }; });
+  } else {
+    state.adminList = [];
+  }
+  const order = lsGet(LS_ORDER, {});
+  if (jobs[0].status === 'fulfilled' && Array.isArray(jobs[0].value) && jobs[0].value.length){
+    state.tracks = applyOverlay(jobs[0].value.map(mapCrateRow).filter(Boolean));
+    state.sources.tracks = 'live';
+  } else {
+    state.tracks = applyOverlay(DEMO_TRACKS.map(function(t, i){ return Object.assign({}, t, { cloud: false, position: order[t.id] != null ? Number(order[t.id]) : i }); }));
+    state.sources.tracks = jobs[0].status === 'rejected' ? 'demo' : 'live-empty';
+  }
+  if (jobs[1].status === 'fulfilled' && Array.isArray(jobs[1].value) && jobs[1].value.length){
+    state.events = jobs[1].value;
+    state.stats = statsFromEvents(state.events);
+    state.sources.plays = 'live';
+  } else {
+    state.events = [];
+    state.stats = buildDemoStats();
+    state.sources.plays = 'demo';
+  }
+  const lastMap = {};
+  if (state.sources.plays === 'live'){
+    state.events.forEach(function(ev){
+      const uid = String(ev.user_id || '');
+      const t = new Date(ev.created_at).getTime();
+      if (uid && isFinite(t) && (!lastMap[uid] || t > lastMap[uid])) lastMap[uid] = t;
+    });
+  }
+  if (jobs[2].status === 'fulfilled' && Array.isArray(jobs[2].value) && jobs[2].value.length){
+    state.users = jobs[2].value.map(function(p){
+      const uid = String(p.id);
+      let last = lastMap[uid] || null;
+      if (!last){
+        const rnd = seeded(hashStr(uid + 'seen'));
+        last = Date.now() - Math.floor(rnd() * 14 * 86400000);
+      }
+      return {
+        id: uid,
+        name: p.display_name || (p.email || 'Pengguna').split('@')[0],
+        email: p.email || '',
+        pfp: p.pfp || null,
+        joined: p.created_at || null,
+        last: last
+      };
+    });
+    state.sources.users = 'live';
+  } else {
+    state.users = DEMO_USERS.slice();
+    state.sources.users = 'demo';
+  }
+  const rolesLive = jobs[3].status === 'fulfilled' && Array.isArray(jobs[3].value) ? jobs[3].value : null;
+  const base = {};
+  if (rolesLive){
+    rolesLive.forEach(function(r){ base[String(r.id)] = { role: r.role === 'developer' || r.role === 'uploader' ? r.role : 'listener', can_upload: !!r.can_upload }; });
+    state.sources.roles = 'live';
+  } else {
+    Object.keys(DEMO_ROLES).forEach(function(k){ base[k] = Object.assign({}, DEMO_ROLES[k]); });
+    state.sources.roles = 'local';
+  }
+  state.roles = Object.assign({}, base, lsGet(LS_ROLES, {}));
+  if (state.sources.users === 'live'){
+    state.users.forEach(function(u){
+      if (adminLabelFor(u.email)) state.roles[u.id] = { role: 'developer' };
+      if (!state.roles[u.id]) state.roles[u.id] = { role: 'listener' };
+    });
+  }
+}
+function adminLabelFor(email){
+  const m = normMail(email);
+  const row = state.adminList.filter(function(a){ return a.email === m; })[0];
+  return row ? row.role : '';
+}
+
+function renderTopbar(){
+  const email = state.session && state.session.user ? state.session.user.email : '';
+  const name = state.profile && state.profile.display_name ? state.profile.display_name : (email ? email.split('@')[0].replace(/[._%+-]+/g, ' ') : 'Admin');
+  $('#greet-main').textContent = '✦ Halo, ' + name + '!';
+  const auth = $('#topbar-auth');
+  auth.innerHTML = '';
+  const greetWrap = $('#greeting-text');
+  $all('.admin-badge', greetWrap).forEach(function(b){ b.remove(); });
+  if (state.adminRole){
+    const badge = document.createElement('span');
+    badge.className = 'admin-badge';
+    badge.textContent = state.adminRole + ' ✦';
+    greetWrap.appendChild(badge);
+  }
+  const chip = document.createElement('span');
+  const anyLive = state.sources.tracks === 'live' || state.sources.plays === 'live' || state.sources.users === 'live';
+  chip.className = 'src-chip ' + (anyLive ? 'live' : 'demo');
+  chip.textContent = anyLive ? 'CLOUD ✦ LIVE' : 'DATA CONTOH';
+  auth.appendChild(chip);
+  const back = document.createElement('a');
+  back.className = 'player-link';
+  back.href = playerHref();
+  back.innerHTML = '<span>♪ Player</span>';
+  auth.appendChild(back);
+  const user = document.createElement('div');
+  user.className = 'topbar-user';
+  const avatar = document.createElement('div');
+  avatar.className = 'topbar-avatar';
+  if (state.profile && state.profile.pfp){
+    const img = document.createElement('img');
+    img.alt = '';
+    img.src = state.profile.pfp;
+    img.onerror = function(){ img.remove(); };
+    avatar.appendChild(img);
+  } else {
+    avatar.textContent = name.trim().split(/\s+/).slice(0, 2).map(function(w){ return w.charAt(0).toUpperCase(); }).join('') || '?';
+  }
+  const out = document.createElement('button');
+  out.type = 'button';
+  out.className = 'topbar-logout';
+  out.textContent = 'Log Out';
+  out.addEventListener('click', function(){
+    confirmAction('Log Out?', 'Kamu akan keluar dari Admin Studio Chiroot.', async function(){
+      await signOutBestEffort();
+      window.location.reload();
+    });
+  });
+  user.appendChild(avatar);
+  user.appendChild(out);
+  auth.appendChild(user);
+}
+function switchTab(tab){
+  state.tab = tab;
+  $all('.admin-tab').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === tab); });
+  $all('.view').forEach(function(v){ v.classList.toggle('active', v.id === 'view-' + tab); });
+}
+function renderTabs(){
+  $('#admin-tabs').addEventListener('click', function(e){
+    const btn = e.target.closest('.admin-tab');
+    if (btn) switchTab(btn.dataset.tab);
+  });
+}
+function chartSVG(items, opt){
+  opt = opt || {};
+  const W = opt.width || 760;
+  const H = opt.height || 300;
+  const n = items.length;
+  if (!n) return '<div class="empty-state"><div class="empty-icon">♪</div><div class="empty-title">Belum ada data</div><div>Putar musik dulu biar grafiknya muncul ✦</div></div>';
+  const max = Math.max.apply(null, items.map(function(i){ return i.value; }).concat([1]));
+  const baseY = H - 64;
+  const topPad = 44;
+  const slot = (W - 70) / n;
+  const bw = Math.min(62, slot - 20);
+  const colors = ['#e2c86a', '#cfc8ba', '#d29a6a', '#d2a772', '#c9b78a', '#d2a772', '#c9b78a', '#d2a772', '#c9b78a'];
+  let bars = '';
+  let grid = '';
+  for (let g = 1; g <= 3; g++){
+    const y = baseY - ((baseY - topPad) * g) / 3;
+    grid += '<line x1="34" y1="' + y.toFixed(1) + '" x2="' + (W - 26) + '" y2="' + y.toFixed(1) + '" stroke="#cbbb92" stroke-width="1.4" stroke-dasharray="5 7" stroke-linecap="round"/>';
+    grid += '<text x="28" y="' + (y + 4).toFixed(1) + '" text-anchor="end" font-size="11" fill="#9a8264" font-family="Kalam,sans-serif">' + Math.round((max * g) / 3) + '</text>';
+  }
+  items.forEach(function(it, i){
+    const h = Math.max(5, ((baseY - topPad) * it.value) / max);
+    const cx = 46 + slot * i + slot / 2;
+    const x = cx - bw / 2;
+    const y = baseY - h;
+    const rot = i % 2 === 0 ? -0.7 : 0.8;
+    const fill = colors[Math.min(i, colors.length - 1)];
+    bars += '<g transform="rotate(' + rot + ' ' + cx.toFixed(1) + ' ' + baseY + ')">';
+    bars += '<rect class="chart-bar-anim" style="animation-delay:' + (i * 60) + 'ms" x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="9" fill="' + fill + '" stroke="#1a1a1a" stroke-width="2.4"/>';
+    if (i === 0){
+      bars += '<rect x="' + (x - 4).toFixed(1) + '" y="' + (y - 4).toFixed(1) + '" width="' + (bw + 8).toFixed(1) + '" height="' + (h + 8).toFixed(1) + '" rx="12" fill="none" stroke="#c9a227" stroke-width="2" stroke-dasharray="7 6" stroke-linecap="round"/>';
+    }
+    bars += '<text x="' + cx.toFixed(1) + '" y="' + (y - 9).toFixed(1) + '" text-anchor="middle" font-size="14" font-weight="700" fill="#4a3b23" font-family="Caveat,cursive">' + fmtNum(it.value) + '</text>';
+    bars += '<text x="' + cx.toFixed(1) + '" y="' + (baseY + 21) + '" text-anchor="middle" font-size="12.5" fill="#3a2c14" font-family="Kalam,sans-serif">' + esc(it.label.length > 11 ? it.label.slice(0, 10) + '…' : it.label) + '</text>';
+    bars += '<text x="' + cx.toFixed(1) + '" y="' + (baseY + 36) + '" text-anchor="middle" font-size="10.5" fill="#9a8264" font-family="Kalam,sans-serif">' + esc(it.sub || '') + '</text>';
+    bars += '</g>';
+  });
+  const baseline = '<line x1="34" y1="' + baseY + '" x2="' + (W - 26) + '" y2="' + baseY + '" stroke="#2c261c" stroke-width="2.6" stroke-linecap="round"/>';
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Grafik bar">' + grid + bars + baseline + '</svg>';
+}
+function sparklineSVG(){
+  const W = 340, H = 120;
+  const todayIdx = ((new Date().getDay() + 6) % 7);
+  const vals = [];
+  for (let d = 0; d < 7; d++){
+    let sum = 0;
+    state.tracks.forEach(function(t){ sum += statFor(t.id).days[d] || 0; });
+    vals.push(sum);
+  }
+  const max = Math.max.apply(null, vals.concat([1]));
+  const step = (W - 40) / 6;
+  let pts = '';
+  vals.forEach(function(v, i){
+    const x = 22 + step * i;
+    const y = H - 26 - ((H - 52) * v) / max;
+    pts += x.toFixed(1) + ',' + y.toFixed(1) + ' ';
+  });
+  let dots = '';
+  vals.forEach(function(v, i){
+    const x = 22 + step * i;
+    const y = H - 26 - ((H - 52) * v) / max;
+    const lbl = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'][i];
+    dots += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (i === todayIdx ? 5 : 3.4) + '" fill="' + (i === todayIdx ? '#d84a3a' : '#c9a227') + '" stroke="#1a1a1a" stroke-width="1.8"/>';
+    dots += '<text x="' + x.toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="11" fill="#9a8264" font-family="Kalam,sans-serif">' + lbl + '</text>';
+  });
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Aktivitas 7 hari"><polyline points="' + pts.trim() + '" fill="none" stroke="#a66b3a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' + dots + '</svg>';
+}
+function sortedByRange(){
+  return state.tracks.slice().sort(function(a, b){ return rangeValue(b.id) - rangeValue(a.id); });
+}
+function thumbHTML(t, size){
+  const label = esc(t.title);
+  return '<div class="thumb"' + (size ? ' style="width:' + size + 'px;height:' + size + 'px"' : '') + '>' +
+    (t.cover ? '<img src="' + esc(t.cover) + '" alt="" loading="lazy" onerror="this.remove()">' : '') +
+    '<span class="t-label" style="background:' + esc(t.color) + '">' + label + '</span></div>';
+}
+function renderDashboard(){
+  const tracks = state.tracks;
+  const weekly = sortedByRange().slice(0, 7).filter(function(t){ return weekTotal(t.id) > 0; });
+  $('#week-note').textContent = weekLabel();
+  $('#week-chart').innerHTML = chartSVG(weekly.map(function(t){
+    return { label: t.title, sub: t.artist, value: weekTotal(t.id) };
+  }), { width: Math.max(560, 46 + weekly.length * 104), height: 300 });
+  const metrics = [
+    { icon: '♫', bg: '#f2e0a8', value: fmtNum(tracks.length), label: 'Total Records', foot: state.sources.tracks === 'live' ? 'Supabase • crate_tracks' : 'data contoh' },
+    { icon: '▶', bg: '#e5f4ea', value: fmtNum(totalPlays()), label: 'Total Play (sepanjang masa)', foot: state.sources.plays === 'live' ? 'Supabase • play_events' : 'data contoh' },
+    { icon: '✦', bg: '#fdf0dc', value: fmtNum(weekPlays()), label: 'Play Minggu Ini', foot: weekLabel() },
+    { icon: '●', bg: '#eef4fb', value: fmtNum(activeUsersCount()), label: 'Pengguna Aktif (7 hari)', foot: state.sources.users === 'live' ? 'Supabase Auth ✦ live' : 'perkiraan lokal' },
+    { icon: '👥', bg: '#f6ecf4', value: fmtNum(state.users.length), label: 'Total Pengguna', foot: state.sources.users === 'live' ? 'Supabase • profiles' : 'data contoh' }
+  ];
+  $('#metrics').innerHTML = metrics.map(function(m){
+    return '<div class="metric-card"><div class="metric-icon" style="background:' + m.bg + '">' + m.icon + '</div>' +
+      '<div class="metric-value">' + m.value + '</div><div class="metric-label">' + esc(m.label) + '</div>' +
+      '<div class="metric-foot">' + esc(m.foot) + '</div></div>';
+  }).join('');
+  const byTotal = state.tracks.slice().sort(function(a, b){ return statFor(b.id).total - statFor(a.id).total; }).slice(0, 8);
+  const maxTotal = Math.max.apply(null, byTotal.map(function(t){ return statFor(t.id).total; }).concat([1]));
+  $('#dash-plays').innerHTML = byTotal.length ? byTotal.map(function(t, i){
+    const st = statFor(t.id);
+    return '<div class="mini-play-row"><div class="mini-rank ' + (i < 3 ? 'r' + (i + 1) : '') + '">#' + (i + 1) + '</div>' +
+      thumbHTML(t) +
+      '<div class="mini-meta"><div class="mini-title">' + esc(t.title) + '</div><div class="mini-artist">' + esc(t.artist) + '</div>' +
+      '<div class="mini-bar-wrap"><div class="mini-bar" style="width:' + Math.round((st.total / maxTotal) * 100) + '%"></div></div></div>' +
+      '<div class="mini-count">' + fmtNum(st.total) + '<small>play</small></div></div>';
+  }).join('') : '<div class="empty-state"><div class="empty-icon">♫</div><div class="empty-title">Crate masih kosong</div><div>Tambah lagu dari player untuk mulai mengukur ✦</div></div>';
+  $('#spark').innerHTML = sparklineSVG();
+  $('#spark-note').textContent = fmtNum(weekPlays()) + ' play';
+  const acts = state.sources.plays === 'live' && state.events.length ? liveActivity(state.events) : demoActivity();
+  $('#activity').innerHTML = acts.map(function(a){
+    return '<div class="activity-item"><div class="act-ico">♫</div><div style="min-width:0;"><b>' + esc(a.title) + '</b><br><span style="color:#9a8264;">didengar oleh ' + esc(a.who) + '</span></div><div class="act-time">' + esc(timeAgo(a.at)) + '</div></div>';
+  }).join('');
+}
+function trackRowHTML(t, idx){
+  const st = statFor(t.id);
+  return '<div class="adm-track" data-id="' + esc(t.id) + '">' +
+    '<div class="pos-cell"><div class="pos-num">' + (idx + 1) + '</div><div class="drag-handle" title="Tarik untuk pindah" role="button" aria-label="Tarik untuk mengubah urutan">⠿</div></div>' +
+    thumbHTML(t) +
+    '<div class="track-meta"><div class="track-title">' + esc(t.title) + '</div><div class="track-artist">' + esc(t.artist) + '</div>' +
+    '<div class="chip-row">' +
+    (t.album ? '<span class="chip album">◈ ' + esc(t.album) + '</span>' : '') +
+    (t.genre ? '<span class="chip genre">#' + esc(t.genre) + '</span>' : '') +
+    '<span class="chip plays">▶ ' + fmtNum(st.total) + ' play</span>' +
+    '</div></div>' +
+    '<div class="track-right">' +
+    '<button type="button" class="icon-btn edit" title="Edit lagu" aria-label="Edit lagu" data-edit="' + esc(t.id) + '">✎</button>' +
+    '<button type="button" class="icon-btn del" title="Hapus lagu" aria-label="Hapus lagu" data-del="' + esc(t.id) + '">🗑</button>' +
+    '</div></div>';
+}
+function renderPlaylist(){
+  const area = $('#track-area');
+  $('#pl-count').textContent = '• ' + state.tracks.length + ' records';
+  const albums = [], genres = [];
+  state.tracks.forEach(function(t){
+    if (t.album && albums.indexOf(t.album) === -1) albums.push(t.album);
+    if (t.genre && genres.indexOf(t.genre) === -1) genres.push(t.genre);
+  });
+  $('#dl-albums').innerHTML = albums.map(function(a){ return '<option value="' + esc(a) + '"></option>'; }).join('');
+  $('#dl-genres').innerHTML = genres.map(function(g){ return '<option value="' + esc(g) + '"></option>'; }).join('');
+  if (!state.tracks.length){
+    area.innerHTML = '<div class="empty-state"><div class="empty-icon">♪</div><div class="empty-title">Crate kosong</div><div>Tambah record dari player, atau jalankan <b>supabase-setup.sql</b> lalu buka ulang panel ini ✦</div></div>';
+    return;
+  }
+  const g = state.group;
+  const owners = {}, ownerKeys = [];
+  state.tracks.forEach(function(t){
+    const key = t.userId || '—';
+    if (!owners[key]){ owners[key] = []; ownerKeys.push(key); }
+    owners[key].push(t);
+  });
+  area.innerHTML = ownerKeys.map(function(uid){
+    const list = owners[uid];
+    const user = state.users.find(function(x){ return x.id === uid; });
+    const ownerLabel = user ? (user.name || user.email) : ('Pengguna ' + uid);
+    let body;
+    if (g === 'none'){
+      body = '<div class="track-list">' + list.map(function(t, i){ return trackRowHTML(t, i); }).join('') + '</div>';
+    } else {
+      const groups = {}, orderKeys = [];
+      list.forEach(function(t){
+        const key = String(t[g] || '').trim() || 'Tanpa ' + (g === 'album' ? 'Album' : g === 'genre' ? 'Genre' : 'Artis');
+        if (!groups[key]){ groups[key] = []; orderKeys.push(key); }
+        groups[key].push(t);
+      });
+      body = orderKeys.map(function(key){
+        const collapsed = !!state.collapsed[g + '::' + uid + '::' + key];
+        const icon = g === 'album' ? '◈' : g === 'genre' ? '#' : '♪';
+        return '<div class="group-box' + (collapsed ? ' collapsed' : '') + '" data-group="' + esc(key) + '">' +
+          '<div class="group-head" data-gkey="' + esc(g + '::' + uid + '::' + key) + '"><span class="g-ico">' + icon + '</span><span>' + esc(key) + '</span>' +
+          '<span class="g-count">• ' + groups[key].length + ' lagu</span><span class="g-caret">▼</span></div>' +
+          '<div class="group-body">' + groups[key].map(function(t){ return trackRowHTML(t, list.indexOf(t)); }).join('') + '</div></div>';
+      }).join('');
+    }
+    return '<div class="user-box" data-user="' + esc(uid) + '">' +
+      '<div class="user-box-head"><span>👤 ' + esc(ownerLabel) + '</span><span class="g-count">• ' + list.length + ' lagu</span></div>' +
+      body + '</div>';
+  }).join('');
+  $all('.group-head', area).forEach(function(h){
+    h.addEventListener('click', function(){
+      const key = h.dataset.gkey;
+      state.collapsed[key] = !state.collapsed[key];
+      lsSet(LS_COLLAPSED, state.collapsed);
+      h.parentElement.classList.toggle('collapsed', !!state.collapsed[key]);
+    });
+  });
+  $all('[data-edit]', area).forEach(function(b){
+    b.addEventListener('click', function(e){ e.stopPropagation(); openEdit(b.dataset.edit); });
+  });
+  $all('[data-del]', area).forEach(function(b){
+    b.addEventListener('click', function(e){ e.stopPropagation(); askDelete(b.dataset.del); });
+  });
+  attachDnD(area);
+  updateSaveBtn();
+}
+function updateSaveBtn(){
+  const btn = $('#btn-save-order');
+  btn.disabled = !state.dirty;
+  btn.textContent = state.dirty ? 'Simpan Urutan ✦' : 'Simpan Urutan';
+}
+function currentDomOrder(){
+  return $all('.adm-track', $('#track-area')).map(function(r){ return r.dataset.id; });
+}
+function commitOrder(ids){
+  const map = {};
+  ids.forEach(function(id, i){ map[id] = i; });
+  let changed = false;
+  state.tracks.forEach(function(t){
+    const next = map[t.id];
+    if (next != null && next !== t.position) changed = true;
+    if (next != null) t.position = next;
+  });
+  if (!changed){ renderPlaylist(); return; }
+  state.tracks.sort(function(a, b){ return a.position - b.position; });
+  state.dirty = true;
+  renderPlaylist();
+}
+async function saveOrder(){
+  if (!state.dirty) return;
+  const cloudTracks = state.tracks.filter(function(t){ return t.cloud; });
+  const overlay = lsGet(LS_ORDER, {});
+  state.tracks.forEach(function(t){ if (!t.cloud) overlay[t.id] = t.position; });
+  lsSet(LS_ORDER, overlay);
+  let saved = 0, failed = 0;
+  for (const t of cloudTracks){
+    try {
+      await apiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(t.id), 'PATCH', { position: t.position });
+      saved++;
+      delete overlay[t.id];
+      lsSet(LS_ORDER, overlay);
+    } catch(e){ failed++; }
+  }
+  state.dirty = false;
+  updateSaveBtn();
+  if (cloudTracks.length === 0){
+    toast('Urutan disimpan di device ✦');
+  } else if (failed === 0){
+    toast('Urutan tersimpan ke cloud (' + saved + ' lagu) ✦');
+  } else if (saved === 0){
+    toast('Gagal simpan ke cloud — urutan disimpan lokal sementara', 'err');
+  } else {
+    toast(saved + ' tersimpan, ' + failed + ' gagal (offline?)', 'err');
+  }
+}
+function attachDnD(area){
+  if (area.dataset.dndBound === '1') return;
+  area.dataset.dndBound = '1';
+  let dragRow = null, ghost = null, offsetY = 0, active = false;
+  function rows(){ return $all('.adm-track', area); }
+  function onDown(e){
+    const handle = e.target.closest('.drag-handle');
+    if (!handle || e.button === 1 || e.button === 2) return;
+    dragRow = handle.closest('.adm-track');
+    if (!dragRow) return;
+    e.preventDefault();
+    active = true;
+    const rect = dragRow.getBoundingClientRect();
+    offsetY = e.clientY - rect.top;
+    ghost = dragRow.cloneNode(true);
+    ghost.classList.add('drag-ghost');
+    ghost.classList.remove('dragging');
+    ghost.style.width = rect.width + 'px';
+    document.body.appendChild(ghost);
+    dragRow.classList.add('dragging');
+    moveGhost(e.clientX, e.clientY);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+  }
+  function moveGhost(x, y){
+    ghost.style.transform = 'translate(' + (x - 40) + 'px,' + (y - offsetY) + 'px) rotate(-1.6deg)';
+  }
+  function onMove(e){
+    if (!active || !ghost) return;
+    moveGhost(e.clientX, e.clientY);
+    const box = dragRow.closest('.user-box');
+    const list = box ? $all('.adm-track', box) : rows();
+    for (const row of list){
+      if (row === dragRow) continue;
+      const r = row.getBoundingClientRect();
+      if (!r.height) continue;
+      const mid = r.top + r.height / 2;
+      const before = e.clientY < mid;
+      const parent = row.parentNode;
+      if (before && row.previousElementSibling !== dragRow) parent.insertBefore(dragRow, row);
+      else if (!before && row.nextElementSibling !== dragRow && !row.contains(dragRow)) parent.insertBefore(dragRow, row.nextSibling);
+    }
+  }
+  function onUp(){
+    if (!active) return;
+    active = false;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+    window.removeEventListener('pointercancel', onUp);
+    if (ghost){ ghost.remove(); ghost = null; }
+    if (dragRow){
+      const box = dragRow.closest('.user-box');
+      const ids = (box ? $all('.adm-track', box) : rows()).map(function(r){ return r.dataset.id; });
+      dragRow.classList.remove('dragging');
+      dragRow = null;
+      commitOrder(ids);
+    }
+  }
+  area.addEventListener('pointerdown', onDown);
+}
+function openEdit(id){
+  const t = state.tracks.find(function(x){ return x.id === id; });
+  if (!t) return;
+  state.editing = t;
+  $('#edit-title').value = t.title;
+  $('#edit-artist').value = t.artist;
+  $('#edit-album').value = t.album || '';
+  $('#edit-genre').value = t.genre || '';
+  buildSwatches('#edit-swatches', LABEL_COLORS, t.color);
+  buildSwatches('#edit-vinyl-swatches', VINYL_COLORS, t.vinyl);
+  openModal('edit-modal');
+}
+function buildSwatches(sel, colors, active){
+  const box = $(sel);
+  box.innerHTML = '';
+  colors.forEach(function(c){
+    const s = document.createElement('button');
+    s.type = 'button';
+    s.className = 'swatch' + (String(c).toLowerCase() === String(active).toLowerCase() ? ' active' : '');
+    s.style.background = c;
+    s.dataset.color = c;
+    s.setAttribute('aria-label', 'Warna ' + c);
+    s.addEventListener('click', function(){
+      $all('.swatch', box).forEach(function(x){ x.classList.remove('active'); });
+      s.classList.add('active');
+    });
+    box.appendChild(s);
+  });
+}
+async function saveEdit(){
+  const t = state.editing;
+  if (!t) return;
+  const title = $('#edit-title').value.trim().slice(0, 80);
+  const artist = $('#edit-artist').value.trim().slice(0, 80) || 'Unknown Artist';
+  const album = $('#edit-album').value.trim().slice(0, 80);
+  const genre = $('#edit-genre').value.trim().slice(0, 60);
+  const labelSel = $('#edit-swatches .swatch.active');
+  const vinylSel = $('#edit-vinyl-swatches .swatch.active');
+  const labelColor = labelSel ? labelSel.dataset.color : t.color;
+  const vinylColor = vinylSel ? vinylSel.dataset.color : t.vinyl;
+  if (!title){ toast('Judul lagu nggak boleh kosong', 'err'); return; }
+  const patch = { title: title, artist: artist, label_color: labelColor, vinyl_color: vinylColor };
+  if (state.metaCloud){ patch.album = album; patch.genre = genre; }
+  if (t.cloud){
+    try {
+      await apiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(t.id), 'PATCH', patch);
+    } catch(err){
+      if (err.code === 'PGRST204' || (String(err.message).indexOf('column') !== -1 && (album || genre))){
+        state.metaCloud = false;
+        try {
+          await apiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(t.id), 'PATCH', { title: title, artist: artist, label_color: labelColor, vinyl_color: vinylColor });
+        } catch(e2){
+          toast('Gagal simpan ke cloud: ' + e2.message, 'err');
+          return;
+        }
+      } else {
+        toast('Gagal simpan ke cloud: ' + err.message, 'err');
+        return;
+      }
+    }
+  }
+  const meta = lsGet(LS_META, {});
+  meta[t.id] = Object.assign(meta[t.id] || {}, { title: title, artist: artist, album: album, genre: genre });
+  lsSet(LS_META, meta);
+  t.title = title; t.artist = artist; t.album = album; t.genre = genre;
+  t.color = labelColor; t.vinyl = vinylColor;
+  closeModal('edit-modal');
+  renderPlaylist();
+  renderDashboard();
+  toast('Record tersimpan ✦' + (state.metaCloud ? '' : ' (album/genre disimpan lokal)'));
+}
+function askDelete(id){
+  const t = state.tracks.find(function(x){ return x.id === id; });
+  if (!t) return;
+  confirmAction('Hapus Record?', '“' + t.title + '” akan dihapus dari crate. Tindakan ini nggak bisa dibatalkan.', async function(){
+    if (t.cloud){
+      try {
+        await apiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(t.id), 'DELETE');
+      } catch(err){
+        toast('Gagal hapus di cloud: ' + err.message, 'err');
+        return;
+      }
+    }
+    state.tracks = state.tracks.filter(function(x){ return x.id !== id; });
+    const order = lsGet(LS_ORDER, {});
+    delete order[id];
+    lsSet(LS_ORDER, order);
+    const meta = lsGet(LS_META, {});
+    delete meta[id];
+    lsSet(LS_META, meta);
+    renderPlaylist();
+    renderDashboard();
+    toast('Record dihapus ✦');
+  });
+}
+function confirmAction(title, msg, cb){
+  $('#confirm-title').textContent = title;
+  $('#confirm-msg').textContent = msg;
+  state.confirmCb = cb;
+  openModal('confirm-modal');
+}
+function renderAnalytics(){
+  $('#ana-chart-title').textContent = 'Grafik Lagu Terpopuler — ' + (state.range === 'week' ? 'Minggu Ini' : state.range === 'month' ? '30 Hari' : 'Semua Waktu');
+  const srcMap = { live: 'sumber: Supabase play_events ✦ live', demo: 'sumber: data contoh / stats lokal' };
+  $('#ana-src-note').textContent = srcMap[state.sources.plays] || '';
+  $('#auth-src-note').textContent = state.sources.users === 'live' ? 'sumber: Supabase Auth ✦ live' : 'sumber: perkiraan lokal';
+  const sorted = sortedByRange();
+  const top = sorted.slice(0, 9).filter(function(t){ return rangeValue(t.id) > 0; });
+  $('#ana-chart').innerHTML = chartSVG(top.map(function(t){
+    return { label: t.title, sub: t.artist, value: rangeValue(t.id) };
+  }), { width: Math.max(600, 46 + top.length * 104), height: 310 });
+  const maxVal = Math.max.apply(null, sorted.map(function(t){ return rangeValue(t.id); }).concat([1]));
+  $('#ana-table').innerHTML = sorted.length ? sorted.map(function(t, i){
+    const v = rangeValue(t.id);
+    return '<div class="ana-row">' +
+      '<div class="ana-rank ' + (i < 3 ? 'r' + (i + 1) : '') + '">#' + (i + 1) + '</div>' +
+      thumbHTML(t, 48) +
+      '<div class="mini-meta"><div class="mini-title">' + esc(t.title) + '</div><div class="mini-artist">' + esc(t.artist) + '</div>' +
+      '<div class="mini-bar-wrap" style="max-width:100%;"><div class="mini-bar" style="width:' + Math.round((v / maxVal) * 100) + '%"></div></div></div>' +
+      '<div class="ana-cat"><b>' + esc(t.album || 'Tanpa Album') + '</b>' + esc(t.genre || 'tanpa genre') + '</div>' +
+      '<div class="ana-num">' + fmtNum(v) + '<small>total ' + fmtNum(statFor(t.id).total) + '</small></div>' +
+      '</div>';
+  }).join('') : '<div class="empty-state"><div class="empty-icon">📈</div><div class="empty-title">Belum ada statistik</div><div>Putar lagu di player biar tercatat ✦</div></div>';
+  const authUsers = [
+    { icon: '👥', bg: '#eef4fb', value: fmtNum(state.users.length), label: 'Total Pengguna (Auth)', foot: state.sources.users === 'live' ? 'profiles ✦ live' : 'data contoh' },
+    { icon: '●', bg: '#e5f4ea', value: fmtNum(activeUsersCount()), label: 'Aktif 7 Hari Terakhir', foot: state.sources.plays === 'live' ? 'dari play_events' : 'estimasi' },
+    { icon: '♫', bg: '#f2e0a8', value: fmtNum(state.tracks.length), label: 'Records di Crate', foot: state.sources.tracks === 'live' ? 'crate_tracks ✦ live' : 'data contoh' },
+    { icon: '▶', bg: '#fdf0dc', value: fmtNum(totalPlays()), label: 'Total Play Semua Lagu', foot: state.sources.plays === 'live' ? 'play_events ✦ live' : 'data contoh' }
+  ];
+  $('#ana-users').innerHTML = authUsers.map(function(m){
+    return '<div class="metric-card"><div class="metric-icon" style="background:' + m.bg + '">' + m.icon + '</div>' +
+      '<div class="metric-value">' + m.value + '</div><div class="metric-label">' + esc(m.label) + '</div>' +
+      '<div class="metric-foot">' + esc(m.foot) + '</div></div>';
+  }).join('');
+}
+function roleOf(user){
+  if (adminLabelFor(user.email)) return 'developer';
+  const r = state.roles[user.id];
+  return r && r.role ? r.role : 'listener';
+}
+function renderUsers(){
+  const q = normMail($('#user-search').value);
+  const list = state.users.filter(function(u){
+    if (!q) return true;
+    return normMail(u.name).indexOf(q) !== -1 || normMail(u.email).indexOf(q) !== -1;
+  });
+  const counts = { developer: 0, uploader: 0, listener: 0 };
+  state.users.forEach(function(u){ counts[roleOf(u)]++; });
+  $('#role-summary').innerHTML =
+    '<span class="role-badge dev">★ ' + counts.developer + ' Developer / Admin</span>' +
+    '<span class="role-badge uploader">▲ ' + counts.uploader + ' Uploader</span>' +
+    '<span class="role-badge listener">● ' + counts.listener + ' Listener</span>';
+  if (!list.length){
+    $('#user-list').innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-title">Tidak ada pengguna cocok</div><div>Coba kata kunci lain ✦</div></div>';
+    return;
+  }
+  const lim = Date.now() - 7 * 86400000;
+  $('#user-list').innerHTML = list.map(function(u){
+    const role = roleOf(u);
+    const adminLabel = adminLabelFor(u.email);
+    const on = (u.last || 0) >= lim;
+    const initials = String(u.name || '?').trim().split(/\s+/).slice(0, 2).map(function(w){ return w.charAt(0).toUpperCase(); }).join('') || '?';
+    const avatarColor = ['#d84a3a', '#3a8a6a', '#5b6ee1', '#b65a9a', '#d28a3a', '#7a4b26'][hashStr(u.email || u.id) % 6];
+    return '<div class="user-row">' +
+      '<div class="user-avatar" style="background:' + avatarColor + '">' + (u.pfp ? '<img src="' + esc(u.pfp) + '" alt="" onerror="this.remove()">' : esc(initials)) + '</div>' +
+      '<div style="min-width:0;"><div class="user-name">' + esc(u.name) + '</div><div class="user-mail">' + esc(u.email) + '</div><div class="user-joined">bergabung ' + fmtDate(u.joined) + '</div></div>' +
+      '<div class="u-status"><span class="status-dot ' + (on ? 'on' : 'off') + '"></span>' + (on ? 'aktif minggu ini' : 'tidak aktif') + (adminLabel ? '<br><span class="role-badge dev" style="margin-top:5px;">' + esc(adminLabel) + '</span>' : '') + '</div>' +
+      '<div class="u-role">' + (adminLabel
+        ? '<span class="role-badge dev" style="display:inline-block;">★ ' + esc(adminLabel) + ' — Terkunci</span>'
+        : '<select class="role-select" data-role="' + esc(u.id) + '">' +
+          '<option value="listener"' + (role === 'listener' ? ' selected' : '') + '>● Listener — hanya mendengarkan</option>' +
+          '<option value="uploader"' + (role === 'uploader' ? ' selected' : '') + '>▲ Uploader — bisa upload lagu</option>' +
+          '</select>') + '</div>' +
+      '</div>';
+  }).join('');
+  $all('[data-role]', $('#user-list')).forEach(function(sel){
+    sel.addEventListener('change', async function(){
+      const id = sel.dataset.role;
+      const role = sel.value;
+      state.roles[id] = { role: role };
+      const user = state.users.find(function(x){ return x.id === id; });
+      const overlay = lsGet(LS_ROLES, {});
+      overlay[id] = { role: role };
+      lsSet(LS_ROLES, overlay);
+      let cloudOk = false;
+      if (user && state.session){
+        try {
+          await apiCall('/rest/v1/user_roles', 'POST', { id: id, email: user.email, role: role, can_upload: role === 'uploader', updated_at: new Date().toISOString() }, { 'Prefer': 'resolution=merge-duplicates' });
+          cloudOk = true;
+        } catch(e){ cloudOk = false; }
+      }
+      renderUsers();
+      toast((role === 'uploader' ? '▲ ' : '● ') + (user ? user.name : 'Pengguna') + ' sekarang ' + (role === 'uploader' ? 'bisa upload lagu' : 'hanya mendengarkan') + (cloudOk ? ' ✦ cloud' : ' ✦ lokal'));
+    });
+  });
+}
+function renderAll(){
+  renderTopbar();
+  renderDashboard();
+  renderPlaylist();
+  renderAnalytics();
+  renderUsers();
+}
+async function openApp(){
+  try { await tryLoadProfile(); } catch(e){}
+  try {
+    await loadAllData();
+  } catch(e){
+    state.adminList = [];
+    state.tracks = applyOverlay(DEMO_TRACKS.map(function(t, i){ return Object.assign({}, t, { cloud: false, position: i }); }));
+    state.users = DEMO_USERS.slice();
+    state.roles = Object.assign({}, DEMO_ROLES, lsGet(LS_ROLES, {}));
+    state.stats = buildDemoStats();
+    state.sources = { tracks: 'demo', plays: 'demo', users: 'demo', roles: 'local' };
+  }
+  $('#gate').style.display = 'none';
+  $('#app').hidden = false;
+  renderAll();
+  armIdleLogout();
+  toast('Selamat datang, ' + state.adminRole + ' ✦');
+}
+function enterDemo(){
+  state.demo = true;
+  state.session = null;
+  state.adminRole = 'DEMO PREVIEW';
+  state.adminList = DEMO_ADMIN_LIST.slice();
+  $('#demo-banner').hidden = false;
+  $('#gate').style.display = 'none';
+  $('#app').hidden = false;
+  initWeekDays();
+  state.collapsed = lsGet(LS_COLLAPSED, {});
+  state.tracks = applyOverlay(DEMO_TRACKS.map(function(t, i){ return Object.assign({}, t, { cloud: false, position: i }); }));
+  state.users = DEMO_USERS.slice();
+  state.roles = Object.assign({}, DEMO_ROLES, lsGet(LS_ROLES, {}));
+  state.stats = buildDemoStats();
+  state.sources = { tracks: 'demo', plays: 'demo', users: 'demo', roles: 'local' };
+  renderAll();
+  toast('Mode demo aktif — semua data hanyalah contoh ✦');
+}
+async function boot(){
+  initWeekDays();
+  state.collapsed = lsGet(LS_COLLAPSED, {});
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('demo') === '1'){
+    enterDemo();
+    return;
+  }
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY){
+    renderGate('config');
+    return;
+  }
+  let callbackError = null;
+  try {
+    await handleAuthCallback();
+  } catch(e){
+    callbackError = e;
+  }
+  const sess = state.session || loadSession();
+  if (sess){
+    state.session = sess;
+    renderGate('checking', 'Memeriksa sesi…');
+    await continueAfterSession();
+    return;
+  }
+  renderGate('login');
+  if (callbackError){
+    const box = $('#login-err');
+    if (box){ box.textContent = callbackError.message; box.hidden = false; }
+  }
+}
+renderTabs();
+$all('[data-close]').forEach(function(b){
+  b.addEventListener('click', function(){ closeModal(b.dataset.close); });
+});
+$all('.modal-overlay').forEach(function(m){
+  m.addEventListener('click', function(e){ if (e.target === m) closeModal(m.id); });
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') $all('.modal-overlay.open').forEach(function(m){ closeModal(m.id); });
+});
+$('#btn-save-order').addEventListener('click', saveOrder);
+$('#group-select').addEventListener('change', function(){
+  state.group = this.value;
+  renderPlaylist();
+});
+$('#range-select').addEventListener('change', function(){
+  state.range = this.value;
+  renderAnalytics();
+});
+$('#user-search').addEventListener('input', renderUsers);
+$('#btn-edit-save').addEventListener('click', saveEdit);
+$('#confirm-ok').addEventListener('click', function(){
+  closeModal('confirm-modal');
+  if (typeof state.confirmCb === 'function'){ const cb = state.confirmCb; state.confirmCb = null; cb(); }
+});
+['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function(ev){
+  window.addEventListener(ev, armIdleLogout, { passive: true });
+});
+boot();
+})();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332cc728cd69de7',t:'MTc4ODA4MjQ1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332edc0fc7f9b8d',t:'MTc4ODA4MzgxOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
