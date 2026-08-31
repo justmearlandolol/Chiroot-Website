@@ -2322,7 +2322,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
             </div>
 
             <div class="gramo-sticker sticker-2">
-              <img src="Chiroot.png" alt="sticker-emoji" class="sticker-label" style="width: 67px; height: 67px;">
+              <img src="win.jpeg" alt="sticker-emoji" class="sticker-label" style="width: 67px; height: 67px;">
               <span class="chopper-label"></span>
             </div>
 
@@ -4409,7 +4409,7 @@ async function addTop10ToCrate(idx){
   }
   if(!(window.ChirootAuth && ChirootAuth.isAuthed())){
     if(!consumeClientRateLimit('top10Add', RATE_LIMITS.top10Add)) return;
-    showToast('Menambahkan "' + song.title + '" ke Crate (Guest)…');
+    var stopA = startCrateWaitToasts();
     try {
       const gTrack = await caGuestAddTrack({
         title: song.title,
@@ -4421,9 +4421,10 @@ async function addTop10ToCrate(idx){
       renderPlaylist();
       renderTop10();
       loadTrack(tracks.length - 1, true, true);
-      showToast('✦ "' + song.title + '" ditambahkan — tersimpan di device ini');
+      stopA('✦ "' + song.title + '" ditambahkan — tersimpan di device ini');
     } catch (err) {
       console.error(err);
+      stopA(null);
       showToast('Gagal menambah track: ' + (err && err.message ? err.message : err));
     }
     return;
@@ -4432,7 +4433,7 @@ async function addTop10ToCrate(idx){
 
   if(/^https?:\/\//i.test(String(song.src || ''))){
     if(!consumeClientRateLimit('addTrack', RATE_LIMITS.addTrack)) return;
-    showToast('Menambahkan "' + song.title + '" ke Crate…');
+    var stopB = startCrateWaitToasts();
     try {
       var pos = await caNextPosition();
       var newTrack = await caCrateAdd({
@@ -4446,15 +4447,16 @@ async function addTop10ToCrate(idx){
       renderPlaylist();
       renderTop10();
       loadTrack(tracks.length - 1, true, true);
-      showToast('✦ "' + song.title + '" ditambahkan – diputar dari URL!');
+      stopB('✦ "' + song.title + '" ditambahkan – diputar dari URL!');
     } catch (err) {
       console.error(err);
+      stopB(null);
       showToast('Gagal menambah track: ' + (err && err.message ? err.message : err));
     }
     return;
   }
 
-  showToast('Menambahkan "' + song.title + '" ke Crate…');
+  var stopC = startCrateWaitToasts();
   try {
     var res = await fetch(song.src);
     if(!res.ok) throw new Error('HTTP ' + res.status);
@@ -4484,9 +4486,10 @@ async function addTop10ToCrate(idx){
     renderPlaylist();
     renderTop10();
     loadTrack(tracks.length - 1, true, true);
-    showToast('✦ "' + song.title + '" ditambahkan ke Crate!');
+    stopC('✦ "' + song.title + '" ditambahkan ke Crate!');
   } catch(e){
     console.error(e);
+    stopC(null);
     showToast('Gagal menambah track: ' + (e && e.message ? e.message : e) + '. Pastikan file ada di "' + song.src + '"');
   }
 }
@@ -4787,7 +4790,7 @@ function loadTrack(index, autoPlay=false, withTransition=true){
     saveState();
   };
 
-  if (withTransition && recordEl) {
+  if (withTransition && recordEl && !document.hidden) {
     swapLock = true;
 
     recordEl.classList.remove('playing');
@@ -5588,22 +5591,33 @@ function showDeleteConfirm(track, onConfirm){
 
 const CRATE_WAIT_MESSAGES = ['Menyusun piringan…', 'Nempelin label…', 'Ngerapihin alur audio…', 'Dikit lagi, sabar ya…', 'Hampir masuk ke Crate…'];
 
-function startCrateProgress(btn) {
-  btn.classList.add('uploading');
-  var pct = 6;
-  btn.style.setProperty('--p', pct + '%');
+function startCrateWaitToasts() {
   var msgIdx = 0;
   showToast(CRATE_WAIT_MESSAGES[0]);
   var tick = setInterval(function () {
-    pct = Math.min(pct + (90 - pct) * 0.12, 90);
-    btn.style.setProperty('--p', pct + '%');
     msgIdx = (msgIdx + 1) % CRATE_WAIT_MESSAGES.length;
     showToast(CRATE_WAIT_MESSAGES[msgIdx]);
   }, 1500);
   return function stop(successMsg) {
     clearInterval(tick);
+    if (successMsg) showToast(successMsg);
+  };
+}
+
+function startCrateProgress(btn) {
+  btn.classList.add('uploading');
+  var pct = 6;
+  btn.style.setProperty('--p', pct + '%');
+  var stopToasts = startCrateWaitToasts();
+  var tick = setInterval(function () {
+    pct = Math.min(pct + (90 - pct) * 0.12, 90);
+    btn.style.setProperty('--p', pct + '%');
+  }, 300);
+  return function stop(successMsg) {
+    clearInterval(tick);
     btn.style.setProperty('--p', '100%');
-    if (successMsg) showToast(typeof successMsg === 'string' ? successMsg : '✦ Selesai, lagu masuk Crate!');
+    var text = successMsg === true ? '✦ Selesai, lagu masuk Crate!' : (successMsg || null);
+    stopToasts(text);
     setTimeout(function () { btn.classList.remove('uploading'); btn.style.removeProperty('--p'); }, 400);
   };
 }
