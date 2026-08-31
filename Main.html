@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,714 +60,6 @@ body{
     repeating-linear-gradient(90deg, rgba(64,42,18,0.008) 0 1px, transparent 1px 4px);
 }
 .paper-texture::after{
-  content:"";
-  position:absolute; inset:0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
-}
-.doodle-notes{
-  position:fixed; inset:0; pointer-events:none; z-index:1;
-  font-family: 'Gloria Hallelujah', cursive;
-  color: rgba(26,26,26,0.24);
-  font-size: 28px;
-}
-.doodle-notes .note{
-  position:absolute;
-  animation: floatNote 7s ease-in-out infinite;
-}
-.n1{ left:9%; top:13%; animation-delay:.1s; transform:rotate(-12deg);}
-.n2{ right:11%; top:19%; font-size:34px; animation-delay:1.2s;}
-.n3{ left:6%; top:52%; font-size:30px; animation-delay:2.6s;}
-.n4{ right:8%; top:58%; animation-delay:.8s;}
-.n5{ left:14%; bottom:14%; animation-delay:1.8s;}
-.n6{ right:15%; bottom:18%; font-size:32px; animation-delay:3s;}
-@keyframes floatNote{
-  0%,100%{ transform: translateY(0) rotate(var(--r, -6deg)); opacity:.78;}
-  50%{ transform: translateY(-14px) rotate(calc(var(--r, -6deg) + 8deg)); opacity:1;}
-}
-.player-shell{
-  position:relative;
-  z-index:5;
-  min-height:100dvh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:34px 18px 44px;
-}
-.paper-card{
-  width:100%;
-  max-width:820px;
-  background: linear-gradient(180deg, #fdf9f0 0%, #f7f0df 100%);
-  padding:30px 28px 26px;
-  position:relative;
-  box-shadow:
-    0 1px 0 #d7c9aa,
-    0 8px 24px var(--card-shadow),
-    0 24px 60px rgba(86,58,22,0.10);
-}
-.sketch-border{
-  border:3px solid var(--ink);
-  border-radius: var(--radius-sketch);
-}
-.sketch-border-soft{
-  border:2.4px solid var(--ink);
-  border-radius: var(--radius-sketch-soft);
-}
-.sketch-border-tiny{
-  border:2px solid var(--ink);
-  border-radius: var(--radius-tiny);
-}
-.corner-doodle{
-  position:absolute;
-  font-family:'Gloria Hallelujah', cursive;
-  font-size:15px;
-  color: var(--gold);
-}
-.corner-doodle.tl{ left:14px; top:9px;}
-.corner-doodle.tr{ right:14px; top:9px;}
-.corner-doodle.bl{ left:14px; bottom:9px;}
-.corner-doodle.br{ right:14px; bottom:9px;}
-.track-header{
-  text-align:center;
-  position:relative;
-  padding-top:6px;
-  margin-bottom:8px;
-}
-.vinyl-stamp{
-  display:inline-block;
-  font-family:'Kalam', cursive;
-  font-size:12px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color: var(--muted);
-  border:1.8px dashed #bba87f;
-  padding:3px 10px;
-  border-radius: 50px;
-  margin-bottom:10px;
-  transform:rotate(-1.5deg);
-}
-.song-title{
-  font-family:'Caveat', 'Gloria Hallelujah', cursive;
-  font-size: clamp(34px, 5vw, 52px);
-  margin:4px 0 2px;
-  line-height:1.05;
-  letter-spacing:.01em;
-  color: var(--ink);
-  font-weight:700;
-  transform: rotate(-0.6deg);
-}
-.sketch-underline{
-  text-shadow: 0 1.5px 0 #f1e1b8;
-}
-.artist-name{
-  margin:0;
-  font-family:'Kalam', sans-serif;
-  font-size:18px;
-  color: var(--muted);
-  letter-spacing:.02em;
-}
-.title-scribble{ margin-top:4px; opacity:.95;}
-.title-scribble svg{ overflow: visible;}
-.gramophone-stage{
-  position:relative;
-  display:flex;
-  justify-content:center;
-  padding:16px 6px 28px;
-}
-.stage-shadow{
-  position:absolute;
-  bottom:18px;
-  width:62%;
-  height:36px;
-  background: radial-gradient(ellipse at center, rgba(70,44,18,0.18) 0%, rgba(70,44,18,0.07) 55%, transparent 72%);
-  filter: blur(2px);
-  z-index:0;
-}
-.gramophone-wrap{
-  position:relative;
-  width:100%;
-  max-width:710px;
-}
-.gramophone-horn{
-  width:100%;
-  height:auto;
-  display:block;
-  filter: drop-shadow(0 6px 0 rgba(90,60,20,0.08));
-  transform: rotate(-0.7deg);
-}
-.turntable-base{
-  position:relative;
-  width:min(520px, 92%);
-  margin:14px auto 0;
-  background:
-    linear-gradient(180deg, #c78853 0%, #a96a3a 50%, #8d5228 100%);
-  padding:30px 24px 26px;
-  box-shadow:
-    inset 0 2px 0 #e1b98a,
-    inset 0 -4px 0 #6d3e1e,
-    0 10px 24px rgba(76,38,12,0.22);
-  overflow:visible;
-}
-.wood-grain{
-  position:absolute;
-  left:12px; right:12px;
-  height:2px;
-  background: rgba(97,47,19,0.26);
-  border-radius:2px;
-}
-.wood-grain.g1{ top:18px; transform:rotate(-0.4deg);}
-.wood-grain.g2{ top:50%; opacity:.55}
-.wood-grain.g3{ bottom:20px; transform:rotate(.5deg); opacity:.72}
-.platter-ring{
-  position:absolute;
-  left:50%; top:50%;
-  width:318px; height:318px;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  background: radial-gradient(circle, #d9b887 0 48%, #b68250 49% 100%);
-  box-shadow: inset 0 0 0 3px #7a4624, 0 3px 10px rgba(40,20,8,0.2);
-  opacity:.88;
-}
-.vinyl-stage{
-  position:relative;
-  width:300px; height:300px;
-  margin:0 auto;
-  display:flex; align-items:center; justify-content:center;
-  z-index:4;
-}
-.record-shadow{
-  position:absolute;
-  width:282px; height:38px;
-  bottom:-6px;
-  background: radial-gradient(ellipse, rgba(30,18,8,0.26) 0%, rgba(30,18,8,0) 72%);
-  border-radius:50%;
-  filter: blur(2px);
-}
-.record{
-  width:286px; height:286px;
-  border-radius:50%;
-  background:
-    radial-gradient(circle at 50% 50%, #23232b 0 34%, #17171d 35% 100%);
-  position:relative;
-  box-shadow:
-    0 0 0 5px #1a1a20,
-    0 0 0 9px #101014,
-    0 10px 26px rgba(0,0,0,0.34),
-    inset 0 0 26px rgba(255,255,255,0.045);
-  transition: transform .45s cubic-bezier(.22,1,.36,1), opacity .35s ease;
-  overflow:hidden;
-  will-change: transform;
-}
-.record.playing{
-  animation: spin 3.8s linear infinite;
-}
-@keyframes spin{
-  to { transform: rotate(360deg); }
-}
-.record-grooves{
-  position:absolute; inset:18px;
-  border-radius:50%;
-  background: repeating-radial-gradient(circle at center,
-    rgba(255,255,255,0.035) 0 2px,
-    transparent 2px 5px);
-  opacity:.95;
-}
-.record-grooves.g2{ inset:54px; opacity:.65;}
-.record-grooves.g3{ inset:92px; opacity:.5;}
-.record-sheen{
-  position:absolute; inset:0; border-radius:50%;
-  background: conic-gradient(from 210deg, rgba(255,255,255,0.08), transparent 30%, transparent 70%, rgba(255,255,255,0.05));
-  pointer-events:none;
-  mix-blend-mode: screen;
-}
-.record-label{
-  position:absolute;
-  left:50%; top:50%;
-  width:108px; height:108px;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  background: var(--red-label);
-  box-shadow: inset 0 0 0 2px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.22);
-  display:flex; align-items:center; justify-content:center;
-  overflow:hidden;
-  border:2.2px solid #141418;
-}
-.label-inner{
-  width:100%; height:100%;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
-  padding:8px;
-  color:#fff8e8;
-  font-family:'Kalam', sans-serif;
-  position:relative;
-}
-.label-inner .label-brand{
-  font-size:9.5px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  opacity:.95;
-}
-.label-inner .label-title{
-  font-family:'Caveat', cursive;
-  font-size:18px;
-  font-weight:700;
-  line-height:1.08;
-  margin-top:2px;
-  text-wrap:balance;
-}
-.label-inner .label-art{
-  font-size:11px;
-  opacity:.92;
-  margin-top:1px;
-}
-.label-inner img.label-cover{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit:cover;
-  opacity:.94;
-}
-.label-inner.has-cover .label-text-wrap{
-  position:relative; z-index:2;
-  background: rgba(20,10,5,0.42);
-  border-radius:8px;
-  padding:4px 6px;
-  backdrop-filter: blur(.5px);
-}
-.spindle-hole{
-  position:absolute;
-  left:50%; top:50%;
-  width:16px; height:16px;
-  transform:translate(-50%,-50%);
-  background:#ece5d6;
-  border-radius:50%;
-  box-shadow: inset 0 0 0 2px #1a1a1a, 0 0 0 2px rgba(0,0,0,0.15);
-  z-index:5;
-}
-.record.swap-out{
-  transform: translateX(-130%) rotate(-28deg) scale(.92);
-  opacity:0;
-}
-.record.swap-in{
-  transform: translateX(130%) rotate(28deg) scale(.92);
-  opacity:0;
-}
-.tonearm-pivot{
-  position:absolute;
-  right:36px; top:28px;
-  width:80px; height:80px;
-  z-index:6;
-}
-.pivot-screw{
-  position:absolute;
-  left:50%; top:50%;
-  width:34px; height:34px;
-  transform:translate(-50%,-50%);
-  background: radial-gradient(circle, #e7c77a 0%, #b98a34 70%);
-  border:2.5px solid #1a1a1a;
-  border-radius:50%;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,240,190,0.7);
-}
-.tonearm{
-  position:absolute;
-  left:36px; top:36px;
-  width:150px;
-  height:26px;
-  transform-origin: -16px 10px;
-  transform: rotate(-42deg);
-  transition: transform .75s cubic-bezier(.34,1.26,.64,1);
-  z-index:5;
-}
-.tonearm.on-record{
-  transform: rotate(158deg);
-}
-.tonearm-bar{
-  position:absolute;
-  left:0; top:7px;
-  width:112px; height:8px;
-  background: linear-gradient(180deg, #e9d39a, #c9a760);
-  border:2px solid #1a1a1a;
-  border-radius:8px;
-  box-shadow: inset 0 1px 0 rgba(255,245,210,.6);
-}
-.tonearm-head{
-  position:absolute;
-  left:108px; top:0;
-  width:40px; height:22px;
-  background:#2b2b34;
-  border:2px solid #111;
-  border-radius: 4px 12px 12px 4px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
-}
-.needle-tip{
-  position:absolute;
-  right:-5px; top:8px;
-  width:9px; height:4px;
-  background:#d9dde4;
-  border:1.5px solid #111;
-  border-radius:2px;
-}
-.counterweight{
-  position:absolute;
-  left:-22px; top:2px;
-  width:22px; height:18px;
-  background:#55586a;
-  border:2px solid #141414;
-  border-radius:5px;
-}
-.crank-handle{
-  position:absolute;
-  left:-6px; bottom:20px;
-  width:34px; height:60px;
-}
-.crank-arm{
-  position:absolute;
-  left:10px; top:8px;
-  width:5px; height:34px;
-  background:#2b2216;
-  border:2px solid #1a1a1a;
-  border-radius:3px;
-  transform: rotate(8deg);
-}
-.crank-knob{
-  position:absolute;
-  bottom:2px; left:3px;
-  width:22px; height:22px;
-  background:#d9b77a;
-  border:2.2px solid #1a1a1a;
-  border-radius:50%;
-  box-shadow: inset 0 2px 0 rgba(255,240,200,.6);
-}
-.brand-plate{
-  position:absolute;
-  left:50%;
-  bottom:-16px;
-  transform: translateX(-50%) rotate(-1deg);
-  background:#f6eacb;
-  padding:4px 14px;
-  font-family:'Kalam', sans-serif;
-  font-size:11.5px;
-  letter-spacing:.14em;
-  color:#63411f;
-  box-shadow: 0 2px 6px rgba(60,36,12,0.16);
-}
-.control-panel{
-  margin:22px auto 18px;
-  padding:18px 18px 16px;
-  background: linear-gradient(180deg, #fdf8ee, #f5ead2);
-  max-width: 700px;
-  box-shadow: 0 5px 14px rgba(118,86,36,0.1);
-}
-.transport{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  flex-wrap:wrap;
-  margin-bottom:14px;
-}
-.ctrl-btn{
-  background:#fbf6e8;
-  border:2.4px solid var(--ink);
-  color:var(--ink);
-  border-radius: 18px 16px 19px 17px / 16px 19px 16px 18px;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:10px 14px;
-  min-width:52px;
-  min-height:48px;
-  transition: transform .12s ease, background .15s ease, box-shadow .15s ease;
-  box-shadow: 0 3px 0 #c8b78a, 0 4px 8px rgba(80,54,20,0.09);
-  font-family: inherit;
-  user-select:none;
-}
-.ctrl-btn.big{ padding:12px 16px; }
-.ctrl-btn.play-main{
-  min-width:74px; min-height:68px;
-  background: #f9edd0;
-  border-width:2.6px;
-  box-shadow: 0 4px 0 #c8b078, 0 6px 16px rgba(96,64,18,0.12);
-}
-.ctrl-btn:hover{ transform: translateY(-2px); background:#fff9ef;}
-.ctrl-btn:active{ transform: translateY(2px); box-shadow: 0 1px 0 #c8b78a;}
-.ctrl-btn.active{
-  background:#f2e0a8;
-  box-shadow: inset 0 2px 6px rgba(120,80,14,0.18), 0 2px 0 #c7a860;
-  color:#6b4a12;
-}
-.play-icon svg{ display:block; }
-.progress-wrap{
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  gap:12px;
-  align-items:center;
-  margin: 6px 2px 12px;
-}
-.time-pill{
-  font-family:'Kalam', sans-serif;
-  font-size:14px;
-  background:#fdf6e6;
-  border:2px solid var(--ink);
-  border-radius: 999px;
-  padding:4px 10px;
-  min-width:56px;
-  text-align:center;
-  color:#4a3b23;
-}
-.progress-track-wrap{
-  background:#fffaf0;
-  padding:8px 10px;
-  position:relative;
-}
-.progress-track{
-  position:relative;
-  height:10px;
-  background:#e6d6b6;
-  border-radius:20px;
-  border:1.7px solid #3b2a14;
-  overflow:visible;
-}
-.progress-fill{
-  position:absolute;
-  left:0; top:0; bottom:0;
-  width:0%;
-  background: linear-gradient(90deg, #c9a227, #e7c86a);
-  border-radius:20px;
-  transition: width .08s linear;
-}
-#progress{
-  position:absolute;
-  inset:-6px;
-  width:100%;
-  appearance:none;
-  background:transparent;
-  margin:0;
-  cursor:pointer;
-  z-index:3;
-}
-#progress::-webkit-slider-thumb{
-  appearance:none;
-  width:18px; height:18px;
-  border-radius:50%;
-  background:#fbf5e5;
-  border:2.2px solid #1a1a1a;
-  box-shadow:0 2px 4px rgba(0,0,0,.18);
-}
-#progress::-moz-range-thumb{
-  width:18px; height:18px;
-  border-radius:50%;
-  background:#fbf5e5;
-  border:2.2px solid #1a1a1a;
-}
-.progress-thumb{
-  position:absolute;
-  top:50%;
-  left:0%;
-  width:14px; height:14px;
-  transform:translate(-50%,-50%);
-  background:#fff7e6;
-  border:2px solid #1a1a1a;
-  border-radius:50%;
-  pointer-events:none;
-  z-index:2;
-  box-shadow:0 2px 4px rgba(0,0,0,.14);
-}
-.volume-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-.mini-btn{
-  background:#fdf6e6;
-  border:2px solid var(--ink);
-  border-radius: 12px;
-  width:40px; height:38px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer;
-  transition: transform .12s ease, background .15s;
-}
-.mini-btn:hover{ transform: translateY(-1px); background:#fff9ef;}
-.volume-track{
-  flex:1;
-  min-width:160px;
-  max-width:340px;
-  background:#fffaf0;
-  padding:7px 10px;
-}
-#volume{
-  width:100%;
-  appearance:none;
-  background:transparent;
-  margin:0;
-  cursor:pointer;
-}
-#volume::-webkit-slider-runnable-track{
-  height:8px; background:#e2cfab; border-radius:8px; border:1.6px solid #3b2a14;
-}
-#volume::-webkit-slider-thumb{
-  appearance:none; margin-top:-6px;
-  width:16px; height:18px;
-  border-radius: 7px;
-  background:#fff7e2;
-  border:2px solid #1a1a1a;
-}
-#volume::-moz-range-track{ height:8px; background:#e2cfab; border-radius:8px; }
-#volume::-moz-range-thumb{
-  width:16px; height:18px; border-radius:7px; background:#fff7e2; border:2px solid #1a1a1a;
-}
-.volume-label{
-  font-family:'Kalam', sans-serif;
-  font-size:13px;
-  color:#5a4630;
-  min-width:38px;
-  text-align:right;
-}
-.playlist-section{
-  margin-top:16px;
-}
-.playlist-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:10px;
-}
-.playlist-title{
-  margin:0;
-  font-family:'Caveat', cursive;
-  font-size:28px;
-  transform: rotate(-0.7deg);
-}
-.crate-count{
-  font-family:'Kalam', sans-serif;
-  font-size:14px;
-  color:var(--muted);
-  font-weight:400;
-}
-.add-btn{
-  background:#fff6df;
-  border:2.3px solid var(--ink);
-  padding:10px 16px;
-  font-family:'Patrick Hand', sans-serif;
-  font-size:17px;
-  cursor:pointer;
-  transition: transform .13s ease, background .15s;
-  box-shadow: 0 3px 0 #d7c18a;
-}
-.add-btn:hover{ transform: translateY(-2px); background:#fffbf0;}
-.add-btn:active{ transform: translateY(1px); box-shadow: 0 1px 0 #d7c18a;}
-.add-btn .plus{ font-weight:700; margin-right:3px; font-size:18px;}
-.playlist-wrap{
-  background:#fffcf5;
-  padding:10px;
-  max-height:320px;
-  overflow:auto;
-}
-.playlist{
-  list-style:none;
-  margin:0; padding:0;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.playlist-item{
-  display:grid;
-  grid-template-columns:54px 1fr auto;
-  gap:12px;
-  align-items:center;
-  padding:10px 12px;
-  background:#fff9ee;
-  border:2px solid #2c261c;
-  border-radius: 16px 14px 17px 15px / 14px 16px 14px 17px;
-  cursor:pointer;
-  transition: transform .12s ease, background .15s, box-shadow .15s;
-  position:relative;
-}
-.playlist-item:hover{
-  background:#fff3d6;
-  transform: translateY(-1px) rotate(-0.35deg);
-  box-shadow: 0 4px 10px rgba(90,60,20,.08);
-}
-.playlist-item.active{
-  background:#f7e6b6;
-  border-color:#b1882b;
-  box-shadow: inset 0 0 0 1px #e6c86a;
-}
-.playlist-thumb{
-  width:54px; height:54px;
-  border-radius:50%;
-  border:2px solid #1a1a1a;
-  background:#1f1f26;
-  position:relative;
-  overflow:hidden;
-  flex-shrink:0;
-}
-.playlist-thumb .pt-label{
-  position:absolute; inset:17px;
-  border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:9px; font-family:'Kalam',sans-serif;
-  color:#fff6e2;
-  text-align:center;
-  line-height:1.1;
-}
-.playlist-thumb img{
-  width:100%; height:100%; object-fit:cover; display:block;
-}
-.playlist-meta .p-title{
-  font-family:'Caveat', cursive;
-  font-size:22px;
-  line-height:1.15;
-  margin:0;
-}
-.playlist-meta .p-artist{
-  font-family:'Kalam', sans-serif;
-  font-size:13.5px;
-  color:#6b5a40;
-  margin-top:1px;
-}
-.playlist-right{
-  text-align:right;
-  font-family:'Kalam', sans-serif;
-  font-size:12px;
-  color:#7a6548;
-  min-width:56px;
-}
-.p-duration{ display:block; }
-.remove-track{
-  background:none; border:none;
-  color:#a2644a;
-  font-size:12px;
-  cursor:pointer;
-  padding:2px 0;
-  font-family:'Kalam', sans-serif;
-}
-.remove-track:hover{ text-decoration:underline; color:#8b3a2a;}
-.hint-text{
-  text-align:center;
-  font-family:'Kalam', sans-serif;
-  font-size:13px;
-  color:#8a7560;
-  margin:14px 4px 4px;
-}
-.hint-text b{ color:#5a3f1f; font-weight:700; }
-.player-footer{
-  margin-top:18px;
-  text-align:center;
-  font-family:'Kalam', sans-serif;
-  font-size:12.5px;
-  color:#9b8264;
-  letter-spacing:.04em;
-  display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
-}
-.footer-dot{ color:var(--gold); }
-.modal-overlay{
-  position:fixed; i.paper-texture::after{
   content:"";
   position:absolute; inset:0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
@@ -1568,6 +859,12 @@ body{
 .btn-primary{
   background:#f3d986;
   border:2.3px solid #1a1a1a;
+  position:relative;
+  overflow:hidden;
+}
+.btn-primary.uploading{
+  background-image:linear-gradient(90deg, #e2c86a var(--p,0%), #f3d986 var(--p,0%));
+  transition: background-image .4s ease;
 }
 .btn-secondary{
   background:#fff8ea;
@@ -4204,15 +3501,12 @@ async function caCrateAdd(fields, audioBlob, coverBlob, audioUrl) {
     ? crypto.randomUUID()
     : 't_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
   const audioPath = uid + '/' + id + '.mp3';
-  let coverPath = null;
+  let coverPath = coverBlob ? (uid + '/' + id + '_cover.jpg') : null;
   try {
-    if (audioBlob) {
-      await caStorageUpload(audioPath, audioBlob, 'audio/mpeg');
-    }
-    if (coverBlob) {
-      coverPath = uid + '/' + id + '_cover.jpg';
-      await caStorageUpload(coverPath, coverBlob, 'image/jpeg');
-    }
+    await Promise.all([
+      audioBlob ? caStorageUpload(audioPath, audioBlob, 'audio/mpeg') : Promise.resolve(),
+      coverBlob ? caStorageUpload(coverPath, coverBlob, 'image/jpeg') : Promise.resolve()
+    ]);
     const rows = await caApiCall('/rest/v1/crate_tracks', 'POST', {
       id: id,
       user_id: uid,
@@ -4252,15 +3546,13 @@ async function caCrateUpdate(track, fields, audioBlob, coverBlob) {
   let audioPath = track._audioPath || null;
   let coverPath = track._coverPath || null;
   let audioUrl = track._audioUrl || null;
-  if (audioBlob) {
-    if (!audioPath) audioPath = uid + '/' + track.id + '.mp3';
-    await caStorageUpload(audioPath, audioBlob, 'audio/mpeg');
-    audioUrl = null;
-  }
-  if (coverBlob) {
-    if (!coverPath) coverPath = uid + '/' + track.id + '_cover.jpg';
-    await caStorageUpload(coverPath, coverBlob, 'image/jpeg');
-  }
+  if (audioBlob && !audioPath) audioPath = uid + '/' + track.id + '.mp3';
+  if (coverBlob && !coverPath) coverPath = uid + '/' + track.id + '_cover.jpg';
+  await Promise.all([
+    audioBlob ? caStorageUpload(audioPath, audioBlob, 'audio/mpeg') : Promise.resolve(),
+    coverBlob ? caStorageUpload(coverPath, coverBlob, 'image/jpeg') : Promise.resolve()
+  ]);
+  if (audioBlob) audioUrl = null;
   const rows = await caApiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(track.id), 'PATCH', {
     title: fields.title,
     artist: fields.artist,
@@ -5474,6 +4766,14 @@ function loadTrack(index, autoPlay=false, withTransition=true){
     audio.load();
     audio.loop = isLoop;
 
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: track.title,
+        artist: track.artist,
+        album: 'Chiroot'
+      });
+    }
+
     if (audio._resumeTime && index === currentIndex) {
       safeOn(audio,'loadedmetadata', function once(){
         audio.currentTime = Math.min(audio._resumeTime, (audio.duration||999)-0.5);
@@ -5724,16 +5024,7 @@ function bindEvents(){
   safeOn(audio,'ended', ()=>{
     recordEl.classList.remove('playing');
     if (isLoop) { audio.currentTime=0; play(); }
-    else {
-      if (document.hidden) {
-        isPlaying = false;
-        window._playNextOnVisible = true;
-        updatePlayPauseUI();
-        saveState();
-      } else {
-        nextTrack();
-      }
-    }
+    else { nextTrack(); }
   });
   safeOn(audio,'volumechange', updateVolumeUI);
 
@@ -5749,15 +5040,19 @@ function bindEvents(){
     else if (e.code === 'Space') { e.preventDefault(); isPlaying ? pause() : play(); }
   });
 
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.setActionHandler('play', () => play());
+    navigator.mediaSession.setActionHandler('pause', () => pause());
+    navigator.mediaSession.setActionHandler('previoustrack', () => prevTrack());
+    navigator.mediaSession.setActionHandler('nexttrack', () => nextTrack());
+  }
+
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
       if(window.__ChirootAudioContext && window.__ChirootAudioContext.state === 'suspended'){
         window.__ChirootAudioContext.resume().catch(function(){});
       }
-      if (window._playNextOnVisible && tracks && tracks.length > 0) {
-        window._playNextOnVisible = false;
-        nextTrack();
-      } else if (isPlaying && audio.paused && tracks && tracks[currentIndex]) {
+      if (isPlaying && audio.paused && tracks && tracks[currentIndex]) {
         audio.play().then(() => {
           recordEl.classList.add('playing');
           tonearm.classList.add('on-record');
@@ -6170,12 +5465,12 @@ function setupAddModal(){
 
     const submitBtnEl = form.querySelector('button[type=submit]');
     submitBtnEl.disabled = true;
-    submitBtnEl.textContent = editMode ? 'Saving…' : 'Uploading…';
+    const stopProgress = startCrateProgress(submitBtnEl);
+    let ok = false;
 
     try{
       let coverBlob = null;
       if (cf) {
-        showToast('Mempersiapkan cover…');
         coverBlob = await imageBlobToJpegBlob(cf, 900);
       } else if (youtubeCoverBlob) {
         coverBlob = youtubeCoverBlob;
@@ -6184,7 +5479,6 @@ function setupAddModal(){
       if(editMode && editIndex >=0){
         const t = tracks[editIndex];
         const audioBlob = af || null;
-        showToast(audioBlob ? 'Mengupload audio baru…' : 'Menyimpan perubahan…');
         const updated = await crateUpdate(t, { title, artist, labelColor: chosenColor, vinylColor: chosenVinyl }, audioBlob, coverBlob);
         tracks[editIndex] = updated;
         renderPlaylist();
@@ -6193,7 +5487,7 @@ function setupAddModal(){
           loadTrack(currentIndex, false, true);
         }
         close();
-        showToast('Record updated ✦');
+        ok = true;
         form.reset();
         return;
       }
@@ -6203,7 +5497,6 @@ function setupAddModal(){
         return;
       }
 
-      showToast('Menyimpan audio…');
       const newTrack = await crateAdd({
         title,
         artist,
@@ -6225,13 +5518,15 @@ function setupAddModal(){
       chosenVinyl = '#1e1e24';
       const vhex = document.getElementById('vinyl-color-hex'); if(vhex) vhex.textContent = chosenVinyl;
       close();
+      ok = true;
 
       loadTrack(tracks.length-1, true, true);
-      if(!authed){ showToast('✦ Tersimpan di device ini (mode Guest)'); if (typeof caShowGuestSaveReminder === 'function') caShowGuestSaveReminder(); }
+      if(!authed){ ok = '✦ Tersimpan di device ini (mode Guest)'; if (typeof caShowGuestSaveReminder === 'function') caShowGuestSaveReminder(); }
     } catch(err){
       console.error(err);
       alert('Gagal menyimpan track: ' + (err && err.message ? err.message : err));
     } finally {
+      stopProgress(ok);
       submitBtnEl.disabled = false;
       submitBtnEl.textContent = editMode ? 'Save changes →' : 'Press Record →';
     }
@@ -6289,6 +5584,28 @@ function showDeleteConfirm(track, onConfirm){
   overlay.querySelector('#dc-cancel').onclick = close;
   overlay.querySelector('#dc-confirm').onclick = ()=>{ close(); onConfirm(); };
   document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown', esc);} }, {once:true});
+}
+
+const CRATE_WAIT_MESSAGES = ['Menyusun piringan…', 'Nempelin label…', 'Ngerapihin alur audio…', 'Dikit lagi, sabar ya…', 'Hampir masuk ke Crate…'];
+
+function startCrateProgress(btn) {
+  btn.classList.add('uploading');
+  var pct = 6;
+  btn.style.setProperty('--p', pct + '%');
+  var msgIdx = 0;
+  showToast(CRATE_WAIT_MESSAGES[0]);
+  var tick = setInterval(function () {
+    pct = Math.min(pct + (90 - pct) * 0.12, 90);
+    btn.style.setProperty('--p', pct + '%');
+    msgIdx = (msgIdx + 1) % CRATE_WAIT_MESSAGES.length;
+    showToast(CRATE_WAIT_MESSAGES[msgIdx]);
+  }, 1500);
+  return function stop(successMsg) {
+    clearInterval(tick);
+    btn.style.setProperty('--p', '100%');
+    if (successMsg) showToast(typeof successMsg === 'string' ? successMsg : '✦ Selesai, lagu masuk Crate!');
+    setTimeout(function () { btn.classList.remove('uploading'); btn.style.removeProperty('--p'); }, 400);
+  };
 }
 
 function showToast(msg){
@@ -7309,12 +6626,13 @@ if (btnRefreshLyrics) {
   var reverbAudio = document.getElementById('audio');
   var reverbBtn = document.getElementById('btn-reverb');
   if (!reverbAudio || !reverbBtn) return;
+  var isMobileDevice = /Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent);
   var rctx = null, rWet = null, rBuilt = false, rOn = false;
   function rBuild() {
     var AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return false;
     try {
-      rctx = new AC();
+      rctx = new AC({ latencyHint: 'playback' });
       window.__ChirootAudioContext = rctx;
       try {
         var savedOutput = JSON.parse(localStorage.getItem('chiroot_audio_output_v1') || '{}');
@@ -7324,7 +6642,7 @@ if (btnRefreshLyrics) {
       } catch (e) {}
       var rSrc = rctx.createMediaElementSource(reverbAudio);
       var rConv = rctx.createConvolver();
-      var rLen = Math.floor(rctx.sampleRate * 2.4);
+      var rLen = Math.floor(rctx.sampleRate * (isMobileDevice ? 1.1 : 2.4));
       var rImp = rctx.createBuffer(2, rLen, rctx.sampleRate);
       for (var rCh = 0; rCh < 2; rCh++) {
         var rData = rImp.getChannelData(rCh);
@@ -7339,12 +6657,19 @@ if (btnRefreshLyrics) {
       rSend.gain.value = 0.85;
       rWet = rctx.createGain();
       rWet.gain.value = 0;
+      var rLimiter = rctx.createDynamicsCompressor();
+      rLimiter.threshold.value = -3;
+      rLimiter.knee.value = 0;
+      rLimiter.ratio.value = 20;
+      rLimiter.attack.value = 0.002;
+      rLimiter.release.value = 0.15;
       rSrc.connect(rDry);
-      rDry.connect(rctx.destination);
+      rDry.connect(rLimiter);
       rSrc.connect(rConv);
       rConv.connect(rSend);
       rSend.connect(rWet);
-      rWet.connect(rctx.destination);
+      rWet.connect(rLimiter);
+      rLimiter.connect(rctx.destination);
       rBuilt = true;
       if (rctx.state === 'suspended') {
         rctx.resume().catch(function(){});
