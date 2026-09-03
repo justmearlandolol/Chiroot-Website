@@ -228,16 +228,7 @@
       .brand-mark {
         width: 44px;
         height: 44px;
-        border: 2.4px solid var(--ink);
-        border-radius: var(--radius-tiny);
-        background: linear-gradient(180deg, #fdf9f0, #f1e1b8);
-        display: grid;
-        place-items: center;
-        box-shadow: 0 3px 0 #c8b78a;
-        font-family: "Caveat", cursive;
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--red-label);
+        display: block;
       }
       .brand-text {
         font-family: "Caveat", cursive;
@@ -1844,6 +1835,128 @@
         border-radius: 8px 7px 9px 6px/7px 9px 6px 8px;
         border: 1.5px solid #7ab6e0;
       }
+      .share-strip {
+        margin: 22px auto 0;
+        max-width: 290px;
+        background: linear-gradient(180deg, #fdf9f0, #f7f0df);
+        padding: 10px 10px 8px;
+        box-shadow: 0 8px 24px var(--card-shadow);
+        transform: rotate(-0.4deg);
+      }
+      .share-caption {
+        margin: 0 0 7px;
+        text-align: center;
+        font-family: "Kalam", sans-serif;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .share-caption b {
+        color: var(--wood-dark);
+      }
+      .share-stage {
+        position: relative;
+        border: 2.4px solid var(--ink);
+        border-radius: var(--radius-sketch-soft);
+        overflow: hidden;
+        background: #e8dcc0;
+        box-shadow: 0 3px 0 #c8b78a;
+        cursor: zoom-in;
+      }
+      .share-stage img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+        transition: opacity 0.35s ease;
+      }
+      .share-stage img.fade {
+        opacity: 0;
+      }
+      .share-dots {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 9px;
+      }
+      .share-dots span {
+        width: 9px;
+        height: 9px;
+        border: 1.6px solid var(--ink);
+        border-radius: 50%;
+        cursor: pointer;
+        background: #fdf6e6;
+      }
+      .share-dots span.on {
+        background: var(--gold);
+      }
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 600;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(24, 16, 6, 0.74);
+        padding: 20px;
+        backdrop-filter: blur(3px);
+      }
+      .lightbox.open {
+        display: flex;
+      }
+      .lightbox img {
+        max-width: min(92vw, 680px);
+        max-height: 84vh;
+        border: 3px solid #fff8e8;
+        border-radius: var(--radius-sketch-soft);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+      }
+      .lb-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        background: #fbf6e8;
+        border: 2.4px solid var(--ink);
+        border-radius: var(--radius-tiny);
+        box-shadow: 0 3px 0 #c8b78a;
+        cursor: pointer;
+        font-family: "Kalam", sans-serif;
+        font-size: 22px;
+        line-height: 1;
+        color: var(--ink);
+      }
+      .lb-btn:hover {
+        background: #fff9ef;
+      }
+      .lb-prev {
+        left: 18px;
+      }
+      .lb-next {
+        right: 18px;
+      }
+      .lb-close {
+        left: auto;
+        right: 16px;
+        top: 16px;
+        bottom: auto;
+        transform: none;
+        font-size: 18px;
+      }
+      @media (max-width: 920px) {
+        .lb-btn {
+          width: 38px;
+          height: 38px;
+        }
+        .lb-prev {
+          left: 8px;
+        }
+        .lb-next {
+          right: 8px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1965,6 +2078,16 @@
             </button>
           </div>
           <div class="hero-meta"></div>
+
+          <div class="share-strip sketch-border-soft">
+            <p class="share-caption"><b>Share your track with your friends!</b></p>
+            <div class="share-stage" id="share-stage" title="Klik untuk perbesar">
+              <img id="share-img" src="chiroot.png" alt="Preview 1" />
+            </div>
+            <div class="share-dots" id="share-dots">
+              <span class="on"></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
         </div>
 
         <div class="preview-card sketch-border" id="preview">
@@ -2167,25 +2290,6 @@
                   <path d="M21 13v2a4 4 0 0 1-4 4H3" />
                 </svg>
               </button>
-              <button
-                class="ctrl-btn"
-                id="btn-reverb"
-                title="Reverb"
-                aria-label="Reverb"
-              >
-                <svg
-                  fill="currentColor"
-                  viewBox="0 0 32 32"
-                  version="1.1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                >
-                  <path
-                    d="M30.991 22.044c0-0.017 0.005-0.033 0.005-0.051v-20.845c0.012-0.109 0.008-0.223-0.018-0.336-0.085-0.466-0.492-0.82-0.982-0.82-0.184 0-0.355 0.053-0.503 0.14l-18.683 4.864c-0.337 0.083-0.586 0.335-0.688 0.646-0.078 0.142-0.125 0.302-0.125 0.475v17.892c-0.952-0.637-2.169-1.020-3.496-1.020-3.048 0-5.52 2.019-5.52 4.509s2.472 4.51 5.52 4.51c3.049 0 5.519-2.019 5.519-4.51 0-0.127-0.011-0.252-0.023-0.377v-20.367l17-4.425v16.68c-0.951-0.637-2.169-1.020-3.496-1.020-3.048 0-5.52 2.020-5.52 4.508 0 2.49 2.472 4.509 5.52 4.509s5.519-2.019 5.519-4.51c-0-0.154-0.010-0.305-0.028-0.453zM6.522 29.998c-2.080 0-3.53-1.318-3.53-2.5s1.45-2.498 3.53-2.498c1.851 0 3.2 1.044 3.475 2.106v0.012c0 0.101 0.020 0.197 0.048 0.288 0.002 0.031 0.007 0.061 0.007 0.093 0 1.181-1.45 2.5-3.529 2.5zM25.49 24.999c-2.061 0-3.499-1.318-3.499-2.5s1.437-2.498 3.498-2.498c2.061 0 3.498 1.317 3.498 2.498s-1.436 2.5-3.498 2.5z"
-                  ></path>
-                </svg>
-              </button>
             </div>
 
             <div class="progress-wrap">
@@ -2292,7 +2396,7 @@
             <h3>Kontrol Lengkap</h3>
             <p>
               Play/Pause, Stop, Restart, Prev/Next, Shuffle, Loop, Volume +
-              Mute, Reverb, dan seek bar yang bisa di-drag.
+              Mute, dan seek bar yang bisa di-drag.
             </p>
           </article>
           <article class="feature-card sketch-border-soft">
@@ -2431,6 +2535,13 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <audio id="audio" preload="metadata"></audio>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <button class="lb-btn lb-close" id="lb-close" aria-label="Tutup">✕</button>
+      <button class="lb-btn lb-prev" id="lb-prev" aria-label="Sebelumnya">‹</button>
+      <img id="lb-img" alt="Preview diperbesar" />
+      <button class="lb-btn lb-next" id="lb-next" aria-label="Berikutnya">›</button>
+    </div>
 
     <script>
       const PREVIEW_TRACKS = [
@@ -2946,63 +3057,97 @@
     </script>
     <script>
       (function () {
-        var reverbAudio = document.getElementById("audio");
-        var reverbBtn = document.getElementById("btn-reverb");
-        if (!reverbAudio || !reverbBtn) return;
-        var rctx = null,
-          rWet = null,
-          rBuilt = false,
-          rOn = false;
-        function rBuild() {
-          var AC = window.AudioContext || window.webkitAudioContext;
-          if (!AC) return false;
-          try {
-            rctx = new AC();
-            var rSrc = rctx.createMediaElementSource(reverbAudio);
-            var rConv = rctx.createConvolver();
-            var rLen = Math.floor(rctx.sampleRate * 2.4);
-            var rImp = rctx.createBuffer(2, rLen, rctx.sampleRate);
-            for (var rCh = 0; rCh < 2; rCh++) {
-              var rData = rImp.getChannelData(rCh);
-              for (var rI = 0; rI < rLen; rI++) {
-                rData[rI] =
-                  (Math.random() * 2 - 1) * Math.pow(1 - rI / rLen, 3);
-              }
-            }
-            rConv.buffer = rImp;
-            var rDry = rctx.createGain();
-            rDry.gain.value = 1;
-            var rSend = rctx.createGain();
-            rSend.gain.value = 0.85;
-            rWet = rctx.createGain();
-            rWet.gain.value = 0;
-            rSrc.connect(rDry);
-            rDry.connect(rctx.destination);
-            rSrc.connect(rConv);
-            rConv.connect(rSend);
-            rSend.connect(rWet);
-            rWet.connect(rctx.destination);
-            rBuilt = true;
-            return true;
-          } catch (e) {
-            return false;
+        var imgs = [
+          "chiroot.png",
+          "chiroot1.png",
+          "chiroot2.png",
+          "chiroot3.png",
+          "chiroot4.png",
+        ];
+        var li = 0,
+          timer = null;
+        var stage = document.getElementById("share-stage"),
+          img = document.getElementById("share-img"),
+          dotsWrap = document.getElementById("share-dots"),
+          dots = dotsWrap ? dotsWrap.children : [],
+          lb = document.getElementById("lightbox"),
+          lbImg = document.getElementById("lb-img"),
+          lbPrev = document.getElementById("lb-prev"),
+          lbNext = document.getElementById("lb-next"),
+          lbClose = document.getElementById("lb-close");
+        function goTo(i) {
+          li = (i + imgs.length) % imgs.length;
+          img.classList.add("fade");
+          img.onload = function () {
+            img.classList.remove("fade");
+          };
+          img.onerror = function () {
+            img.classList.remove("fade");
+          };
+          img.src = imgs[li];
+          img.alt = "Preview " + (li + 1);
+          for (var d = 0; d < dots.length; d++) {
+            dots[d].classList.toggle("on", d === li);
+          }
+          if (lbImg) {
+            lbImg.src = imgs[li];
+            lbImg.alt = "Preview " + (li + 1);
           }
         }
-        function rSet(next) {
-          if (next && !rBuilt && !rBuild()) return;
-          if (rctx && rctx.state === "suspended") rctx.resume();
-          rOn = next;
-          if (rBuilt && rWet) {
-            rWet.gain.cancelScheduledValues(rctx.currentTime);
-            rWet.gain.setTargetAtTime(next ? 0.9 : 0, rctx.currentTime, 0.05);
-          }
-          reverbBtn.classList.toggle("active", rOn);
-          if (typeof showToast === "function")
-            showToast(next ? "Reverb aktif ✦" : "Reverb nonaktif");
+        function startTimer() {
+          clearInterval(timer);
+          timer = setInterval(function () {
+            goTo(li + 1);
+          }, 2000);
         }
-        reverbBtn.addEventListener("click", function () {
-          rSet(!rOn);
+        function openLb() {
+          if (lbImg) {
+            lbImg.src = imgs[li];
+            lbImg.alt = "Preview " + (li + 1);
+          }
+          lb.classList.add("open");
+          lb.setAttribute("aria-hidden", "false");
+          clearInterval(timer);
+        }
+        function closeLb() {
+          lb.classList.remove("open");
+          lb.setAttribute("aria-hidden", "true");
+          startTimer();
+        }
+        if (stage) {
+          stage.addEventListener("click", openLb);
+        }
+        for (var di = 0; di < dots.length; di++) {
+          (function (di) {
+            dots[di].addEventListener("click", function (e) {
+              e.stopPropagation();
+              goTo(di);
+              startTimer();
+            });
+          })(di);
+        }
+        if (lb) {
+          lb.addEventListener("click", function (e) {
+            if (e.target === lb || e.target === lbImg) closeLb();
+          });
+          lbClose.addEventListener("click", closeLb);
+          lbPrev.addEventListener("click", function (e) {
+            e.stopPropagation();
+            goTo(li - 1);
+          });
+          lbNext.addEventListener("click", function (e) {
+            e.stopPropagation();
+            goTo(li + 1);
+          });
+        }
+        document.addEventListener("keydown", function (e) {
+          if (!lb || !lb.classList.contains("open")) return;
+          if (e.key === "Escape") closeLb();
+          if (e.key === "ArrowLeft") goTo(li - 1);
+          if (e.key === "ArrowRight") goTo(li + 1);
         });
+        startTimer();
+        img.src = imgs[0];
       })();
     </script>
     <script>
@@ -3324,5 +3469,5 @@
         }
       })();
     </script>
-  </body>
+  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3538a2e0b62b772',t:'MTc4ODQyNTc3MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
