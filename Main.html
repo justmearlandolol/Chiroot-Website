@@ -5031,6 +5031,31 @@ function bindEvents(){
   });
   safeOn(audio,'volumechange', updateVolumeUI);
 
+  let audioRetryCount = 0;
+  safeOn(audio,'playing', ()=>{ audioRetryCount = 0; });
+  safeOn(audio,'error', ()=>{
+    if (audioRetryCount >= 3) {
+      audioRetryCount = 0;
+      isPlaying = false;
+      updatePlayPauseUI();
+      showToast('Lagu gagal diputar – cek koneksi lalu tap Play lagi');
+      return;
+    }
+    audioRetryCount++;
+    const resumeAt = audio.currentTime || 0;
+    const wasPlaying = isPlaying;
+    const src = audio.src;
+    setTimeout(()=>{
+      audio.src = src;
+      audio.load();
+      safeOn(audio,'loadedmetadata', function once(){
+        audio.currentTime = Math.min(resumeAt, (audio.duration||999)-0.5);
+        audio.removeEventListener('loadedmetadata', once);
+        if (wasPlaying) play();
+      });
+    }, 800);
+  });
+
   document.addEventListener('keydown', (e)=>{
     const tag = document.activeElement.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
