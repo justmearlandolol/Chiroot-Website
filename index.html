@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,500;0,600;0,700;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" type="image/png" href="favicon.svg" />
@@ -40,320 +40,405 @@
         --blue: #5b6ee1;
         --plum: #b65a9a;
         --amber: #d28a3a;
-        --radius-sketch: 255px 15px 225px 15px / 15px 225px 15px 255px;
-        --radius-sketch-soft: 22px 26px 20px 24px / 24px 20px 26px 22px;
-        --radius-tiny: 13px 16px 14px 15px / 15px 14px 16px 13px;
-        --nav-h: 74px;
+        --nav-h: 76px;
+        --font-display: "Archivo Black", "Archivo", sans-serif;
+        --font-cond: "Archivo Narrow", "Archivo", sans-serif;
+        --font-body: "Archivo", system-ui, sans-serif;
+        --font-mono: "Space Mono", "Courier New", monospace;
       }
       * {
         box-sizing: border-box;
       }
       html {
         scroll-behavior: smooth;
+        scroll-padding-top: calc(var(--nav-h) + 20px);
+      }
+      html,
+      body {
+        overflow-x: clip;
       }
       body {
         margin: 0;
         background: var(--paper);
         color: var(--ink);
-        font-family: "Patrick Hand", "Kalam", system-ui, sans-serif;
+        font-family: var(--font-body);
         -webkit-font-smoothing: antialiased;
-        overflow-x: hidden;
         position: relative;
+      }
+      ::selection {
+        background: var(--red-label);
+        color: var(--paper);
       }
       a {
         color: inherit;
         text-decoration: none;
       }
       button,
-      input {
+      input,
+      textarea {
         font-family: inherit;
+      }
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 3px solid var(--blue);
+        outline-offset: 2px;
       }
       .paper-texture {
         position: fixed;
         inset: 0;
         pointer-events: none;
-        z-index: 0;
-        opacity: 0.95;
-        background:
-          radial-gradient(
-            circle at 20% 18%,
-            rgba(200, 170, 120, 0.07) 0 120px,
-            transparent 121px
-          ),
-          radial-gradient(
-            circle at 80% 70%,
-            rgba(190, 150, 100, 0.05) 0 180px,
-            transparent 181px
-          ),
-          repeating-linear-gradient(
-            0deg,
-            rgba(64, 42, 18, 0.012) 0 2px,
-            transparent 2px 5px
-          ),
-          repeating-linear-gradient(
-            90deg,
-            rgba(64, 42, 18, 0.008) 0 1px,
-            transparent 1px 4px
-          );
-      }
-      .paper-texture::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-        mix-blend-mode: multiply;
+        z-index: 100;
+        opacity: 0.55;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
       }
       .doodle-notes {
         position: fixed;
         inset: 0;
         pointer-events: none;
-        z-index: 1;
-        font-family: "Gloria Hallelujah", cursive;
-        color: rgba(26, 26, 26, 0.2);
-        font-size: 28px;
+        z-index: 40;
       }
-      .doodle-notes .note {
+      .note {
         position: absolute;
-        animation: floatNote 7s ease-in-out infinite;
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 20px;
+        opacity: 0.5;
       }
-      .n1 {
-        left: 6%;
-        top: 18%;
-        animation-delay: 0.1s;
-        transform: rotate(-12deg);
+      .note.n1 {
+        top: 16%;
+        left: 3%;
+        color: var(--red-label);
+        transform: rotate(-14deg);
       }
-      .n2 {
-        right: 8%;
-        top: 22%;
-        font-size: 34px;
-        animation-delay: 1.2s;
+      .note.n2 {
+        top: 8%;
+        right: 10%;
+        color: var(--teal);
+        transform: rotate(10deg);
       }
-      .n3 {
-        left: 4%;
-        top: 58%;
-        font-size: 30px;
-        animation-delay: 2.6s;
+      .note.n3 {
+        top: 44%;
+        right: 2%;
+        color: var(--blue);
+        transform: rotate(-8deg);
       }
-      .n4 {
-        right: 5%;
-        top: 64%;
-        animation-delay: 0.8s;
+      .note.n4 {
+        bottom: 32%;
+        left: 1.5%;
+        color: var(--plum);
+        transform: rotate(12deg);
       }
-      .n5 {
-        left: 12%;
+      .note.n5 {
         bottom: 10%;
-        animation-delay: 1.8s;
+        right: 5%;
+        color: var(--amber);
+        transform: rotate(-10deg);
       }
-      .n6 {
-        right: 12%;
-        bottom: 12%;
-        font-size: 32px;
-        animation-delay: 3s;
+      .note.n6 {
+        top: 56%;
+        left: 5%;
+        color: var(--gold);
+        transform: rotate(6deg);
       }
       @keyframes floatNote {
-        0%,
-        100% {
-          transform: translateY(0) rotate(var(--r, -6deg));
-          opacity: 0.78;
-        }
-        50% {
-          transform: translateY(-14px) rotate(calc(var(--r, -6deg)+8deg));
-          opacity: 1;
+        to {
+          transform: translateY(-14px) rotate(0deg);
         }
       }
-      .sketch-border {
-        border: 3px solid var(--ink);
-        border-radius: var(--radius-sketch);
+      body.is-playing .note {
+        animation: floatNote 2.6s ease-in-out infinite alternate;
       }
-      .sketch-border-soft {
-        border: 2.4px solid var(--ink);
-        border-radius: var(--radius-sketch-soft);
+      body.is-playing .note.n2 {
+        animation-delay: 0.4s;
       }
-      .sketch-border-tiny {
-        border: 2px solid var(--ink);
-        border-radius: var(--radius-tiny);
+      body.is-playing .note.n3 {
+        animation-delay: 0.8s;
       }
-      .corner-doodle {
-        position: absolute;
-        font-family: "Gloria Hallelujah", cursive;
-        font-size: 15px;
-        color: var(--gold);
+      body.is-playing .note.n4 {
+        animation-delay: 1.2s;
       }
-      .corner-doodle.tl {
-        left: 14px;
-        top: 9px;
+      body.is-playing .note.n5 {
+        animation-delay: 1.6s;
       }
-      .corner-doodle.tr {
-        right: 14px;
-        top: 9px;
-      }
-      .corner-doodle.bl {
-        left: 14px;
-        bottom: 9px;
-      }
-      .corner-doodle.br {
-        right: 14px;
-        bottom: 9px;
+      body.is-playing .note.n6 {
+        animation-delay: 2s;
       }
       .site-nav {
-        position: fixed;
+        position: sticky;
         top: 0;
-        left: 0;
-        right: 0;
-        z-index: 100;
-        height: var(--nav-h);
-        display: flex;
-        align-items: center;
-        padding: 0 22px;
-        background: rgba(247, 243, 233, 0.86);
-        backdrop-filter: blur(10px);
-        border-bottom: 2.5px solid rgba(26, 26, 26, 0.12);
-        box-shadow: 0 8px 24px rgba(86, 58, 22, 0.06);
+        z-index: 60;
+        background: var(--paper);
+        border-bottom: 3px solid var(--ink);
       }
       .nav-inner {
-        width: 100%;
-        max-width: 1120px;
+        max-width: 1360px;
         margin: 0 auto;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 16px;
+        min-height: var(--nav-h);
+        padding: 0 20px;
       }
       .brand {
         display: flex;
         align-items: center;
         gap: 12px;
-        transform: rotate(-0.5deg);
+        padding: 8px 16px;
+        background: var(--ink);
+        color: var(--paper);
+        border: 2px solid var(--ink);
+        box-shadow: 4px 4px 0 var(--gold);
       }
       .brand-mark {
-        width: 44px;
-        height: 44px;
-        display: block;
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
       }
       .brand-text {
-        font-family: "Caveat", cursive;
-        font-size: 30px;
-        font-weight: 700;
-        line-height: 1;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        white-space: nowrap;
       }
       .brand-text span {
-        color: var(--red-label);
-      }
-      .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-      .nav-links a {
-        display: inline-flex;
-        align-items: center;
-        padding: 8px 14px;
-        border: 2px solid transparent;
-        border-radius: 16px 14px 18px 15px / 14px 18px 14px 16px;
-        font-family: "Kalam", sans-serif;
-        font-size: 16px;
-        color: var(--ink-soft);
-        transition:
-          transform 0.12s ease,
-          background 0.15s ease,
-          border-color 0.15s ease;
-      }
-      .nav-links a:hover {
-        background: #fff9ef;
-        border-color: var(--ink);
-        transform: translateY(-1px);
-        box-shadow: 0 3px 0 #c8b78a;
-      }
-      .nav-cta {
-        background: #fbf6e8;
-        border: 2.4px solid var(--ink) !important;
-        box-shadow: 0 3px 0 #c8b78a;
-        color: var(--ink) !important;
-        font-weight: 700;
-      }
-      .nav-cta:hover {
-        background: #fff3d4 !important;
+        font-family: var(--font-display);
+        font-size: 15px;
+        letter-spacing: 0.02em;
+        color: var(--gold-soft);
       }
       .nav-toggle {
         display: none;
-        width: 46px;
-        height: 42px;
-        background: #fbf6e8;
-        border: 2.4px solid var(--ink);
-        border-radius: 14px 12px 15px 13px / 12px 15px 12px 14px;
-        box-shadow: 0 3px 0 #c8b78a;
-        cursor: pointer;
+        margin-left: auto;
+        width: 50px;
+        height: 50px;
         align-items: center;
         justify-content: center;
+        background: var(--paper);
+        border: 2px solid var(--ink);
+        box-shadow: 3px 3px 0 var(--ink);
+        cursor: pointer;
       }
       .nav-toggle span {
-        display: block;
-        width: 18px;
-        height: 2.4px;
-        background: var(--ink);
         position: relative;
+        display: block;
+        width: 22px;
+        height: 3px;
+        background: var(--ink);
       }
       .nav-toggle span::before,
       .nav-toggle span::after {
         content: "";
         position: absolute;
         left: 0;
-        width: 18px;
-        height: 2.4px;
+        width: 22px;
+        height: 3px;
         background: var(--ink);
+        transition: transform 0.2s;
       }
       .nav-toggle span::before {
-        top: -6px;
+        top: -7px;
       }
       .nav-toggle span::after {
-        top: 6px;
+        top: 7px;
+      }
+      .nav-toggle[aria-expanded="true"] span {
+        background: transparent;
+      }
+      .nav-toggle[aria-expanded="true"] span::before {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .nav-toggle[aria-expanded="true"] span::after {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        padding: 0;
+        list-style: none;
+      }
+      .nav-links a {
+        display: inline-block;
+        padding: 10px 14px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        border: 2px solid transparent;
+        transition: background 0.12s, color 0.12s, border-color 0.12s,
+          box-shadow 0.12s, transform 0.12s;
+      }
+      .nav-links a:hover {
+        border-color: var(--ink);
+        background: var(--gold-soft);
+        box-shadow: 3px 3px 0 var(--ink);
+        transform: translate(-1px, -1px);
+      }
+      .nav-cta {
+        background: var(--red-label);
+        color: var(--paper);
+        border-color: var(--ink) !important;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+      .nav-cta:hover {
+        background: var(--ink) !important;
+        color: var(--gold-soft) !important;
+      }
+      .tick-bar {
+        display: flex;
+        overflow: hidden;
+        background: var(--ink);
+        border-bottom: 3px solid var(--ink);
+        padding: 9px 0;
+      }
+      .tick {
+        display: flex;
+        flex: none;
+        width: max-content;
+        gap: 30px;
+        padding-right: 30px;
+        white-space: nowrap;
+        animation: tickMove 28s linear infinite;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--paper);
+      }
+      .tick i {
+        color: var(--gold);
+        font-style: normal;
+      }
+      .tick em {
+        color: var(--red-label);
+        font-style: normal;
+      }
+      @keyframes tickMove {
+        to {
+          transform: translateX(-100%);
+        }
       }
       .page {
         position: relative;
-        z-index: 5;
-        padding-top: calc(var(--nav-h)+18px);
+        z-index: 2;
       }
       .hero {
-        max-width: 1120px;
+        position: relative;
+        overflow: clip;
+        padding: 72px clamp(20px, 4vw, 56px) 120px;
+        border-bottom: 3px solid var(--ink);
+      }
+      .bg-word {
+        position: absolute;
+        font-family: var(--font-display);
+        line-height: 0.8;
+        letter-spacing: -0.02em;
+        pointer-events: none;
+        user-select: none;
+      }
+      .hero-bg-word {
+        top: -18px;
+        left: -30px;
+        font-size: clamp(110px, 19vw, 300px);
+        color: transparent;
+        -webkit-text-stroke: 2px rgba(26, 26, 26, 0.14);
+      }
+      .hero-bg-word.b {
+        top: auto;
+        left: auto;
+        right: -24px;
+        bottom: -58px;
+        font-size: clamp(140px, 22vw, 340px);
+        color: rgba(201, 162, 39, 0.24);
+        -webkit-text-stroke: 0;
+        transform: rotate(-4deg);
+      }
+      .hero-blob {
+        position: absolute;
+        pointer-events: none;
+      }
+      .hb1 {
+        top: 120px;
+        right: 6%;
+        width: 150px;
+        height: 150px;
+        background: var(--teal);
+        transform: rotate(14deg);
+        opacity: 0.85;
+      }
+      .hb2 {
+        bottom: 90px;
+        left: 1%;
+        width: 190px;
+        height: 190px;
+        border-radius: 50%;
+        background: var(--blue);
+        opacity: 0.35;
+      }
+      .hb3 {
+        top: 46%;
+        left: 42%;
+        width: 110px;
+        height: 110px;
+        background: var(--plum);
+        clip-path: polygon(0 100%, 100% 100%, 50% 0);
+        opacity: 0.7;
+      }
+      .hb4 {
+        top: 60px;
+        left: 55%;
+        width: 260px;
+        height: 16px;
+        background: var(--amber);
+        transform: rotate(-24deg);
+        opacity: 0.8;
+      }
+      .hero-grid {
+        position: relative;
+        z-index: 1;
+        max-width: 1360px;
         margin: 0 auto;
-        padding: 28px 18px 40px;
         display: grid;
-        grid-template-columns: 1.05fr 0.95fr;
-        gap: 28px;
+        grid-template-columns: 1.04fr 0.96fr;
+        gap: clamp(36px, 5vw, 72px);
         align-items: start;
       }
       .hero-copy {
-        position: relative;
-        padding-top: 10px;
+        padding-top: 26px;
       }
       .vinyl-stamp {
         display: inline-block;
-        font-family: "Kalam", cursive;
+        background: var(--ink);
+        color: var(--gold-soft);
+        font-family: var(--font-mono);
         font-size: 12px;
-        letter-spacing: 0.12em;
+        font-weight: 700;
+        letter-spacing: 0.22em;
         text-transform: uppercase;
-        color: var(--muted);
-        border: 1.8px dashed #bba87f;
-        padding: 3px 10px;
-        border-radius: 50px;
-        margin-bottom: 14px;
-        transform: rotate(-1.5deg);
+        padding: 7px 14px;
+        border: 2px solid var(--gold);
+        box-shadow: 4px 4px 0 var(--red-label);
+        transform: rotate(-2deg);
       }
       .hero-title {
-        font-family: "Caveat", "Gloria Hallelujah", cursive;
-        font-size: clamp(40px, 5.8vw, 64px);
-        margin: 0 0 8px;
-        line-height: 1.02;
-        font-weight: 700;
-        transform: rotate(-0.6deg);
-        text-shadow: 0 1.5px 0 #f1e1b8;
+        margin: 30px 0 0;
+        font-family: var(--font-display);
+        font-size: clamp(42px, 5.6vw, 92px);
+        line-height: 0.95;
+        letter-spacing: -0.015em;
+        text-transform: uppercase;
       }
       .hero-title em {
         font-style: normal;
-        color: var(--red-label);
+        display: inline-block;
+        background: var(--red-label);
+        color: var(--paper);
+        padding: 0 0.18em;
+        transform: rotate(-1.2deg);
       }
       .typewriter-word {
         display: inline-grid;
@@ -361,7 +446,7 @@
         position: relative;
         color: var(--red-label);
         font-style: normal;
-        min-width: 5.6em;
+        min-width: 6ch;
       }
       .typewriter-word .tw-word {
         grid-area: 1/1;
@@ -371,23 +456,23 @@
         width: 0;
         max-width: max-content;
       }
-      .typewriter-word .tw-gramophone {
-        animation: twGramophone 8s steps(10, end) infinite;
+      .typewriter-word .tw-free {
+        animation: twFree 8s steps(5, end) infinite;
       }
-      .typewriter-word .tw-sigma {
-        animation: twSigma 8s steps(5, end) infinite;
+      .typewriter-word .tw-noads {
+        animation: twNoads 8s steps(6, end) infinite;
       }
-      @keyframes twGramophone {
+      @keyframes twFree {
         0% {
           width: 0;
           opacity: 1;
         }
         18% {
-          width: 10ch;
+          width: 5ch;
           opacity: 1;
         }
         31% {
-          width: 10ch;
+          width: 5ch;
           opacity: 1;
         }
         45% {
@@ -400,7 +485,7 @@
           opacity: 0;
         }
       }
-      @keyframes twSigma {
+      @keyframes twNoads {
         0%,
         48% {
           width: 0;
@@ -411,11 +496,11 @@
           opacity: 1;
         }
         61% {
-          width: 5ch;
+          width: 6ch;
           opacity: 1;
         }
         76% {
-          width: 5ch;
+          width: 6ch;
           opacity: 1;
         }
         90% {
@@ -428,161 +513,348 @@
           opacity: 0;
         }
       }
-      .hero-sub {
-        margin: 0 0 22px;
-        font-family: "Kalam", sans-serif;
-        font-size: 18px;
-        color: var(--muted);
-        max-width: 38ch;
-        line-height: 1.45;
-      }
       .title-scribble {
-        margin: 2px 0 18px;
-        opacity: 0.95;
+        margin: 10px 0 0;
+      }
+      .hero-sub {
+        margin: 26px 0 0;
+        max-width: 46ch;
+        font-size: 18.5px;
+        line-height: 1.65;
+        font-weight: 500;
+        background: var(--paper-2);
+        border: 2px solid var(--ink);
+        border-left: 10px solid var(--teal);
+        padding: 16px 18px;
+        box-shadow: 6px 6px 0 rgba(26, 26, 26, 0.9);
       }
       .hero-actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 18px;
+        margin-top: 34px;
         align-items: center;
-        margin-bottom: 22px;
       }
       .btn {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        gap: 8px;
-        border: 2.4px solid var(--ink);
-        border-radius: 18px 16px 19px 17px / 16px 19px 16px 18px;
-        padding: 12px 18px;
-        min-height: 46px;
-        background: #fbf6e8;
+        gap: 10px;
+        padding: 15px 24px;
+        border: 3px solid var(--ink);
+        background: var(--paper-2);
         color: var(--ink);
+        font-family: var(--font-cond);
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
         cursor: pointer;
-        box-shadow:
-          0 3px 0 #c8b78a,
-          0 4px 8px rgba(80, 54, 20, 0.09);
-        transition:
-          transform 0.12s ease,
-          background 0.15s ease,
-          box-shadow 0.15s ease;
-        font-size: 17px;
+        box-shadow: 6px 6px 0 var(--ink);
+        transition: transform 0.12s, box-shadow 0.12s;
       }
       .btn:hover {
-        transform: translateY(-2px);
-        background: #fff9ef;
+        transform: translate(-2px, -2px);
+        box-shadow: 8px 8px 0 var(--ink);
       }
       .btn:active {
-        transform: translateY(2px);
-        box-shadow: 0 1px 0 #c8b78a;
+        transform: translate(3px, 3px);
+        box-shadow: 1px 1px 0 var(--ink);
       }
       .btn-primary {
-        background: #f2e0a8;
-        box-shadow:
-          0 4px 0 #c7a860,
-          0 6px 16px rgba(96, 64, 18, 0.12);
-        font-weight: 700;
-      }
-      .btn-primary:hover {
-        background: #f7e7b5;
-      }
-      .btn-ghost {
-        background: transparent;
+        background: var(--red-label);
+        color: var(--paper);
       }
       .btn-windows {
-        background: linear-gradient(180deg, #eaf5ff, #d6e8f9);
-        border-color: #1a6ca6;
-        color: #0b4d80;
-        box-shadow:
-          0 4px 0 #7ab6e0,
-          0 6px 16px rgba(20, 90, 150, 0.14);
-        font-weight: 700;
+        background: var(--blue);
+        color: var(--paper);
+        transform: rotate(1deg);
       }
       .btn-windows:hover {
-        background: linear-gradient(180deg, #f1f8ff, #e0eefb);
-        transform: translateY(-2px);
-      }
-      .btn-windows:active {
-        transform: translateY(2px);
-        box-shadow: 0 1px 0 #7ab6e0;
-      }
-      .btn-windows svg {
-        display: block;
+        transform: rotate(1deg) translate(-2px, -2px);
       }
       .hero-meta {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 10px 0;
+        margin-top: 28px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
       }
-      .meta-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: #fdf6e6;
+      .hero-meta span {
+        padding: 5px 12px;
         border: 2px solid var(--ink);
-        border-radius: 999px;
-        padding: 6px 12px;
-        font-family: "Kalam", sans-serif;
-        font-size: 14px;
-        color: #4a3b23;
-        transform: rotate(-0.4deg);
       }
-      .meta-pill b {
-        color: var(--red-label);
+      .hero-meta span:nth-child(1) {
+        background: var(--gold-soft);
+      }
+      .hero-meta span:nth-child(2) {
+        background: var(--paper);
+      }
+      .hero-meta span:nth-child(3) {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .share-strip {
+        margin-top: 34px;
+        max-width: 460px;
+        background: var(--paper-2);
+        border: 3px solid var(--ink);
+        box-shadow: 8px 8px 0 var(--plum);
+        padding: 14px;
+        transform: rotate(0.6deg);
+      }
+      .share-caption {
+        margin: 0 0 10px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .share-caption b {
+        background: var(--ink);
+        color: var(--paper);
+        padding: 3px 8px;
+      }
+      .share-stage {
+        position: relative;
+        overflow: hidden;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        cursor: zoom-in;
+        aspect-ratio: 16 / 9;
+      }
+      .share-stage img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.25s;
+      }
+      .share-stage img.fade {
+        opacity: 0.15;
+      }
+      .share-dots {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .share-dots span {
+        width: 14px;
+        height: 14px;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        cursor: pointer;
+        transition: background 0.12s, transform 0.12s;
+      }
+      .share-dots span:hover {
+        transform: translateY(-2px);
+      }
+      .share-dots span.on {
+        background: var(--red-label);
       }
       .preview-card {
         position: relative;
-        background: linear-gradient(180deg, #fdf9f0 0%, #f7f0df 100%);
-        padding: 18px 16px 16px;
-        box-shadow:
-          0 1px 0 #d7c9aa,
-          0 8px 24px var(--card-shadow),
-          0 24px 60px rgba(86, 58, 22, 0.1);
-        max-width: 440px;
-        width: 100%;
-        margin: 0 auto;
+        z-index: 1;
+        grid-column: 2;
+        grid-row: 1;
+        background: var(--paper);
+        border: 3px solid var(--ink);
+        box-shadow: 12px 12px 0 var(--ink);
+        padding: 20px 20px 24px;
+        margin-top: 26px;
+        transform: rotate(-1.1deg);
+      }
+      .pc-blob {
+        grid-column: 2;
+        grid-row: 1;
+        z-index: 0;
+        justify-self: end;
+        align-self: start;
+        width: 150px;
+        height: 150px;
+        margin-top: -4px;
+        margin-right: -20px;
+        background: var(--gold-soft);
+        border: 3px solid var(--ink);
+        border-radius: 50%;
+      }
+      .pc-sticker {
+        position: absolute;
+        top: -16px;
+        right: 14px;
+        z-index: 3;
+        background: var(--red-label);
+        color: var(--paper);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        border: 2px solid var(--ink);
+        box-shadow: 4px 4px 0 var(--ink);
+        transform: rotate(4deg);
+      }
+      .corner-doodle {
+        position: absolute;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        color: var(--gold);
+        z-index: 3;
+      }
+      .corner-doodle.tl {
+        top: 8px;
+        left: 10px;
+      }
+      .corner-doodle.tr {
+        top: 8px;
+        right: 12px;
+      }
+      .corner-doodle.bl {
+        bottom: 8px;
+        left: 10px;
+      }
+      .corner-doodle.br {
+        bottom: 8px;
+        right: 12px;
+      }
+      .nowplaying-wrap {
+        position: relative;
+        z-index: 2;
+        width: min(360px, 92%);
+        margin: -36px auto 16px;
+        transform: rotate(1.4deg);
+      }
+      .nowplaying-card {
+        background: var(--ink);
+        color: var(--paper);
+        border: 2px solid var(--gold);
+        box-shadow: 6px 6px 0 var(--red-label);
+        padding: 14px 18px;
+        text-align: center;
+      }
+      .np-eyebrow {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--gold-soft);
+      }
+      .np-track {
+        font-family: var(--font-display);
+        font-size: clamp(20px, 3vw, 26px);
+        line-height: 1.05;
+        text-transform: uppercase;
+        margin: 6px 0 2px;
+      }
+      .np-artist {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: #c9c3b4;
+        margin: 0;
+      }
+      .np-bar {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 5px;
+        height: 22px;
+        margin-top: 10px;
+      }
+      .np-bar span {
+        width: 5px;
+        height: 5px;
+      }
+      .np-bar span:nth-child(1) {
+        background: var(--gold);
+      }
+      .np-bar span:nth-child(2) {
+        background: var(--red-label);
+      }
+      .np-bar span:nth-child(3) {
+        background: var(--teal);
+      }
+      .np-bar span:nth-child(4) {
+        background: var(--blue);
+      }
+      .np-bar span:nth-child(5) {
+        background: var(--plum);
+      }
+      @keyframes npBounce {
+        from {
+          height: 5px;
+        }
+        to {
+          height: 22px;
+        }
+      }
+      body.is-playing .np-bar span {
+        animation: npBounce 0.48s ease-in-out infinite alternate;
+      }
+      body.is-playing .np-bar span:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      body.is-playing .np-bar span:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      body.is-playing .np-bar span:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      body.is-playing .np-bar span:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+      body:not(.is-playing) .np-bar span {
+        animation: none;
+        height: 5px;
       }
       .preview-head {
         text-align: center;
-        margin-bottom: 6px;
+        padding: 4px 6px 2px;
       }
       .preview-eyebrow {
-        font-family: "Kalam", sans-serif;
+        display: inline-block;
+        background: var(--ink);
+        color: var(--gold-soft);
+        font-family: var(--font-mono);
         font-size: 11px;
-        letter-spacing: 0.14em;
+        font-weight: 700;
+        letter-spacing: 0.26em;
         text-transform: uppercase;
-        color: var(--muted);
-        margin-bottom: 2px;
+        padding: 5px 12px;
+        transform: rotate(-1deg);
       }
       .preview-song {
-        font-family: "Caveat", cursive;
-        font-size: clamp(24px, 3.4vw, 32px);
-        margin: 0;
-        line-height: 1.05;
-        font-weight: 700;
-        transform: rotate(-0.5deg);
+        margin: 12px 0 0;
+        font-family: var(--font-display);
+        font-size: clamp(28px, 3.4vw, 42px);
+        line-height: 0.95;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
       }
       .preview-artist {
-        margin: 2px 0 0;
-        font-family: "Kalam", sans-serif;
-        font-size: 14px;
+        margin: 8px 0 0;
+        font-family: var(--font-mono);
+        font-size: 13px;
         color: var(--muted);
       }
       .gramophone-stage {
         position: relative;
         display: flex;
         justify-content: center;
-        padding: 8px 2px 10px;
+        padding: 26px 2px 18px;
       }
       .stage-shadow {
         position: absolute;
-        bottom: 10px;
+        bottom: 12px;
         width: 62%;
-        height: 24px;
+        height: 22px;
         background: radial-gradient(
           ellipse at center,
-          rgba(70, 44, 18, 0.18) 0%,
-          rgba(70, 44, 18, 0.07) 55%,
+          rgba(70, 44, 18, 0.22) 0%,
+          rgba(70, 44, 18, 0.08) 55%,
           transparent 72%
         );
         filter: blur(2px);
@@ -592,17 +864,10 @@
         position: relative;
         width: min(300px, 100%);
         margin: 0 auto;
-        background: linear-gradient(
-          180deg,
-          #c78853 0%,
-          #a96a3a 50%,
-          #8d5228 100%
-        );
+        background: var(--wood);
+        border: 3px solid var(--ink);
+        box-shadow: 8px 8px 0 var(--wood-dark);
         padding: 18px 14px 18px;
-        box-shadow:
-          inset 0 2px 0 #e1b98a,
-          inset 0 -4px 0 #6d3e1e,
-          0 10px 24px rgba(76, 38, 12, 0.22);
         overflow: visible;
       }
       .wood-grain {
@@ -610,8 +875,7 @@
         left: 12px;
         right: 12px;
         height: 2px;
-        background: rgba(97, 47, 19, 0.26);
-        border-radius: 2px;
+        background: rgba(58, 28, 10, 0.35);
       }
       .wood-grain.g1 {
         top: 12px;
@@ -634,11 +898,9 @@
         height: 200px;
         transform: translate(-50%, -50%);
         border-radius: 50%;
-        background: radial-gradient(circle, #d9b887 0 48%, #b68250 49% 100%);
-        box-shadow:
-          inset 0 0 0 3px #7a4624,
-          0 3px 10px rgba(40, 20, 8, 0.2);
-        opacity: 0.88;
+        background: var(--wood-light);
+        border: 3px solid var(--ink);
+        box-shadow: inset 0 0 0 8px rgba(58, 28, 10, 0.18);
       }
       .vinyl-stage {
         position: relative;
@@ -657,7 +919,7 @@
         bottom: -2px;
         background: radial-gradient(
           ellipse,
-          rgba(30, 18, 8, 0.26) 0%,
+          rgba(30, 18, 8, 0.28) 0%,
           rgba(30, 18, 8, 0) 72%
         );
         border-radius: 50%;
@@ -667,17 +929,9 @@
         width: 178px;
         height: 178px;
         border-radius: 50%;
-        background: radial-gradient(
-          circle at 50% 50%,
-          #23232b 0 34%,
-          #17171d 35% 100%
-        );
+        background: var(--vinyl);
         position: relative;
-        box-shadow:
-          0 0 0 3px #1a1a20,
-          0 0 0 6px #101014,
-          0 10px 26px rgba(0, 0, 0, 0.34),
-          inset 0 0 26px rgba(255, 255, 255, 0.045);
+        box-shadow: 0 0 0 3px #101014, 0 0 0 5px #2c2c34;
         overflow: hidden;
         will-change: transform;
       }
@@ -731,9 +985,7 @@
         transform: translate(-50%, -50%);
         border-radius: 50%;
         background: var(--red-label);
-        box-shadow:
-          inset 0 0 0 2px rgba(0, 0, 0, 0.18),
-          0 2px 6px rgba(0, 0, 0, 0.22);
+        box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.18);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -750,7 +1002,6 @@
         text-align: center;
         padding: 6px;
         color: #fff8e8;
-        font-family: "Kalam", sans-serif;
         position: relative;
       }
       .label-inner img.label-cover {
@@ -764,20 +1015,20 @@
       .label-inner.has-cover .label-text-wrap {
         position: relative;
         z-index: 2;
-        background: rgba(20, 10, 5, 0.42);
-        border-radius: 6px;
+        background: rgba(20, 10, 5, 0.45);
         padding: 2px 4px;
       }
       .label-inner .label-brand {
+        font-family: var(--font-mono);
         font-size: 7px;
         letter-spacing: 0.14em;
         text-transform: uppercase;
         opacity: 0.95;
       }
       .label-inner .label-title {
-        font-family: "Caveat", cursive;
-        font-size: 12px;
-        font-weight: 700;
+        font-family: var(--font-body);
+        font-weight: 800;
+        font-size: 11px;
         line-height: 1.05;
       }
       .spindle-hole {
@@ -789,9 +1040,7 @@
         transform: translate(-50%, -50%);
         background: #ece5d6;
         border-radius: 50%;
-        box-shadow:
-          inset 0 0 0 2px #1a1a1a,
-          0 0 0 2px rgba(0, 0, 0, 0.15);
+        box-shadow: inset 0 0 0 2px #1a1a1a;
         z-index: 5;
       }
       .tonearm-pivot {
@@ -809,12 +1058,9 @@
         width: 22px;
         height: 22px;
         transform: translate(-50%, -50%);
-        background: radial-gradient(circle, #e7c77a 0%, #b98a34 70%);
+        background: var(--gold);
         border: 2.5px solid #1a1a1a;
         border-radius: 50%;
-        box-shadow:
-          0 2px 5px rgba(0, 0, 0, 0.25),
-          inset 0 1px 0 rgba(255, 240, 190, 0.7);
       }
       .tonearm {
         position: absolute;
@@ -836,10 +1082,9 @@
         top: 5px;
         width: 76px;
         height: 6px;
-        background: linear-gradient(180deg, #e9d39a, #c9a760);
+        background: var(--gold);
         border: 2px solid #1a1a1a;
-        border-radius: 8px;
-        box-shadow: inset 0 1px 0 rgba(255, 245, 210, 0.6);
+        border-radius: 4px;
       }
       .tonearm-head {
         position: absolute;
@@ -850,7 +1095,6 @@
         background: #2b2b34;
         border: 2px solid #111;
         border-radius: 4px 10px 10px 4px;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
       }
       .needle-tip {
         position: absolute;
@@ -875,413 +1119,292 @@
       .brand-plate {
         position: absolute;
         left: 50%;
-        bottom: -12px;
+        bottom: -14px;
         transform: translateX(-50%) rotate(-1deg);
-        background: #f6eacb;
-        padding: 3px 10px;
-        font-family: "Kalam", sans-serif;
+        background: var(--ink);
+        color: var(--gold-soft);
+        padding: 4px 12px;
+        font-family: var(--font-mono);
         font-size: 10px;
-        letter-spacing: 0.14em;
-        color: #63411f;
-        box-shadow: 0 2px 6px rgba(60, 36, 12, 0.16);
-      }
-      .nowplaying-wrap {
-        display: flex;
-        justify-content: center;
-        margin: 2px auto 10px;
-        width: 100%;
-      }
-      .nowplaying-card {
-        background: linear-gradient(180deg, #fffaf0, #f6ead0);
-        padding: 8px 14px 10px;
-        text-align: center;
-        max-width: 100%;
-        width: 100%;
-        box-shadow: 0 3px 10px rgba(118, 86, 36, 0.08);
-        position: relative;
-        transform: rotate(-0.5deg);
-      }
-      .np-eyebrow {
-        font-family: "Kalam", sans-serif;
-        font-size: 10px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: #9a755a;
-      }
-      .np-track {
-        font-family: "Caveat", "Gloria Hallelujah", cursive;
         font-weight: 700;
-        font-size: clamp(20px, 3vw, 26px);
-        line-height: 1.05;
-        color: #1a1a1a;
-        margin: 2px 0 1px;
-      }
-      .np-artist {
-        font-family: "Kalam", sans-serif;
-        font-size: 12px;
-        color: #6b5a40;
-        margin: 0;
-      }
-      .np-bar {
-        display: flex;
-        gap: 4px;
-        justify-content: center;
-        margin-top: 6px;
-        height: 14px;
-        align-items: flex-end;
-        opacity: 0.9;
-      }
-      .np-bar span {
-        width: 3px;
-        background: #c9a227;
-        border-radius: 2px;
-        display: inline-block;
-        height: 5px;
-        animation: npBounce 1s ease-in-out infinite;
-      }
-      .np-bar span:nth-child(1) {
-        animation-delay: 0s;
-        height: 6px;
-      }
-      .np-bar span:nth-child(2) {
-        animation-delay: 0.15s;
-        height: 11px;
-      }
-      .np-bar span:nth-child(3) {
-        animation-delay: 0.3s;
-        height: 14px;
-      }
-      .np-bar span:nth-child(4) {
-        animation-delay: 0.15s;
-        height: 9px;
-      }
-      .np-bar span:nth-child(5) {
-        animation-delay: 0s;
-        height: 7px;
-      }
-      @keyframes npBounce {
-        0%,
-        100% {
-          transform: scaleY(0.7);
-          opacity: 0.85;
-        }
-        50% {
-          transform: scaleY(1.35);
-          opacity: 1;
-        }
-      }
-      body:not(.is-playing) .np-bar span {
-        animation-play-state: paused;
-        opacity: 0.55;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        border: 2px solid var(--ink);
       }
       .preview-controls {
-        margin-top: 18px;
-        padding: 12px 10px 10px;
-        background: linear-gradient(180deg, #fdf8ee, #f5ead2);
-        box-shadow: 0 5px 14px rgba(118, 86, 36, 0.1);
+        position: relative;
+        margin-top: 24px;
+        background: var(--paper-2);
+        border: 3px solid var(--ink);
+        box-shadow: 6px 6px 0 var(--gold);
+        padding: 18px 16px;
       }
       .transport {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        margin-bottom: 10px;
         flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
       }
       .ctrl-btn {
-        background: #fbf6e8;
-        border: 2.2px solid var(--ink);
-        color: var(--ink);
-        border-radius: 16px 14px 17px 15px / 14px 17px 14px 16px;
-        cursor: pointer;
+        width: 46px;
+        height: 46px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 8px 10px;
-        min-width: 42px;
-        min-height: 40px;
-        transition:
-          transform 0.12s ease,
-          background 0.15s ease,
-          box-shadow 0.15s ease;
-        box-shadow:
-          0 3px 0 #c8b78a,
-          0 4px 8px rgba(80, 54, 20, 0.09);
-        user-select: none;
-      }
-      .ctrl-btn.small {
-        min-width: 38px;
-        min-height: 38px;
-        padding: 6px 8px;
-      }
-      .ctrl-btn.play-main {
-        min-width: 60px;
-        min-height: 56px;
-        background: #f9edd0;
-        border-width: 2.4px;
-        box-shadow:
-          0 4px 0 #c8b078,
-          0 6px 16px rgba(96, 64, 18, 0.12);
-      }
-      .ctrl-btn.active {
-        background: #f7e6b6;
-        box-shadow:
-          0 2px 0 #c8b078,
-          inset 0 0 0 1px #e6c86a;
-        transform: translateY(1px);
+        background: var(--paper);
+        border: 2px solid var(--ink);
+        color: var(--ink);
+        cursor: pointer;
+        box-shadow: 3px 3px 0 var(--ink);
+        transition: transform 0.12s, box-shadow 0.12s, background 0.12s,
+          color 0.12s;
       }
       .ctrl-btn:hover {
-        transform: translateY(-2px);
-        background: #fff9ef;
+        background: var(--ink);
+        color: var(--paper);
+        transform: translate(-1px, -1px);
+        box-shadow: 4px 4px 0 var(--ink);
       }
       .ctrl-btn:active {
-        transform: translateY(2px);
-        box-shadow: 0 1px 0 #c8b78a;
+        transform: translate(2px, 2px);
+        box-shadow: 0 0 0 var(--ink);
       }
-      .ctrl-btn:disabled {
-        opacity: 0.45;
-        cursor: not-allowed;
-        transform: none;
+      .ctrl-btn.small {
+        width: 38px;
+        height: 38px;
+      }
+      .ctrl-btn.play-main {
+        width: 62px;
+        height: 62px;
+        background: var(--red-label);
+        color: var(--paper);
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+      .ctrl-btn.active {
+        background: var(--gold);
+        color: var(--ink);
       }
       .progress-wrap {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        gap: 8px;
+        display: flex;
         align-items: center;
+        gap: 10px;
+        margin-top: 16px;
       }
       .time-pill {
-        font-family: "Kalam", sans-serif;
-        font-size: 12px;
-        background: #fdf6e6;
-        border: 2px solid var(--ink);
-        border-radius: 999px;
-        padding: 3px 8px;
-        min-width: 46px;
-        text-align: center;
-        color: #4a3b23;
+        flex: none;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        font-weight: 700;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 5px 9px;
+        letter-spacing: 0.06em;
       }
       .progress-track-wrap {
-        background: #fffaf0;
-        padding: 7px 9px;
         position: relative;
+        flex: 1;
+        height: 20px;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+      }
+      .progress-track-wrap:focus-within {
+        outline: 3px solid var(--blue);
+        outline-offset: 2px;
       }
       .progress-track {
         position: relative;
-        height: 9px;
-        background: #e6d6b6;
-        border-radius: 20px;
-        border: 1.6px solid #3b2a14;
-        overflow: visible;
+        height: 100%;
       }
       .progress-fill {
         position: absolute;
         left: 0;
         top: 0;
         bottom: 0;
-        width: 0%;
-        background: linear-gradient(90deg, #c9a227, #e7c86a);
-        border-radius: 20px;
+        width: 0;
+        background: var(--red-label);
+        background-image: repeating-linear-gradient(
+          -45deg,
+          rgba(26, 26, 26, 0.18) 0 4px,
+          transparent 4px 8px
+        );
       }
       .progress-thumb {
         position: absolute;
         top: 50%;
-        width: 14px;
-        height: 14px;
-        transform: translate(-50%, -50%);
         left: 0;
-        background: #fff7e6;
-        border: 2px solid #1a1a1a;
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 2;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
+        width: 10px;
+        height: 22px;
+        transform: translate(-50%, -50%);
+        background: var(--gold);
+        border: 2px solid var(--ink);
       }
       #preview-seek {
         position: absolute;
-        inset: -6px;
+        inset: 0;
         width: 100%;
-        appearance: none;
-        background: transparent;
+        height: 100%;
         margin: 0;
+        opacity: 0;
         cursor: pointer;
-        z-index: 3;
-      }
-      #preview-seek::-webkit-slider-thumb {
+        -webkit-appearance: none;
         appearance: none;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
         background: transparent;
-        border: none;
-      }
-      #preview-seek::-moz-range-thumb {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: transparent;
-        border: none;
       }
       .volume-row {
         display: flex;
         align-items: center;
-        gap: 8px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 10px;
+        gap: 10px;
+        margin-top: 14px;
       }
       .mini-btn {
-        background: #fdf6e6;
-        border: 2px solid var(--ink);
-        border-radius: 12px;
+        flex: none;
         width: 36px;
-        height: 34px;
-        display: flex;
+        height: 36px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
+        background: var(--paper);
+        border: 2px solid var(--ink);
+        color: var(--ink);
         cursor: pointer;
-        transition:
-          transform 0.12s ease,
-          background 0.15s;
-        flex-shrink: 0;
+        box-shadow: 2px 2px 0 var(--ink);
+        transition: background 0.12s, color 0.12s;
       }
       .mini-btn:hover {
-        transform: translateY(-1px);
-        background: #fff9ef;
+        background: var(--ink);
+        color: var(--paper);
       }
       .volume-track {
         flex: 1;
-        min-width: 120px;
-        max-width: 260px;
-        background: #fffaf0;
-        padding: 6px 9px;
+        max-width: 150px;
+        height: 20px;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        display: flex;
+        align-items: center;
+        padding: 0 2px;
       }
       #volume {
         width: 100%;
-        appearance: none;
-        background: transparent;
+        height: 14px;
         margin: 0;
+        background: transparent;
         cursor: pointer;
-      }
-      #volume::-webkit-slider-runnable-track {
-        height: 7px;
-        background: #e2cfab;
-        border-radius: 8px;
-        border: 1.4px solid #3b2a14;
+        -webkit-appearance: none;
+        appearance: none;
       }
       #volume::-webkit-slider-thumb {
-        appearance: none;
-        margin-top: -6px;
+        -webkit-appearance: none;
         width: 14px;
-        height: 16px;
-        border-radius: 6px;
-        background: #fff7e2;
-        border: 2px solid #1a1a1a;
-      }
-      #volume::-moz-range-track {
-        height: 7px;
-        background: #e2cfab;
-        border-radius: 8px;
+        height: 14px;
+        background: var(--ink);
+        border: 2px solid var(--paper);
+        box-shadow: 0 0 0 2px var(--ink);
       }
       #volume::-moz-range-thumb {
-        width: 14px;
-        height: 16px;
-        border-radius: 6px;
-        background: #fff7e2;
-        border: 2px solid #1a1a1a;
+        width: 12px;
+        height: 12px;
+        background: var(--ink);
+        border: 2px solid var(--paper);
+        border-radius: 0;
+        box-shadow: 0 0 0 2px var(--ink);
       }
       .volume-label {
-        font-family: "Kalam", sans-serif;
+        font-family: var(--font-mono);
         font-size: 12px;
-        color: #5a4630;
-        min-width: 36px;
-        text-align: right;
+        font-weight: 700;
       }
-      .preview-note {
-        margin: 10px 2px 0;
-        text-align: center;
-        font-family: "Kalam", sans-serif;
-        font-size: 13px;
+      .hint-text {
+        margin: 16px 0 0;
+        padding-top: 12px;
+        border-top: 2px dashed var(--ink);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        line-height: 1.9;
+        letter-spacing: 0.04em;
         color: var(--muted);
+        text-align: center;
       }
-      .preview-note b {
-        color: var(--wood-dark);
+      .hint-text b {
+        color: var(--ink);
+        background: var(--gold-soft);
+        padding: 1px 6px;
+        border: 1px solid var(--ink);
       }
       .mini-crate {
-        margin-top: 12px;
+        margin-top: 20px;
+        background: var(--vinyl);
+        color: var(--paper);
+        border: 3px solid var(--ink);
+        box-shadow: 6px 6px 0 var(--blue);
+        padding: 16px;
       }
       .mini-crate-head {
         display: flex;
-        align-items: center;
+        align-items: baseline;
         justify-content: space-between;
-        gap: 10px;
         flex-wrap: wrap;
-        margin-bottom: 8px;
+        gap: 8px;
       }
       .mini-crate-title {
         margin: 0;
-        font-family: "Caveat", cursive;
-        font-size: 22px;
-        transform: rotate(-0.6deg);
+        font-family: var(--font-display);
+        font-size: 18px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--paper);
       }
       .crate-count {
-        font-family: "Kalam", sans-serif;
+        font-family: var(--font-mono);
         font-size: 12px;
-        color: var(--muted);
+        color: var(--gold-soft);
       }
       .crate-link {
-        font-family: "Kalam", sans-serif;
-        font-size: 13px;
-        color: var(--wood-dark);
-        border-bottom: 1.5px dashed var(--gold);
-        padding-bottom: 1px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--paper);
+        border-bottom: 2px solid var(--red-label);
       }
       .crate-link:hover {
-        color: var(--red-label);
+        color: var(--gold-soft);
+        border-color: var(--gold-soft);
       }
       .crate-list {
         list-style: none;
-        margin: 0;
+        margin: 12px 0 0;
         padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        background: #fffcf5;
-        padding: 8px;
-        max-height: 190px;
+        max-height: 230px;
         overflow: auto;
       }
       .crate-item {
         display: grid;
-        grid-template-columns: 38px 1fr auto;
-        gap: 8px;
+        grid-template-columns: 44px 1fr auto;
+        gap: 12px;
         align-items: center;
-        padding: 7px 9px;
-        background: #fff9ee;
-        border: 2px solid #2c261c;
-        border-radius: 14px 12px 15px 13px / 12px 14px 12px 15px;
+        padding: 8px;
+        border: 2px solid #3a3a44;
+        background: #26262e;
+        margin-bottom: 8px;
         cursor: pointer;
-        transition:
-          transform 0.12s ease,
-          background 0.15s;
+        transition: background 0.12s, border-color 0.12s;
       }
       .crate-item:hover {
-        background: #fff3d6;
-        transform: translateY(-1px) rotate(-0.3deg);
+        background: #31313b;
+        border-color: var(--gold);
       }
       .crate-item.active {
-        background: #f7e6b6;
-        border-color: #b1882b;
-        box-shadow: inset 0 0 0 1px #e6c86a;
+        background: var(--red-label);
+        border-color: var(--paper);
       }
       .crate-thumb {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        border: 2px solid #1a1a1a;
-        background: #1f1f26;
-        position: relative;
+        width: 44px;
+        height: 44px;
         overflow: hidden;
-        flex-shrink: 0;
+        border: 2px solid #3a3a44;
+      }
+      .crate-item.active .crate-thumb {
+        border-color: var(--paper);
       }
       .crate-thumb img {
         width: 100%;
@@ -1289,678 +1412,902 @@
         object-fit: cover;
         display: block;
       }
-      .crate-thumb .ct-label {
-        position: absolute;
-        inset: 0;
+      .ct-label {
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 10px;
-        font-family: "Kalam", sans-serif;
-        color: #fff6e2;
-        text-align: center;
-        line-height: 1;
-        border-radius: 50%;
-        padding: 4px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--paper);
+      }
+      .crate-meta {
+        min-width: 0;
       }
       .crate-meta .p-title {
-        font-family: "Caveat", cursive;
-        font-size: 18px;
-        line-height: 1.1;
-        margin: 0;
+        font-weight: 800;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
       }
       .crate-meta .p-artist {
-        font-family: "Kalam", sans-serif;
-        font-size: 12px;
-        color: #6b5a40;
-        margin-top: 1px;
-      }
-      .crate-meta .p-dur {
-        font-family: "Kalam", sans-serif;
+        font-family: var(--font-mono);
         font-size: 11px;
-        color: #8a7560;
+        color: #b9b9c3;
+      }
+      #crate-list .p-dur {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--gold-soft) !important;
       }
       .cover-row {
-        margin-top: 12px;
         display: flex;
+        gap: 14px;
         align-items: center;
-        gap: 10px;
-        padding: 8px;
-        background: #fffaf0;
+        margin-top: 16px;
+        background: var(--paper);
+        border: 2px solid var(--ink);
+        box-shadow: 4px 4px 0 var(--amber);
+        padding: 12px;
       }
       .cover-thumb {
-        width: 50px;
-        height: 50px;
-        border-radius: var(--radius-tiny);
-        border: 2.2px solid var(--ink);
+        width: 52px;
+        height: 52px;
         object-fit: cover;
-        background: #e8dcc0;
-        box-shadow: 0 3px 0 #c8b78a;
-        flex-shrink: 0;
-      }
-      .cover-meta {
-        min-width: 0;
+        border: 2px solid var(--ink);
+        flex: none;
       }
       .cover-meta h4 {
         margin: 0;
-        font-family: "Caveat", cursive;
-        font-size: 20px;
-        line-height: 1.05;
+        font-family: var(--font-display);
+        font-size: 16px;
+        text-transform: uppercase;
       }
       .cover-meta p {
-        margin: 2px 0 0;
-        font-family: "Kalam", sans-serif;
-        font-size: 13px;
+        margin: 4px 0 0;
+        font-family: var(--font-mono);
+        font-size: 11px;
         color: var(--muted);
-      }
-      .hint-text {
-        text-align: center;
-        font-family: "Kalam", sans-serif;
-        font-size: 12px;
-        color: #8a7560;
-        margin: 10px 4px 2px;
-      }
-      .hint-text b {
-        color: #5a3f1f;
-        font-weight: 700;
       }
       .section {
-        max-width: 1120px;
+        position: relative;
+      }
+      .section-inner {
+        position: relative;
+        z-index: 1;
+        max-width: 1360px;
         margin: 0 auto;
-        padding: 18px 18px 48px;
+        padding: 110px clamp(20px, 4vw, 56px);
+      }
+      #features {
+        overflow: clip;
+        background: var(--paper-2);
+        border-bottom: 3px solid var(--ink);
+      }
+      .features-bg-word {
+        bottom: -40px;
+        right: -20px;
+        font-size: clamp(140px, 22vw, 340px);
+        color: transparent;
+        -webkit-text-stroke: 2px rgba(166, 107, 58, 0.28);
+        transform: rotate(-3deg);
       }
       .section-head {
-        text-align: center;
-        margin-bottom: 22px;
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 26px 34px;
+      }
+      .sec-tag {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 6px 12px;
       }
       .section-title {
-        font-family: "Caveat", cursive;
-        font-size: clamp(34px, 5vw, 48px);
-        margin: 0;
-        transform: rotate(-0.6deg);
+        margin: 12px 0 0;
+        font-family: var(--font-display);
+        font-size: clamp(40px, 6vw, 86px);
+        line-height: 0.9;
+        letter-spacing: -0.015em;
+        text-transform: uppercase;
+        border-left: 16px solid var(--red-label);
+        padding-left: 22px;
       }
       .section-sub {
-        margin: 6px auto 0;
-        max-width: 52ch;
-        font-family: "Kalam", sans-serif;
-        font-size: 16px;
-        color: var(--muted);
+        margin: 0;
+        max-width: 46ch;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.7;
+        background: var(--paper);
+        border: 2px solid var(--ink);
+        box-shadow: 5px 5px 0 var(--teal);
+        padding: 12px 16px;
       }
       .feature-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 30px;
+        margin-top: 74px;
       }
       .feature-card {
         position: relative;
-        background: linear-gradient(180deg, #fdf9f0, #f7f0df);
-        padding: 22px 18px 18px;
-        box-shadow: 0 8px 24px var(--card-shadow);
-        min-height: 180px;
+        border: 3px solid var(--ink);
+        box-shadow: 10px 10px 0 var(--ink);
+        padding: 26px;
+      }
+      .feature-card.fc1 {
+        grid-column: 1 / 8;
+        background: var(--teal);
+      }
+      .feature-card.fc2 {
+        grid-column: 8 / 13;
+        background: var(--blue);
+        margin-top: 64px;
+        transform: rotate(0.8deg);
+      }
+      .feature-card.fc3 {
+        grid-column: 3 / 10;
+        background: var(--plum);
+        margin-top: -26px;
+        transform: rotate(-0.6deg);
+      }
+      .fnum {
+        position: absolute;
+        top: 12px;
+        right: 18px;
+        font-family: var(--font-display);
+        font-size: clamp(56px, 6.6vw, 104px);
+        line-height: 0.8;
+        color: transparent;
+        -webkit-text-stroke: 2px rgba(247, 243, 233, 0.75);
+        pointer-events: none;
       }
       .feature-icon {
-        width: 48px;
-        height: 48px;
-        display: grid;
-        place-items: center;
-        border: 2.2px solid var(--ink);
-        border-radius: var(--radius-tiny);
-        background: #f9edd0;
-        box-shadow: 0 3px 0 #c8b78a;
-        margin-bottom: 12px;
-        font-size: 22px;
+        width: 58px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27px;
+        background: var(--ink);
+        color: var(--paper);
+        border: 2px solid var(--paper);
+        box-shadow: 4px 4px 0 rgba(26, 26, 26, 0.55);
       }
       .feature-card h3 {
-        margin: 0 0 6px;
-        font-family: "Caveat", cursive;
-        font-size: 26px;
-        transform: rotate(-0.4deg);
+        margin: 18px 0 0;
+        font-family: var(--font-display);
+        font-size: clamp(21px, 2.2vw, 27px);
+        line-height: 1;
+        text-transform: uppercase;
+        color: var(--paper);
+        max-width: 12ch;
       }
       .feature-card p {
-        margin: 0;
-        font-family: "Kalam", sans-serif;
-        font-size: 15px;
-        color: var(--muted);
-        line-height: 1.4;
+        margin: 16px 0 0;
+        background: var(--paper);
+        border: 2px solid var(--ink);
+        padding: 14px 16px;
+        font-size: 16.5px;
+        line-height: 1.6;
+        font-weight: 500;
+        max-width: 52ch;
+      }
+      .f-arrow {
+        position: absolute;
+        bottom: -34px;
+        left: 8%;
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 34px;
+        color: var(--wood);
+        transform: rotate(8deg);
+      }
+      #faq {
+        overflow: clip;
+        background: var(--ink);
+      }
+      .faq-bg-word {
+        top: -30px;
+        right: -30px;
+        font-size: clamp(180px, 26vw, 420px);
+        color: transparent;
+        -webkit-text-stroke: 2px rgba(201, 162, 39, 0.24);
+        transform: rotate(3deg);
+      }
+      #faq .section-title {
+        color: var(--paper);
+        border-left-color: var(--gold);
+      }
+      #faq .section-sub {
+        background: transparent;
+        color: #cfc9bb;
+        border-color: #4a4a52;
+        box-shadow: 5px 5px 0 var(--teal);
       }
       .faq-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 28px;
+        margin-top: 74px;
       }
       .faq-card {
+        background: var(--paper);
+        color: var(--ink);
+        border: 3px solid var(--ink);
+        box-shadow: 8px 8px 0 var(--gold);
+        padding: 24px 26px;
         position: relative;
-        background: linear-gradient(180deg, #fdf9f0, #f7f0df);
-        padding: 20px 18px;
-        box-shadow: 0 8px 24px var(--card-shadow);
+      }
+      .faq-card.fq1 {
+        grid-column: 1 / 7;
+      }
+      .faq-card.fq2 {
+        grid-column: 7 / 13;
+        margin-top: 54px;
+      }
+      .faq-card.fq3 {
+        grid-column: 2 / 8;
+        margin-top: -18px;
+        transform: rotate(0.5deg);
+      }
+      .faq-card.fq4 {
+        grid-column: 8 / 13;
+        margin-top: 36px;
+        transform: rotate(-0.5deg);
       }
       .faq-q {
         display: flex;
-        align-items: flex-start;
-        gap: 10px;
-        margin: 0 0 8px;
+        align-items: baseline;
+        gap: 16px;
       }
-      .faq-q .qn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 30px;
-        height: 30px;
-        flex-shrink: 0;
-        border: 2.2px solid var(--ink);
-        border-radius: var(--radius-tiny);
-        background: #f9edd0;
-        box-shadow: 0 3px 0 #c8b78a;
-        font-family: "Caveat", cursive;
-        font-weight: 700;
-        font-size: 18px;
+      .qn {
+        font-family: var(--font-display);
+        font-size: 42px;
+        line-height: 0.9;
+      }
+      .fq1 .qn {
         color: var(--red-label);
       }
+      .fq2 .qn {
+        color: var(--teal);
+      }
+      .fq3 .qn {
+        color: var(--blue);
+      }
+      .fq4 .qn {
+        color: var(--plum);
+      }
       .faq-q h3 {
-        margin: 2px 0 0;
-        font-family: "Caveat", cursive;
-        font-size: 24px;
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 19px;
         line-height: 1.1;
+        text-transform: uppercase;
       }
       .faq-card p {
-        margin: 0;
-        font-family: "Kalam", sans-serif;
-        font-size: 15px;
-        color: var(--muted);
-        line-height: 1.45;
+        margin: 14px 0 0;
+        padding-left: 62px;
+        font-size: 16.5px;
+        line-height: 1.65;
+        font-weight: 500;
       }
       .cta-band {
-        max-width: 1120px;
-        margin: 0 auto 40px;
-        padding: 0 18px;
+        position: relative;
+        overflow: clip;
+        background: var(--red-label);
+        border-bottom: 3px solid var(--ink);
+        padding: 110px clamp(20px, 4vw, 56px);
+      }
+      .cta-bg-word {
+        bottom: -46px;
+        left: -24px;
+        font-size: clamp(120px, 17vw, 280px);
+        color: transparent;
+        -webkit-text-stroke: 2px rgba(247, 243, 233, 0.28);
+        transform: rotate(-2deg);
+      }
+      .cta-blob {
+        position: absolute;
+        top: -70px;
+        right: -70px;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: var(--gold-soft);
+        border: 3px solid var(--ink);
+        opacity: 0.85;
       }
       .cta-card {
         position: relative;
-        background: linear-gradient(180deg, #fdf9f0, #f3e7c8);
-        padding: 34px 24px;
-        text-align: center;
-        box-shadow:
-          0 1px 0 #d7c9aa,
-          0 8px 24px var(--card-shadow),
-          0 24px 60px rgba(86, 58, 22, 0.1);
+        z-index: 1;
+        max-width: 880px;
+        margin: 0 auto;
+        background: var(--paper);
+        border: 4px solid var(--ink);
+        box-shadow: 14px 14px 0 var(--ink);
+        transform: rotate(-0.8deg);
+        padding: 46px clamp(22px, 4vw, 48px);
       }
       .cta-card h2 {
-        margin: 0 0 8px;
-        font-family: "Caveat", cursive;
-        font-size: clamp(34px, 5vw, 48px);
-        transform: rotate(-0.5deg);
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(34px, 5vw, 64px);
+        line-height: 0.92;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
       }
-      .cta-card p {
-        margin: 0 auto 18px;
-        max-width: 52ch;
-        font-family: "Kalam", sans-serif;
-        font-size: 16px;
-        color: var(--muted);
-      }
-      .waitlist-form {
-        max-width: 620px;
-        margin: 16px auto 0;
-        display: grid;
-        gap: 12px;
-      }
-      .waitlist-message {
-        width: 100%;
-        min-height: 118px;
-        resize: vertical;
-        background: #fffaf0;
-        border: 2.4px solid var(--ink);
-        border-radius: var(--radius-sketch-soft);
-        padding: 13px 15px;
-        font-family: "Kalam", sans-serif;
-        font-size: 16px;
-        color: var(--ink);
-        box-shadow: 0 3px 0 #c8b78a;
-        outline: none;
-      }
-      .waitlist-message:focus {
-        background: #fff9ef;
-        box-shadow:
-          0 3px 0 #c8b78a,
-          0 0 0 3px rgba(201, 162, 39, 0.18);
+      .cta-card > p {
+        margin: 22px 0 0;
+        font-size: 17px;
+        line-height: 1.7;
+        font-weight: 500;
+        max-width: 62ch;
       }
       .waitlist-email-link {
+        font-family: var(--font-mono);
+        font-weight: 700;
         color: var(--red-label);
-        border-bottom: 1.5px dashed var(--gold);
-        padding-bottom: 1px;
+        border-bottom: 4px solid var(--gold);
+        white-space: nowrap;
       }
       .waitlist-email-link:hover {
-        color: var(--wood-dark);
+        background: var(--gold-soft);
+      }
+      .waitlist-form {
+        margin-top: 30px;
+      }
+      .waitlist-message {
+        display: block;
+        width: 100%;
+        min-height: 130px;
+        resize: vertical;
+        background: var(--paper-2);
+        border: 3px solid var(--ink);
+        padding: 14px 16px;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--ink);
+      }
+      .waitlist-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 20px;
       }
       .site-footer {
         position: relative;
-        z-index: 5;
-        border-top: 2.5px solid rgba(26, 26, 26, 0.12);
-        background: linear-gradient(180deg, #f7f0df, #efe4c8);
-        padding: 34px 18px 24px;
+        overflow: clip;
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .color-strip {
+        display: flex;
+        height: 14px;
+      }
+      .color-strip span {
+        flex: 1;
+      }
+      .color-strip span:nth-child(1) {
+        background: var(--red-label);
+      }
+      .color-strip span:nth-child(2) {
+        background: var(--amber);
+      }
+      .color-strip span:nth-child(3) {
+        background: var(--gold);
+      }
+      .color-strip span:nth-child(4) {
+        background: var(--teal);
+      }
+      .color-strip span:nth-child(5) {
+        background: var(--blue);
+      }
+      .color-strip span:nth-child(6) {
+        background: var(--plum);
       }
       .footer-inner {
-        max-width: 1120px;
+        max-width: 1360px;
         margin: 0 auto;
+        padding: 74px clamp(20px, 4vw, 56px) 30px;
         display: grid;
-        grid-template-columns: 1.3fr 1fr 1fr;
-        gap: 24px;
+        grid-template-columns: 1.4fr 1fr 1fr;
+        gap: 48px;
       }
       .footer-brand .brand {
-        margin-bottom: 10px;
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--paper);
+        box-shadow: 4px 4px 0 var(--red-label);
+      }
+      .footer-brand .brand-text span {
+        color: var(--red-label);
       }
       .footer-brand p {
-        margin: 0;
-        font-family: "Kalam", sans-serif;
-        font-size: 15px;
-        color: var(--muted);
-        max-width: 34ch;
-        line-height: 1.45;
+        margin: 18px 0 0;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        color: #cfc9bb;
       }
       .footer-col h4 {
-        margin: 0 0 10px;
-        font-family: "Caveat", cursive;
-        font-size: 26px;
-        transform: rotate(-0.5deg);
+        margin: 0 0 6px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #4a4a52;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: var(--gold-soft);
       }
       .footer-col ul {
         list-style: none;
         margin: 0;
         padding: 0;
-        display: grid;
-        gap: 8px;
       }
       .footer-col a {
-        font-family: "Kalam", sans-serif;
-        font-size: 15px;
-        color: var(--ink-soft);
-        border-bottom: 1.5px dashed transparent;
+        display: inline-block;
+        padding: 9px 0;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 0.01em;
+        transition: color 0.12s, transform 0.12s;
       }
       .footer-col a:hover {
-        border-bottom-color: var(--gold);
-        color: var(--ink);
+        color: var(--gold-soft);
+        transform: translateX(6px);
+      }
+      .footer-giant {
+        font-family: var(--font-display);
+        font-size: clamp(80px, 16.5vw, 280px);
+        line-height: 0.76;
+        letter-spacing: -0.02em;
+        text-align: center;
+        color: var(--paper);
+        user-select: none;
+        margin: 26px 0 -0.08em;
+        white-space: nowrap;
+      }
+      .footer-giant i {
+        font-style: normal;
+        color: var(--red-label);
       }
       .footer-bottom {
-        max-width: 1120px;
-        margin: 22px auto 0;
-        padding-top: 16px;
-        border-top: 1.8px dashed #bba87f;
         display: flex;
-        flex-wrap: wrap;
         justify-content: space-between;
+        flex-wrap: wrap;
         gap: 10px;
-        font-family: "Kalam", sans-serif;
-        font-size: 14px;
-        color: var(--muted);
+        max-width: 1360px;
+        margin: 0 auto;
+        padding: 18px clamp(20px, 4vw, 56px) 22px;
+        border-top: 2px solid #3a3a42;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        color: #cfc9bb;
       }
       .footer-dot {
-        margin: 0 8px;
         color: var(--gold);
       }
       .toast {
         position: fixed;
         left: 50%;
-        bottom: 24px;
-        transform: translateX(-50%) translateY(20px);
-        background: #fbf6e8;
-        border: 2.4px solid var(--ink);
-        border-radius: var(--radius-sketch-soft);
-        padding: 10px 16px;
-        box-shadow:
-          0 4px 0 #c8b78a,
-          0 12px 28px rgba(80, 54, 20, 0.14);
-        font-family: "Kalam", sans-serif;
-        font-size: 15px;
-        z-index: 200;
-        opacity: 0;
-        pointer-events: none;
-        transition:
-          opacity 0.25s ease,
-          transform 0.25s ease;
-      }
-      .toast.show {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-      @media (max-width: 920px) {
-        .hero {
-          grid-template-columns: 1fr;
-          gap: 22px;
-        }
-        .hero-copy {
-          order: 1;
-          padding-top: 0;
-        }
-        .preview-card {
-          order: 2;
-          max-width: 480px;
-        }
-        .feature-grid,
-        .footer-inner {
-          grid-template-columns: 1fr;
-        }
-        .faq-grid {
-          grid-template-columns: 1fr;
-        }
-        .nav-links {
-          position: fixed;
-          top: var(--nav-h);
-          right: 14px;
-          left: 14px;
-          display: none;
-          flex-direction: column;
-          align-items: stretch;
-          gap: 8px;
-          padding: 14px;
-          background: linear-gradient(180deg, #fdf9f0, #f7f0df);
-          border: 2.4px solid var(--ink);
-          border-radius: var(--radius-sketch-soft);
-          box-shadow: 0 12px 30px rgba(86, 58, 22, 0.14);
-        }
-        .nav-links.open {
-          display: flex;
-        }
-        .nav-toggle {
-          display: inline-flex;
-        }
-        .nav-links a {
-          justify-content: center;
-        }
-      }
-      @media (max-width: 480px) {
-        .hero-title {
-          font-size: 40px;
-        }
-        .preview-card {
-          padding: 16px 12px 14px;
-          max-width: 100%;
-        }
-        .turntable-base {
-          width: min(270px, 100%);
-          padding: 16px 12px 18px;
-        }
-        .platter-ring {
-          width: 180px;
-          height: 180px;
-        }
-        .vinyl-stage,
-        .record {
-          width: 166px;
-          height: 166px;
-        }
-        .record-label {
-          width: 64px;
-          height: 64px;
-        }
-        .site-nav {
-          padding: 0 12px;
-        }
-        .ctrl-btn.play-main {
-          min-width: 54px;
-          min-height: 50px;
-        }
-      }
-      .install-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(30, 20, 8, 0.42);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 300;
-        padding: 18px;
-        backdrop-filter: blur(2px);
-      }
-      .install-overlay.open {
-        display: flex;
-      }
-      .install-card {
-        width: 100%;
-        max-width: 560px;
-        background: linear-gradient(180deg, #fffdf7, #f8f0dc);
-        padding: 26px 22px 22px;
-        position: relative;
-        box-shadow: 0 18px 50px rgba(40, 24, 8, 0.28);
-        max-height: 90vh;
-        overflow: auto;
-        animation: paperPop 0.3s ease;
-      }
-      @keyframes paperPop {
-        from {
-          transform: translateY(14px) scale(0.98) rotate(-0.6deg);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0) scale(1) rotate(-0.4deg);
-          opacity: 1;
-        }
-      }
-      .install-close {
-        position: absolute;
-        right: 12px;
-        top: 10px;
-        background: #fff8e7;
-        border: 2px solid #1a1a1a;
-        width: 36px;
-        height: 34px;
-        border-radius: 12px;
-        cursor: pointer;
-        font-size: 16px;
-      }
-      .install-title {
-        margin: 0 28px 2px 0;
-        font-family: "Caveat", cursive;
-        font-size: 32px;
-      }
-      .install-sub {
-        margin: 0 0 14px;
-        font-family: "Kalam", sans-serif;
-        color: #7a6548;
-      }
-      .install-steps {
-        font-family: "Kalam", sans-serif;
-        font-size: 15px;
-        color: #4a3b23;
-        line-height: 1.7;
-        background: #fffaf0;
-        border: 2px solid var(--ink);
-        border-radius: 14px;
-        padding: 14px 16px;
-      }
-      .install-steps b {
-        color: var(--red-label);
-      }
-      .install-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        margin-top: 14px;
-        flex-wrap: wrap;
-      }
-      .toast {
-        position: fixed;
-        left: 50%;
-        bottom: 24px;
-        transform: translateX(-50%) translateY(20px);
-        background: #fbf6e8;
-        border: 2.4px solid var(--ink);
-        border-radius: var(--radius-sketch-soft);
-        padding: 10px 16px;
-        box-shadow:
-          0 4px 0 #c8b78a,
-          0 12px 28px rgba(80, 54, 20, 0.14);
-        font-family: "Kalam", sans-serif;
-        font-size: 15px;
-        z-index: 400;
-        opacity: 0;
-        pointer-events: none;
-        transition:
-          opacity 0.25s ease,
-          transform 0.25s ease;
-        max-width: 90vw;
-      }
-      .toast.show {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-      .install-overlay-windows .install-card {
-        background: linear-gradient(180deg, #f4faff, #e4effb);
-        border-color: #1a6ca6;
-      }
-      .install-overlay-windows .install-close {
-        background: #eaf5ff;
-        border-color: #1a6ca6;
-        color: #0b4d80;
-      }
-      .install-overlay-windows .install-title {
-        color: #0b4d80;
-      }
-      .install-overlay-windows .install-sub {
-        color: #3a6890;
-      }
-      .install-overlay-windows .install-steps {
-        background: #f0f7fd;
-        border-color: #1a6ca6;
-        color: #0b4d80;
-      }
-      .install-overlay-windows .install-steps b {
-        color: #0078c8;
-      }
-      .install-overlay-windows .install-steps code {
-        background: #d8ebfa;
-        border-color: #7ab6e0;
-        color: #0b4d80;
-        font-family: "Patrick Hand", monospace;
-        font-size: 0.95em;
-        padding: 1px 6px;
-        border-radius: 8px 7px 9px 6px/7px 9px 6px 8px;
-        border: 1.5px solid #7ab6e0;
-      }
-      .share-strip {
-        margin: 22px auto 0;
-        max-width: 290px;
-        background: linear-gradient(180deg, #fdf9f0, #f7f0df);
-        padding: 10px 10px 8px;
-        box-shadow: 0 8px 24px var(--card-shadow);
-        transform: rotate(-0.4deg);
-      }
-      .share-caption {
-        margin: 0 0 7px;
-        text-align: center;
-        font-family: "Kalam", sans-serif;
+        bottom: 26px;
+        transform: translate(-50%, 18px);
+        z-index: 90;
+        background: var(--ink);
+        color: var(--paper);
+        border: 2px solid var(--gold);
+        box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.45);
+        padding: 12px 20px;
+        font-family: var(--font-mono);
         font-size: 13px;
-        color: var(--muted);
-      }
-      .share-caption b {
-        color: var(--wood-dark);
-      }
-      .share-stage {
-        position: relative;
-        border: 2.4px solid var(--ink);
-        border-radius: var(--radius-sketch-soft);
-        overflow: hidden;
-        background: #e8dcc0;
-        box-shadow: 0 3px 0 #c8b78a;
-        cursor: zoom-in;
-      }
-      .share-stage img {
-        display: block;
-        width: 100%;
-        aspect-ratio: 4 / 5;
-        object-fit: cover;
-        transition: opacity 0.35s ease;
-      }
-      .share-stage img.fade {
+        max-width: min(480px, 90vw);
+        text-align: center;
         opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
       }
-      .share-dots {
-        display: flex;
-        justify-content: center;
-        gap: 6px;
-        margin-top: 9px;
+      .toast.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
       }
-      .share-dots span {
-        width: 9px;
-        height: 9px;
-        border: 1.6px solid var(--ink);
-        border-radius: 50%;
-        cursor: pointer;
-        background: #fdf6e6;
-      }
-      .share-dots span.on {
-        background: var(--gold);
+      #install-toast {
+        z-index: 95;
       }
       .lightbox {
         position: fixed;
         inset: 0;
-        z-index: 600;
-        display: none;
+        z-index: 120;
+        display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(24, 16, 6, 0.74);
-        padding: 20px;
-        backdrop-filter: blur(3px);
+        background: rgba(26, 26, 26, 0.94);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.2s, visibility 0.2s;
       }
       .lightbox.open {
-        display: flex;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
       }
       .lightbox img {
-        max-width: min(92vw, 680px);
-        max-height: 84vh;
-        border: 3px solid #fff8e8;
-        border-radius: var(--radius-sketch-soft);
-        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+        max-width: 86vw;
+        max-height: 80vh;
+        border: 3px solid var(--paper);
+        box-shadow: 14px 14px 0 var(--red-label);
       }
       .lb-btn {
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 44px;
-        height: 44px;
-        display: grid;
-        place-items: center;
-        background: #fbf6e8;
-        border: 2.4px solid var(--ink);
-        border-radius: var(--radius-tiny);
-        box-shadow: 0 3px 0 #c8b78a;
-        cursor: pointer;
-        font-family: "Kalam", sans-serif;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: 2px solid var(--paper);
+        color: var(--paper);
         font-size: 22px;
-        line-height: 1;
-        color: var(--ink);
+        font-family: var(--font-mono);
+        cursor: pointer;
+        transition: background 0.12s, color 0.12s;
       }
       .lb-btn:hover {
-        background: #fff9ef;
-      }
-      .lb-prev {
-        left: 18px;
-      }
-      .lb-next {
-        right: 18px;
+        background: var(--paper);
+        color: var(--ink);
       }
       .lb-close {
-        left: auto;
-        right: 16px;
-        top: 16px;
-        bottom: auto;
-        transform: none;
-        font-size: 18px;
+        top: 20px;
+        right: 20px;
       }
-      @media (max-width: 920px) {
-        .lb-btn {
-          width: 38px;
-          height: 38px;
+      .lb-prev {
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .lb-next {
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .install-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 110;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(26, 26, 26, 0.82);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.2s, visibility 0.2s;
+      }
+      .install-overlay.open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+      .install-card {
+        position: relative;
+        width: min(580px, 94vw);
+        max-height: 88vh;
+        overflow: auto;
+        background: var(--paper);
+        border: 4px solid var(--ink);
+        box-shadow: 14px 14px 0 var(--gold);
+        padding: 34px 30px;
+        transform: rotate(-0.5deg);
+      }
+      .install-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+        background: var(--ink);
+        color: var(--paper);
+        border: 2px solid var(--ink);
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .install-close:hover {
+        background: var(--red-label);
+      }
+      .install-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 26px;
+        text-transform: uppercase;
+        line-height: 1;
+      }
+      .install-sub {
+        margin: 12px 0 0;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .install-steps {
+        margin-top: 20px;
+        display: grid;
+        gap: 10px;
+      }
+      .install-steps > div {
+        border: 2px solid var(--ink);
+        border-left: 10px solid var(--teal);
+        background: var(--paper-2);
+        padding: 12px 14px;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .install-actions {
+        margin-top: 22px;
+        display: flex;
+        justify-content: center;
+      }
+      @media (max-width: 1080px) {
+        .feature-card.fc1 {
+          grid-column: 1 / 13;
         }
-        .lb-prev {
-          left: 8px;
+        .feature-card.fc2 {
+          grid-column: 2 / 13;
         }
-        .lb-next {
-          right: 8px;
+        .feature-card.fc3 {
+          grid-column: 1 / 12;
+          margin-top: 0;
+        }
+        .faq-card.fq1 {
+          grid-column: 1 / 13;
+        }
+        .faq-card.fq2 {
+          grid-column: 2 / 13;
+        }
+        .faq-card.fq3 {
+          grid-column: 1 / 13;
+          margin-top: 0;
+        }
+        .faq-card.fq4 {
+          grid-column: 2 / 13;
+        }
+      }
+      @media (max-width: 900px) {
+        :root {
+          --nav-h: 66px;
+        }
+        .nav-toggle {
+          display: inline-flex;
+        }
+        .nav-links {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0;
+          background: var(--paper);
+          border-bottom: 3px solid var(--ink);
+          padding: 12px 18px 20px;
+          margin: 0;
+          transform: translateY(-10px);
+          opacity: 0;
+          visibility: hidden;
+          transition: transform 0.2s, opacity 0.2s, visibility 0.2s;
+        }
+        .nav-links.open {
+          transform: none;
+          opacity: 1;
+          visibility: visible;
+        }
+        .nav-links li {
+          border-bottom: 2px solid var(--ink);
+        }
+        .nav-links li:last-child {
+          border-bottom: 0;
+          padding-top: 6px;
+        }
+        .nav-links a {
+          display: block;
+          padding: 14px 6px;
+          border: 0;
+        }
+        .nav-cta {
+          text-align: center;
+          border: 2px solid var(--ink) !important;
+        }
+        .hero {
+          padding-top: 56px;
+        }
+        .hero-grid {
+          grid-template-columns: 1fr;
+          gap: 48px;
+        }
+        .pc-blob {
+          display: none;
+        }
+        .preview-card {
+          grid-column: auto;
+          grid-row: auto;
+          transform: rotate(-0.4deg);
+          margin-top: 12px;
+        }
+        .hb1 {
+          width: 110px;
+          height: 110px;
+          top: 90px;
+        }
+        .hb4 {
+          display: none;
+        }
+        .footer-inner {
+          grid-template-columns: 1fr;
+          gap: 36px;
+        }
+        .feature-card.fc2,
+        .feature-card.fc3,
+        .faq-card.fq3,
+        .faq-card.fq4 {
+          transform: none;
+        }
+        .feature-card.fc2,
+        .feature-card.fc3 {
+          margin-top: 0;
+        }
+      }
+      @media (max-width: 620px) {
+        .tick {
+          font-size: 10px;
+          gap: 20px;
+          padding-right: 20px;
+        }
+        .hero {
+          padding: 44px 16px 84px;
+        }
+        .hero-title {
+          font-size: clamp(38px, 11.5vw, 56px);
+        }
+        .hero-sub {
+          font-size: 16.5px;
+        }
+        .hero-actions {
+          gap: 14px;
+        }
+        .btn {
+          width: 100%;
+          justify-content: center;
+          font-size: 16px;
+          padding: 14px 18px;
+        }
+        .btn-windows {
+          transform: none;
+        }
+        .btn-windows:hover {
+          transform: translate(-2px, -2px);
+        }
+        .hero-bg-word {
+          font-size: clamp(90px, 24vw, 140px);
+        }
+        .hero-bg-word.b {
+          font-size: clamp(110px, 30vw, 180px);
+          bottom: -40px;
+        }
+        .section-inner {
+          padding: 84px 16px;
+        }
+        .section-title {
+          font-size: clamp(36px, 12vw, 52px);
+          border-left-width: 12px;
+          padding-left: 16px;
+        }
+        .feature-grid,
+        .faq-grid {
+          gap: 22px;
+          margin-top: 52px;
+        }
+        .feature-card.fc1,
+        .feature-card.fc2,
+        .feature-card.fc3,
+        .faq-card.fq1,
+        .faq-card.fq2,
+        .faq-card.fq3,
+        .faq-card.fq4 {
+          grid-column: 1 / 13;
+          margin-top: 0;
+        }
+        .feature-card {
+          box-shadow: 7px 7px 0 var(--ink);
+          padding: 20px;
+        }
+        .fnum {
+          font-size: 56px;
+        }
+        .faq-card p {
+          padding-left: 0;
+        }
+        .faq-q h3 {
+          font-size: 17px;
+        }
+        .qn {
+          font-size: 34px;
+        }
+        .preview-card {
+          padding: 14px 12px 18px;
+          box-shadow: 8px 8px 0 var(--ink);
+        }
+        .preview-controls {
+          padding: 14px 10px;
+          box-shadow: 4px 4px 0 var(--gold);
+        }
+        .ctrl-btn {
+          width: 42px;
+          height: 42px;
+        }
+        .ctrl-btn.small {
+          width: 36px;
+          height: 36px;
+        }
+        .ctrl-btn.play-main {
+          width: 56px;
+          height: 56px;
+        }
+        .time-pill {
+          display: none;
+        }
+        .volume-track {
+          max-width: none;
+        }
+        .hint-text {
+          font-size: 10px;
+        }
+        .cta-band {
+          padding: 72px 16px;
+        }
+        .cta-card {
+          padding: 30px 18px;
+          box-shadow: 8px 8px 0 var(--ink);
+          transform: none;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 6px;
+        }
+        .toast {
+          font-size: 12px;
+          width: 92vw;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+        html {
+          scroll-behavior: auto;
         }
       }
     </style>
   </head>
   <body>
-    <div class="paper-texture"></div>
+    <div class="paper-texture" aria-hidden="true"></div>
     <div class="doodle-notes" aria-hidden="true">
       <span class="note n1">♪</span>
       <span class="note n2">♫</span>
@@ -1994,327 +2341,205 @@
       </div>
     </nav>
 
+    <div class="tick-bar" aria-hidden="true">
+      <div class="tick">
+        <span>Chiroot Audio</span><i>✦</i><span>Gratis</span><i>✦</i
+        ><span>Tanpa Premium Plan</span><i>✦</i><span>Est. 1924</span><i>✦</i
+        ><span>Gramophone</span><i>✦</i><em>No Ads</em><i>✦</i
+        ><span>Putar Musik Mu</span><i>✦</i>
+      </div>
+      <div class="tick">
+        <span>Chiroot Audio</span><i>✦</i><span>Gratis</span><i>✦</i
+        ><span>Tanpa Premium Plan</span><i>✦</i><span>Est. 1924</span><i>✦</i
+        ><span>Gramophone</span><i>✦</i><em>No Ads</em><i>✦</i
+        ><span>Putar Musik Mu</span><i>✦</i>
+      </div>
+    </div>
+
     <div class="page" id="top">
       <section class="hero">
-        <div class="hero-copy">
-          <div class="vinyl-stamp">✦ Chiroot 1924 ✦</div>
-          <h1 class="hero-title">
-            Putar musik mu<br />
-            ala
-            <span
-              class="typewriter-word"
-              aria-label="Gramophone berganti Sigma"
-            >
-              <span class="tw-word tw-gramophone">Gramophone</span>
-              <span class="tw-word tw-sigma">Sigma</span>
-            </span>
-          </h1>
-          <div class="title-scribble" aria-hidden="true">
-            <svg viewBox="0 0 300 18" width="220" height="14">
-              <path
-                d="M2 12 C 40 4, 80 16, 120 9 C 170 3, 210 14, 260 8 C 278 6, 290 10, 298 7"
-                fill="none"
-                stroke="#c9a227"
-                stroke-width="2.2"
-                stroke-linecap="round"
-              />
-            </svg>
-          </div>
-          <p class="hero-sub">
-            Audio Player yang Gratis,Udah ke connect dengan Spotify behhh,
-            Kurang baik apa kita >:3
-          </p>
-          <div class="hero-actions">
-            <button class="btn btn-primary" id="install-android" type="button">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 413.137 413.137"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="#000000"
-                aria-hidden="true"
+        <span class="bg-word hero-bg-word" aria-hidden="true">CHIROOT</span>
+        <span class="bg-word hero-bg-word b" aria-hidden="true">1924</span>
+        <span class="hero-blob hb1" aria-hidden="true"></span>
+        <span class="hero-blob hb2" aria-hidden="true"></span>
+        <span class="hero-blob hb3" aria-hidden="true"></span>
+        <span class="hero-blob hb4" aria-hidden="true"></span>
+        <div class="hero-grid">
+          <span class="pc-blob" aria-hidden="true"></span>
+          <div class="hero-copy">
+            <div class="vinyl-stamp">✦ Chiroot 1924 ✦</div>
+            <h1 class="hero-title">
+              CHIROOT IS<br />
+              <span
+                class="typewriter-word"
+                aria-label="FREE berganti NO ADS"
               >
-                <g>
-                  <path
-                    style="fill: #aac148"
-                    d="M311.358,136.395H101.779c-4.662,0-8.441,3.779-8.441,8.441v175.749c0,4.662,3.779,8.441,8.441,8.441h37.363v59.228c0,13.742,11.14,24.883,24.883,24.883l0,0c13.742,0,24.883-11.14,24.883-24.883v-59.228h34.803v59.228c0,13.742,11.14,24.883,24.883,24.883l0,0c13.742,0,24.883-11.14,24.883-24.883v-59.228h37.882c4.662,0,8.441-3.779,8.441-8.441V144.836C319.799,140.174,316.02,136.395,311.358,136.395z"
-                  ></path>
-                  <path
-                    style="fill: #aac148"
-                    d="M57.856,136.354L57.856,136.354c-13.742,0-24.883,11.14-24.883,24.883v101.065c0,13.742,11.14,24.883,24.883,24.883l0,0c13.742,0,24.883-11.14,24.883-24.883V161.237C82.738,147.495,71.598,136.354,57.856,136.354z"
-                  ></path>
-                  <path
-                    style="fill: #aac148"
-                    d="M355.281,136.354L355.281,136.354c-13.742,0-24.883,11.14-24.883,24.883v101.065c0,13.742,11.14,24.883,24.883,24.883l0,0c13.742,0,24.883-11.14,24.883-24.883V161.237C380.164,147.495,369.024,136.354,355.281,136.354z"
-                  ></path>
-                  <path
-                    style="fill: #aac148"
-                    d="M103.475,124.069h205.692c5.366,0,9.368-4.943,8.266-10.195c-6.804-32.428-27.45-59.756-55.465-75.543l17.584-31.727c1.19-2.148,0.414-4.855-1.734-6.045c-2.153-1.193-4.856-0.414-6.046,1.734l-17.717,31.966c-14.511-6.734-30.683-10.495-47.734-10.495c-17.052,0-33.224,3.761-47.735,10.495L140.869,2.292c-1.191-2.149-3.898-2.924-6.045-1.734c-2.148,1.19-2.924,3.897-1.734,6.045l17.584,31.727c-28.015,15.788-48.661,43.115-55.465,75.544C94.106,119.126,98.108,124.069,103.475,124.069z M267.697,76.786c0,5.282-4.282,9.565-9.565,9.565c-5.282,0-9.565-4.282-9.565-9.565c0-5.282,4.282-9.565,9.565-9.565C263.415,67.221,267.697,71.504,267.697,76.786z M154.508,67.221c5.282,0,9.565,4.282,9.565,9.565c0,5.282-4.282,9.565-9.565,9.565c-5.282,0-9.565-4.282-9.565-9.565C144.943,71.504,149.225,67.221,154.508,67.221z"
-                  ></path>
-                </g>
-              </svg>
-              Install untuk Android
-            </button>
-            <button
-              class="btn btn-windows"
-              id="install-windows"
-              type="button"
-              title="Download installer Windows (.exe) — terverifikasi SHA-256"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="-0.5 0 257 257"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                preserveAspectRatio="xMidYMid"
-              >
+                <span class="tw-word tw-free">FREE/</span>
+                <span class="tw-word tw-noads">NO ADS</span>
+              </span>
+            </h1>
+            <div class="title-scribble" aria-hidden="true">
+              <svg viewBox="0 0 300 18" width="220" height="14">
                 <path
-                  d="M0 36.357L104.62 22.11l.045 100.914-104.57.595L0 36.358zm104.57 98.293l.08 101.002L.081 221.275l-.006-87.302 104.494.677zm12.682-114.405L255.968 0v121.74l-138.716 1.1V20.246zM256 135.6l-.033 121.191-138.716-19.578-.194-101.84L256 135.6z"
-                  fill="#00ADEF"
-                ></path>
+                  d="M2 12 C 40 4, 80 16, 120 9 C 170 3, 210 14, 260 8 C 278 6, 290 10, 298 7"
+                  fill="none"
+                  stroke="#c9a227"
+                  stroke-width="3.4"
+                  stroke-linecap="round"
+                />
               </svg>
-              Install dengan Windows
-            </button>
-          </div>
-          <div class="hero-meta"></div>
-
-          <div class="share-strip sketch-border-soft">
-            <p class="share-caption"><b>Share your track with your friends!</b></p>
-            <div class="share-stage" id="share-stage" title="Klik untuk perbesar">
-              <img id="share-img" src="cantbe.png" alt="Preview 1" />
             </div>
-            <div class="share-dots" id="share-dots">
-              <span class="on"></span><span></span><span></span><span></span><span></span>
+            <p class="hero-sub">
+              Audio Player yang Gratis,Udah ke connect dengan Spotify behhh,
+              Kurang baik apa kita &gt;:3
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" id="install-android" type="button">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 413.137 413.137"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#000000"
+                  aria-hidden="true"
+                >
+                  <g>
+                    <path
+                      style="fill: #aac148"
+                      d="M311.358,136.395H101.779c-4.662,0-8.441,3.779-8.441,8.441v175.749c0,4.662,3.779,8.441,8.441,8.441h37.363v59.228c0,13.742,11.14,24.883,24.883,24.883l0,0c13.742,0,24.883-11.14,24.883-24.883v-59.228h34.803v59.228c0,13.742,11.14,24.883,24.883,24.883l0,0c13.742,0,24.883-11.14,24.883-24.883v-59.228h37.882c4.662,0,8.441-3.779,8.441-8.441V144.836C319.799,140.174,316.02,136.395,311.358,136.395z"
+                    ></path>
+                    <path
+                      style="fill: #aac148"
+                      d="M57.856,136.354L57.856,136.354c-13.742,0-24.883,11.14-24.883,24.883v101.065c0,13.742,11.14,24.883,24.883,24.883l0,0c13.742,0,24.883-11.14,24.883-24.883V161.237C82.738,147.495,71.598,136.354,57.856,136.354z"
+                    ></path>
+                    <path
+                      style="fill: #aac148"
+                      d="M355.281,136.354L355.281,136.354c-13.742,0-24.883,11.14-24.883,24.883v101.065c0,13.742,11.14,24.883,24.883,24.883l0,0c13.742,0,24.883-11.14,24.883-24.883V161.237C380.164,147.495,369.024,136.354,355.281,136.354z"
+                    ></path>
+                    <path
+                      style="fill: #aac148"
+                      d="M103.475,124.069h205.692c5.366,0,9.368-4.943,8.266-10.195c-6.804-32.428-27.45-59.756-55.465-75.543l17.584-31.727c1.19-2.148,0.414-4.855-1.734-6.045c-2.153-1.193-4.856-0.414-6.046,1.734l-17.717,31.966c-14.511-6.734-30.683-10.495-47.734-10.495c-17.052,0-33.224,3.761-47.735,10.495L140.869,2.292c-1.191-2.149-3.898-2.924-6.045-1.734c-2.148,1.19-2.924,3.897-1.734,6.045l17.584,31.727c-28.015,15.788-48.661,43.115-55.465,75.544C94.106,119.126,98.108,124.069,103.475,124.069z M267.697,76.786c0,5.282-4.282,9.565-9.565,9.565c-5.282,0-9.565-4.282-9.565-9.565c0-5.282,4.282-9.565,9.565-9.565C263.415,67.221,267.697,71.504,267.697,76.786z M154.508,67.221c5.282,0,9.565,4.282,9.565,9.565c0,5.282-4.282,9.565-9.565,9.565c-5.282,0-9.565-4.282-9.565-9.565C144.943,71.504,149.225,67.221,154.508,67.221z"
+                    ></path>
+                  </g>
+                </svg>
+                Install untuk Android
+              </button>
+              <button
+                class="btn btn-windows"
+                id="install-windows"
+                type="button"
+                title="Download installer Windows (.exe) - terverifikasi SHA-256"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="-0.5 0 257 257"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  preserveAspectRatio="xMidYMid"
+                >
+                  <path
+                    d="M0 36.357L104.62 22.11l.045 100.914-104.57.595L0 36.358zm104.57 98.293l.08 101.002L.081 221.275l-.006-87.302 104.494.677zm12.682-114.405L255.968 0v121.74l-138.716 1.1V20.246zM256 135.6l-.033 121.191-138.716-19.578-.194-101.84L256 135.6z"
+                    fill="#00ADEF"
+                  ></path>
+                </svg>
+                Install dengan Windows
+              </button>
             </div>
-          </div>
-        </div>
+            <div class="hero-meta">
+              <span>Spotify Connected</span><span>Gratis</span><span>Est. 1924</span>
+            </div>
 
-        <div class="preview-card sketch-border" id="preview">
-          <div class="corner-doodle tl">✦</div>
-          <div class="corner-doodle tr">✧</div>
-          <div class="corner-doodle bl">✧</div>
-          <div class="corner-doodle br">✦</div>
-
-          <div class="nowplaying-wrap">
-            <div class="nowplaying-card sketch-border-tiny">
-              <div class="np-eyebrow">✦ now playing ✦</div>
-              <div class="np-track" id="np-track">DAY 1</div>
-              <div class="np-artist" id="np-artist">Red Velvet</div>
-              <div class="np-bar" aria-hidden="true">
-                <span></span><span></span><span></span><span></span
-                ><span></span>
+            <div class="share-strip">
+              <p class="share-caption">
+                <b>Share your track with your friends!</b>
+              </p>
+              <div class="share-stage" id="share-stage" title="Klik untuk perbesar">
+                <img id="share-img" src="cantbe.png" alt="Preview 1" />
+              </div>
+              <div class="share-dots" id="share-dots">
+                <span class="on"></span><span></span><span></span><span></span><span></span>
               </div>
             </div>
           </div>
 
-          <div class="preview-head">
-            <div class="preview-eyebrow">✦ 1924 ✦</div>
-            <h2 class="preview-song" id="ui-title"></h2>
-            <p class="preview-artist" id="ui-artist"></p>
-          </div>
+          <div class="preview-card" id="preview">
+            <div class="pc-sticker" aria-hidden="true">Preview • 30 sec</div>
+            <div class="corner-doodle tl" aria-hidden="true">✦</div>
+            <div class="corner-doodle tr" aria-hidden="true">✧</div>
+            <div class="corner-doodle bl" aria-hidden="true">✧</div>
+            <div class="corner-doodle br" aria-hidden="true">✦</div>
 
-          <div class="gramophone-stage">
-            <div class="stage-shadow"></div>
-            <div class="turntable-base sketch-border-soft">
-              <div class="wood-grain g1"></div>
-              <div class="wood-grain g2"></div>
-              <div class="wood-grain g3"></div>
-              <div class="platter-ring"></div>
-              <div class="vinyl-stage">
-                <div class="record-shadow"></div>
-                <div class="record" id="record">
-                  <div class="record-grooves"></div>
-                  <div class="record-grooves g2"></div>
-                  <div class="record-grooves g3"></div>
-                  <div class="record-label" id="record-label">
-                    <div class="label-inner has-cover" id="label-inner">
-                      <img
-                        class="label-cover"
-                        id="label-cover"
-                        alt="Cover lagu"
-                        src=""
-                      />
-                      <div class="label-text-wrap">
-                        <div class="label-brand">Chiroot</div>
-                        <div class="label-title" id="label-title">DAY 1</div>
+            <div class="nowplaying-wrap">
+              <div class="nowplaying-card">
+                <div class="np-eyebrow">✦ now playing ✦</div>
+                <div class="np-track" id="np-track">DAY 1</div>
+                <div class="np-artist" id="np-artist">Red Velvet</div>
+                <div class="np-bar" aria-hidden="true">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-head">
+              <div class="preview-eyebrow">✦ 1924 ✦</div>
+              <h2 class="preview-song" id="ui-title"></h2>
+              <p class="preview-artist" id="ui-artist"></p>
+            </div>
+
+            <div class="gramophone-stage">
+              <div class="stage-shadow"></div>
+              <div class="turntable-base">
+                <div class="wood-grain g1"></div>
+                <div class="wood-grain g2"></div>
+                <div class="wood-grain g3"></div>
+                <div class="platter-ring"></div>
+                <div class="vinyl-stage">
+                  <div class="record-shadow"></div>
+                  <div class="record" id="record">
+                    <div class="record-grooves"></div>
+                    <div class="record-grooves g2"></div>
+                    <div class="record-grooves g3"></div>
+                    <div class="record-label" id="record-label">
+                      <div class="label-inner has-cover" id="label-inner">
+                        <img
+                          class="label-cover"
+                          id="label-cover"
+                          alt="Cover lagu"
+                          src=""
+                        />
+                        <div class="label-text-wrap">
+                          <div class="label-brand">Chiroot</div>
+                          <div class="label-title" id="label-title">DAY 1</div>
+                        </div>
                       </div>
+                      <div class="spindle-hole"></div>
                     </div>
-                    <div class="spindle-hole"></div>
+                    <div class="record-sheen"></div>
                   </div>
-                  <div class="record-sheen"></div>
                 </div>
-              </div>
-              <div class="tonearm-pivot">
-                <div class="tonearm" id="tonearm">
-                  <div class="tonearm-bar"></div>
-                  <div class="tonearm-head">
-                    <div class="needle-tip"></div>
+                <div class="tonearm-pivot">
+                  <div class="tonearm" id="tonearm">
+                    <div class="tonearm-bar"></div>
+                    <div class="tonearm-head">
+                      <div class="needle-tip"></div>
+                    </div>
+                    <div class="counterweight"></div>
                   </div>
-                  <div class="counterweight"></div>
+                  <div class="pivot-screw"></div>
                 </div>
-                <div class="pivot-screw"></div>
+                <div class="brand-plate">GRAMO • 1924</div>
               </div>
-              <div class="brand-plate sketch-border-tiny">GRAMO • 1924</div>
-            </div>
-          </div>
-
-          <div class="preview-controls sketch-border-soft">
-            <div class="transport">
-              <button
-                class="ctrl-btn small"
-                id="btn-shuffle"
-                title="Shuffle (S)"
-                aria-label="Shuffle"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <polyline points="16 3 21 3 21 8" />
-                  <line x1="4" y1="20" x2="21" y2="3" />
-                  <polyline points="21 16 21 21 16 21" />
-                  <line x1="15" y1="15" x2="21" y2="21" />
-                  <line x1="4" y1="4" x2="9" y2="9" />
-                </svg>
-              </button>
-              <button
-                class="ctrl-btn small"
-                id="btn-prev"
-                title="Previous (←)"
-                aria-label="Previous"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                >
-                  <polygon points="19,5 9,12 19,19" />
-                  <rect x="5" y="5" width="2.5" height="14" rx="1" />
-                </svg>
-              </button>
-              <button
-                class="ctrl-btn"
-                id="btn-restart"
-                title="Ulangi (R)"
-                aria-label="Ulangi"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="18"
-                  height="18"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <polyline points="1 4 1 10 7 10" />
-                  <path d="M3.51 15a9 9 0 1 0 .49-4" />
-                </svg>
-              </button>
-              <button
-                class="ctrl-btn play-main"
-                id="btn-play"
-                title="Play / Pause (Space)"
-                aria-label="Play"
-              >
-                <span id="play-icon">
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="26"
-                    height="26"
-                    fill="currentColor"
-                  >
-                    <polygon points="7,5 20,12 7,19" />
-                  </svg>
-                </span>
-              </button>
-              <button
-                class="ctrl-btn"
-                id="btn-stop"
-                title="Stop"
-                aria-label="Stop"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                >
-                  <rect x="6" y="6" width="12" height="12" rx="2" />
-                </svg>
-              </button>
-              <button
-                class="ctrl-btn small"
-                id="btn-next"
-                title="Next (→)"
-                aria-label="Next"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                >
-                  <polygon points="5,5 15,12 5,19" />
-                  <rect x="16.5" y="5" width="2.5" height="14" rx="1" />
-                </svg>
-              </button>
-              <button
-                class="ctrl-btn small"
-                id="btn-loop"
-                title="Loop (L)"
-                aria-label="Loop"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <polyline points="17 1 21 5 17 9" />
-                  <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                  <polyline points="7 23 3 19 7 15" />
-                  <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-                </svg>
-              </button>
             </div>
 
-            <div class="progress-wrap">
-              <span class="time-pill" id="current-time">0:00</span>
-              <div class="progress-track-wrap sketch-border-tiny">
-                <div class="progress-track">
-                  <div class="progress-fill" id="progress-fill"></div>
-                  <div class="progress-thumb" id="progress-thumb"></div>
-                  <input
-                    type="range"
-                    id="preview-seek"
-                    min="0"
-                    max="30"
-                    value="0"
-                    step="0.1"
-                    aria-label="Seek preview"
-                  />
-                </div>
-              </div>
-              <span class="time-pill" id="duration">0:30</span>
-            </div>
-
-            <div class="volume-row">
-              <button class="mini-btn" id="btn-mute" aria-label="Mute">
-                <span id="mute-icon">
+            <div class="preview-controls">
+              <div class="transport">
+                <button
+                  class="ctrl-btn small"
+                  id="btn-shuffle"
+                  title="Shuffle (S)"
+                  aria-label="Shuffle"
+                >
                   <svg
                     viewBox="0 0 24 24"
                     width="16"
@@ -2325,145 +2550,313 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   >
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                    <polyline points="16 3 21 3 21 8" />
+                    <line x1="4" y1="20" x2="21" y2="3" />
+                    <polyline points="21 16 21 21 16 21" />
+                    <line x1="15" y1="15" x2="21" y2="21" />
+                    <line x1="4" y1="4" x2="9" y2="9" />
                   </svg>
-                </span>
-              </button>
-              <div class="volume-track sketch-border-tiny">
-                <input
-                  type="range"
-                  id="volume"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value="0.82"
-                  aria-label="Volume"
-                />
+                </button>
+                <button
+                  class="ctrl-btn small"
+                  id="btn-prev"
+                  title="Previous (←)"
+                  aria-label="Previous"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                  >
+                    <polygon points="19,5 9,12 19,19" />
+                    <rect x="5" y="5" width="2.5" height="14" rx="1" />
+                  </svg>
+                </button>
+                <button
+                  class="ctrl-btn"
+                  id="btn-restart"
+                  title="Ulangi (R)"
+                  aria-label="Ulangi"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="1 4 1 10 7 10" />
+                    <path d="M3.51 15a9 9 0 1 0 .49-4" />
+                  </svg>
+                </button>
+                <button
+                  class="ctrl-btn play-main"
+                  id="btn-play"
+                  title="Play / Pause (Space)"
+                  aria-label="Play"
+                >
+                  <span id="play-icon">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="26"
+                      height="26"
+                      fill="currentColor"
+                    >
+                      <polygon points="7,5 20,12 7,19" />
+                    </svg>
+                  </span>
+                </button>
+                <button
+                  class="ctrl-btn"
+                  id="btn-stop"
+                  title="Stop"
+                  aria-label="Stop"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                  >
+                    <rect x="6" y="6" width="12" height="12" rx="2" />
+                  </svg>
+                </button>
+                <button
+                  class="ctrl-btn small"
+                  id="btn-next"
+                  title="Next (→)"
+                  aria-label="Next"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                  >
+                    <polygon points="5,5 15,12 5,19" />
+                    <rect x="16.5" y="5" width="2.5" height="14" rx="1" />
+                  </svg>
+                </button>
+                <button
+                  class="ctrl-btn small"
+                  id="btn-loop"
+                  title="Loop (L)"
+                  aria-label="Loop"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="17 1 21 5 17 9" />
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                    <polyline points="7 23 3 19 7 15" />
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                  </svg>
+                </button>
               </div>
-              <span class="volume-label" id="volume-label">82%</span>
+
+              <div class="progress-wrap">
+                <span class="time-pill" id="current-time">0:00</span>
+                <div class="progress-track-wrap">
+                  <div class="progress-track">
+                    <div class="progress-fill" id="progress-fill"></div>
+                    <div class="progress-thumb" id="progress-thumb"></div>
+                    <input
+                      type="range"
+                      id="preview-seek"
+                      min="0"
+                      max="30"
+                      value="0"
+                      step="0.1"
+                      aria-label="Seek preview"
+                    />
+                  </div>
+                </div>
+                <span class="time-pill" id="duration">0:30</span>
+              </div>
+
+              <div class="volume-row">
+                <button class="mini-btn" id="btn-mute" aria-label="Mute">
+                  <span id="mute-icon">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                    </svg>
+                  </span>
+                </button>
+                <div class="volume-track">
+                  <input
+                    type="range"
+                    id="volume"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value="0.82"
+                    aria-label="Volume"
+                  />
+                </div>
+                <span class="volume-label" id="volume-label">82%</span>
+              </div>
             </div>
-          </div>
 
-          <p class="hint-text">
-            <b>Space</b> Play/Pause • <b>← →</b> Prev/Next • <b>S</b> Shuffle •
-            <b>L</b> Loop • <b>M</b> Mute • <b>R</b> Restart
-          </p>
+            <p class="hint-text">
+              <b>Space</b> Play/Pause • <b>← →</b> Prev/Next • <b>S</b> Shuffle •
+              <b>L</b> Loop • <b>M</b> Mute • <b>R</b> Restart
+            </p>
 
-          <div class="mini-crate" id="crate">
-            <div class="mini-crate-head">
-              <h3 class="mini-crate-title">
-                The Crate
-                <span class="crate-count" id="crate-count">• 0 cuplikan</span>
-              </h3>
-              <a class="crate-link" href="Main.html">Buka crate penuh →</a>
+            <div class="mini-crate" id="crate">
+              <div class="mini-crate-head">
+                <h3 class="mini-crate-title">
+                  The Crate
+                  <span class="crate-count" id="crate-count">• 0 cuplikan</span>
+                </h3>
+                <a class="crate-link" href="Main.html">Buka crate penuh →</a>
+              </div>
+              <ul class="crate-list" id="crate-list"></ul>
             </div>
-            <ul class="crate-list sketch-border-soft" id="crate-list"></ul>
-          </div>
 
-          <div class="cover-row sketch-border-tiny">
-            <img class="cover-thumb" id="cover-thumb" alt="Cover art" src="" />
-            <div class="cover-meta">
-              <h4 id="cover-title">DAY 1</h4>
-              <p id="cover-artist">Red Velvet • preview 30s</p>
+            <div class="cover-row">
+              <img class="cover-thumb" id="cover-thumb" alt="Cover art" src="" />
+              <div class="cover-meta">
+                <h4 id="cover-title">DAY 1</h4>
+                <p id="cover-artist">Red Velvet • preview 30s</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <section class="section" id="features">
-        <div class="section-head">
-          <h2 class="section-title">Yang bikin beda</h2>
-          <p class="section-sub">
-            Nuansa doodle kertas, kontrol sketchy, gramophone yang benar-benar
-            hidup, + fitur-fitur inti dari player lengkapnya.
-          </p>
-        </div>
-        <div class="feature-grid">
-          <article class="feature-card sketch-border-soft">
-            <div class="corner-doodle tl">✦</div>
-            <div class="feature-icon">♪</div>
-            <h3>Vinyl &amp; Tonearm Hidup</h3>
-            <p>
-              Piringan berputar otomatis saat play, tonearm turun ke groove, bar
-              now-playing menari mengikuti irama.
+        <span class="bg-word features-bg-word" aria-hidden="true">BEDA</span>
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <span class="sec-tag">Sec. 02 - Fitur</span>
+              <h2 class="section-title">Yang bikin beda</h2>
+            </div>
+            <p class="section-sub">
+              Nuansa doodle kertas, kontrol sketchy, gramophone yang benar-benar
+              hidup, + fitur-fitur inti dari player lengkapnya.
             </p>
-          </article>
-          <article class="feature-card sketch-border-soft">
-            <div class="corner-doodle tr">✦</div>
-            <div class="feature-icon">🎛</div>
-            <h3>Kontrol Lengkap</h3>
-            <p>
-              Play/Pause, Stop, Restart, Prev/Next, Shuffle, Loop, Volume +
-              Mute, dan seek bar yang bisa di-drag.
-            </p>
-          </article>
-          <article class="feature-card sketch-border-soft">
-            <div class="corner-doodle bl">✦</div>
-            <div class="feature-icon">📀</div>
-            <h3>Mini Crate</h3>
-            <p>
-              Daftar cuplikan lagu langsung di website nya, klik untuk ganti
-              track tanpa reload halaman.
-            </p>
-          </article>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card fc1">
+              <span class="fnum" aria-hidden="true">01</span>
+              <div class="corner-doodle tl" aria-hidden="true">✦</div>
+              <div class="feature-icon">♪</div>
+              <h3>Vinyl &amp; Tonearm Hidup</h3>
+              <p>
+                Piringan berputar otomatis saat play, tonearm turun ke groove, bar
+                now-playing menari mengikuti irama.
+              </p>
+            </article>
+            <article class="feature-card fc2">
+              <span class="fnum" aria-hidden="true">02</span>
+              <div class="corner-doodle tr" aria-hidden="true">✦</div>
+              <div class="feature-icon">🎛</div>
+              <h3>Kontrol Lengkap</h3>
+              <p>
+                Play/Pause, Stop, Restart, Prev/Next, Shuffle, Loop, Volume +
+                Mute, dan seek bar yang bisa di-drag.
+              </p>
+            </article>
+            <article class="feature-card fc3">
+              <span class="fnum" aria-hidden="true">03</span>
+              <div class="corner-doodle bl" aria-hidden="true">✦</div>
+              <div class="feature-icon">📀</div>
+              <h3>Mini Crate</h3>
+              <p>
+                Daftar cuplikan lagu langsung di website nya, klik untuk ganti
+                track tanpa reload halaman.
+              </p>
+              <span class="f-arrow" aria-hidden="true">↘</span>
+            </article>
+          </div>
         </div>
       </section>
 
       <section class="section" id="faq">
-        <div class="section-head">
-          <h2 class="section-title">Tanya Jawab</h2>
-          <p class="section-sub">Pertanyaan yang sering ditanyakan.</p>
-        </div>
-        <div class="faq-grid">
-          <article class="faq-card sketch-border-soft">
-            <div class="corner-doodle tl">✦</div>
-            <div class="faq-q">
-              <span class="qn">Q1</span>
-              <h3>Apakah Chiroot Gratis?</h3>
+        <span class="bg-word faq-bg-word" aria-hidden="true">FAQ</span>
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <span class="sec-tag">Sec. 03 - Tanya Jawab</span>
+              <h2 class="section-title">Tanya Jawab</h2>
             </div>
-            <p>Yap betul, Chiroot Gratis tanpa ada Premium plan bla bla bla.</p>
-          </article>
-          <article class="faq-card sketch-border-soft">
-            <div class="corner-doodle tr">✧</div>
-            <div class="faq-q">
-              <span class="qn">Q2</span>
-              <h3>Bisa ganti warna label vinyl tiap lagu?</h3>
-            </div>
-            <p>
-              Yessir! Setiap lagu BISA di edit dengan warna favorit yang kamu
-              mau pakai.
-            </p>
-          </article>
-          <article class="faq-card sketch-border-soft">
-            <div class="corner-doodle bl">✧</div>
-            <div class="faq-q">
-              <span class="qn">Q3</span>
-              <h3>Format File untuk lagu/Cover image nya apa?</h3>
-            </div>
-            <p>
-              Untuk sekarang lagu nya format file nya MP3 dan untuk Cover Image
-              nya Bisa JPEG, JPG, dan PNG!
-            </p>
-          </article>
-          <article class="faq-card sketch-border-soft">
-            <div class="corner-doodle br">✦</div>
-            <div class="faq-q">
-              <span class="qn">Q4</span>
-              <h3>Bisa dipakai di HP / layar kecil?</h3>
-            </div>
-            <p>Udah responsive kok, jadi working untuk semua device!</p>
-          </article>
+            <p class="section-sub">Pertanyaan yang sering ditanyakan.</p>
+          </div>
+          <div class="faq-grid">
+            <article class="faq-card fq1">
+              <div class="corner-doodle tl" aria-hidden="true">✦</div>
+              <div class="faq-q">
+                <span class="qn">Q1</span>
+                <h3>Apakah Chiroot Gratis?</h3>
+              </div>
+              <p>Yap betul, Chiroot Gratis tanpa ada Premium plan bla bla bla.</p>
+            </article>
+            <article class="faq-card fq2">
+              <div class="corner-doodle tr" aria-hidden="true">✧</div>
+              <div class="faq-q">
+                <span class="qn">Q2</span>
+                <h3>Bisa ganti warna label vinyl tiap lagu?</h3>
+              </div>
+              <p>
+                Yessir! Setiap lagu BISA di edit dengan warna favorit yang kamu
+                mau pakai.
+              </p>
+            </article>
+            <article class="faq-card fq3">
+              <div class="corner-doodle bl" aria-hidden="true">✧</div>
+              <div class="faq-q">
+                <span class="qn">Q3</span>
+                <h3>Format File untuk lagu/Cover image nya apa?</h3>
+              </div>
+              <p>
+                Untuk sekarang lagu nya format file nya MP3 dan untuk Cover Image
+                nya Bisa JPEG, JPG, dan PNG!
+              </p>
+            </article>
+            <article class="faq-card fq4">
+              <div class="corner-doodle br" aria-hidden="true">✦</div>
+              <div class="faq-q">
+                <span class="qn">Q4</span>
+                <h3>Bisa dipakai di HP / layar kecil?</h3>
+              </div>
+              <p>Udah responsive kok, jadi working untuk semua device!</p>
+            </article>
+          </div>
         </div>
       </section>
 
       <div class="cta-band">
-        <div class="cta-card sketch-border">
-          <div class="corner-doodle tl">✦</div>
-          <div class="corner-doodle tr">✧</div>
-          <div class="corner-doodle bl">✧</div>
-          <div class="corner-doodle br">✦</div>
+        <span class="bg-word cta-bg-word" aria-hidden="true">WAITLIST</span>
+        <span class="cta-blob" aria-hidden="true"></span>
+        <div class="cta-card">
+          <div class="corner-doodle tl" aria-hidden="true">✦</div>
+          <div class="corner-doodle tr" aria-hidden="true">✧</div>
+          <div class="corner-doodle bl" aria-hidden="true">✧</div>
+          <div class="corner-doodle br" aria-hidden="true">✦</div>
+          <span class="sec-tag">Sec. 04 - Waitlist</span>
           <h2>Join the waitlist</h2>
           <p>
             Karena Web app ini aslinya masih belum sepenuhnya selesai, Yall guys
@@ -2472,8 +2865,7 @@
               ><span
                 class="__cf_email__"
                 data-cfemail="accddec0cdc2c8c3d6c5cbd6cdcbeccbc1cdc5c082cfc3c1"
-                >ChirootDevTeam</span
-              ></a
+                >ChirootDevTeam</span></a
             >
             untuk menanyakan atau beri kita ide ya!
           </p>
@@ -2484,14 +2876,7 @@
               maxlength="1200"
               placeholder="Tulis pesan / ide kamu buat Chiroot di sini..."
             ></textarea>
-            <div
-              style="
-                display: flex;
-                gap: 12px;
-                justify-content: center;
-                flex-wrap: wrap;
-              "
-            >
+            <div class="waitlist-actions">
               <button class="btn btn-primary" id="waitlist-gmail" type="button">
                 ✦ Join waitlist!
               </button>
@@ -2502,6 +2887,9 @@
     </div>
 
     <footer class="site-footer">
+      <div class="color-strip" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
       <div class="footer-inner">
         <div class="footer-brand">
           <div class="brand">
@@ -2527,8 +2915,9 @@
           </ul>
         </div>
       </div>
+      <div class="footer-giant" aria-hidden="true">CHIROOT<i>✦</i></div>
       <div class="footer-bottom">
-        <span>Made by Arlando D.A and My lovely Team :3</span>
+        <span>Made from ChirootDevTeam</span>
         <span>Chiroot <span class="footer-dot">✦</span> </span>
       </div>
     </footer>
@@ -2625,7 +3014,7 @@
           encodeURIComponent(
             '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect width="80" height="80" fill="' +
               c +
-              '"/><text x="40" y="50" font-family="Caveat,Kalam,sans-serif" font-size="22" text-anchor="middle" fill="#fff6e2">' +
+              '"/><text x="40" y="50" font-family="Archivo,sans-serif" font-weight="800" font-size="22" text-anchor="middle" fill="#fff6e2">' +
               t +
               "</text></svg>",
           )
@@ -2828,7 +3217,7 @@
             .catch(function (err) {
               setPlayingVisual(false);
               showToast(
-                "Audio gagal diputar — pastikan file " +
+                "Audio gagal diputar - pastikan file " +
                   getTrack().audio +
                   " ada di folder yang sama.",
               );
@@ -2991,7 +3380,7 @@
         showToast(
           "Gagal memuat audio (" +
             getTrack().audio +
-            ") — cek nama file / jalankan lewat server lokal.",
+            ") - cek nama file / jalankan lewat server lokal.",
         );
       });
       seek.addEventListener("pointerdown", function () {
@@ -3166,7 +3555,7 @@
     </script>
 
     <div class="install-overlay" id="install-overlay" aria-hidden="true">
-      <div class="install-card sketch-border">
+      <div class="install-card">
         <button class="install-close" id="install-close" aria-label="Close">
           ✕
         </button>
@@ -3186,7 +3575,7 @@
       id="install-overlay-windows"
       aria-hidden="true"
     >
-      <div class="install-card sketch-border">
+      <div class="install-card">
         <button
           class="install-close"
           id="install-close-windows"
@@ -3348,7 +3737,7 @@
             openModal(
               "Install di Android",
               "Download file APK Chiroot, lalu install di Android kamu:",
-              "<div><b>1.</b> Tap tombol <b>Download .apk</b> — file langsung didownload dari Google Drive.</div>" +
+              "<div><b>1.</b> Tap tombol <b>Download .apk</b> - file langsung didownload dari Google Drive.</div>" +
                 "<div><b>2.</b> Buka file APK-nya. Kalau muncul peringatan, aktifkan <b>Install unknown apps</b> di pengaturan browser.</div>" +
                 "<div><b>3.</b> Tap <b>Install</b> dan tunggu sampai selesai.</div>" +
                 NOTE_ANDROID,
@@ -3361,113 +3750,5 @@
           });
       })();
     </script>
-    <script>
-      (function () {
-        function c() {
-          var b =
-            a.contentDocument || (a.contentWindow && a.contentWindow.document);
-          if (b) {
-            var d = b.createElement("script");
-            d.innerHTML =
-              "window.__CF$cv$params={r:'a213e6bbddeead69',t:'MTc4NTA3NDExOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
-            b.getElementsByTagName("head")[0].appendChild(d);
-          }
-        }
-        if (document.body) {
-          var a = document.createElement("iframe");
-          a.height = 1;
-          a.width = 1;
-          a.style.position = "absolute";
-          a.style.top = 0;
-          a.style.left = 0;
-          a.style.border = "none";
-          a.style.visibility = "hidden";
-          document.body.appendChild(a);
-          if ("loading" !== document.readyState) c();
-          else if (window.addEventListener)
-            document.addEventListener("DOMContentLoaded", c);
-          else {
-            var e = document.onreadystatechange || function () {};
-            document.onreadystatechange = function (b) {
-              e(b);
-              "loading" !== document.readyState &&
-                ((document.onreadystatechange = e), c());
-            };
-          }
-        }
-      })();
-    </script>
-    <script>
-      (function () {
-        function c() {
-          var b =
-            a.contentDocument || (a.contentWindow && a.contentWindow.document);
-          if (b) {
-            var d = b.createElement("script");
-            d.innerHTML =
-              "window.__CF$cv$params={r:'a21c10684cb7243f',t:'MTc4NTE1OTcxMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
-            b.getElementsByTagName("head")[0].appendChild(d);
-          }
-        }
-        if (document.body) {
-          var a = document.createElement("iframe");
-          a.height = 1;
-          a.width = 1;
-          a.style.position = "absolute";
-          a.style.top = 0;
-          a.style.left = 0;
-          a.style.border = "none";
-          a.style.visibility = "hidden";
-          document.body.appendChild(a);
-          if ("loading" !== document.readyState) c();
-          else if (window.addEventListener)
-            document.addEventListener("DOMContentLoaded", c);
-          else {
-            var e = document.onreadystatechange || function () {};
-            document.onreadystatechange = function (b) {
-              e(b);
-              "loading" !== document.readyState &&
-                ((document.onreadystatechange = e), c());
-            };
-          }
-        }
-      })();
-    </script>
-    <script>
-      (function () {
-        function c() {
-          var b =
-            a.contentDocument || (a.contentWindow && a.contentWindow.document);
-          if (b) {
-            var d = b.createElement("script");
-            d.innerHTML =
-              "window.__CF$cv$params={r:'a30b1c414b629610',t:'MTc4NzY2NjI5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
-            b.getElementsByTagName("head")[0].appendChild(d);
-          }
-        }
-        if (document.body) {
-          var a = document.createElement("iframe");
-          a.height = 1;
-          a.width = 1;
-          a.style.position = "absolute";
-          a.style.top = 0;
-          a.style.left = 0;
-          a.style.border = "none";
-          a.style.visibility = "hidden";
-          document.body.appendChild(a);
-          if ("loading" !== document.readyState) c();
-          else if (window.addEventListener)
-            document.addEventListener("DOMContentLoaded", c);
-          else {
-            var e = document.onreadystatechange || function () {};
-            document.onreadystatechange = function (b) {
-              e(b);
-              "loading" !== document.readyState &&
-                ((document.onreadystatechange = e), c());
-            };
-          }
-        }
-      })();
-    </script>
-  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3538a2e0b62b772',t:'MTc4ODQyNTc3MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  </body>
 </html>
