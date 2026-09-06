@@ -630,7 +630,312 @@ button:focus-visible, input:focus-visible, select:focus-visible{ outline:3px sol
   .ana-row .ana-cat{ display:none;}
   .admin-sticker{ display:none;}
 }
-  </style>
+  
+.pn-layout {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .pn-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.pn-template-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: #fdfaf2;
+  border: 1.6px dashed #d2a772;
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-bottom: 14px;
+}
+.pn-template-label {
+  font-family: 'Kalam', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #7a6548;
+}
+.pn-template-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.btn-template {
+  font-family: 'Patrick Hand', sans-serif;
+  font-size: 14px;
+  background: #ffffff;
+  border: 1.8px solid #1a1a1a;
+  border-radius: 9px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease;
+}
+.btn-template:hover {
+  background: #f3d986;
+  transform: translateY(-1px);
+}
+.pn-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pn-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 12px;
+}
+@media (max-width: 540px) {
+  .pn-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+.pn-snippet-helpers {
+  display: flex;
+  gap: 4px;
+}
+.btn-snippet {
+  font-family: 'Patrick Hand', sans-serif;
+  font-size: 12.5px;
+  background: #f4eee1;
+  border: 1.5px solid #1a1a1a;
+  border-radius: 6px;
+  padding: 2px 7px;
+  cursor: pointer;
+}
+.btn-snippet:hover {
+  background: #e2c86a;
+}
+.pn-textarea {
+  font-family: 'Patrick Hand', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  resize: vertical;
+  min-height: 140px;
+}
+.pn-switches-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #fcf8ee;
+  border: 1.5px solid #dfd3bd;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.pn-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Kalam', sans-serif;
+  font-size: 13.5px;
+  color: #33323a;
+  cursor: pointer;
+}
+.pn-checkbox-label input {
+  width: 16px;
+  height: 16px;
+  accent-color: #c9a227;
+  cursor: pointer;
+}
+.pn-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.pn-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 650px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.pn-card-item {
+  background: #fffdf8;
+  border: 2px solid #1a1a1a;
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  transition: transform .12s ease;
+}
+.pn-card-item:hover {
+  transform: translateY(-1px);
+}
+.pn-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.pn-card-title {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.2;
+}
+.pn-card-meta {
+  font-family: 'Kalam', sans-serif;
+  font-size: 12px;
+  color: #7b6f5f;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pn-card-summary {
+  font-family: 'Patrick Hand', sans-serif;
+  font-size: 14px;
+  color: #4a3f33;
+  line-height: 1.35;
+}
+.pn-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  align-items: center;
+  margin-top: 4px;
+  border-top: 1px dashed #e2d7c0;
+  padding-top: 8px;
+}
+.pn-type-badge {
+  display: inline-block;
+  font-family: 'Kalam', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1.4px solid #1a1a1a;
+  text-transform: uppercase;
+}
+.pn-type-major { background: #e2c86a; color: #1a1a1a; }
+.pn-type-minor { background: #cce7dc; color: #174e38; }
+.pn-type-patch { background: #fedbcf; color: #7d2a1c; }
+.pn-type-maintenance { background: #dce5fa; color: #233e7d; }
+.patchnotes-modal-card {
+  max-width: 540px;
+  width: 100%;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #fffdf7, #f7efe0);
+  padding: 20px 22px;
+  position: relative;
+  box-shadow: 0 16px 36px rgba(40,28,12,0.28);
+}
+.patchnotes-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+.patchnotes-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.patchnotes-type-pill {
+  font-family: 'Kalam', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  padding: 2px 9px;
+  border-radius: 6px;
+  border: 1.8px solid #1a1a1a;
+  text-transform: uppercase;
+}
+.patchnotes-version-pill {
+  font-family: 'Kalam', system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  background: #1a1a1a;
+  color: #f7f3e9;
+  padding: 2px 9px;
+  border-radius: 6px;
+}
+.patchnotes-title {
+  font-family: 'Caveat', cursive;
+  font-size: 30px;
+  line-height: 1.15;
+  color: #1a1a1a;
+  margin: 4px 0 2px;
+}
+.patchnotes-date {
+  font-family: 'Kalam', system-ui, sans-serif;
+  font-size: 12.5px;
+  color: #7b6f5f;
+  margin: 0;
+}
+.patchnotes-summary-box {
+  background: #fdf8eb;
+  border: 1.8px dashed #c9a227;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: 'Patrick Hand', system-ui, sans-serif;
+  font-size: 15px;
+  color: #433728;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+.patchnotes-scroll-area {
+  background: #ffffff;
+  border: 2px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 14px 16px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  max-height: 44vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.patchnotes-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.patchnotes-group-title {
+  font-family: 'Kalam', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #5b4630;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1.5px dashed #ded4be;
+  padding-bottom: 3px;
+}
+.patchnotes-item {
+  font-family: 'Patrick Hand', system-ui, sans-serif;
+  font-size: 16px;
+  color: #242220;
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding-left: 4px;
+}
+.patchnotes-bullet {
+  color: #c9a227;
+  font-size: 18px;
+  line-height: 1.1;
+  flex-shrink: 0;
+}
+</style>
 </head>
 <body>
 
@@ -691,6 +996,7 @@ button:focus-visible, input:focus-visible, select:focus-visible{ outline:3px sol
         <button type="button" class="admin-tab" data-tab="playlist">♫ Crate &amp; Kategori</button>
         <button type="button" class="admin-tab" data-tab="analytics">📈 Analitik</button>
         <button type="button" class="admin-tab" data-tab="users">👥 Pengguna</button>
+        <button type="button" class="admin-tab" data-tab="patchnotes">📢 Patch Notes</button>
       </nav>
 
       <section class="view active" id="view-dashboard" aria-label="Dashboard">
@@ -799,6 +1105,110 @@ button:focus-visible, input:focus-visible, select:focus-visible{ outline:3px sol
         </div>
       </section>
 
+      <section class="view" id="view-patchnotes" aria-label="Patch Notes">
+        <div class="view-head">
+          <div>
+            <h2 class="view-title">📢 Manajemen Patch Notes</h2>
+            <p class="panel-note" style="margin-top:2px;">Kirim pengumuman pembaruan yang otomatis muncul sebagai pop-up di player musik pengguna.</p>
+          </div>
+          <div class="view-tools">
+            <button type="button" class="btn-primary sketch-border-soft" id="btn-pn-scroll-new">✦ Buat Rilis Baru</button>
+          </div>
+        </div>
+
+        <div class="pn-layout">
+          <div class="panel sketch-border-soft pn-form-card" id="pn-form-container">
+            <div class="panel-head" style="margin-bottom:12px;">
+              <h3 class="panel-title" id="pn-form-title">✦ Buat Patch Notes Baru</h3>
+              <span class="role-badge dev" id="pn-mode-badge">Baru</span>
+            </div>
+
+            <div class="pn-template-bar">
+              <span class="pn-template-label">⚡ Template Cepat:</span>
+              <div class="pn-template-btns">
+                <button type="button" class="btn-template sketch-border-tiny" data-pn-template="minor">✦ Fitur Baru</button>
+                <button type="button" class="btn-template sketch-border-tiny" data-pn-template="patch">🐛 Hotfix / Bug Fix</button>
+                <button type="button" class="btn-template sketch-border-tiny" data-pn-template="major">🚀 Major Update</button>
+                <button type="button" class="btn-template sketch-border-tiny" data-pn-template="maint">🛠️ Pemeliharaan</button>
+              </div>
+            </div>
+
+            <form id="pn-form" class="pn-form-grid">
+              <input type="hidden" id="pn-edit-id" value="">
+              
+              <div class="pn-row-2">
+                <div class="field">
+                  <label for="pn-input-title">Judul Pembaruan / Rilis <span style="color:#d84a3a;">*</span></label>
+                  <input type="text" id="pn-input-title" class="sketch-input" placeholder="contoh: Chiroot v2.1 • Audio Reverb &amp; Bluetooth" required>
+                </div>
+                <div class="field">
+                  <label for="pn-input-version">Nomor Versi <span style="color:#d84a3a;">*</span></label>
+                  <input type="text" id="pn-input-version" class="sketch-input" placeholder="contoh: v2.1.0" required>
+                </div>
+              </div>
+
+              <div class="pn-row-2">
+                <div class="field">
+                  <label for="pn-select-type">Tipe Rilis</label>
+                  <select id="pn-select-type" class="sketch-input">
+                    <option value="minor">✦ Minor (Fitur Baru &amp; Update)</option>
+                    <option value="major">🚀 Major (Pembaruan Skala Besar)</option>
+                    <option value="patch">🐛 Patch / Hotfix (Perbaikan Bug)</option>
+                    <option value="maintenance">🛠️ Maintenance (Pemeliharaan Sistem)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="pn-input-author">Penulis / Tim</label>
+                  <input type="text" id="pn-input-author" class="sketch-input" placeholder="Chiroot Dev Team">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="pn-input-summary">Ringkasan Singkat (Muncul di sub-header modal pop-up)</label>
+                <input type="text" id="pn-input-summary" class="sketch-input" placeholder="contoh: Pembaruan audio player dengan fitur reverb, output bluetooth, dan perbaikan UI.">
+              </div>
+
+              <div class="field">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                  <label for="pn-input-content">Konten Rincian Catatan Pembaruan <span style="color:#d84a3a;">*</span></label>
+                  <div class="pn-snippet-helpers">
+                    <button type="button" class="btn-snippet" data-snippet="[FITUR BARU]&#10;• ">+ Fitur</button>
+                    <button type="button" class="btn-snippet" data-snippet="[PENINGKATAN]&#10;• ">+ Peningkatan</button>
+                    <button type="button" class="btn-snippet" data-snippet="[PERBAIKAN]&#10;• ">+ Bugfix</button>
+                  </div>
+                </div>
+                <textarea id="pn-input-content" class="sketch-input pn-textarea" rows="8" placeholder="Tulis rincian pembaruan di sini..." required></textarea>
+              </div>
+
+              <div class="pn-switches-row">
+                <label class="pn-checkbox-label">
+                  <input type="checkbox" id="pn-check-published" checked>
+                  <span><strong>Publikasikan Langsung</strong> (Tersedia untuk pengguna)</span>
+                </label>
+                <label class="pn-checkbox-label">
+                  <input type="checkbox" id="pn-check-popup" checked>
+                  <span><strong>Pop-up Otomatis</strong> (Muncul di player saat pengguna buka web)</span>
+                </label>
+              </div>
+
+              <div class="pn-form-actions">
+                <button type="button" class="btn-secondary sketch-border-soft" id="btn-pn-reset">↺ Reset Form</button>
+                <button type="button" class="btn-secondary sketch-border-soft" id="btn-pn-preview">👁️ Preview Modal</button>
+                <button type="submit" class="btn-primary sketch-border-soft" id="btn-pn-submit">📢 Kirim &amp; Publikasikan</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel sketch-border-soft pn-history-card">
+            <div class="panel-head">
+              <h3 class="panel-title">Riwayat Catatan Pembaruan</h3>
+              <span class="panel-note" id="pn-count-note">0 rilis</span>
+            </div>
+            <div id="pn-list-container" class="pn-list-wrap"></div>
+          </div>
+        </div>
+      </section>
+
       <footer class="player-footer">
         <span>Made by ChirootDevTeam</span>
         <span class="footer-dot">✦</span>
@@ -841,7 +1251,27 @@ button:focus-visible, input:focus-visible, select:focus-visible{ outline:3px sol
     </div>
   </div>
 
-  <div class="modal-overlay" id="confirm-modal" aria-hidden="true">
+  <div class="modal-overlay" 
+  <div class="modal-overlay" id="preview-patch-modal" aria-hidden="true">
+    <div class="modal-card sketch-border patchnotes-modal-card">
+      <button class="modal-close sketchy" data-close="preview-patch-modal" aria-label="Close">✕</button>
+      <div class="patchnotes-head">
+        <div class="patchnotes-tags-row">
+          <span class="patchnotes-type-pill pn-type-minor" id="prev-pn-pill-type">✦ UPDATE FITUR</span>
+          <span class="patchnotes-version-pill" id="prev-pn-pill-ver">v2.1.0</span>
+        </div>
+        <h3 class="patchnotes-title" id="prev-pn-disp-title">Catatan Pembaruan</h3>
+        <p class="patchnotes-date" id="prev-pn-disp-date">Dipublikasikan baru saja</p>
+      </div>
+      <div class="patchnotes-summary-box" id="prev-pn-disp-summary"></div>
+      <div class="patchnotes-scroll-area sketch-border-tiny" id="prev-pn-disp-content"></div>
+      <div class="modal-actions" style="margin-top:14px; justify-content:space-between; align-items:center;">
+        <span style="font-family:'Kalam',sans-serif; font-size:12.5px; color:#7a6548;">✦ Tampilan simulasi pop-up player</span>
+        <button type="button" class="btn-primary sketch-border-soft" data-close="preview-patch-modal">Tutup Preview</button>
+      </div>
+    </div>
+  </div>
+id="confirm-modal" aria-hidden="true">
     <div class="modal-card sketch-border" style="max-width:420px;">
       <button type="button" class="modal-close" data-close="confirm-modal" aria-label="Close">✕</button>
       <h3 class="modal-title" id="confirm-title">Yakin?</h3>
@@ -897,7 +1327,9 @@ const state = {
   weekDays: [],
   editing: null,
   confirmCb: null
-};
+,
+  patchNotes: [],
+  editingPatchId: null};
 
 function $(sel, root){ return (root || document).querySelector(sel); }
 function $all(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
@@ -1709,13 +2141,21 @@ async function loadAllData(){
     apiCall('/rest/v1/play_events?select=*&order=created_at.desc&limit=1000', 'GET'),
     apiCall('/rest/v1/profiles?select=*&order=created_at.desc', 'GET'),
     apiCall('/rest/v1/user_roles?select=*', 'GET'),
-    apiCall('/rest/v1/chiroot_admins?select=email,role&order=email.asc', 'GET')
+    apiCall('/rest/v1/chiroot_admins?select=email,role&order=email.asc', 'GET'),
+    apiCall('/rest/v1/chiroot_patch_notes?select=*&order=created_at.desc', 'GET')
   ]);
   if (jobs[4].status === 'fulfilled' && Array.isArray(jobs[4].value)){
     state.adminList = jobs[4].value.map(function(r){ return { email: normMail(r.email), role: String(r.role || 'Developer') }; });
   } else {
     state.adminList = [];
   }
+  if (jobs[5] && jobs[5].status === 'fulfilled' && Array.isArray(jobs[5].value)) {
+    state.patchNotes = jobs[5].value;
+    lsSet(LS_PATCH_NOTES, state.patchNotes);
+  } else {
+    state.patchNotes = lsGet(LS_PATCH_NOTES, DEMO_PATCH_NOTES);
+  }
+
   const order = lsGet(LS_ORDER, {});
   if (jobs[0].status === 'fulfilled' && Array.isArray(jobs[0].value) && jobs[0].value.length){
     state.tracks = applyOverlay(jobs[0].value.map(mapCrateRow).filter(Boolean));
@@ -2346,12 +2786,351 @@ function renderUsers(){
     });
   });
 }
+
+const LS_PATCH_NOTES = 'chiroot_patch_notes_local';
+const DEMO_PATCH_NOTES = [
+  {
+    id: 'pn_demo_1',
+    version: 'v2.1.0',
+    title: 'Chiroot v2.1 • Fitur Reverb, Bluetooth & Patch Notes',
+    release_type: 'minor',
+    summary: 'Pembaruan terkini dengan penambahan efek studio reverb, konektivitas Bluetooth, dan sistem catatan pembaruan.',
+    content: '[FITUR BARU]\n• Efek Studio Reverb: Tambahkan nuansa gema akustik hangat pada lagu.\n• Dukungan Bluetooth: Hubungkan output suara ke headphone & speaker nirkabel.\n• Modal Patch Notes: Pengumuman pembaruan kini tampil langsung di aplikasi.\n\n[PENINGKATAN]\n• Tampilan antarmuka pemutar piringan hitam lebih responsif dan mulus.\n• Peningkatan kecepatan sinkronisasi data cloud.\n\n[PERBAIKAN]\n• Perbaikan bug pemutaran saat berpindah daftar lagu di The Crate.',
+    is_published: true,
+    popup_on_enter: true,
+    author_email: 'admin@chiroot.app',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const PATCH_TEMPLATES = {
+  minor: {
+    version: 'v2.2.0',
+    title: 'Chiroot v2.2 • Fitur Baru & Peningkatan Crate',
+    release_type: 'minor',
+    summary: 'Pembaruan ini menambahkan fitur baru untuk pengalaman mendengarkan musik vintage yang lebih kaya.',
+    content: '[FITUR BARU]\n• Equalizer Akustik: Kustomisasi profil suara vinyl sesuai selera.\n• Mode Putar Ulang Otomatis: Putar berulang piringan hitam favorit tanpa henti.\n\n[PENINGKATAN]\n• Waktu muat piringan hitam di crate dipercepat hingga 40%.\n• Animasi putaran jarum gramofon diperhalus.\n\n[PERBAIKAN]\n• Perbaikan tampilan durasi lagu pada browser mobile.'
+  },
+  patch: {
+    version: 'v2.1.1',
+    title: 'Chiroot v2.1.1 • Hotfix & Perbaikan Kestabilan',
+    release_type: 'patch',
+    summary: 'Pembaruan pemeliharaan cepat untuk mengatasi beberapa kendala teknis.',
+    content: '[PERBAIKAN BUG]\n• Memperbaiki pemutaran audio yang sempat terhenti saat beralih aplikasi di latar belakang.\n• Memperbaiki sinkronisasi lirik pada lagu yang memiliki jeda panjang.\n• Menghindari delay saat menekan tombol Bluetooth.\n\n[OPTIMASI]\n• Pengurangan konsumsi memori saat memutar playlist panjang.'
+  },
+  major: {
+    version: 'v3.0.0',
+    title: 'Chiroot 3.0 • Era Baru Pemutar Gramofon Digital',
+    release_type: 'major',
+    summary: 'Selamat datang di Chiroot 3.0! Pembaruan besar dengan desain sketsa tangan baru dan performa audio terbaik.',
+    content: '[PEMBARUAN BESAR]\n• Antarmuka Baru: Desain doodle retro yang sepenuhnya interaktif dan responsif di semua layar.\n• Sinkronisasi Cloud Instan: Koleksi piringan hitam tersinkron otomatis antar semua perangkat.\n• Sistem Ekspor / Impor ZIP Lengkap: Cadangkan seluruh perpustakaan musik dalam satu file ZIP.\n\n[FITUR BARU]\n• Dukungan Efek Studio Reverb & Spatial Audio.\n• Pemilihan Output Headset / Speaker Bluetooth langsung dari pemutar.\n• Manajemen Catatan Pembaruan Terpusat dari Admin Studio.'
+  },
+  maint: {
+    version: 'v2.1.2',
+    title: 'Chiroot • Pemeliharaan Sistem & Keamanan Server',
+    release_type: 'maintenance',
+    summary: 'Pemeliharaan rutin infrastruktur server database dan peningkatan keamanan.',
+    content: '[PEMELIHARAAN SISTEM]\n• Peningkatan infrastruktur cloud database Supabase untuk performa query lebih cepat.\n• Penguatan enkripsi token autentikasi Google OAuth.\n• Pembaruan sistem penanganan storage untuk file audio dan cover album.'
+  }
+};
+
+function parsePatchContent(content) {
+  if (!content) return '<div class="patchnotes-item"><span>Tidak ada rincian catatan pembaruan.</span></div>';
+  const lines = String(content).split('\n');
+  let out = '';
+  let currentGroup = [];
+  let currentTitle = '';
+  lines.forEach(function(l) {
+    const t = l.trim();
+    if (!t) return;
+    const headerMatch = t.match(/^(?:\[([^\]]+)\]|#{1,3}\s*(.+))$/);
+    if (headerMatch) {
+      if (currentGroup.length) {
+        out += '<div class="patchnotes-group"><div class="patchnotes-group-title">✦ ' + esc(currentTitle) + '</div>' + currentGroup.join('') + '</div>';
+        currentGroup = [];
+      }
+      currentTitle = headerMatch[1] || headerMatch[2] || '';
+    } else {
+      const clean = t.replace(/^[•\-\+\*]\s*/, '');
+      currentGroup.push('<div class="patchnotes-item"><span class="patchnotes-bullet">✦</span><span>' + esc(clean) + '</span></div>');
+    }
+  });
+  if (currentGroup.length) {
+    const h = currentTitle ? '<div class="patchnotes-group-title">✦ ' + esc(currentTitle) + '</div>' : '';
+    out += '<div class="patchnotes-group">' + h + currentGroup.join('') + '</div>';
+  }
+  return out || '<div class="patchnotes-item"><span>' + esc(content) + '</span></div>';
+}
+
+function applyPatchTemplate(typeKey) {
+  const tmpl = PATCH_TEMPLATES[typeKey];
+  if (!tmpl) return;
+  $('#pn-input-title').value = tmpl.title;
+  $('#pn-input-version').value = tmpl.version;
+  $('#pn-select-type').value = tmpl.release_type;
+  $('#pn-input-summary').value = tmpl.summary;
+  $('#pn-input-content').value = tmpl.content;
+  if (!$('#pn-input-author').value.trim()) {
+    $('#pn-input-author').value = (state.profile && state.profile.name) || (state.session && state.session.user && state.session.user.email) || 'Chiroot Dev Team';
+  }
+  toast('Template ' + typeKey + ' berhasil dimuat ✦');
+}
+
+function resetPatchForm() {
+  state.editingPatchId = null;
+  $('#pn-edit-id').value = '';
+  $('#pn-form').reset();
+  $('#pn-check-published').checked = true;
+  $('#pn-check-popup').checked = true;
+  $('#pn-form-title').textContent = '✦ Buat Patch Notes Baru';
+  $('#pn-mode-badge').textContent = 'Baru';
+  $('#pn-mode-badge').className = 'role-badge dev';
+  $('#btn-pn-submit').textContent = '📢 Kirim & Publikasikan';
+}
+
+function editPatchNote(id) {
+  const patch = state.patchNotes.find(function(p){ return String(p.id) === String(id); });
+  if (!patch) return;
+  state.editingPatchId = patch.id;
+  $('#pn-edit-id').value = patch.id;
+  $('#pn-input-title').value = patch.title || '';
+  $('#pn-input-version').value = patch.version || '';
+  $('#pn-select-type').value = patch.release_type || 'minor';
+  $('#pn-input-author').value = patch.author_email || '';
+  $('#pn-input-summary').value = patch.summary || '';
+  $('#pn-input-content').value = patch.content || '';
+  $('#pn-check-published').checked = patch.is_published !== false;
+  $('#pn-check-popup').checked = patch.popup_on_enter !== false;
+  $('#pn-form-title').textContent = '✦ Edit Catatan Pembaruan';
+  $('#pn-mode-badge').textContent = 'Mode Edit';
+  $('#pn-mode-badge').className = 'role-badge uploader';
+  $('#btn-pn-submit').textContent = '💾 Simpan Perubahan';
+  $('#pn-form-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function openPatchPreview(patchData) {
+  const p = patchData || {
+    title: $('#pn-input-title').value || 'Judul Contoh Rilis',
+    version: $('#pn-input-version').value || 'v1.0.0',
+    release_type: $('#pn-select-type').value || 'minor',
+    summary: $('#pn-input-summary').value || '',
+    content: $('#pn-input-content').value || '[FITUR BARU]\n• Fitur keren 1\n• Fitur keren 2',
+    created_at: new Date().toISOString()
+  };
+  const rType = String(p.release_type || 'minor').toLowerCase();
+  let typeLabel = '✦ UPDATE FITUR';
+  let typeClass = 'pn-type-minor';
+  if (rType === 'major') { typeLabel = '🚀 MAJOR RELEASE'; typeClass = 'pn-type-major'; }
+  else if (rType === 'patch' || rType === 'hotfix') { typeLabel = '🐛 HOTFIX / PERBAIKAN'; typeClass = 'pn-type-patch'; }
+  else if (rType === 'maintenance') { typeLabel = '🛠️ PEMELIHARAAN'; typeClass = 'pn-type-maintenance'; }
+
+  const pillType = $('#prev-pn-pill-type');
+  if (pillType) { pillType.textContent = typeLabel; pillType.className = 'patchnotes-type-pill ' + typeClass; }
+  const pillVer = $('#prev-pn-pill-ver');
+  if (pillVer) pillVer.textContent = p.version || 'v1.0';
+  const dispTitle = $('#prev-pn-disp-title');
+  if (dispTitle) dispTitle.textContent = p.title || 'Catatan Pembaruan';
+  const dispDate = $('#prev-pn-disp-date');
+  if (dispDate) {
+    const d = p.created_at ? new Date(p.created_at) : new Date();
+    dispDate.textContent = 'Dirilis ' + d.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+  const dispSummary = $('#prev-pn-disp-summary');
+  if (dispSummary) {
+    if (p.summary && p.summary.trim()) {
+      dispSummary.textContent = p.summary.trim();
+      dispSummary.style.display = 'block';
+    } else {
+      dispSummary.style.display = 'none';
+    }
+  }
+  const dispContent = $('#prev-pn-disp-content');
+  if (dispContent) {
+    dispContent.innerHTML = parsePatchContent(p.content);
+  }
+  openModal('preview-patch-modal');
+}
+
+function askDeletePatch(id) {
+  const patch = state.patchNotes.find(function(p){ return String(p.id) === String(id); });
+  if (!patch) return;
+  confirmAction('Hapus Patch Note?', 'Yakin ingin menghapus catatan versi "' + patch.version + ' - ' + patch.title + '"? Pengguna tidak akan melihat rilis ini lagi.', async function(){
+    let cloudOk = false;
+    if (state.session && !state.demo) {
+      try {
+        await apiCall('/rest/v1/chiroot_patch_notes?id=eq.' + encodeURIComponent(id), 'DELETE');
+        cloudOk = true;
+      } catch(e) { cloudOk = false; }
+    }
+    state.patchNotes = state.patchNotes.filter(function(p){ return String(p.id) !== String(id); });
+    lsSet(LS_PATCH_NOTES, state.patchNotes);
+    if (String(state.editingPatchId) === String(id)) resetPatchForm();
+    renderPatchNotes();
+    toast('Patch note berhasil dihapus' + (cloudOk ? ' ✦ cloud' : ' ✦ lokal'));
+  });
+}
+
+async function togglePatchStatus(id, newStatus) {
+  const patch = state.patchNotes.find(function(p){ return String(p.id) === String(id); });
+  if (!patch) return;
+  patch.is_published = newStatus;
+  patch.updated_at = new Date().toISOString();
+  let cloudOk = false;
+  if (state.session && !state.demo) {
+    try {
+      await apiCall('/rest/v1/chiroot_patch_notes?id=eq.' + encodeURIComponent(id), 'PATCH', { is_published: newStatus, updated_at: patch.updated_at });
+      cloudOk = true;
+    } catch(e) { cloudOk = false; }
+  }
+  lsSet(LS_PATCH_NOTES, state.patchNotes);
+  renderPatchNotes();
+  toast(newStatus ? 'Patch note dipublikasikan (Live) ✦' : 'Patch note diarsipkan ke Draft ✦');
+}
+
+async function savePatchNote(e) {
+  if (e) e.preventDefault();
+  const id = $('#pn-edit-id').value.trim();
+  const title = $('#pn-input-title').value.trim();
+  const version = $('#pn-input-version').value.trim();
+  const release_type = $('#pn-select-type').value;
+  const author_email = $('#pn-input-author').value.trim() || (state.session && state.session.user && state.session.user.email) || 'admin@chiroot.app';
+  const summary = $('#pn-input-summary').value.trim();
+  const content = $('#pn-input-content').value.trim();
+  const is_published = $('#pn-check-published').checked;
+  const popup_on_enter = $('#pn-check-popup').checked;
+
+  if (!title || !version || !content) {
+    toast('Mohon lengkapi judul, versi, dan konten pembaruan.');
+    return;
+  }
+
+  const payload = {
+    title: title,
+    version: version,
+    release_type: release_type,
+    author_email: author_email,
+    summary: summary,
+    content: content,
+    is_published: is_published,
+    popup_on_enter: popup_on_enter,
+    updated_at: new Date().toISOString()
+  };
+
+  let cloudOk = false;
+  if (id) {
+    if (state.session && !state.demo) {
+      try {
+        await apiCall('/rest/v1/chiroot_patch_notes?id=eq.' + encodeURIComponent(id), 'PATCH', payload);
+        cloudOk = true;
+      } catch(e) { cloudOk = false; }
+    }
+    const idx = state.patchNotes.findIndex(function(p){ return String(p.id) === String(id); });
+    if (idx !== -1) {
+      state.patchNotes[idx] = Object.assign({}, state.patchNotes[idx], payload);
+    }
+    toast('Patch note berhasil diperbarui ✦' + (cloudOk ? ' (cloud)' : ' (lokal)'));
+  } else {
+    payload.id = 'pn_' + Date.now();
+    payload.created_at = new Date().toISOString();
+    if (state.session && !state.demo) {
+      try {
+        const res = await apiCall('/rest/v1/chiroot_patch_notes', 'POST', payload);
+        if (Array.isArray(res) && res[0] && res[0].id) payload.id = res[0].id;
+        cloudOk = true;
+      } catch(e) { cloudOk = false; }
+    }
+    state.patchNotes.unshift(payload);
+    toast('Patch note berhasil dipublikasikan ✦' + (cloudOk ? ' (cloud)' : ' (lokal)'));
+  }
+
+  lsSet(LS_PATCH_NOTES, state.patchNotes);
+  resetPatchForm();
+  renderPatchNotes();
+}
+
+function renderPatchNotes() {
+  const list = state.patchNotes || [];
+  $('#pn-count-note').textContent = list.length + ' rilis';
+  const container = $('#pn-list-container');
+  if (!container) return;
+
+  if (!list.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📢</div><div class="empty-title">Belum ada catatan pembaruan</div><div>Gunakan form di sebelah kiri untuk membuat rilis baru ✦</div></div>';
+    return;
+  }
+
+  container.innerHTML = list.map(function(p) {
+    const rType = String(p.release_type || 'minor').toLowerCase();
+    let badgeClass = 'pn-type-minor';
+    let typeName = 'Minor Update';
+    if (rType === 'major') { badgeClass = 'pn-type-major'; typeName = 'Major Update'; }
+    else if (rType === 'patch' || rType === 'hotfix') { badgeClass = 'pn-type-patch'; typeName = 'Patch / Hotfix'; }
+    else if (rType === 'maintenance') { badgeClass = 'pn-type-maintenance'; typeName = 'Maintenance'; }
+
+    const isPub = p.is_published !== false;
+    const isPop = p.popup_on_enter !== false;
+
+    return '<div class="pn-card-item" data-pn-card="' + esc(p.id) + '">' +
+      '<div class="pn-card-head">' +
+        '<div>' +
+          '<div style="display:flex; align-items:center; gap:6px; margin-bottom:3px;">' +
+            '<span class="pn-type-badge ' + badgeClass + '">' + esc(typeName) + '</span>' +
+            '<span class="role-badge" style="background:#1a1a1a; color:#f7f3e9; border:none;">' + esc(p.version) + '</span>' +
+            (isPub ? '<span class="role-badge role-dev" style="background:#d4eedc; color:#1b5e20;">● Live</span>' : '<span class="role-badge" style="background:#f0e5d8; color:#7a6548;">○ Draft</span>') +
+            (isPop ? '<span title="Pop-up otomatis aktif" style="font-size:12px;">🔔</span>' : '<span title="Pop-up otomatis nonaktif" style="font-size:12px;">🔕</span>') +
+          '</div>' +
+          '<h4 class="pn-card-title">' + esc(p.title) + '</h4>' +
+        '</div>' +
+      '</div>' +
+      '<div class="pn-card-meta">' +
+        '<span>📅 ' + fmtDate(p.created_at) + '</span>' +
+        '<span>✍️ ' + esc(p.author_email || 'Dev Team') + '</span>' +
+      '</div>' +
+      (p.summary ? '<div class="pn-card-summary">' + esc(p.summary) + '</div>' : '') +
+      '<div class="pn-card-actions">' +
+        '<button type="button" class="btn-secondary sketch-border-tiny" style="font-size:13px; padding:3px 8px;" data-pn-preview-btn="' + esc(p.id) + '">👁️ Preview</button>' +
+        '<button type="button" class="btn-secondary sketch-border-tiny" style="font-size:13px; padding:3px 8px;" data-pn-toggle-btn="' + esc(p.id) + '">' + (isPub ? 'Jadikan Draft' : 'Publikasikan') + '</button>' +
+        '<button type="button" class="btn-secondary sketch-border-tiny" style="font-size:13px; padding:3px 8px;" data-pn-edit-btn="' + esc(p.id) + '">✏️ Edit</button>' +
+        '<button type="button" class="btn-danger sketch-border-tiny" style="font-size:13px; padding:3px 8px;" data-pn-del-btn="' + esc(p.id) + '">🗑️ Hapus</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  $all('[data-pn-preview-btn]', container).forEach(function(b) {
+    b.addEventListener('click', function() {
+      const p = list.find(function(x){ return String(x.id) === String(b.dataset.pnPreviewBtn); });
+      if (p) openPatchPreview(p);
+    });
+  });
+
+  $all('[data-pn-toggle-btn]', container).forEach(function(b) {
+    b.addEventListener('click', function() {
+      const p = list.find(function(x){ return String(x.id) === String(b.dataset.pnToggleBtn); });
+      if (p) togglePatchStatus(p.id, !(p.is_published !== false));
+    });
+  });
+
+  $all('[data-pn-edit-btn]', container).forEach(function(b) {
+    b.addEventListener('click', function() {
+      editPatchNote(b.dataset.pnEditBtn);
+    });
+  });
+
+  $all('[data-pn-del-btn]', container).forEach(function(b) {
+    b.addEventListener('click', function() {
+      askDeletePatch(b.dataset.pnDelBtn);
+    });
+  });
+}
+
 function renderAll(){
   renderTopbar();
   renderDashboard();
   renderPlaylist();
   renderAnalytics();
   renderUsers();
+  renderPatchNotes();
 }
 async function openApp(){
   try { await tryLoadProfile(); } catch(e){}
@@ -2448,8 +3227,35 @@ $('#confirm-ok').addEventListener('click', function(){
 ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function(ev){
   window.addEventListener(ev, armIdleLogout, { passive: true });
 });
+
+  $('#pn-form').addEventListener('submit', savePatchNote);
+  $('#btn-pn-reset').addEventListener('click', resetPatchForm);
+  $('#btn-pn-preview').addEventListener('click', function(){ openPatchPreview(); });
+  const scrollBtn = $('#btn-pn-scroll-new');
+  if (scrollBtn) {
+    scrollBtn.addEventListener('click', function(){
+      resetPatchForm();
+      $('#pn-form-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+  $all('[data-pn-template]').forEach(function(b){
+    b.addEventListener('click', function(){ applyPatchTemplate(b.dataset.pnTemplate); });
+  });
+  $all('[data-snippet]').forEach(function(b){
+    b.addEventListener('click', function(){
+      const ta = $('#pn-input-content');
+      const snippet = b.dataset.snippet;
+      const start = ta.selectionStart || 0;
+      const end = ta.selectionEnd || 0;
+      const val = ta.value;
+      ta.value = val.substring(0, start) + (start > 0 && val[start-1] !== '\n' ? '\n\n' : '') + snippet + val.substring(end);
+      ta.focus();
+      ta.selectionStart = ta.selectionEnd = start + snippet.length + (start > 0 && val[start-1] !== '\n' ? 2 : 0);
+    });
+  });
+
 boot();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332cc728cd69de7',t:'MTc4ODA4MjQ1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332edc0fc7f9b8d',t:'MTc4ODA4MzgxOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332cc728cd69de7',t:'MTc4ODA4MjQ1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332edc0fc7f9b8d',t:'MTc4ODA4MzgxOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36bcfb08c86a550',t:'MTc4ODY4MDI3Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
