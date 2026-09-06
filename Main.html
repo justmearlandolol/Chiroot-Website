@@ -1685,15 +1685,50 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       transform: translateX(180px) rotate(-8deg);
       animation: slideFromRight 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
     }
-    .logo-wrapper img {
-      width: 130px;
-      height: auto;
+    .logo-wrapper .star-face {
+      position: relative;
       display: block;
+      width: 130px;
+      aspect-ratio: 55 / 54;
+      overflow: hidden;
       border: 3px solid var(--ink);
       border-radius: var(--radius-sketch-soft);
+      background-color: #d7ed86;
+      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAAFEBAMAAACzDWpGAAAAFVBMVEXX7Ya3ynOYp2F4hE5ZYDs6PSkaGhaUUzPyAAAJP0lEQVR42u2dy24bNxSGz1AqYLlAMbIE9LLSBe2mG9+yaTe59QXaR+hz9Q3abVdOnXVjS1oVRRFJs2qziKwBCiRCEYldRLHlmeHMIXnOkGMPF44yuvgzDw//nxTJAahLXepiVhosnxoM+29XlJ/HAvm0D1dnMd0HCg7KTh/g4Ag8pzwGABh6ThmENz9rSt/K/aWU8c3Pui7vRcTf/+N7xOMd1jri94CyGtoj3lP2/KYc3PrHU0qxdZadnseUwdMw8cBHysZ1FYpDfymPbx4OvaXcTW0ReksZZj+uteeuUsqUOfKyLmMFcR3xOuJ1xO8EZTW0Z1e7yew6OeVA+R+PKMWtKWAqu05MmfDnVHadmLKRqDwiu05MeZy8MPSQMp3UNHadmDIsvlJrz12ilLkWyZu6jBHcdcTriNcRryxlNbQnrdo0dp2WcoC65JhSZKzVILHrlJSZzpzErlNSNjKrjcKuU1IeZ18eekWpSmcCu05JGepd1yjNdE7KWQyelSRl40kI/We+YSYjPgwBOmZL1CTaKFlT9iyyMtakt8weui8QmSI+zuv5vIn4IgYAaB4BtA8GoS8RT+b45rfvAQBOO9Buw+IXX13wIgIACAaDNkDnka+U8pmpBDNqTzrH15OdZ3XMoUqvCex6Rk90WWxzsEadyq5nrFeXjc+uH+9vXkF7/3OJWHwunuwpnmld2fZFWevVGz/uIM+DEJXswXfqwG5+jsnrEuS/N78waLdbAPufRIVdWk5/EHwUkbdLgKmB385twUNgoNxNc2Sy5yeyrV3P9uqXelVV2CkGLJTpyuwaKTuXV9+Wi16S57SDTPZSFHLbd4xTQRv085RdGtkl2zHkTDdbYyPraUm5Ub2+51HE1XVjZOO5Iq4simSXrBFvar/DRbLrz8AUJHuplIUxGrrXHgAocjGJZC+g7DFRjvRM0NDQx5v7y/ch7xREaX/zCtqtVqvVau2tDr7dy32xpV1X7y3ddezZf8f8Q5hlfFDU8Ozses4O2K8eUqbpX895eqIpaWcyBB7KtMm0+kUhD2WGY7dpWlyUtJXJppAXcRUo047dosRclErHblAkW10qHbtXESfdH8oXcahExKEaEa8EJeGOYDbtQTh2DcoeH+WIrjJt7HrBSHcdkc1ldHq5gQn6WUP6dvtqDsXnwBQ6dnxZ/5T37IMjWGZQgnwxKT5TZ3eO3TZR169ypkweA7TSBSD4dIzoiQgd+wl6RJrMnEJKQpPZ6GFH9/q9OqFjPzYZFS0AM5u1nhxSUXaPxtBOX17mzTrJMYoSLsko4bSTJUEyPlC/5WUEuBOpaAfmJt0Xxm1M3UFuswJD6XAsuf3VAv8HuatKHKWzyvzwi3Eu2NXA/FLLq5MOzPHl3URvRDFzQjnSHPc4GZhvJrqjMxcNc4r16u7KEjbnvlPKi2jXuntKuRibzBpIV9mtlz1RqZDryIxyVCrlJZhRrsuszJRvwFLeWpZZdlXi59zWz8uXb33KEh37CMwpSzOZm4kFZWmOPSNoGmcv765x5ZPv1Ztf01d1FDK9+I1Zvk3qEuR/fW75Pl9lrkDWmv2flZ/dBpQbZi+sFDgtSslMqexFfPq+R90j+0Sp7pD1KFl7oncTGsrASYJ7FfE8n6CX425apW5dxm6q0p+I5zouXyjfTcgoKY9T1hqjalEKNsrNhI5ywFaVBYMqHRcsjngQb02vWVOesgRc5c8NKRuHPP4cMWev0S5PXGS3LiXTpnLUBBSecshTlahRPrJdtrkSHDdjgqN80Mv69p0iwXFTeSjKLlNH+WG3Ok27POaCxI7wMZR8e81kREc5ZKtK7AC/6Sy7dUrTVXZTUnZ56xE7dBausltrGiKfstEDL4pwlN2ElI2HVaA8gQpQMplzYkpvqjKP0qMTn4TbBLfU8XLkGzvV2PRZvgsou0fgVRFO5PvabdjoeGnyjd2oItzK98CcskT5Rp7aKtxqDvLUVuFYvnECJ1zL99CMsmT5FmYvKtufYxpm08PRdxGlZ/KdTdn1sR5T7fLYAUCgS+nmHKeeJqWb0TdGyq/XZrVbH3+z54ISc0RM4D67EUfEbOuy+7jVcpXAiBMdhbvs1sgHUa45N5Ry4cMsRoii7Pozi6GmFI+hApSdsAqUrj1GQJBfPki5gLJ3xZhIeRMApodh4fqOrII4IA07Ko8QbeKgvzSkJLpnYf7xEdYLP78kOrrx9wln9lBtVDlhzXGqteEF8ymeUBaYMl/WXzYPq0CZv4jOkpJu3Wju9JQ/K8GHlaAUjJSEpi/M13FG06V1KiobZRHk2TXlEjo/eEq5mIO89jGL80ccbdZee2Yaoh8wUkYaz24iU8dum+MjuhfnOPaGbX7kDkD/uL278Y3YW6mno3Im32wpYT7YQ1PC3//M/vxC9fqgP1txUeZuOE1Swmr1Vv169eSbvULqbjidGki5PWXOhtPMp3IyXfBR5nSZU91MDx14IsWmnddjgOWV1o0TGRVSnilALhYy1pN1grpUhUm5Fl3O5kuAxXmZlIFp8k/xH8XYLqOiZhuhpZyPsnh12Agt5S7HPa/HyUk01ZKYhn27/HoPKY+pkpJ1lZS7HUMul8lDnQ7Ljjiu255ipJyPEnkEXCLTs7ev8lFipzZvZ3pQLmXBztu8TC9Px5Uini4vXoJ4Eua2Zq66RG4oS2W6LDV7ZqSNmIsy0mzFkYvs0T5N4jrTj/zTnoSBXy7j7PVh3pyGeLGQMUDwNHwgJ97WJcjZfLlcXp1nfkPFRRkbvu8qUySZKDcWbwxYKEMLEU8HfpI10uAZnaFFPF0u42lJOa4h4qmyPrsqKXt0RDwrfxgoM+aJyM99I6CMiq+4p0wPq+mPfSOgLOHIVuE2o8ujTJ2+HnhJmcrp0EtK7rMcaSgTSe1pxKESEa9CTwTMZzlSUQYV0J4SUp6DclqFHLcw6uVRcsg6PaWVUS+NkuOAZnrKqAqULGe31ncErSltS1wFyk0l6nJaBUoGEaenZBqbE1NyiDg9JdNdFogpI58pQ04RZxqd1Qp55ylvBuCxz5QRp4iTRXzEKeJklNupdR4RJ6PcHqHMdntTohxfT4DzLl5UPdEIOO+IRkUpgfPOH/eLshoKGQDnvPX9qsuKZE/MeZ8xMsoJrPkoG1QftAwvY6hLXepSF5PyPzqPXVliPPsIAAAAAElFTkSuQmCC");
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
       box-shadow:
         0 4px 0 #c8b78a,
         0 6px 16px rgba(96, 64, 18, 0.12);
+    }
+
+    .logo-wrapper .star-eyes {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: url("data:image/png;base64,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");
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      animation: starEyesLook 3.6s cubic-bezier(0.68, -0.05, 0.27, 1) infinite;
+      will-change: transform;
+    }
+
+    @keyframes starEyesLook {
+      0%, 10% { transform: translateX(0) translateZ(0); }
+      22%, 40% { transform: translateX(6.2%) translateZ(0); }
+      52%, 70% { transform: translateX(-6.2%) translateZ(0); }
+      82%, 100% { transform: translateX(0) translateZ(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .logo-wrapper .star-eyes {
+        animation: none;
+      }
     }
 
     .text-wrapper {
@@ -1810,7 +1845,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       .preloader-card {
         padding: 28px 22px 26px;
       }
-      .logo-wrapper img {
+      .logo-wrapper .star-face {
         width: 90px;
       }
       .brand-text {
@@ -2245,7 +2280,9 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
           <div class="logo-wrapper">
             <div class="logo-inner">
-              <img src="favicon.png" alt="Chiroot Logo" />
+              <div class="star-face" role="img" aria-label="Chiroot">
+                <span class="star-eyes"></span>
+              </div>
             </div>
           </div>
 
@@ -7128,6 +7165,5 @@ if (btnRefreshLyrics) {
   restoreOutput();
 })();
 </script>
-
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36b88b94e45db51',t:'MTc4ODY3NzM2OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
