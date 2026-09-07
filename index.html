@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chiroot | Free Audio Player Tanpa Iklan</title>
-    <meta name="description" content="Chiroot, free audio player 100% tanpa iklan dengan tampilan vinyl gramophone yang hidup. Kontrol lengkap, mini crate, cover custom, dan integrasi YouTube untuk cari lagu favoritmu." />
-    <meta name="keywords" content="free audio player, no ads music player, music player tanpa iklan, youtube integrated player, vinyl player web, chiroot" />
+    <meta name="description" content="Chiroot is a digital music service and free for everyone to use.." />
+    <meta name="keywords" content="free audio player, no ads music player, chiroot" />
     <meta name="author" content="Chiroot" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Chiroot" />
-    <meta property="og:title" content="Chiroot | Free Audio Player Tanpa Iklan" />
+    <meta property="og:title" content="Chiroot | Free Audio Player" />
     <meta property="og:description" content="Audio player gratis, no ads, dengan nuansa vinyl gramophone dan integrasi YouTube. Kontrol lengkap, mini crate, cover custom." />
     <meta property="og:image" content="favicon.svg" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -22,16 +22,25 @@
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,500;0,600;0,700;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" type="image/png" href="favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="manifest" href="manifest.webmanifest" />
     <meta name="theme-color" content="#1a1a1a" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+      content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; media-src 'self' blob:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="no-referrer" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-XXXXXXXXXX");
+    </script>
     <style>
       :root {
         --paper: #f7f3e9;
@@ -1765,38 +1774,48 @@
         font-weight: 500;
         max-width: 62ch;
       }
-      .waitlist-email-link {
+      .donate-band {
+        background: var(--teal);
+      }
+      .donate-content {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+      }
+      .qr-frame {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        background: var(--paper);
+        border: 4px solid var(--ink);
+        box-shadow: 8px 8px 0 var(--gold);
+        padding: 18px;
+        transform: rotate(-3deg);
+      }
+      .qr-frame img {
+        width: 170px;
+        height: 170px;
+        object-fit: contain;
+        border: 2px solid var(--ink);
+      }
+      .qr-caption {
         font-family: var(--font-mono);
         font-weight: 700;
-        color: var(--red-label);
-        border-bottom: 4px solid var(--gold);
-        white-space: nowrap;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
       }
-      .waitlist-email-link:hover {
-        background: var(--gold-soft);
-      }
-      .waitlist-form {
-        margin-top: 30px;
-      }
-      .waitlist-message {
-        display: block;
-        width: 100%;
-        min-height: 130px;
-        resize: vertical;
-        background: var(--paper-2);
-        border: 3px solid var(--ink);
-        padding: 14px 16px;
-        font-family: var(--font-mono);
-        font-size: 14px;
-        line-height: 1.6;
-        color: var(--ink);
-      }
-      .waitlist-actions {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 20px;
+      .donate-fallback {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        max-width: 320px;
+        text-align: center;
       }
       .site-footer {
         position: relative;
@@ -2769,10 +2788,6 @@
               <span class="sec-tag">Sec. 02 - Fitur</span>
               <h2 class="section-title">Yang bikin beda</h2>
             </div>
-            <p class="section-sub">
-              Nuansa doodle kertas, kontrol sketchy, gramophone yang benar-benar
-              hidup, + fitur-fitur inti dari player lengkapnya.
-            </p>
           </div>
           <div class="feature-grid">
             <article class="feature-card fc1">
@@ -2863,38 +2878,39 @@
         </div>
       </section>
 
-      <div class="cta-band">
-        <span class="bg-word cta-bg-word" aria-hidden="true">WAITLIST</span>
+      <div class="cta-band donate-band">
+        <span class="bg-word cta-bg-word" aria-hidden="true">SUPPORT</span>
         <span class="cta-blob" aria-hidden="true"></span>
         <div class="cta-card">
           <div class="corner-doodle tl" aria-hidden="true">✦</div>
           <div class="corner-doodle tr" aria-hidden="true">✧</div>
           <div class="corner-doodle bl" aria-hidden="true">✧</div>
           <div class="corner-doodle br" aria-hidden="true">✦</div>
-          <span class="sec-tag">Sec. 04 - Waitlist</span>
-          <h2>Join the waitlist</h2>
+          <span class="sec-tag">Sec. 04 - Support</span>
+          <h2>SUPPORT US!</h2>
           <p>
-            Karena Web app ini aslinya masih belum sepenuhnya selesai, Yall guys
-            boleh kirim email ke
-            <a class="waitlist-email-link" href="ChirootDevTeam@proton.me"
-              ><span
-                class="__cf_email__"
-                data-cfemail="accddec0cdc2c8c3d6c5cbd6cdcbeccbc1cdc5c082cfc3c1"
-                >ChirootDevTeam</span></a
-            >
-            untuk menanyakan atau beri kita ide ya!
+            Chiroot gratis dan bebas iklan selamanya. Kalau kalian suka dan mau
+            bantu dev tetap ngoding, scan QR di bawah buat donate via Saweria.
           </p>
-          <div class="waitlist-form">
-            <textarea
-              class="waitlist-message"
-              id="waitlist-message"
-              maxlength="1200"
-              placeholder="Tulis pesan / ide kamu buat Chiroot di sini..."
-            ></textarea>
-            <div class="waitlist-actions">
-              <button class="btn btn-primary" id="waitlist-gmail" type="button">
-                ✦ Join waitlist!
-              </button>
+          <div class="donate-content">
+            <div class="qr-frame">
+              <img
+                src="Chiroot-Donate.png"
+                alt="QR Saweria Chiroot"
+                id="donate-qr"
+                onerror="this.closest('.qr-frame').style.display='none'; document.getElementById('donate-fallback').style.display='flex';"
+              />
+              <span class="qr-caption">✦ Scan buat donate ✦</span>
+            </div>
+            <div class="donate-fallback" id="donate-fallback">
+              <p>Gambar QR-nya lagi bermasalah, klik link di bawah aja ya:</p>
+              <a
+                class="btn btn-primary"
+                href="https://saweria.co/widgets/qr?streamKey=314a7b6768941d57209e45d4f76318ff"
+                target="_blank"
+                rel="noopener noreferrer"
+                >✦ Buka QR Saweria</a
+              >
             </div>
           </div>
         </div>
@@ -2950,11 +2966,11 @@
     <script>
       const PREVIEW_TRACKS = [
         {
-          title: "DAY 1",
-          artist: "Red Velvet",
-          audio: "Day 1.mp3",
-          cover: "reze.png",
-          startTime: 50,
+          title: "Harvey",
+          artist: "Her's",
+          audio: "Harvey.mp3",
+          cover: "Harvey.jpeg",
+          startTime: 58,
           previewSeconds: 30,
           labelColor: "#d84a3a",
         },
@@ -3373,9 +3389,7 @@
           pausePreview();
           if (!isShuffle && currentIdx >= PREVIEW_TRACKS.length - 1) {
             updateProgressUI(getPreviewSeconds());
-            showToast(
-              "Preview selesai ✦ buka player penuh buat lagu lengkapnya",
-            );
+            
             return;
           }
           nextTrack();
@@ -3621,30 +3635,6 @@
       role="status"
       aria-live="polite"
     ></div>
-
-    <script>
-      (function () {
-        var btn = document.getElementById("waitlist-gmail");
-        var msg = document.getElementById("waitlist-message");
-        if (!btn || !msg) return;
-        btn.addEventListener("click", function () {
-          var message = msg.value.trim();
-          var body =
-            "Wsg Dev,\n\nGweh mau join waitlist Chiroot.\n\nPesan / ide gw:\n" +
-            (message || "-") +
-            "\n\nTerima kasih!";
-          var url =
-            "https://mail.google.com/mail/?view=cm&fs=1" +
-            "&to=" +
-            encodeURIComponent("ChirootDevTeam@proton.me") +
-            "&su=" +
-            encodeURIComponent("Join the waitlist Chiroot") +
-            "&body=" +
-            encodeURIComponent(body);
-          window.open(url, "_blank", "noopener,noreferrer");
-        });
-      })();
-    </script>
 
     <script>
       (function () {
