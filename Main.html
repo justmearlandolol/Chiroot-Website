@@ -1685,50 +1685,15 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       transform: translateX(180px) rotate(-8deg);
       animation: slideFromRight 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
     }
-    .logo-wrapper .star-face {
-      position: relative;
-      display: block;
+    .logo-wrapper img {
       width: 130px;
-      aspect-ratio: 55 / 54;
-      overflow: hidden;
+      height: auto;
+      display: block;
       border: 3px solid var(--ink);
       border-radius: var(--radius-sketch-soft);
-      background-color: #d7ed86;
-      background-image: url("data:image/png;base64,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");
-      background-size: 100% 100%;
-      background-position: center;
-      background-repeat: no-repeat;
       box-shadow:
         0 4px 0 #c8b78a,
         0 6px 16px rgba(96, 64, 18, 0.12);
-    }
-
-    .logo-wrapper .star-eyes {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      background-image: url("data:image/png;base64,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");
-      background-size: 100% 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-      animation: starEyesLook 3.6s cubic-bezier(0.68, -0.05, 0.27, 1) infinite;
-      will-change: transform;
-    }
-
-    @keyframes starEyesLook {
-      0%, 10% { transform: translateX(0) translateZ(0); }
-      22%, 40% { transform: translateX(6.2%) translateZ(0); }
-      52%, 70% { transform: translateX(-6.2%) translateZ(0); }
-      82%, 100% { transform: translateX(0) translateZ(0); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .logo-wrapper .star-eyes {
-        animation: none;
-      }
     }
 
     .text-wrapper {
@@ -1845,7 +1810,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       .preloader-card {
         padding: 28px 22px 26px;
       }
-      .logo-wrapper .star-face {
+      .logo-wrapper img {
         width: 90px;
       }
       .brand-text {
@@ -2252,148 +2217,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   .bluetooth-modal-actions{justify-content:stretch;}
   .bluetooth-modal-actions button{flex:1;min-width:120px;}
 }
-
-.patchnotes-modal-card {
-  max-width: 560px;
-  width: 100%;
-  max-height: 88vh;
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(180deg, #fffdf7, #f7efe0);
-  padding: 22px 24px 20px;
-  position: relative;
-  box-shadow: 0 16px 36px rgba(40,28,12,0.28);
-}
-.patchnotes-head {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 12px;
-  flex-shrink: 0;
-}
-.patchnotes-tags-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.patchnotes-type-pill {
-  font-family: 'Kalam', system-ui, sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-  padding: 2px 9px;
-  border-radius: 6px;
-  border: 1.8px solid #1a1a1a;
-  text-transform: uppercase;
-}
-.patchnotes-version-pill {
-  font-family: 'Kalam', system-ui, sans-serif;
-  font-size: 12.5px;
-  font-weight: 700;
-  background: #1a1a1a;
-  color: #f7f3e9;
-  padding: 2px 9px;
-  border-radius: 6px;
-}
-.patchnotes-title {
-  font-family: 'Caveat', cursive;
-  font-size: 32px;
-  line-height: 1.15;
-  color: #1a1a1a;
-  margin: 4px 0 2px;
-}
-.patchnotes-date {
-  font-family: 'Kalam', system-ui, sans-serif;
-  font-size: 12.5px;
-  color: #7b6f5f;
-  margin: 0;
-}
-.patchnotes-summary-box {
-  background: #fdf8eb;
-  border: 1.8px dashed #c9a227;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-family: 'Patrick Hand', system-ui, sans-serif;
-  font-size: 15.5px;
-  color: #433728;
-  line-height: 1.4;
-  margin-bottom: 12px;
-  flex-shrink: 0;
-}
-.patchnotes-scroll-area {
-  background: #ffffff;
-  border: 2px solid #1a1a1a;
-  border-radius: 12px;
-  padding: 14px 16px;
-  overflow-y: auto;
-  flex: 1 1 auto;
-  max-height: 46vh;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.patchnotes-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.patchnotes-group-title {
-  font-family: 'Kalam', system-ui, sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: #5b4630;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border-bottom: 1.5px dashed #ded4be;
-  padding-bottom: 3px;
-}
-.patchnotes-item {
-  font-family: 'Patrick Hand', system-ui, sans-serif;
-  font-size: 16px;
-  color: #242220;
-  line-height: 1.4;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding-left: 4px;
-}
-.patchnotes-bullet {
-  color: #c9a227;
-  font-size: 18px;
-  line-height: 1.1;
-  flex-shrink: 0;
-}
-.patchnotes-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-top: 14px;
-  flex-wrap: wrap;
-  flex-shrink: 0;
-}
-.patch-dot {
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  background: #d84a3a;
-  border: 1.5px solid #1a1a1a;
-  border-radius: 50%;
-  margin-left: 5px;
-  animation: pulseDot 1.6s infinite ease-in-out;
-}
-.pn-type-major { background: #e2c86a; color: #1a1a1a; }
-.pn-type-minor { background: #cce7dc; color: #174e38; }
-.pn-type-patch { background: #fedbcf; color: #7d2a1c; }
-.pn-type-maintenance { background: #dce5fa; color: #233e7d; }
-@keyframes pulseDot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.35); opacity: 0.7; }
-}
 </style>
 </head>
 <body>
@@ -2422,9 +2245,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
           <div class="logo-wrapper">
             <div class="logo-inner">
-              <div class="star-face" role="img" aria-label="Chiroot">
-                <span class="star-eyes"></span>
-              </div>
+              <img src="favicon.png" alt="Chiroot Logo" />
             </div>
           </div>
 
@@ -2667,7 +2488,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
         <div class="playlist-header">
           <h2 class="playlist-title">The Crate <span class="crate-count" id="crate-count">• 0 records</span></h2>
           <div class="playlist-actions">
-          <button type="button" class="share-btn patchnotes-button sketch-border-soft" id="btn-patchnotes-open" title="Catatan Pembaruan" aria-label="Patch Notes"><span>📢 Patch Notes</span><span class="patch-dot" id="patch-indicator-dot" style="display:none;"></span></button>
           <button class="share-btn sketch-border-soft" id="btn-share" title="Share doodle card">✦ Share</button>
           <button type="button" class="share-btn bluetooth-btn sketch-border-soft" id="btn-bluetooth-open" title="Pilih headset Bluetooth" aria-label="Pilih headset Bluetooth">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M7 17L17 7L12 2V22L17 17L7 7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
@@ -2922,12 +2742,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
           <p id="crate-zip-status" style="font-family:'Kalam',sans-serif; font-size:12.5px; color:#7a6548; margin:10px 0 0; min-height:1.2em; word-break:break-word;"></p>
         </div>
 
-        <div class="report-box" style="background:#fdf9ed;">
-          <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">📢 Catatan Pembaruan (Patch Notes)</div>
-          <p style="font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630; margin: 4px 0 12px;">Lihat rilis fitur baru, perbaikan bug, dan riwayat versi Chiroot.</p>
-          <button type="button" class="btn-secondary sketch-border-soft" id="btn-settings-patchnotes" style="width:100%; text-align:center;">📢 Buka Catatan Pembaruan</button>
-        </div>
-
         <div class="report-box" style="background:#fff4f0;">
           <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">️ Danger Zone</div>
           <p style="font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630; margin: 4px 0 12px;">Hapus seluruh data dan kembalikan ke piringan hitam demo.</p>
@@ -3061,29 +2875,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       </div>
     </div>
   </div>
-  <div class="modal-overlay" id="patchnotes-modal" aria-hidden="true">
-    <div class="modal-card sketch-border patchnotes-modal-card">
-      <button class="modal-close sketchy" id="btn-patchnotes-close" aria-label="Close">✕</button>
-      <div class="patchnotes-head">
-        <div class="patchnotes-tags-row">
-          <span class="patchnotes-type-pill pn-type-minor" id="pn-pill-type">✦ UPDATE FITUR</span>
-          <span class="patchnotes-version-pill" id="pn-pill-ver">v2.1.0</span>
-        </div>
-        <h3 class="patchnotes-title" id="pn-disp-title">Catatan Pembaruan</h3>
-        <p class="patchnotes-date" id="pn-disp-date">Dipublikasikan baru saja</p>
-      </div>
-      <div class="patchnotes-summary-box" id="pn-disp-summary"></div>
-      <div class="patchnotes-scroll-area sketch-border-tiny" id="pn-disp-content"></div>
-      <div class="patchnotes-footer">
-        <label style="font-family:'Kalam',sans-serif; font-size:13px; color:#7a6548; display:inline-flex; align-items:center; gap:6px; cursor:pointer; user-select:none;">
-          <input type="checkbox" id="pn-chk-dont-show" style="accent-color:#c9a227; width:16px; height:16px; cursor:pointer;">
-          <span>Jangan tampilkan lagi versi ini</span>
-        </label>
-        <button type="button" class="btn-primary sketch-border-soft" id="btn-patchnotes-ack">Mengerti ✦</button>
-      </div>
-    </div>
-  </div>
-
 
   <script>
 (function () {
@@ -3475,7 +3266,7 @@ function caMapCrateRow(row) {
 
 const GUEST_IDB_NAME = 'chiroot_guest_v1';
 const GUEST_IDB_STORE = 'tracks';
-let caGuestMem = null;
+let caGuestMem = null; // fallback jika IndexedDB tidak tersedia
 
 function caIsGuest() {
   return !(ChirootAuth.session && ChirootAuth.profile);
@@ -3796,7 +3587,7 @@ async function caCrateReset() {
 
 function caLoginRedirect() {
   if (!isSupabaseConfigured()) {
-    caGateError('Konfigurasi Supabase belum benar. Hubungi developer Chiroot.');
+    caGateError('Terjadi Kesalahan. Hubungi developer Chiroot.');
     return;
   }
   const proto = window.location.protocol;
@@ -7337,211 +7128,6 @@ if (btnRefreshLyrics) {
   restoreOutput();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36b88b94e45db51',t:'MTc4ODY3NzM2OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-<script>
-(function () {
-  const LS_SEEN_PATCH = 'chiroot_seen_patch_id';
-  const FALLBACK_PATCH_NOTE = {
-    id: 'pn_local_v210',
-    version: 'v2.1.0',
-    title: 'Chiroot v2.1 • Fitur Reverb, Bluetooth & Patch Notes',
-    release_type: 'minor',
-    summary: 'Selamat datang di pembaruan Chiroot! Nikmati efek audio reverb, output Bluetooth, dan sistem catatan pembaruan baru.',
-    content: '[FITUR BARU]\n• Efek Studio Reverb: Tambahkan nuansa gema akustik hangat pada lagu.\n• Dukungan Bluetooth: Hubungkan output suara ke headphone & speaker nirkabel.\n• Modal Patch Notes: Pengumuman pembaruan kini tampil langsung di aplikasi.\n\n[PENINGKATAN]\n• Tampilan antarmuka pemutar piringan hitam lebih responsif dan mulus.\n• Peningkatan kecepatan sinkronisasi data cloud.\n\n[PERBAIKAN]\n• Perbaikan bug pemutaran saat berpindah daftar lagu di The Crate.',
-    is_published: true,
-    popup_on_enter: true,
-    created_at: '2026-09-06T00:00:00Z'
-  };
 
-  let currentPatchNote = FALLBACK_PATCH_NOTE;
-
-  function esc(s) {
-    return String(s == null ? '' : s)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-  }
-
-  function renderPatchContent(content) {
-    if (!content) return '<div class="patchnotes-item"><span>Tidak ada rincian catatan pembaruan.</span></div>';
-    const lines = String(content).split('\n');
-    let out = '';
-    let currentGroup = [];
-    let currentTitle = '';
-    lines.forEach(function (l) {
-      const t = l.trim();
-      if (!t) return;
-      const headerMatch = t.match(/^(?:\[([^\]]+)\]|#{1,3}\s*(.+))$/);
-      if (headerMatch) {
-        if (currentGroup.length) {
-          out += '<div class="patchnotes-group"><div class="patchnotes-group-title">✦ ' + esc(currentTitle) + '</div>' + currentGroup.join('') + '</div>';
-          currentGroup = [];
-        }
-        currentTitle = headerMatch[1] || headerMatch[2] || '';
-      } else {
-        const clean = t.replace(/^[•\-\+\*]\s*/, '');
-        currentGroup.push('<div class="patchnotes-item"><span class="patchnotes-bullet">✦</span><span>' + esc(clean) + '</span></div>');
-      }
-    });
-    if (currentGroup.length) {
-      const h = currentTitle ? '<div class="patchnotes-group-title">✦ ' + esc(currentTitle) + '</div>' : '';
-      out += '<div class="patchnotes-group">' + h + currentGroup.join('') + '</div>';
-    }
-    return out || '<div class="patchnotes-item"><span>' + esc(content) + '</span></div>';
-  }
-
-  function fillPatchModal(patch) {
-    if (!patch) patch = FALLBACK_PATCH_NOTE;
-    currentPatchNote = patch;
-    const modal = document.getElementById('patchnotes-modal');
-    if (!modal) return;
-    const pillType = document.getElementById('pn-pill-type');
-    const pillVer = document.getElementById('pn-pill-ver');
-    const dispTitle = document.getElementById('pn-disp-title');
-    const dispDate = document.getElementById('pn-disp-date');
-    const dispSummary = document.getElementById('pn-disp-summary');
-    const dispContent = document.getElementById('pn-disp-content');
-
-    const rType = String(patch.release_type || 'minor').toLowerCase();
-    let typeLabel = '✦ UPDATE FITUR';
-    let typeClass = 'pn-type-minor';
-    if (rType === 'major') { typeLabel = '🚀 MAJOR RELEASE'; typeClass = 'pn-type-major'; }
-    else if (rType === 'patch' || rType === 'hotfix') { typeLabel = '🐛 HOTFIX / PERBAIKAN'; typeClass = 'pn-type-patch'; }
-    else if (rType === 'maintenance') { typeLabel = '🛠️ PEMELIHARAAN'; typeClass = 'pn-type-maintenance'; }
-
-    if (pillType) { pillType.textContent = typeLabel; pillType.className = 'patchnotes-type-pill ' + typeClass; }
-    if (pillVer) pillVer.textContent = patch.version || 'v1.0';
-    if (dispTitle) dispTitle.textContent = patch.title || 'Catatan Pembaruan';
-    if (dispDate) {
-      const d = patch.created_at ? new Date(patch.created_at) : new Date();
-      dispDate.textContent = 'Dirilis ' + d.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-    }
-    if (dispSummary) {
-      if (patch.summary && patch.summary.trim()) {
-        dispSummary.textContent = patch.summary.trim();
-        dispSummary.style.display = 'block';
-      } else {
-        dispSummary.style.display = 'none';
-      }
-    }
-    if (dispContent) {
-      dispContent.innerHTML = renderPatchContent(patch.content);
-    }
-  }
-
-  function openPatchNotesModal(patch) {
-    fillPatchModal(patch || currentPatchNote);
-    const modal = document.getElementById('patchnotes-modal');
-    if (modal) {
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden', 'false');
-    }
-  }
-
-  function closePatchNotesModal(markSeen) {
-    const modal = document.getElementById('patchnotes-modal');
-    if (modal) {
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden', 'true');
-    }
-    const chk = document.getElementById('pn-chk-dont-show');
-    if (markSeen || (chk && chk.checked)) {
-      if (currentPatchNote && currentPatchNote.id) {
-        try { localStorage.setItem(LS_SEEN_PATCH, String(currentPatchNote.id)); } catch (e) { }
-      }
-      const dot = document.getElementById('patch-indicator-dot');
-      if (dot) dot.style.display = 'none';
-    }
-  }
-
-  async function checkPatchNotesOnBoot() {
-    try {
-      const sbUrl = (window.CHIROOT_CONFIG && window.CHIROOT_CONFIG.SUPABASE_URL) || 'https://astuagdezahmuuwjoghf.supabase.co';
-      const sbKey = (window.CHIROOT_CONFIG && window.CHIROOT_CONFIG.SUPABASE_ANON_KEY) || 'sb_publishable_NXhR-MquEMwYDrCBPAOgAQ_MZ4BXQlT';
-      const headers = { 'apikey': sbKey };
-      if (window.ChirootAuth && window.ChirootAuth.session && window.ChirootAuth.session.access_token) {
-        headers['Authorization'] = 'Bearer ' + window.ChirootAuth.session.access_token;
-      } else {
-        headers['Authorization'] = 'Bearer ' + sbKey;
-      }
-      const res = await fetch(sbUrl.replace(/\/+$/, '') + '/rest/v1/chiroot_patch_notes?is_published=eq.true&order=created_at.desc&limit=5', {
-        method: 'GET',
-        headers: headers
-      });
-      if (res.ok) {
-        const list = await res.json();
-        if (Array.isArray(list) && list.length > 0) {
-          currentPatchNote = list[0];
-          const lastSeen = localStorage.getItem(LS_SEEN_PATCH);
-          if (String(currentPatchNote.id) !== lastSeen) {
-            const dot = document.getElementById('patch-indicator-dot');
-            if (dot) dot.style.display = 'inline-block';
-            if (currentPatchNote.popup_on_enter !== false) {
-              setTimeout(function () {
-                openPatchNotesModal(currentPatchNote);
-              }, 900);
-            }
-          }
-          return;
-        }
-      }
-    } catch (e) { }
-    currentPatchNote = FALLBACK_PATCH_NOTE;
-  }
-
-  const btnOpen = document.getElementById('btn-patchnotes-open');
-  if (btnOpen) {
-    btnOpen.addEventListener('click', function () {
-      openPatchNotesModal(currentPatchNote);
-    });
-  }
-
-  const btnSettings = document.getElementById('btn-settings-patchnotes');
-  if (btnSettings) {
-    btnSettings.addEventListener('click', function () {
-      const settingsModal = document.getElementById('settings-modal');
-      if (settingsModal) {
-        settingsModal.classList.remove('open');
-        settingsModal.setAttribute('aria-hidden', 'true');
-      }
-      openPatchNotesModal(currentPatchNote);
-    });
-  }
-
-  const btnClose = document.getElementById('btn-patchnotes-close');
-  if (btnClose) {
-    btnClose.addEventListener('click', function () {
-      closePatchNotesModal(false);
-    });
-  }
-
-  const btnAck = document.getElementById('btn-patchnotes-ack');
-  if (btnAck) {
-    btnAck.addEventListener('click', function () {
-      closePatchNotesModal(true);
-    });
-  }
-
-  const modalOverlay = document.getElementById('patchnotes-modal');
-  if (modalOverlay) {
-    modalOverlay.addEventListener('click', function (e) {
-      if (e.target === modalOverlay) closePatchNotesModal(false);
-    });
-  }
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') {
-      const modal = document.getElementById('patchnotes-modal');
-      if (modal && modal.classList.contains('open')) closePatchNotesModal(false);
-    }
-  });
-
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    checkPatchNotesOnBoot();
-  } else {
-    window.addEventListener('DOMContentLoaded', checkPatchNotesOnBoot);
-  }
-})();
-</script>
-
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36bb6d41dd7fd9a',t:'MTc4ODY3OTI1OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
