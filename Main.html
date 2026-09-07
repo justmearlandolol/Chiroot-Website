@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1619,7 +1620,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      transition: opacity 0.7s ease, visibility 0.7s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
     #preloader.hidden {
       opacity: 0;
@@ -1668,7 +1669,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       flex-direction: column;
       align-items: center;
       gap: 20px;
-      animation: vanishAll 0.6s ease 3.2s forwards;
+      animation: vanishAll 0.35s ease 1.6s forwards;
     }
 
     @keyframes vanishAll {
@@ -1683,17 +1684,52 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       display: inline-block;
       opacity: 0;
       transform: translateX(180px) rotate(-8deg);
-      animation: slideFromRight 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+      animation: slideFromRight 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
     }
-    .logo-wrapper img {
-      width: 130px;
-      height: auto;
+    .logo-wrapper .star-face {
+      position: relative;
       display: block;
+      width: 130px;
+      aspect-ratio: 55 / 54;
+      overflow: hidden;
       border: 3px solid var(--ink);
       border-radius: var(--radius-sketch-soft);
+      background-color: #d7ed86;
+      background-image: url("data:image/png;base64,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");
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
       box-shadow:
         0 4px 0 #c8b78a,
         0 6px 16px rgba(96, 64, 18, 0.12);
+    }
+
+    .logo-wrapper .star-eyes {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: url("data:image/png;base64,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");
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      animation: starEyesLook 2.4s cubic-bezier(0.68, -0.05, 0.27, 1) infinite;
+      will-change: transform;
+    }
+
+    @keyframes starEyesLook {
+      0%, 8% { transform: translateX(0) translateZ(0); }
+      20%, 38% { transform: translateX(6.2%) translateZ(0); }
+      50%, 68% { transform: translateX(-6.2%) translateZ(0); }
+      80%, 100% { transform: translateX(0) translateZ(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .logo-wrapper .star-eyes {
+        animation: none;
+      }
     }
 
     .text-wrapper {
@@ -1710,7 +1746,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       white-space: nowrap;
       opacity: 0;
       transform: translateX(140px);
-      animation: slideFromRight 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+      animation: slideFromRight 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
     }
 
     .brand-text .highlight {
@@ -1744,7 +1780,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
     .loading-wrapper {
       opacity: 0;
-      animation: fadeUp 0.5s ease 1.7s forwards;
+      animation: fadeUp 0.3s ease 0.85s forwards;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1810,7 +1846,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       .preloader-card {
         padding: 28px 22px 26px;
       }
-      .logo-wrapper img {
+      .logo-wrapper .star-face {
         width: 90px;
       }
       .brand-text {
@@ -2217,6 +2253,68 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   .bluetooth-modal-actions{justify-content:stretch;}
   .bluetooth-modal-actions button{flex:1;min-width:120px;}
 }
+.topbar-switch{
+  background:#fff8e7;border:2.2px solid var(--ink);
+  border-radius:14px 12px 15px 13px / 12px 15px 12px 14px;
+  padding:8px 13px;cursor:pointer;
+  font-family:'Kalam',sans-serif;font-size:14.5px;font-weight:700;color:#6a4a08;
+  box-shadow:0 3px 0 #c8b78a;transition:transform .12s ease, box-shadow .12s ease;
+}
+.topbar-switch:hover{transform:translateY(-2px);box-shadow:0 5px 0 #c8b78a;background:#fdf1cc;}
+.topbar-switch:active{transform:translateY(0);box-shadow:0 2px 0 #c8b78a;}
+.acct-card{max-width:430px;max-height:min(88vh,640px);overflow:auto;}
+.acct-list{display:flex;flex-direction:column;gap:9px;max-height:min(44vh,320px);overflow-y:auto;padding:2px 4px 2px 2px;}
+.acct-list.busy{opacity:.6;}
+.acct-row{display:flex;align-items:stretch;gap:8px;}
+.acct-pick{
+  flex:1;min-width:0;display:flex;align-items:center;gap:11px;text-align:left;
+  background:#fffdf6;border:2.2px solid var(--ink);
+  border-radius:16px 13px 18px 14px / 13px 18px 13px 17px;
+  padding:9px 11px;cursor:pointer;
+  font-family:'Kalam',sans-serif;font-size:14px;color:#2a1d0e;
+  box-shadow:0 3px 0 #c8b78a;transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.acct-pick:hover{transform:translateY(-2px);box-shadow:0 5px 0 #c8b78a;background:#fff9e8;}
+.acct-pick:active{transform:translateY(0);box-shadow:0 2px 0 #c8b78a;}
+.acct-pick:focus-visible{outline:3px solid #f3d87a;outline-offset:2px;}
+.acct-row.active .acct-pick{background:#f3d986;cursor:default;transform:none;box-shadow:0 2px 0 #c8b78a;}
+.acct-av{
+  width:38px;height:38px;border-radius:50%;border:2.2px solid var(--ink);background:#f2e0a8;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Caveat',cursive;font-size:18px;font-weight:700;color:#5a3f1f;
+  overflow:hidden;flex-shrink:0;
+}
+.acct-av img{width:100%;height:100%;object-fit:cover;display:block;}
+.acct-meta{display:flex;flex-direction:column;min-width:0;flex:1;}
+.acct-name{font-size:15.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.acct-mail{font-size:12.5px;color:#7a6548;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.acct-flag{
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#6a4a08;background:#fdf1cc;
+  border:1.8px solid var(--ink);border-radius:10px 12px 10px 12px / 12px 10px 12px 10px;
+  padding:2px 8px;transform:rotate(-2deg);white-space:nowrap;
+}
+.acct-quick{font-size:11.5px;color:#8d765e;white-space:nowrap;}
+.acct-del{
+  background:#fff4ec;border:2px solid var(--ink);border-radius:12px 10px 13px 11px / 10px 13px 10px 12px;
+  width:34px;cursor:pointer;font-size:13px;color:#8a3a2a;flex-shrink:0;
+  box-shadow:0 2px 0 #dcb9a4;font-family:'Kalam',sans-serif;transition:transform .12s ease, background .12s ease;
+}
+.acct-del:hover{background:#ffe9dc;transform:translateY(-1px);}
+.acct-empty{
+  font-family:'Kalam',sans-serif;font-size:13.5px;line-height:1.5;color:#8d765e;
+  background:#fffcf5;border:2px dashed #c9b88a;border-radius:16px;padding:14px;
+}
+.acct-hint{font-family:'Kalam',sans-serif;font-size:12.5px;color:#8a3a2a;margin:8px 2px 0;}
+.acct-hint:empty{display:none;}
+#acct-add.full{opacity:.72;background:#f4ecda;box-shadow:0 2px 0 #c8b78a;}
+#acct-add.full:hover{transform:none;}
+#acct-add.full:focus-visible{outline:3px solid #f3d87a;outline-offset:2px;}
+.gate-pick-btn{width:100%;justify-content:center;margin-top:2px;font-size:15px;}
+@media (max-width:480px){
+  .topbar-switch{padding:7px 10px;font-size:13.5px;}
+  .acct-quick{display:none;}
+  .acct-name{font-size:14.5px;}
+}
 </style>
 </head>
 <body>
@@ -2245,7 +2343,9 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
           <div class="logo-wrapper">
             <div class="logo-inner">
-              <img src="favicon.png" alt="Chiroot Logo" />
+              <div class="star-face" role="img" aria-label="Chiroot">
+                <span class="star-eyes"></span>
+              </div>
             </div>
           </div>
 
@@ -2860,6 +2960,20 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
           </div>
         </section>
       </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="acct-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="acct-title">
+    <div class="modal-card acct-card sketch-border">
+      <button type="button" class="modal-close sketchy" id="acct-close" aria-label="Tutup">✕</button>
+      <h3 class="modal-title" id="acct-title">Ganti Akun</h3>
+      <p class="modal-sub"></p>
+      <div class="acct-list" id="acct-list"></div>
+      <p class="acct-hint" id="acct-hint" aria-live="polite"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary sketch-border-soft" id="acct-add">＋ Login akun Google lain</button>
+      </div>
+      <p class="form-note">Akun lama tidak di-logout dari server, jadi bisa dipakai balik kapan pun. Tekan ✕ pada sebuah baris untuk melepasnya dari device ini.</p>
     </div>
   </div>
 
@@ -3585,7 +3699,7 @@ async function caCrateReset() {
   }
 }
 
-function caLoginRedirect() {
+function caLoginRedirect(opts) {
   if (!isSupabaseConfigured()) {
     caGateError('Terjadi Kesalahan. Hubungi developer Chiroot.');
     return;
@@ -3607,6 +3721,7 @@ function caLoginRedirect() {
     params.set('code_challenge', pair.challenge);
     params.set('code_challenge_method', 'S256');
     params.set('redirect_to', window.location.origin + window.location.pathname);
+    if (opts && opts.pickAccount) params.set('prompt', 'select_account');
     window.location.assign(caBase() + '/auth/v1/authorize?' + params.toString());
   }).catch(function () {
     caSetLoginButtonsBusy(false);
@@ -3702,6 +3817,14 @@ function caGateShow(mode) {
   btn.innerHTML = GOOGLE_G_SVG + '<span>Login with Google</span>';
   btn.addEventListener('click', caLoginRedirect);
   wrap.appendChild(btn);
+  if (caAccountsRead().length) {
+    const pick = document.createElement('button');
+    pick.type = 'button';
+    pick.className = 'btn-secondary sketch-border-soft gate-pick-btn';
+    pick.textContent = 'Akun yang tersimpan di device ini';
+    pick.addEventListener('click', caOpenAccountSwitcher);
+    wrap.appendChild(pick);
+  }
   const note = document.createElement('p');
   note.className = 'gate-note';
   note.textContent = 'Dengan login, lagu & profil kamu tersimpan di akun Google dan bisa dibuka dari device lain.';
@@ -3783,6 +3906,15 @@ function caRenderTopbar() {
     btn.innerHTML = GOOGLE_G_SVG + '<span>Login with Google</span>';
     btn.addEventListener('click', caLoginRedirect);
     el.appendChild(btn);
+    if (caAccountsRead().length) {
+      const back = document.createElement('button');
+      back.type = 'button';
+      back.className = 'topbar-switch';
+      back.textContent = 'Akun Tersimpan';
+      back.title = 'Pakai akun yang pernah login di device ini';
+      back.addEventListener('click', caOpenAccountSwitcher);
+      el.appendChild(back);
+    }
     return;
   }
   const user = document.createElement('div');
@@ -3794,6 +3926,12 @@ function caRenderTopbar() {
   avatar.setAttribute('aria-label', 'Edit profil');
   avatar.innerHTML = caAvatarInner(ChirootAuth.profile);
   avatar.addEventListener('click', caOpenProfileModal);
+  const sw = document.createElement('button');
+  sw.type = 'button';
+  sw.className = 'topbar-switch';
+  sw.textContent = 'Ganti Akun';
+  sw.title = 'Pindah ke akun lain yang pernah login di device ini';
+  sw.addEventListener('click', caOpenAccountSwitcher);
   const out = document.createElement('button');
   out.type = 'button';
   out.className = 'topbar-logout';
@@ -3809,6 +3947,7 @@ function caRenderTopbar() {
     user.appendChild(ap);
   }
   user.appendChild(avatar);
+  user.appendChild(sw);
   user.appendChild(out);
   el.appendChild(user);
 }
@@ -3899,6 +4038,7 @@ async function caOnboardingSave() {
     const profile = await caCreateProfile({ display_name: name, email: email, pfp: obPfpDataUrl, description: '', banner_color: '#d84a3a' });
     if (!profile) throw new Error('Gagal menyimpan profil.');
     ChirootAuth.profile = profile;
+    caAccountRemember();
     caCloseOnboarding();
     caGateHide();
     caRenderTopbar();
@@ -4006,6 +4146,7 @@ async function caProfileSave() {
     });
     if (!updated) throw new Error('Gagal memperbarui profil.');
     ChirootAuth.profile = updated;
+    caAccountRemember();
     caRenderTopbar();
     caRenderGreeting();
     caCloseProfileModal();
@@ -4027,7 +4168,9 @@ function caAskSignOut() {
 }
 
 function caDoSignOut() {
+  const caOutUid = caActiveUserId();
   caSignOut().then(async function () {
+    if (caOutUid) caAccountsForget(caOutUid);
     tracks = [];
     currentIndex = 0;
     isPlaying = false;
@@ -4072,6 +4215,7 @@ async function caBootProfileStep(fresh) {
   }
   if (profile) {
     ChirootAuth.profile = profile;
+    caAccountRemember();
     caGateHide();
     caRenderTopbar();
     caRenderGreeting();
@@ -4197,6 +4341,355 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
   <script>
+const CHIROOT_ACCOUNTS_KEY = 'chiroot_accounts_v1';
+const CHIROOT_ACCOUNTS_MAX = 5;
+const CHIROOT_ACCOUNTS_FULL_MSG = 'Account penuh, silahkan hapus salah satu akun';
+let caSwitchBusy = false;
+let caAccountsFullNoticed = false;
+
+function caAccountsLimit(rows) {
+  return Array.isArray(rows) ? rows.slice(0, CHIROOT_ACCOUNTS_MAX) : [];
+}
+
+function caAccountsFull() {
+  return caAccountsRead().length >= CHIROOT_ACCOUNTS_MAX;
+}
+
+function caAccountsFullWarn(force) {
+  const add = document.getElementById('acct-add');
+  if (add) {
+    add.classList.add('full');
+    add.title = CHIROOT_ACCOUNTS_FULL_MSG;
+  }
+  const hint = document.getElementById('acct-hint');
+  if (hint && !caSwitchBusy) hint.textContent = CHIROOT_ACCOUNTS_FULL_MSG;
+  if (force || !caAccountsFullNoticed) {
+    caAccountsFullNoticed = true;
+    showToast(CHIROOT_ACCOUNTS_FULL_MSG);
+  }
+}
+
+function caAccountsRead() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CHIROOT_ACCOUNTS_KEY) || '[]');
+    if (!Array.isArray(raw)) return [];
+    return caAccountsLimit(raw.filter(function (r) {
+      return r && typeof r.user_id === 'string' && r.user_id && r.session
+        && typeof r.session.access_token === 'string' && r.session.access_token;
+    }));
+  } catch (e) { return []; }
+}
+
+function caAccountsWrite(list) {
+  const rows = caAccountsLimit(list);
+  if (Array.isArray(list) && list.length > rows.length) caAccountsFullWarn();
+  try {
+    localStorage.setItem(CHIROOT_ACCOUNTS_KEY, JSON.stringify(rows));
+  } catch (e) {
+    try {
+      localStorage.setItem(CHIROOT_ACCOUNTS_KEY, JSON.stringify(rows.map(function (r) {
+        return Object.assign({}, r, { pfp: '' });
+      })));
+    } catch (e2) {}
+  }
+}
+
+function caAccountsForget(userId) {
+  caAccountsWrite(caAccountsRead().filter(function (r) { return String(r.user_id) !== String(userId); }));
+}
+
+function caAccountRow(userId) {
+  const rows = caAccountsRead();
+  for (let i = 0; i < rows.length; i++) {
+    if (String(rows[i].user_id) === String(userId)) return rows[i];
+  }
+  return null;
+}
+
+function caAccountRemember() {
+  const s = ChirootAuth.session;
+  if (!s || !s.user || !s.user.id) return;
+  const p = ChirootAuth.profile || null;
+  const row = {
+    user_id: String(s.user.id),
+    email: String((p && p.email) || s.user.email || ''),
+    display_name: (p && p.display_name) || '',
+    pfp: (p && p.pfp && String(p.pfp).length < 120000) ? p.pfp : '',
+    banner_color: (p && p.banner_color) || '#d84a3a',
+    saved_at: Date.now(),
+    session: {
+      access_token: s.access_token,
+      refresh_token: s.refresh_token || '',
+      expires_at: s.expires_at,
+      user: { id: String(s.user.id), email: String(s.user.email || '') }
+    }
+  };
+  const all = caAccountsRead();
+  const rows = [];
+  let known = false;
+  for (let i = 0; i < all.length; i++) {
+    if (String(all[i].user_id) === row.user_id) known = true;
+    else rows.push(all[i]);
+  }
+  if (!known && rows.length >= CHIROOT_ACCOUNTS_MAX) {
+    caAccountsFullWarn();
+    return;
+  }
+  rows.unshift(row);
+  caAccountsWrite(rows);
+}
+
+function caActiveUserId() {
+  return (ChirootAuth.session && ChirootAuth.session.user) ? String(ChirootAuth.session.user.id) : '';
+}
+
+function caAccountRows() {
+  const active = caActiveUserId();
+  return caAccountsRead().sort(function (a, b) {
+    if (String(a.user_id) === active) return -1;
+    if (String(b.user_id) === active) return 1;
+    return (Number(b.saved_at) || 0) - (Number(a.saved_at) || 0);
+  });
+}
+
+function caAccountInitials(row) {
+  const src = String((row && (row.display_name || row.email)) || '?');
+  const init = src.split(/[\s@._-]+/).filter(Boolean).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join('');
+  return init || '?';
+}
+
+function caAccountLabel(row) {
+  const name = String((row && row.display_name) || '').trim();
+  if (name) return name.split(/\s+/)[0];
+  const mail = String((row && row.email) || '').trim();
+  if (mail) return mail.split('@')[0];
+  return 'akun';
+}
+
+function caSetSwitcherBusy(busy) {
+  caSwitchBusy = !!busy;
+  if (!busy) caAccountsFullNoticed = false;
+  const box = document.getElementById('acct-list');
+  if (box) box.classList.toggle('busy', !!busy);
+  document.querySelectorAll('#acct-modal button').forEach(function (b) { b.disabled = !!busy; });
+  const hint = document.getElementById('acct-hint');
+  if (hint) hint.textContent = busy ? 'Menyiapkan akun…' : '';
+}
+
+function caStopPlaybackForSwitch() {
+  try {
+    audio.pause();
+    audio.loop = false;
+    audio.removeAttribute('src');
+    audio.load();
+    audio._resumeTime = 0;
+  } catch (e) {}
+  try { document.body.classList.remove('is-playing'); } catch (e) {}
+  try {
+    loopBtn.classList.remove('active');
+    shuffleBtn.classList.remove('active');
+  } catch (e) {}
+  try {
+    if (typeof isPlaying === 'boolean') isPlaying = false;
+    if (typeof isLoop === 'boolean') isLoop = false;
+    if (typeof isShuffle === 'boolean') isShuffle = false;
+    if (Array.isArray(playOrder)) playOrder = [];
+  } catch (e) {}
+}
+
+function caRerenderForUser(keepPlayer) {
+  renderPlaylist();
+  renderTop10();
+  if (keepPlayer) return;
+  if (tracks && tracks.length) loadTrack(currentIndex, false, true);
+  else showEmptyState();
+  caRenderTopbar();
+  caRenderGreeting();
+}
+
+function caRenderAccountList() {
+  const box = document.getElementById('acct-list');
+  if (!box) return;
+  const rows = caAccountRows();
+  const active = caActiveUserId();
+  const full = rows.length >= CHIROOT_ACCOUNTS_MAX;
+  const add = document.getElementById('acct-add');
+  if (add) {
+    add.classList.toggle('full', full);
+    add.title = full ? CHIROOT_ACCOUNTS_FULL_MSG : 'Maksimal ' + CHIROOT_ACCOUNTS_MAX + ' akun di device ini';
+  }
+  const hint = document.getElementById('acct-hint');
+  if (hint && !caSwitchBusy) hint.textContent = full ? CHIROOT_ACCOUNTS_FULL_MSG : '';
+  if (full) caAccountsFullNoticed = false;
+  box.innerHTML = '';
+  if (!rows.length) {
+    const empty = document.createElement('div');
+    empty.className = 'acct-empty';
+    empty.textContent = 'Belum ada akun yang tersimpan di device ini. Login Google satu kali, setelah itu pindah akun tinggal klik.';
+    box.appendChild(empty);
+    return;
+  }
+  rows.forEach(function (row) {
+    const isActive = String(row.user_id) === active;
+    const wrap = document.createElement('div');
+    wrap.className = 'acct-row' + (isActive ? ' active' : '');
+    const pick = document.createElement('button');
+    pick.type = 'button';
+    pick.className = 'acct-pick';
+    const av = document.createElement('span');
+    av.className = 'acct-av';
+    if (row.banner_color) { try { av.style.borderColor = row.banner_color; } catch (e) {} }
+    if (row.pfp) {
+      const img = document.createElement('img');
+      img.src = row.pfp;
+      img.alt = '';
+      av.appendChild(img);
+    } else {
+      av.textContent = caAccountInitials(row);
+    }
+    const meta = document.createElement('span');
+    meta.className = 'acct-meta';
+    const nm = document.createElement('span');
+    nm.className = 'acct-name';
+    nm.textContent = String(row.display_name || '').trim() || String(row.email || '').split('@')[0] || 'Akun Chiroot';
+    const mail = document.createElement('span');
+    mail.className = 'acct-mail';
+    mail.textContent = String(row.email || '—');
+    meta.appendChild(nm);
+    meta.appendChild(mail);
+    pick.appendChild(av);
+    pick.appendChild(meta);
+    if (isActive) {
+      const flag = document.createElement('span');
+      flag.className = 'acct-flag';
+      flag.textContent = 'aktif';
+      pick.appendChild(flag);
+    } else {
+      const quick = document.createElement('span');
+      quick.className = 'acct-quick';
+      const exp = row.session && row.session.expires_at;
+      quick.textContent = (caExpireMs(exp, 0) > Date.now()) ? 'langsung' : 'perlu refresh';
+      pick.appendChild(quick);
+      pick.addEventListener('click', function () { caAccountActivate(row.user_id); });
+    }
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'acct-del';
+    del.textContent = '✕';
+    del.title = 'Lepas akun ini dari device';
+    del.setAttribute('aria-label', 'Lepas ' + (String(row.email || 'akun')) + ' dari daftar');
+    del.addEventListener('click', function () {
+      const sure = window.confirm('Lepas ' + (row.email || 'akun ini') + ' dari daftar akun di device ini?\nLagu & profilnya tetap aman di cloud.');
+      if (!sure) return;
+      caAccountsForget(row.user_id);
+      caRenderAccountList();
+      showToast(isActive ? 'Akun aktif dilepas dari daftar (kamu tetap login di akun itu).' : 'Akun dilepas dari daftar.');
+    });
+    wrap.appendChild(pick);
+    wrap.appendChild(del);
+    box.appendChild(wrap);
+  });
+}
+
+function caOpenAccountSwitcher() {
+  const modal = document.getElementById('acct-modal');
+  if (!modal) return;
+  caRenderAccountList();
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(function () {
+    const first = modal.querySelector('.acct-row:not(.active) .acct-pick');
+    if (first) { try { first.focus(); } catch (e) {} }
+  }, 60);
+}
+
+function caCloseAccountSwitcher() {
+  const modal = document.getElementById('acct-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+async function caAccountActivate(userId) {
+  if (caSwitchBusy) return;
+  const row = caAccountRow(userId);
+  if (!row) {
+    showToast('Akun itu sudah tidak ada di daftar.');
+    caRenderAccountList();
+    return;
+  }
+  if (String(userId) === caActiveUserId()) { caCloseAccountSwitcher(); return; }
+  const keep = { session: ChirootAuth.session, profile: ChirootAuth.profile, tracks: tracks, index: currentIndex };
+  caSetSwitcherBusy(true);
+  try {
+    const raw = row.session && row.session.access_token ? Object.assign({}, row.session, {
+      user: (row.session.user && row.session.user.id) ? row.session.user : { id: String(row.user_id), email: String(row.email || '') }
+    }) : null;
+    const stored = raw ? caValidateSessionShape(raw) : null;
+    if (!stored) throw new Error('sesi tersimpan sudah kedaluwarsa');
+    ChirootAuth.session = stored;
+    ChirootAuth.profile = null;
+    await caEnsureFreshToken(false);
+    caSaveSession(ChirootAuth.session);
+    const profile = await caFetchProfile();
+    if (!profile) throw new Error('profil di akun ini belum lengkap');
+    ChirootAuth.profile = profile;
+    caAccountRemember();
+    try { await caLoadAdminRole(true); } catch (e) {}
+    caStopPlaybackForSwitch();
+    currentIndex = 0;
+    tracks = await caFetchCrate();
+    restoreState();
+    caGateHide();
+    caRerenderForUser(false);
+    caCloseAccountSwitcher();
+    showToast('Pindah ke ' + caAccountLabel(profile) + ' ✦ crate & profil ikut ganti.');
+    caFireHook('onProfileReady');
+  } catch (err) {
+    const msg = err && err.message ? String(err.message) : String(err);
+    if (/kedaluwarsa|sesi habis|login lagi|invalid[_ -]?grant|refresh token|unauthorized|forbidden|401|403/i.test(msg)) caAccountsForget(userId);
+    ChirootAuth.session = keep.session;
+    ChirootAuth.profile = keep.profile;
+    tracks = keep.tracks;
+    currentIndex = keep.index;
+    caRerenderForUser(true);
+    showToast('Ganti akun gagal (' + msg + '). Coba login ulang di akun itu.');
+  } finally {
+    caSetSwitcherBusy(false);
+  }
+}
+
+function caDetachActiveSession() {
+  ChirootAuth.session = null;
+  ChirootAuth.profile = null;
+  caClearSession();
+  caRenderTopbar();
+}
+
+function caAccountAddNew() {
+  if (caSwitchBusy) return;
+  if (caAccountsFull()) { caAccountsFullWarn(true); return; }
+  caAccountRemember();
+  caDetachActiveSession();
+  caCloseAccountSwitcher();
+  caLoginRedirect({ pickAccount: true });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const close = document.getElementById('acct-close');
+  if (close) close.addEventListener('click', caCloseAccountSwitcher);
+  const add = document.getElementById('acct-add');
+  if (add) add.addEventListener('click', caAccountAddNew);
+  const modal = document.getElementById('acct-modal');
+  if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) caCloseAccountSwitcher(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (modal && modal.classList.contains('open')) caCloseAccountSwitcher();
+  });
+});
+</script>
+
+  <script>
 
 window.addEventListener('load', function () {
       const preloader = document.getElementById('preloader');
@@ -4205,8 +4698,8 @@ window.addEventListener('load', function () {
         setTimeout(function () {
           preloader.style.display = 'none';
 
-        }, 700);
-      }, 4000);
+        }, 400);
+      }, 2000);
     });
 
     setTimeout(function () {
@@ -4216,9 +4709,9 @@ window.addEventListener('load', function () {
         setTimeout(function () {
           preloader.style.display = 'none';
 
-        }, 700);
+        }, 400);
       }
-    }, 7000);
+    }, 3600);
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
 
@@ -7129,5 +7622,5 @@ if (btnRefreshLyrics) {
 })();
 </script>
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3799bbafdb298ed',t:'MTc4ODgyNDk0OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
