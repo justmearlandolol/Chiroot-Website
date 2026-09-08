@@ -1180,6 +1180,25 @@ button:focus-visible, input:focus-visible, select:focus-visible{ outline:3px sol
                 <textarea id="pn-input-content" class="sketch-input pn-textarea" rows="8" placeholder="Tulis rincian pembaruan di sini..." required></textarea>
               </div>
 
+              <div class="field" style="background:#fdfaf2;border:1.8px dashed #d2a772;border-radius:12px;padding:12px 14px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#5b4630" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <label style="font-family:'Kalam',sans-serif;font-size:14px;font-weight:700;color:#5b4630;margin:0;">Upload Gambar / GIF untuk Patch Notes</label>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                  <input type="file" id="pn-image-input" accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp" style="font-family:'Kalam',sans-serif;font-size:13px;flex:1;min-width:180px;">
+                  <button type="button" class="btn-secondary sketch-border-tiny" id="btn-pn-upload-img" style="font-size:14px;padding:7px 14px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Upload &amp; Sisipkan
+                  </button>
+                </div>
+                <p style="font-family:'Kalam',sans-serif;font-size:12px;color:#8b745b;margin:6px 0 0;">JPG, PNG, GIF, WEBP — maks 10 MB. Gambar otomatis di-upload ke Supabase Storage &amp; disisipkan ke konten.</p>
+                <div id="pn-image-preview" style="display:none;margin-top:10px;text-align:center;">
+                  <img id="pn-image-preview-img" style="max-width:100%;max-height:180px;border-radius:8px;border:2px solid #1a1a1a;" alt="Preview">
+                  <p id="pn-image-status" style="font-family:'Kalam',sans-serif;font-size:12px;color:#2a7a3a;margin:6px 0 0;"></p>
+                </div>
+              </div>
+
               <div class="pn-switches-row">
                 <label class="pn-checkbox-label">
                   <input type="checkbox" id="pn-check-published" checked>
@@ -2840,25 +2859,43 @@ function parsePatchContent(content) {
   let out = '';
   let currentGroup = [];
   let currentTitle = '';
+
+  function flushGroup() {
+    if (!currentGroup.length) return;
+    out += '<div class="patchnotes-group"><div class="patchnotes-group-title">✦ ' + esc(currentTitle) + '</div>' + currentGroup.join('') + '</div>';
+    currentGroup = [];
+  }
+
   lines.forEach(function(l) {
     const t = l.trim();
     if (!t) return;
+
+    // Handle [IMG:url] tags
+    const imgMatch = t.match(/^\[IMG:(https?:\/\/[^\]]+)\]$/);
+    if (imgMatch) {
+      flushGroup();
+      out += '<img src="' + esc(imgMatch[1]) + '" alt="Patch note image" style="max-width:100%;max-height:280px;border-radius:10px;border:2px solid #1a1a1a;margin:6px 0;display:block;" loading="lazy">';
+      return;
+    }
+
+    // Handle markdown image syntax ![alt](url)
+    const imgMd = t.match(/^!\[([^\]]*)\]\((https?:\/\/[^)]+)\)$/);
+    if (imgMd) {
+      flushGroup();
+      out += '<img src="' + esc(imgMd[2]) + '" alt="' + esc(imgMd[1]) + '" style="max-width:100%;max-height:280px;border-radius:10px;border:2px solid #1a1a1a;margin:6px 0;display:block;" loading="lazy">';
+      return;
+    }
+
     const headerMatch = t.match(/^(?:\[([^\]]+)\]|#{1,3}\s*(.+))$/);
     if (headerMatch) {
-      if (currentGroup.length) {
-        out += '<div class="patchnotes-group"><div class="patchnotes-group-title">✦ ' + esc(currentTitle) + '</div>' + currentGroup.join('') + '</div>';
-        currentGroup = [];
-      }
+      flushGroup();
       currentTitle = headerMatch[1] || headerMatch[2] || '';
     } else {
       const clean = t.replace(/^[•\-\+\*]\s*/, '');
       currentGroup.push('<div class="patchnotes-item"><span class="patchnotes-bullet">✦</span><span>' + esc(clean) + '</span></div>');
     }
   });
-  if (currentGroup.length) {
-    const h = currentTitle ? '<div class="patchnotes-group-title">✦ ' + esc(currentTitle) + '</div>' : '';
-    out += '<div class="patchnotes-group">' + h + currentGroup.join('') + '</div>';
-  }
+  flushGroup();
   return out || '<div class="patchnotes-item"><span>' + esc(content) + '</span></div>';
 }
 
@@ -3030,15 +3067,18 @@ async function savePatchNote(e) {
     }
     toast('Patch note berhasil diperbarui ✦' + (cloudOk ? ' (cloud)' : ' (lokal)'));
   } else {
-    payload.id = 'pn_' + Date.now();
-    payload.created_at = new Date().toISOString();
     if (state.session && !state.demo) {
       try {
         const res = await apiCall('/rest/v1/chiroot_patch_notes', 'POST', payload);
-        if (Array.isArray(res) && res[0] && res[0].id) payload.id = res[0].id;
+        if (Array.isArray(res) && res[0] && res[0].id) {
+          payload.id = res[0].id;
+          payload.created_at = res[0].created_at;
+        }
         cloudOk = true;
       } catch(e) { cloudOk = false; }
     }
+    if (!payload.id) payload.id = 'local_' + Date.now();
+    if (!payload.created_at) payload.created_at = new Date().toISOString();
     state.patchNotes.unshift(payload);
     toast('Patch note berhasil dipublikasikan ✦' + (cloudOk ? ' (cloud)' : ' (lokal)'));
   }
@@ -3253,8 +3293,112 @@ $('#confirm-ok').addEventListener('click', function(){
     });
   });
 
+  (function(){
+    var imgInput = document.getElementById('pn-image-input');
+    var uploadBtn = document.getElementById('btn-pn-upload-img');
+    var previewDiv = document.getElementById('pn-image-preview');
+    var previewImg = document.getElementById('pn-image-preview-img');
+    var statusP = document.getElementById('pn-image-status');
+    var contentTA = document.getElementById('pn-input-content');
+    if(!imgInput || !uploadBtn || !previewDiv || !previewImg || !statusP || !contentTA) return;
+
+    var STORAGE_BUCKET = 'chiroot-crate';
+    var uploading = false;
+
+    function showLocalPreview(file){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        previewImg.src = e.target.result;
+        previewDiv.style.display = 'block';
+        statusP.textContent = '✓ Preview: ' + file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + ' MB)';
+        statusP.style.color = '#2a7a3a';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function insertImageToContent(url){
+      var tag = '\n[IMG:' + url + ']\n';
+      var start = contentTA.selectionStart || contentTA.value.length;
+      var val = contentTA.value;
+      contentTA.value = val.substring(0, start) + tag + val.substring(start);
+      contentTA.focus();
+      contentTA.selectionStart = contentTA.selectionEnd = start + tag.length;
+    }
+
+    uploadBtn.addEventListener('click', async function(){
+      if(uploading) return;
+      var file = imgInput.files && imgInput.files[0];
+      if(!file){
+        toast('Pilih file gambar / GIF dulu.', 'err');
+        return;
+      }
+
+      var validTypes = ['image/jpeg','image/png','image/gif','image/webp'];
+      if(validTypes.indexOf(file.type) === -1){
+        toast('Format tidak didukung. Gunakan JPG, PNG, GIF, atau WEBP.', 'err');
+        return;
+      }
+      if(file.size > 10 * 1024 * 1024){
+        toast('File terlalu besar. Maksimal 10 MB.', 'err');
+        return;
+      }
+
+      showLocalPreview(file);
+      uploading = true;
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = 'Mengupload...';
+      statusP.textContent = '⏳ Mengupload ke Supabase Storage...';
+      statusP.style.color = '#5b4630';
+
+      try {
+        if(!state.session || !state.session.access_token){
+          throw new Error('Belum login. Login dulu untuk upload gambar.');
+        }
+
+        var ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+        if(ext === 'jpeg') ext = 'jpg';
+        var fileName = 'pn_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+        var storagePath = 'patch-notes/' + fileName;
+
+        var res = await fetch(SUPABASE_URL + '/storage/v1/object/' + STORAGE_BUCKET + '/' + storagePath, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + state.session.access_token,
+            'apikey': SUPABASE_ANON_KEY,
+            'Content-Type': file.type,
+            'x-upsert': 'false'
+          },
+          body: file
+        });
+
+        if(!res.ok){
+          var errData = {};
+          try { errData = await res.json(); } catch(e){}
+          throw new Error((errData.message || errData.error || 'Upload gagal (HTTP ' + res.status + ')'));
+        }
+
+        var publicUrl = SUPABASE_URL + '/storage/v1/object/public/' + STORAGE_BUCKET + '/' + storagePath;
+        insertImageToContent(publicUrl);
+        statusP.textContent = '✓ Gambar berhasil di-upload & disisipkan ke konten!';
+        statusP.style.color = '#2a7a3a';
+        toast('Gambar berhasil di-upload & disisipkan ke konten ✦');
+
+      } catch(err){
+        console.error('Image upload error:', err);
+        statusP.textContent = '✗ Upload gagal: ' + (err.message || err);
+        statusP.style.color = '#b42318';
+        toast('Upload gambar gagal: ' + (err.message || err), 'err');
+      } finally {
+        uploading = false;
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Upload &amp; Sisipkan';
+        imgInput.value = '';
+      }
+    });
+  })();
+
 boot();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332cc728cd69de7',t:'MTc4ODA4MjQ1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332edc0fc7f9b8d',t:'MTc4ODA4MzgxOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36bcfb08c86a550',t:'MTc4ODY4MDI3Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332cc728cd69de7',t:'MTc4ODA4MjQ1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a332edc0fc7f9b8d',t:'MTc4ODA4MzgxOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36bcfb08c86a550',t:'MTc4ODY4MDI3Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a37aa48cdb83fe19',t:'MTc4ODgzNTc5NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
