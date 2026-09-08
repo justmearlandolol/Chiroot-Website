@@ -2315,6 +2315,169 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   .acct-quick{display:none;}
   .acct-name{font-size:14.5px;}
 }
+
+/* ═══════════════════════════════════════════════════
+   PATCH NOTES — Chiroot
+   ═══════════════════════════════════════════════════ */
+.pn-open-btn{
+  background:#fff6df;
+  border:2.3px solid var(--ink);
+  padding:9px 15px;
+  font-family:'Patrick Hand',sans-serif;
+  font-size:16px;
+  cursor:pointer;
+  transition:transform .13s ease,background .15s;
+  box-shadow:0 3px 0 #d7c18a;
+  border-radius:16px 14px 17px 15px / 14px 16px 14px 17px;
+  color:#5a4020;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.pn-open-btn:hover{transform:translateY(-2px);background:#fffbf0;}
+.pn-open-btn:active{transform:translateY(1px);box-shadow:0 1px 0 #d7c18a;}
+.pn-open-btn svg{flex-shrink:0;}
+.pn-badge-dot{
+  display:inline-block;width:9px;height:9px;border-radius:50%;
+  background:#d84a3a;border:1.6px solid #1a1a1a;
+  margin-left:2px;vertical-align:middle;
+  animation:pnPulse 1.6s ease-in-out infinite;
+}
+@keyframes pnPulse{
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:.5;transform:scale(1.3);}
+}
+
+.pn-modal-card{
+  max-width:620px;width:100%;
+  max-height:90vh;display:flex;flex-direction:column;
+  background:linear-gradient(180deg,#fffdf7,#f7efe0);
+  padding:22px 24px;position:relative;
+  box-shadow:0 18px 50px rgba(40,28,12,.28);
+}
+.pn-modal-head{
+  display:flex;flex-direction:column;gap:5px;margin-bottom:14px;flex-shrink:0;
+}
+.pn-modal-tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.pn-modal-type-pill{
+  font-family:'Kalam',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.6px;padding:3px 10px;border-radius:7px;
+  border:1.8px solid #1a1a1a;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.pn-modal-type-pill svg{width:14px;height:14px;flex-shrink:0;}
+.pn-pill-major{background:#f7df8e;color:#5a4008;}
+.pn-pill-minor{background:#cce7dc;color:#174e38;}
+.pn-pill-patch{background:#fedbcf;color:#7d2a1c;}
+.pn-pill-maintenance{background:#dce5fa;color:#233e7d;}
+.pn-modal-ver{
+  font-family:'Kalam',sans-serif;font-size:12.5px;font-weight:700;
+  background:#1a1a1a;color:#f7f3e9;padding:3px 10px;border-radius:7px;
+}
+.pn-modal-title{
+  font-family:'Caveat',cursive;font-size:30px;line-height:1.15;
+  color:#1a1a1a;margin:4px 0 2px;
+}
+.pn-modal-date{
+  font-family:'Kalam',sans-serif;font-size:12.5px;color:#7b6f5f;margin:0;
+}
+.pn-modal-summary{
+  background:#fdf8eb;border:1.8px dashed #c9a227;border-radius:10px;
+  padding:10px 14px;font-family:'Patrick Hand',sans-serif;font-size:15px;
+  color:#433728;line-height:1.4;margin-bottom:14px;flex-shrink:0;
+}
+.pn-modal-scroll{
+  background:#ffffff;border:2px solid #1a1a1a;border-radius:12px;
+  padding:16px 18px;overflow-y:auto;flex:1 1 auto;
+  max-height:44vh;display:flex;flex-direction:column;gap:14px;
+}
+.pn-modal-group{display:flex;flex-direction:column;gap:6px;}
+.pn-modal-group-title{
+  font-family:'Kalam',sans-serif;font-size:14px;font-weight:700;
+  color:#5b4630;text-transform:uppercase;letter-spacing:.6px;
+  display:flex;align-items:center;gap:7px;
+  border-bottom:1.5px dashed #ded4be;padding-bottom:4px;
+}
+.pn-modal-group-title svg{width:18px;height:18px;flex-shrink:0;}
+.pn-modal-item{
+  font-family:'Patrick Hand',sans-serif;font-size:16px;color:#242220;
+  line-height:1.45;display:flex;align-items:flex-start;gap:9px;
+  padding-left:4px;
+}
+.pn-modal-bullet{
+  flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;
+  margin-top:1px;
+}
+.pn-modal-bullet svg{width:16px;height:16px;}
+.pn-modal-img{
+  width:100%;max-width:100%;border-radius:10px;
+  border:2px solid #1a1a1a;margin:6px 0;display:block;
+}
+.pn-modal-nav{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-top:14px;flex-wrap:wrap;flex-shrink:0;
+}
+.pn-nav-btn{
+  font-family:'Patrick Hand',sans-serif;font-size:15px;
+  background:#fff6df;border:2px solid var(--ink);
+  border-radius:12px;padding:7px 14px;cursor:pointer;
+  transition:transform .12s ease,background .15s;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.pn-nav-btn:hover{transform:translateY(-1px);background:#fffbf0;}
+.pn-nav-btn:disabled{opacity:.4;cursor:default;transform:none;}
+.pn-nav-counter{
+  font-family:'Kalam',sans-serif;font-size:13px;color:#7a6548;
+}
+.pn-history-list{
+  display:flex;flex-direction:column;gap:10px;margin-top:10px;
+}
+.pn-history-item{
+  background:#fff9ee;border:2px solid #2c261c;
+  border-radius:14px 12px 15px 13px / 12px 14px 12px 15px;
+  padding:10px 14px;cursor:pointer;
+  transition:transform .12s ease,background .15s,box-shadow .15s;
+  display:flex;align-items:center;gap:12px;
+}
+.pn-history-item:hover{
+  background:#fff3d6;transform:translateY(-1px) rotate(-.3deg);
+  box-shadow:0 4px 10px rgba(90,60,20,.08);
+}
+.pn-history-icon{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--ink);
+}
+.pn-history-icon svg{width:20px;height:20px;}
+.pn-history-icon.major{background:#f7df8e;}
+.pn-history-icon.minor{background:#cce7dc;}
+.pn-history-icon.patch{background:#fedbcf;}
+.pn-history-icon.maintenance{background:#dce5fa;}
+.pn-history-info{min-width:0;flex:1;}
+.pn-history-title{
+  font-family:'Caveat',cursive;font-size:19px;line-height:1.1;
+  color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.pn-history-meta{
+  font-family:'Kalam',sans-serif;font-size:12px;color:#7a6548;margin-top:2px;
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+}
+.pn-history-ver{
+  font-size:11px;font-weight:700;background:#1a1a1a;color:#f7f3e9;
+  padding:1px 7px;border-radius:5px;
+}
+.pn-empty{
+  text-align:center;padding:28px 14px;color:#7a6548;
+  font-family:'Kalam',sans-serif;border:2px dashed #c9b88a;
+  border-radius:16px;background:#fffcf5;
+}
+.pn-empty-icon{font-size:34px;margin-bottom:6px;}
+.pn-empty-title{font-family:'Caveat',cursive;font-size:26px;color:#4a3b23;}
+
+@media(max-width:560px){
+  .pn-modal-card{padding:16px 14px;max-width:95%;}
+  .pn-modal-title{font-size:24px;}
+  .pn-modal-scroll{max-height:38vh;padding:12px 14px;}
+  .pn-open-btn span.pn-btn-label{display:none;}
+}
 </style>
 </head>
 <body>
@@ -2596,6 +2759,11 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
           <button type="button" class="share-btn settings-button sketch-border-soft" id="btn-settings-open" title="Settings" aria-label="Settings">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" aria-hidden="true"><path d="M 50,15 C 53,16 54,23 57,24 C 61,23 64,19 68,21 C 71,23 69,29 71,32 C 75,34 80,33 82,37 C 83,41 78,45 78,48 C 79,52 84,54 83,59 C 82,62 76,62 74,66 C 74,70 77,75 74,78 C 71,81 66,78 63,79 C 60,82 59,88 54,88 C 50,87 49,81 46,80 C 42,81 38,85 34,83 C 31,81 33,75 31,72 C 27,70 22,71 20,67 C 19,63 24,59 24,56 C 23,52 18,50 19,45 C 20,41 26,42 28,38 C 28,34 25,29 28,26 C 31,23 36,26 39,25 C 42,22 43,16 48,15 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M 50,38 C 57,37 63,42 63,49 C 64,56 57,63 49,62 C 42,62 37,56 38,49 C 39,42 44,39 50,38 Z" fill="none" stroke="#333333" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             <span class="sr-only">Settings</span>
+          </button>
+          <button type="button" class="pn-open-btn" id="btn-patchnotes-open" title="Patch Notes">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span class="pn-btn-label">Patch Notes</span>
+            <span class="pn-badge-dot" id="pn-new-dot" style="display:none;"></span>
           </button>
           <button class="add-btn sketch-border-soft" id="btn-add-open">
             <span class="plus">+</span> Add Music
@@ -3012,6 +3180,322 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   </script>
 
   <audio id="audio" preload="metadata"></audio>
+
+  <div class="modal-overlay" id="patchnotes-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="pn-modal-title">
+    <div class="modal-card pn-modal-card sketch-border">
+      <button class="modal-close sketchy" id="btn-pn-close" aria-label="Close">✕</button>
+
+      <div id="pn-modal-detail-view">
+        <div class="pn-modal-head">
+          <div class="pn-modal-tags">
+            <span class="pn-modal-type-pill pn-pill-minor" id="pn-modal-pill-type">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span id="pn-modal-pill-text">UPDATE</span>
+            </span>
+            <span class="pn-modal-ver" id="pn-modal-ver">v1.0</span>
+          </div>
+          <h3 class="pn-modal-title" id="pn-modal-title">Patch Notes</h3>
+          <p class="pn-modal-date" id="pn-modal-date">—</p>
+        </div>
+        <div class="pn-modal-summary" id="pn-modal-summary"></div>
+        <div class="pn-modal-scroll sketch-border-tiny" id="pn-modal-content"></div>
+        <div class="pn-modal-nav">
+          <div style="display:flex;gap:8px;">
+            <button type="button" class="nav-btn pn-nav-btn" id="pn-nav-prev" disabled>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Prev
+            </button>
+            <button type="button" class="nav-btn pn-nav-btn" id="pn-nav-next" disabled>
+              Next
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <span class="pn-nav-counter" id="pn-nav-counter"></span>
+        </div>
+      </div>
+
+      <div id="pn-modal-history-view" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <h3 class="pn-modal-title" style="margin:0;">📢 Semua Patch Notes</h3>
+          <button type="button" class="btn-secondary sketch-border-soft" id="pn-back-to-latest" style="font-size:13px;padding:6px 12px;">← Terbaru</button>
+        </div>
+        <div class="pn-modal-scroll sketch-border-tiny" style="max-height:58vh;" id="pn-history-list"></div>
+      </div>
+
+      <div class="modal-actions" style="margin-top:14px;justify-content:space-between;align-items:center;">
+        <button type="button" class="btn-secondary sketch-border-soft" id="pn-btn-history" style="font-size:14px;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Riwayat
+        </button>
+        <button type="button" class="btn-primary sketch-border-soft" id="pn-btn-close-bottom">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function(){
+  var PN_KEY = 'chiroot_pn_seen_v1';
+  var PN_TABLE = 'chiroot_patch_notes';
+  var modal = document.getElementById('patchnotes-modal');
+  var allPatches = [];
+  var currentIdx = 0;
+  var showingHistory = false;
+
+  var SVG_ICONS = {
+    major: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+    minor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    patch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    maintenance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>'
+  };
+
+  var GROUP_ICONS = {
+    'FITUR BARU': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#3a8a6a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+    'PENINGKATAN': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#5b6ee1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+    'PERBAIKAN': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#d84a3a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    'PERBAIKAN BUG': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#d84a3a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    'OPTIMASI': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#c9a227" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+    'PEMBARUAN BESAR': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#c9a227" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+    'PEMELIHARAAN SISTEM': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#5b6ee1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>'
+  };
+
+  function esc(s){
+    return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function parseContent(content){
+    if(!content) return '<div class="pn-modal-item"><span>Tidak ada rincian.</span></div>';
+    var lines = String(content).split('\n');
+    var out = '';
+    var currentGroup = [];
+    var currentTitle = '';
+
+    function flushGroup(){
+      if(!currentGroup.length) return;
+      var iconSvg = '';
+      var upperTitle = currentTitle.toUpperCase().trim();
+      for(var key in GROUP_ICONS){
+        if(upperTitle.indexOf(key) !== -1){ iconSvg = GROUP_ICONS[key]; break; }
+      }
+      if(!iconSvg) iconSvg = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#c9a227" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+      out += '<div class="pn-modal-group">';
+      if(currentTitle){
+        out += '<div class="pn-modal-group-title">' + iconSvg + ' ' + esc(currentTitle) + '</div>';
+      }
+      out += currentGroup.join('');
+      out += '</div>';
+      currentGroup = [];
+    }
+
+    for(var i = 0; i < lines.length; i++){
+      var t = lines[i].trim();
+      if(!t) continue;
+
+      var imgMatch = t.match(/^\[IMG:(https?:\/\/[^\]]+)\]$/);
+      if(imgMatch){
+        flushGroup();
+        out += '<img class="pn-modal-img" src="' + esc(imgMatch[1]) + '" alt="Patch note image" loading="lazy">';
+        continue;
+      }
+
+      var imgMd = t.match(/^!\[([^\]]*)\]\((https?:\/\/[^)]+)\)$/);
+      if(imgMd){
+        flushGroup();
+        out += '<img class="pn-modal-img" src="' + esc(imgMd[2]) + '" alt="' + esc(imgMd[1]) + '" loading="lazy">';
+        continue;
+      }
+
+      var headerMatch = t.match(/^(?:\[([^\]]+)\]|#{1,3}\s*(.+))$/);
+      if(headerMatch){
+        flushGroup();
+        currentTitle = headerMatch[1] || headerMatch[2] || '';
+        continue;
+      }
+
+      var clean = t.replace(/^[•\-\+\*]\s*/, '');
+      var bulletColor = '#c9a227';
+      var uT = currentTitle.toUpperCase();
+      if(uT.indexOf('PERBAIKAN') !== -1 || uT.indexOf('BUG') !== -1) bulletColor = '#d84a3a';
+      else if(uT.indexOf('FITUR') !== -1) bulletColor = '#3a8a6a';
+      else if(uT.indexOf('PENINGKATAN') !== -1) bulletColor = '#5b6ee1';
+      else if(uT.indexOf('OPTIMASI') !== -1) bulletColor = '#c9a227';
+
+      currentGroup.push(
+        '<div class="pn-modal-item">' +
+        '<span class="pn-modal-bullet"><svg viewBox="0 0 24 24" fill="none" stroke="' + bulletColor + '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>' +
+        '<span>' + esc(clean) + '</span></div>'
+      );
+    }
+    flushGroup();
+    return out || '<div class="pn-modal-item"><span>' + esc(content) + '</span></div>';
+  }
+
+  function getTypeInfo(type){
+    var t = String(type||'minor').toLowerCase();
+    if(t === 'major') return {label:'MAJOR RELEASE', cls:'pn-pill-major', icon:SVG_ICONS.major};
+    if(t === 'patch' || t === 'hotfix') return {label:'HOTFIX / BUGFIX', cls:'pn-pill-patch', icon:SVG_ICONS.patch};
+    if(t === 'maintenance') return {label:'PEMELIHARAAN', cls:'pn-pill-maintenance', icon:SVG_ICONS.maintenance};
+    return {label:'UPDATE FITUR', cls:'pn-pill-minor', icon:SVG_ICONS.minor};
+  }
+
+  function renderDetail(idx){
+    if(!allPatches.length) return;
+    currentIdx = Math.max(0, Math.min(idx, allPatches.length - 1));
+    var p = allPatches[currentIdx];
+    var info = getTypeInfo(p.release_type);
+
+    var pill = document.getElementById('pn-modal-pill-type');
+    pill.className = 'pn-modal-type-pill ' + info.cls;
+    pill.querySelector('svg').outerHTML = info.icon.replace('width="20"','width="14"').replace('height="20"','height="14"');
+    document.getElementById('pn-modal-pill-text').textContent = info.label;
+    document.getElementById('pn-modal-ver').textContent = p.version || 'v1.0';
+    document.getElementById('pn-modal-title').textContent = p.title || 'Patch Notes';
+    var d = p.created_at ? new Date(p.created_at) : new Date();
+    document.getElementById('pn-modal-date').textContent = 'Dirilis ' + d.toLocaleDateString('id-ID',{year:'numeric',month:'long',day:'numeric'});
+
+    var sumEl = document.getElementById('pn-modal-summary');
+    if(p.summary && p.summary.trim()){
+      sumEl.textContent = p.summary.trim();
+      sumEl.style.display = 'block';
+    } else {
+      sumEl.style.display = 'none';
+    }
+
+    document.getElementById('pn-modal-content').innerHTML = parseContent(p.content);
+    document.getElementById('pn-nav-prev').disabled = currentIdx >= allPatches.length - 1;
+    document.getElementById('pn-nav-next').disabled = currentIdx <= 0;
+    document.getElementById('pn-nav-counter').textContent = (currentIdx + 1) + ' / ' + allPatches.length;
+  }
+
+  function renderHistory(){
+    var box = document.getElementById('pn-history-list');
+    if(!allPatches.length){
+      box.innerHTML = '<div class="pn-empty"><div class="pn-empty-icon">📢</div><div class="pn-empty-title">Belum ada patch notes</div><div>Admin belum mengirim catatan pembaruan.</div></div>';
+      return;
+    }
+    box.innerHTML = allPatches.map(function(p, i){
+      var info = getTypeInfo(p.release_type);
+      return '<div class="pn-history-item" data-pn-idx="' + i + '">' +
+        '<div class="pn-history-icon ' + (p.release_type||'minor') + '">' + info.icon + '</div>' +
+        '<div class="pn-history-info">' +
+          '<div class="pn-history-title">' + esc(p.title) + '</div>' +
+          '<div class="pn-history-meta">' +
+            '<span class="pn-history-ver">' + esc(p.version) + '</span>' +
+            '<span>' + (p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}) : '—') + '</span>' +
+            '<span>' + info.label + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    box.querySelectorAll('.pn-history-item').forEach(function(el){
+      el.addEventListener('click', function(){
+        var idx = parseInt(el.dataset.pnIdx, 10);
+        showDetailView(idx);
+      });
+    });
+  }
+
+  function showDetailView(idx){
+    showingHistory = false;
+    document.getElementById('pn-modal-detail-view').style.display = '';
+    document.getElementById('pn-modal-history-view').style.display = 'none';
+    document.getElementById('pn-btn-history').style.display = '';
+    renderDetail(idx);
+  }
+
+  function showHistoryView(){
+    showingHistory = true;
+    document.getElementById('pn-modal-detail-view').style.display = 'none';
+    document.getElementById('pn-modal-history-view').style.display = '';
+    document.getElementById('pn-btn-history').style.display = 'none';
+    renderHistory();
+  }
+
+  function openModal(idx){
+    if(!allPatches.length){
+      if(typeof showToast === 'function') showToast('Belum ada patch notes tersedia.');
+      return;
+    }
+    showDetailView(typeof idx === 'number' ? idx : 0);
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    markSeen();
+  }
+
+  function closeModalFn(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+  }
+
+  function getSeen(){
+    try { return JSON.parse(localStorage.getItem(PN_KEY) || '{}'); } catch(e){ return {}; }
+  }
+  function markSeen(){
+    var seen = getSeen();
+    allPatches.forEach(function(p){ if(p.id) seen[p.id] = true; });
+    try { localStorage.setItem(PN_KEY, JSON.stringify(seen)); } catch(e){}
+    var dot = document.getElementById('pn-new-dot');
+    if(dot) dot.style.display = 'none';
+  }
+  function checkUnseen(){
+    if(!allPatches.length) return;
+    var seen = getSeen();
+    var hasNew = allPatches.some(function(p){ return p.popup_on_enter !== false && p.id && !seen[p.id]; });
+    var dot = document.getElementById('pn-new-dot');
+    if(dot) dot.style.display = hasNew ? '' : 'none';
+    return hasNew;
+  }
+
+  async function fetchPatchNotes(){
+    try {
+      var url = String(SUPABASE_URL).trim().replace(/\/+$/,'');
+      var key = String(SUPABASE_PUBLISHABLE_KEY || '').trim();
+      if(!url || !key) return;
+      var headers = {'apikey': key};
+      var sess = (window.ChirootAuth && ChirootAuth.session) ? ChirootAuth.session : null;
+      if(sess && sess.access_token) headers['Authorization'] = 'Bearer ' + sess.access_token;
+      var res = await fetch(url + '/rest/v1/' + PN_TABLE + '?select=*&is_published=eq.true&order=created_at.desc&limit=50', {headers: headers});
+      if(!res.ok) return;
+      var data = await res.json();
+      if(Array.isArray(data) && data.length){
+        allPatches = data;
+        var hasNew = checkUnseen();
+        if(hasNew){
+          var latestPopup = allPatches.find(function(p){ return p.popup_on_enter !== false; });
+          if(latestPopup){
+            var idx = allPatches.indexOf(latestPopup);
+            setTimeout(function(){ openModal(idx); }, 2500);
+          }
+        }
+      }
+    } catch(e){ console.warn('Patch notes fetch failed', e); }
+  }
+
+  document.getElementById('btn-patchnotes-open').addEventListener('click', function(){ openModal(0); });
+  document.getElementById('btn-pn-close').addEventListener('click', closeModalFn);
+  document.getElementById('pn-btn-close-bottom').addEventListener('click', closeModalFn);
+  document.getElementById('pn-nav-prev').addEventListener('click', function(){ renderDetail(currentIdx + 1); });
+  document.getElementById('pn-nav-next').addEventListener('click', function(){ renderDetail(currentIdx - 1); });
+  document.getElementById('pn-btn-history').addEventListener('click', showHistoryView);
+  document.getElementById('pn-back-to-latest').addEventListener('click', function(){ showDetailView(0); });
+  modal.addEventListener('click', function(e){ if(e.target === modal) closeModalFn(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.classList.contains('open')) closeModalFn();
+    if(!modal.classList.contains('open') || showingHistory) return;
+    if(e.key === 'ArrowLeft' && !document.getElementById('pn-nav-next').disabled) renderDetail(currentIdx - 1);
+    if(e.key === 'ArrowRight' && !document.getElementById('pn-nav-prev').disabled) renderDetail(currentIdx + 1);
+  });
+
+  if(document.readyState === 'complete' || document.readyState === 'interactive'){
+    setTimeout(fetchPatchNotes, 1500);
+  } else {
+    window.addEventListener('DOMContentLoaded', function(){ setTimeout(fetchPatchNotes, 1500); });
+  }
+  if(window.ChirootAuth && typeof ChirootAuth.waitReady === 'function'){
+    ChirootAuth.waitReady().then(function(){ setTimeout(fetchPatchNotes, 800); });
+  }
+})();
+  </script>
 
   <div class="auth-overlay open" id="auth-overlay" aria-hidden="false" role="dialog" aria-modal="true" aria-labelledby="gate-title">
     <div class="auth-overlay-card sketch-border">
@@ -7622,5 +8106,5 @@ if (btnRefreshLyrics) {
 })();
 </script>
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3799bbafdb298ed',t:'MTc4ODgyNDk0OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3799bbafdb298ed',t:'MTc4ODgyNDk0OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a37aa3e3af3bfe19',t:'MTc4ODgzNTc2OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
