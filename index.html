@@ -2,6 +2,22 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      
+      
+      
+      
+      (function () {
+        try {
+          var q = window.location.search || "";
+          if (/(^|[?&])(code|error)=/.test(q)) {
+            var target =
+              window.location.pathname.replace(/[^/]*$/, "") + "Main.html" + q + (window.location.hash || "");
+            window.location.replace(target);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chiroot | Free Audio Player Tanpa Iklan</title>
     <meta name="description" content="Chiroot is a digital music service and free for everyone to use.." />
@@ -3755,5 +3771,5 @@
           });
       })();
     </script>
-  </body>
+  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
