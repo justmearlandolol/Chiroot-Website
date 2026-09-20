@@ -1,19 +1,17 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://i.ytimg.com https://i.scdn.co https://*.scdn.co https://astuagdezahmuuwjoghf.supabase.co; media-src 'self' data: blob: https://astuagdezahmuuwjoghf.supabase.co; connect-src 'self' https://astuagdezahmuuwjoghf.supabase.co https://www.googleapis.com https://lrclib.net https://*.scdn.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <title>Chiroot</title>
+  <meta name="description" content="Chiroot adalah pemutar musik gratis tanpa iklan dan tanpa premium plan. Putar koleksi lagumu sendiri dengan tampilan gramofon klasik." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
-  <script src="chiroot-config.js"></script>
   <style>:root{
   --paper: #f7f3e9;
   --paper-2: #f1e9d6;
@@ -2262,6 +2260,67 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 }
 .topbar-switch:hover{transform:translateY(-2px);box-shadow:0 5px 0 #c8b78a;background:#fdf1cc;}
 .topbar-switch:active{transform:translateY(0);box-shadow:0 2px 0 #c8b78a;}
+.avatar-wrap{position:relative;display:inline-flex;}
+.avatar-caret{
+  position:absolute;right:-2px;bottom:-2px;
+  width:16px;height:16px;border-radius:50%;
+  background:#fff8e7;border:2px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-size:8px;line-height:1;color:#5a3f1f;pointer-events:none;
+}
+.avatar-menu{
+  position:absolute;top:calc(100% + 10px);right:0;z-index:60;
+  min-width:232px;padding:8px;
+  background:#fffcf5;border:2.4px solid var(--ink);
+  border-radius:18px 15px 19px 16px / 16px 19px 15px 18px;
+  box-shadow:0 6px 0 #c8b78a, 0 10px 22px rgba(80,54,20,.16);
+  display:none;flex-direction:column;gap:4px;
+}
+.avatar-menu.open{display:flex;}
+.avatar-menu-head{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px 10px;margin-bottom:2px;
+  border-bottom:2px dashed #d8c9a3;
+}
+.avatar-menu-head .amh-av{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  border:2.2px solid var(--ink);background:#f2e0a8;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Caveat',cursive;font-size:18px;font-weight:700;color:#5a3f1f;
+}
+.avatar-menu-head .amh-av img{width:100%;height:100%;object-fit:cover;display:block;}
+.avatar-menu-head .amh-txt{min-width:0;}
+.avatar-menu-head .amh-name{
+  font-family:'Kalam',sans-serif;font-size:14.5px;font-weight:700;color:#3a2b18;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.avatar-menu-head .amh-mail{
+  font-family:'Kalam',sans-serif;font-size:12px;color:#6e6252;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.avatar-menu-item{
+  display:flex;align-items:center;gap:10px;width:100%;
+  min-height:44px;padding:9px 12px;
+  background:transparent;border:2px solid transparent;border-radius:13px;
+  cursor:pointer;text-align:left;
+  font-family:'Kalam',sans-serif;font-size:15px;font-weight:600;color:#3a2b18;
+  transition:background .12s ease, border-color .12s ease;
+}
+.avatar-menu-item:hover{background:#f7efd9;border-color:#e0d0a4;}
+.avatar-menu-item:active{background:#f0e4c4;}
+.avatar-menu-item .ami-ic{
+  width:20px;flex-shrink:0;text-align:center;font-size:15px;line-height:1;
+}
+.avatar-menu-item.danger{color:#8a3a2a;}
+.avatar-menu-item.danger:hover{background:#ffeee6;border-color:#e8c3b2;}
+.avatar-menu-sep{height:2px;margin:4px 6px;background:#ece2c8;border-radius:2px;}
+@media (max-width:560px){
+  .avatar-menu{
+    left:0;right:auto;
+    min-width:min(262px, calc(100vw - 40px));
+    max-width:calc(100vw - 40px);
+  }
+}
 .acct-card{max-width:430px;max-height:min(88vh,640px);overflow:auto;}
 .acct-list{display:flex;flex-direction:column;gap:9px;max-height:min(44vh,320px);overflow-y:auto;padding:2px 4px 2px 2px;}
 .acct-list.busy{opacity:.6;}
@@ -2316,9 +2375,6 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   .acct-name{font-size:14.5px;}
 }
 
-/* ═══════════════════════════════════════════════════
-   PATCH NOTES — Chiroot
-   ═══════════════════════════════════════════════════ */
 .pn-open-btn{
   background:#fff6df;
   border:2.3px solid var(--ink);
@@ -2478,6 +2534,86 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   .pn-modal-scroll{max-height:38vh;padding:12px 14px;}
   .pn-open-btn span.pn-btn-label{display:none;}
 }
+
+html{ overflow-x: hidden; }
+
+.paper-texture,
+.doodle-notes{
+  width: 100%;
+  max-width: 100vw;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+:root{
+  --muted: #6e6252;
+  --ink-label: #3a2b18;
+}
+
+.top10-add-btn{ min-height: 44px; }
+
+#btn-patchnotes-open{ min-height: 44px; }
+
+.field{ color: var(--ink-label); }
+.file-hint{ color: #6f5a42; }
+.volume-label{ color: #4a3826; }
+.player-footer{ color: #6f5c43; }
+.np-eyebrow,
+.now-playing-eyebrow{ color: #7d6242; }
+
+#progress:focus-visible,
+#volume:focus-visible{
+  outline: 3px solid var(--red-label);
+  outline-offset: 4px;
+}
+
+@media (pointer: coarse){
+  .ctrl-btn{ min-width: 44px; min-height: 44px; }
+  .mini-btn,
+  #btn-mute{ width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+  .top10-add-btn{ min-height: 44px; padding-inline: 14px; }
+
+  #progress{
+    inset: -18px;
+    height: auto;
+    min-height: 46px;
+    touch-action: none;
+  }
+  #progress::-webkit-slider-thumb{
+    width: 26px;
+    height: 26px;
+  }
+  #progress::-moz-range-thumb{
+    width: 26px;
+    height: 26px;
+  }
+
+  #volume{
+    padding-block: 19px;
+    min-height: 46px;
+    touch-action: none;
+    position: relative;
+    z-index: 2;
+  }
+  #volume::-webkit-slider-thumb{
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-top: -9px;
+  }
+  #volume::-moz-range-thumb{
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+}
+
+:where(button, a, input, select, textarea, [role="button"]):focus-visible{
+  outline: 3px solid var(--red-label);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
 </style>
 </head>
 <body>
@@ -2585,12 +2721,12 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
             </div>
 
             <div class="gramo-sticker sticker-2">
-              <img src="win.jpeg" alt="sticker-emoji" class="sticker-label" style="width: 67px; height: 67px;">
+              <img src="win.jpeg" alt="sticker-emoji" class="sticker-label" width="67" height="67" loading="lazy" decoding="async" style="width: 67px; height: 67px;">
               <span class="chopper-label"></span>
             </div>
 
             <div class="gramo-sticker sticker-3 chopper-sticker sketch-border-tiny">
-              <img src="Chopper-removebg-preview.png" alt="Chopper" class="chopper-img">
+              <img src="Chopper-removebg-preview.png" alt="Chopper" class="chopper-img" loading="lazy" decoding="async">
               <span class="chopper-label"></span>
             </div>
 
@@ -2782,7 +2918,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 
       <section class="top10-section">
         <div class="top10-header">
-          <h2 class="top10-title"> Top 5 Song of the Month {August} </h2>
+          <h2 class="top10-title">Top 5 Song of the Month <span id="top10-month"></span></h2>
         </div>
         <div class="top10-wrap sketch-border-soft" id="top10-wrap">
           <ul class="top10-list" id="top10-list"></ul>
@@ -3430,6 +3566,14 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   function getSeen(){
     try { return JSON.parse(localStorage.getItem(PN_KEY) || '{}'); } catch(e){ return {}; }
   }
+  function isFirstVisit(){
+    try { return localStorage.getItem(PN_KEY) === null; } catch(e){ return false; }
+  }
+  function seedSeen(){
+    var seen = {};
+    allPatches.forEach(function(p){ if(p.id) seen[p.id] = true; });
+    try { localStorage.setItem(PN_KEY, JSON.stringify(seen)); } catch(e){}
+  }
   function markSeen(){
     var seen = getSeen();
     allPatches.forEach(function(p){ if(p.id) seen[p.id] = true; });
@@ -3458,14 +3602,13 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
       if(!res.ok) return;
       var data = await res.json();
       if(Array.isArray(data) && data.length){
+        var firstVisit = isFirstVisit();
         allPatches = data;
-        var hasNew = checkUnseen();
-        if(hasNew){
-          var latestPopup = allPatches.find(function(p){ return p.popup_on_enter !== false; });
-          if(latestPopup){
-            var idx = allPatches.indexOf(latestPopup);
-            setTimeout(function(){ openModal(idx); }, 2500);
-          }
+        if(firstVisit){
+          seedSeen();
+          checkUnseen();
+        } else {
+          checkUnseen();
         }
       }
     } catch(e){ console.warn('Patch notes fetch failed', e); }
@@ -3500,7 +3643,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
   <div class="auth-overlay open" id="auth-overlay" aria-hidden="false" role="dialog" aria-modal="true" aria-labelledby="gate-title">
     <div class="auth-overlay-card sketch-border">
       <div class="gate-brand">
-        <img src="favicon.png" alt="Chiroot" class="gate-logo">
+        <img src="favicon.png" alt="Chiroot" class="gate-logo" width="64" height="64" decoding="async">
         <h3 class="auth-overlay-title" id="gate-title">Masuk ke Chiroot</h3>
       </div>
       <p class="auth-overlay-sub">Lagu &amp; profil kamu disimpan di cloud lalu disinkronkan lewat akun Google. Satu akun, semua device.</p>
@@ -4183,9 +4326,7 @@ async function caCrateReset() {
   }
 }
 
-// FIX (login redirect): redirect_to selalu menunjuk ke Main.html (canonical),
-// bukan pathname apapun yang sedang dibuka. Ini mencegah Supabase fallback
-// ke Site URL (index.html) saat URL tidak cocok dengan allowlist.
+
 function caLoginRedirectUrl() {
   try {
     var u = new URL(window.location.href);
@@ -4422,24 +4563,6 @@ function caRenderTopbar() {
   }
   const user = document.createElement('div');
   user.className = 'topbar-user';
-  const avatar = document.createElement('button');
-  avatar.type = 'button';
-  avatar.className = 'topbar-avatar';
-  avatar.title = 'Edit profil';
-  avatar.setAttribute('aria-label', 'Edit profil');
-  avatar.innerHTML = caAvatarInner(ChirootAuth.profile);
-  avatar.addEventListener('click', caOpenProfileModal);
-  const sw = document.createElement('button');
-  sw.type = 'button';
-  sw.className = 'topbar-switch';
-  sw.textContent = 'Ganti Akun';
-  sw.title = 'Pindah ke akun lain yang pernah login di device ini';
-  sw.addEventListener('click', caOpenAccountSwitcher);
-  const out = document.createElement('button');
-  out.type = 'button';
-  out.className = 'topbar-logout';
-  out.textContent = 'Log Out';
-  out.addEventListener('click', caAskSignOut);
   if (caAdminRole) {
     const ap = document.createElement('button');
     ap.type = 'button';
@@ -4449,9 +4572,108 @@ function caRenderTopbar() {
     ap.addEventListener('click', function () { window.location.href = caAdminPanelHref(); });
     user.appendChild(ap);
   }
-  user.appendChild(avatar);
-  user.appendChild(sw);
-  user.appendChild(out);
+
+  const profile = ChirootAuth.profile;
+  const wrap = document.createElement('div');
+  wrap.className = 'avatar-wrap';
+
+  const avatar = document.createElement('button');
+  avatar.type = 'button';
+  avatar.className = 'topbar-avatar';
+  avatar.id = 'topbar-avatar-btn';
+  avatar.title = 'Akun & profil';
+  avatar.setAttribute('aria-label', 'Buka menu akun');
+  avatar.setAttribute('aria-haspopup', 'menu');
+  avatar.setAttribute('aria-expanded', 'false');
+  avatar.innerHTML = caAvatarInner(profile);
+
+  const caret = document.createElement('span');
+  caret.className = 'avatar-caret';
+  caret.setAttribute('aria-hidden', 'true');
+  caret.textContent = '▾';
+
+  const menu = document.createElement('div');
+  menu.className = 'avatar-menu';
+  menu.id = 'topbar-avatar-menu';
+  menu.setAttribute('role', 'menu');
+
+  const head = document.createElement('div');
+  head.className = 'avatar-menu-head';
+  const headAv = document.createElement('div');
+  headAv.className = 'amh-av';
+  headAv.innerHTML = caAvatarInner(profile);
+  const headTxt = document.createElement('div');
+  headTxt.className = 'amh-txt';
+  const nameEl = document.createElement('div');
+  nameEl.className = 'amh-name';
+  nameEl.textContent = (profile && profile.display_name) || caGreetName() || 'Akun Chiroot';
+  headTxt.appendChild(nameEl);
+  const mail = (profile && profile.email) || (ChirootAuth.session && ChirootAuth.session.user && ChirootAuth.session.user.email) || '';
+  if (mail) {
+    const mailEl = document.createElement('div');
+    mailEl.className = 'amh-mail';
+    mailEl.textContent = mail;
+    headTxt.appendChild(mailEl);
+  }
+  head.appendChild(headAv);
+  head.appendChild(headTxt);
+  menu.appendChild(head);
+
+  function addItem(icon, label, handler, danger) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'avatar-menu-item' + (danger ? ' danger' : '');
+    b.setAttribute('role', 'menuitem');
+    b.innerHTML = '<span class="ami-ic" aria-hidden="true">' + icon + '</span>';
+    const t = document.createElement('span');
+    t.textContent = label;
+    b.appendChild(t);
+    b.addEventListener('click', function () {
+      closeMenu();
+      handler();
+    });
+    menu.appendChild(b);
+    return b;
+  }
+
+  addItem('✎', 'Edit Profil', caOpenProfileModal);
+  addItem('⇄', 'Ganti Akun', caOpenAccountSwitcher);
+  const sep = document.createElement('div');
+  sep.className = 'avatar-menu-sep';
+  menu.appendChild(sep);
+  addItem('⏻', 'Log Out', caAskSignOut, true);
+
+  function openMenu() {
+    menu.classList.add('open');
+    avatar.setAttribute('aria-expanded', 'true');
+    document.addEventListener('click', onDocClick, true);
+    document.addEventListener('keydown', onKeyDown, true);
+  }
+  function closeMenu() {
+    menu.classList.remove('open');
+    avatar.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('click', onDocClick, true);
+    document.removeEventListener('keydown', onKeyDown, true);
+  }
+  function onDocClick(e) {
+    if (!wrap.contains(e.target)) closeMenu();
+  }
+  function onKeyDown(e) {
+    if (e.key === 'Escape') {
+      closeMenu();
+      avatar.focus();
+    }
+  }
+  avatar.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (menu.classList.contains('open')) closeMenu();
+    else openMenu();
+  });
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(caret);
+  wrap.appendChild(menu);
+  user.appendChild(wrap);
   el.appendChild(user);
 }
 
@@ -5616,9 +5838,17 @@ function renderPlaylist(){
     playlistEl.innerHTML = '<li style="list-style:none;text-align:center;padding:28px 12px;color:#7a6548;font-family:Kalam,sans-serif;border:2px dashed #c9b88a;border-radius:16px;background:#fffcf5;">'
       + '<div style="font-size:34px;margin-bottom:6px;"></div>'
       + '<div style="font-family:Caveat,cursive;font-size:26px;color:#4a3b23;">Crate kosong</div>'
-      + '<div style="margin-top:4px;">Tap <b>+ Add Music</b> untuk memasukkan piringan pertama kamu.<br>MP3 + cover + pilih warna label & vinyl.</div>'
-      + '<div style="margin-top:10px;font-size:12px;opacity:.8;">Tip: file <5 MB lebih aman di HP.</div>'
+      + '<div style="margin-top:4px;">Masukkan piringan pertama kamu.<br>MP3 + cover + pilih warna label & vinyl.</div>'
+      + '<button type="button" id="empty-add-btn" style="margin-top:14px;min-height:44px;padding:10px 22px;font-family:Kalam,sans-serif;font-size:16px;cursor:pointer;background:#f9edd0;border:2.4px solid #1a1a1a;border-radius:18px 16px 19px 17px / 16px 19px 16px 18px;box-shadow:0 3px 0 #c8b78a;">+ Add Music</button>'
+      + '<div style="margin-top:12px;font-size:12px;opacity:.8;">Tip: file <5 MB lebih aman di HP.</div>'
       + '</li>';
+    const emptyBtn = document.getElementById('empty-add-btn');
+    if(emptyBtn){
+      emptyBtn.addEventListener('click', function(){
+        const opener = document.getElementById('btn-add-open');
+        if(opener) opener.click();
+      });
+    }
     const cc = document.getElementById('crate-count');
     if(cc) cc.textContent = '• 0 records';
     updateTransportDisabled(true);
@@ -8125,5 +8355,12 @@ if (btnRefreshLyrics) {
 })();
 </script>
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3233d3d483cff8f',t:'MTc4NzkxOTMwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a323bfcfcbf9fd10',t:'MTc4NzkyNDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a330f5336c500f23',t:'MTc4ODA2MzE1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3799bbafdb298ed',t:'MTc4ODgyNDk0OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a37aa3e3af3bfe19',t:'MTc4ODgzNTc2OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da8714d845f924',t:'MTc4OTg0MTIyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>
+(function(){
+  var el = document.getElementById('top10-month');
+  if(!el) return;
+  var months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  el.textContent = months[new Date().getMonth()];
+})();
+</script>
 </html>
