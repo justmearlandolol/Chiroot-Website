@@ -4,9 +4,6 @@
     <meta charset="UTF-8" />
     <script>
       
-      
-      
-      
       (function () {
         try {
           var q = window.location.search || "";
@@ -2351,6 +2348,122 @@
           scroll-behavior: auto;
         }
       }
+
+      :root {
+        --muted: #6e6252;
+        --red-label: #c1432f;
+      }
+
+      .np-artist {
+        color: #efece4;
+      }
+      #crate-list .p-dur {
+        color: #fdf9ea !important;
+      }
+      #crate-list .p-artist,
+      .crate-meta .p-artist {
+        color: #f6f5f1 !important;
+      }
+
+      .typewriter-word {
+        min-width: 7ch;
+        min-height: 1.15em;
+      }
+
+      @media (max-width: 860px) {
+        .typewriter-word .tw-free,
+        .typewriter-word .tw-noads {
+          animation: none;
+          border-right: 0;
+        }
+        .typewriter-word .tw-free {
+          display: none;
+        }
+        .typewriter-word .tw-noads {
+          width: max-content;
+          opacity: 1;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .typewriter-word .tw-free {
+          display: none;
+        }
+        .typewriter-word .tw-noads {
+          width: max-content;
+          opacity: 1;
+          border-right: 0;
+        }
+      }
+
+      @media (min-width: 861px) and (max-width: 900px) {
+        .nav-toggle {
+          display: none;
+        }
+        .nav-links {
+          position: static;
+          flex-direction: row;
+          align-items: center;
+          gap: 22px;
+          background: none;
+          border-bottom: 0;
+          padding: 0;
+          transform: none;
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+
+      @media (pointer: coarse) {
+        .nav-links a,
+        .footer-col a,
+        .crate-link {
+          min-height: 44px;
+          display: inline-flex;
+          align-items: center;
+        }
+
+        .ctrl-btn,
+        .ctrl-btn.small,
+        .mini-btn,
+        .install-close {
+          width: 44px;
+          height: 44px;
+        }
+
+        .footer-col a,
+        .nav-links a {
+          min-width: 44px;
+          justify-content: flex-start;
+        }
+
+        #volume,
+        #preview-seek {
+          height: 46px;
+          min-height: 46px;
+          padding-block: 16px;
+          background-clip: content-box;
+          position: relative;
+          z-index: 3;
+          touch-action: none;
+        }
+        #volume::-webkit-slider-thumb,
+        #preview-seek::-webkit-slider-thumb {
+          width: 22px;
+          height: 22px;
+        }
+        #volume::-moz-range-thumb,
+        #preview-seek::-moz-range-thumb {
+          width: 22px;
+          height: 22px;
+        }
+      }
+
+      :where(button, a, input, select, textarea, [role="button"]):focus-visible {
+        outline: 3px solid var(--red-label);
+        outline-offset: 2px;
+        border-radius: 6px;
+      }
     </style>
   </head>
   <body>
@@ -2367,7 +2480,7 @@
     <nav class="site-nav" aria-label="Navigasi utama">
       <div class="nav-inner">
         <a class="brand" href="#top">
-          <img src="favicon.png" class="brand-mark" alt="Chiroot" />
+          <img src="favicon.png" class="brand-mark" alt="Chiroot" width="30" height="30" decoding="async" />
           <div class="brand-text"><span>Chiroot</span> Audio</div>
         </a>
         <button
@@ -2505,7 +2618,7 @@
                 <b>Share your track with your friends!</b>
               </p>
               <div class="share-stage" id="share-stage" title="Klik untuk perbesar">
-                <img id="share-img" src="cantbe.png" alt="Preview 1" />
+                <img id="share-img" src="cantbe.png" alt="Preview 1" loading="lazy" decoding="async" />
               </div>
               <div class="share-dots" id="share-dots">
                 <span class="on"></span><span></span><span></span><span></span><span></span>
@@ -2786,7 +2899,7 @@
             </div>
 
             <div class="cover-row">
-              <img class="cover-thumb" id="cover-thumb" alt="Cover art" src="" />
+              <img class="cover-thumb" id="cover-thumb" alt="Cover art" src="" loading="lazy" decoding="async" />
               <div class="cover-meta">
                 <h4 id="cover-title">DAY 1</h4>
                 <p id="cover-artist">Red Velvet • preview 30s</p>
@@ -2975,7 +3088,7 @@
     <div class="lightbox" id="lightbox" aria-hidden="true">
       <button class="lb-btn lb-close" id="lb-close" aria-label="Tutup">✕</button>
       <button class="lb-btn lb-prev" id="lb-prev" aria-label="Sebelumnya">‹</button>
-      <img id="lb-img" alt="Preview diperbesar" />
+      <img id="lb-img" alt="Preview diperbesar" loading="lazy" decoding="async" />
       <button class="lb-btn lb-next" id="lb-next" aria-label="Berikutnya">›</button>
     </div>
 
@@ -3771,5 +3884,5 @@
           });
       })();
     </script>
-  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3e10339ed94eba0',t:'MTc4OTkwOTIyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
