@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -1206,11 +1207,160 @@ button:focus-visible, input:focus-visible{
   margin-right:4px;
 }
 .edit-track:hover{ background:#ddeaff; transform: translateY(-1px); }
+.edit-track,.delete-track,.queue-track{ display:inline-flex; align-items:center; gap:4px; vertical-align:middle; }
+.edit-track svg,.queue-track svg{ transform: rotate(-2deg); flex-shrink:0; }
+.edit-track:hover svg,.queue-track:hover svg{ transform: rotate(-2deg) translateY(-1px) scale(1.05); }
+.queue-track{
+  background:#eef7f1;
+  border:1.8px solid #6aa88c;
+  color:#2f6b52;
+  font-family:'Kalam', sans-serif;
+  font-size:11.5px;
+  padding:3px 8px;
+  border-radius:10px;
+  cursor:pointer;
+  transition: background .15s, transform .1s;
+  margin-top:3px;
+  margin-right:4px;
+}
+.queue-track:hover{ background:#dff0e7; transform: translateY(-1px); }
+.queue-track:active{ transform: translateY(0); }
+.queue-track.queued{ background:#f7e6b6; border-color:#b1882b; color:#7a5a12; }
+.queue-section{
+  margin-top:12px;
+  background:linear-gradient(180deg,#fffdf5,#f8efd9);
+  padding:12px 12px 10px;
+  border-radius: 20px 18px 22px 19px / 18px 22px 18px 20px;
+  box-shadow: 0 4px 12px rgba(118,86,36,0.09);
+}
+.queue-section[hidden]{ display:none; }
+.queue-header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px; flex-wrap:wrap; margin-bottom:8px;
+}
+.queue-title{
+  margin:0;
+  font-family:'Caveat', cursive;
+  font-size:25px;
+  transform: rotate(-0.6deg);
+  display:flex; align-items:center; gap:8px;
+}
+.queue-title svg{ color:#8a6a34; transform:rotate(-3deg); }
+.queue-count{ font-family:'Kalam', sans-serif; font-size:13px; color:var(--muted); font-weight:400; }
+.queue-clear{
+  background:#fff2ee;
+  border:2px solid #b46a5a;
+  color:#9b3a2a;
+  font-family:'Kalam', sans-serif;
+  font-size:12.5px;
+  padding:5px 10px;
+  border-radius:11px;
+  cursor:pointer;
+  transition: background .15s, transform .1s;
+}
+.queue-clear:hover{ background:#ffe3da; transform: translateY(-1px); }
+.queue-clear:active{ transform: translateY(0); }
+.queue-list{
+  list-style:none;
+  margin:0; padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  max-height:220px;
+  overflow:auto;
+}
+.queue-list::-webkit-scrollbar{ width:8px; }
+.queue-list::-webkit-scrollbar-thumb{ background:#dcc29a; border-radius:6px; border:2px solid #fffcf5; }
+.queue-item{
+  display:grid;
+  grid-template-columns:22px 38px 1fr auto auto;
+  gap:9px;
+  align-items:center;
+  padding:7px 9px;
+  background:#fffdf7;
+  border:1.8px solid #2c261c;
+  border-radius: 14px 12px 15px 13px / 12px 14px 12px 15px;
+  cursor:pointer;
+  transition: transform .12s ease, background .15s;
+}
+.queue-item:hover{ background:#fff6e0; transform: translateY(-1px) rotate(-0.3deg); }
+.queue-item.next{ background:#f9edc9; border-color:#b1882b; box-shadow: inset 0 0 0 1px #e6c86a; }
+.queue-order{ font-family:'Caveat', cursive; font-size:19px; color:#8a6a34; text-align:center; }
+.queue-thumb{
+  width:38px; height:38px;
+  border-radius:50%;
+  border:1.8px solid #1a1a1a;
+  background:#1f1f26;
+  position:relative;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.queue-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.queue-thumb .qt-label{
+  position:absolute; inset:11px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:7.5px; font-family:'Kalam', sans-serif;
+  color:#fff6e2;
+  text-align:center;
+  line-height:1.05;
+}
+.queue-meta{ min-width:0; }
+.queue-meta .q-title{
+  font-family:'Caveat', cursive;
+  font-size:19px;
+  line-height:1.15;
+  margin:0;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.queue-meta .q-artist{
+  font-family:'Kalam', sans-serif;
+  font-size:12px;
+  color:#6b5a40;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.queue-badge{
+  font-family:'Kalam', sans-serif;
+  font-size:11px;
+  padding:2px 7px;
+  border-radius:9px;
+  background:#fff6df;
+  border:1.6px solid #c9b88a;
+  color:#6b5a40;
+  white-space:nowrap;
+}
+.queue-item.next .queue-badge{ background:#f3d87a; border-color:#b1882b; color:#4a3b23; }
+.queue-remove{
+  background:none; border:none;
+  color:#a2644a;
+  padding:3px;
+  border-radius:8px;
+  cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  transition: background .15s, color .15s;
+}
+.queue-remove:hover{ background:#ffe3da; color:#8b3a2a; }
+.queue-note{
+  margin:8px 2px 0;
+  font-family:'Kalam', sans-serif;
+  font-size:12.5px;
+  color:#8a7560;
+}
+.queue-note b{ color:#5a3f1f; }
 .playlist-actions-row{
   display:flex;
   gap:4px;
   flex-wrap:wrap;
   justify-content:flex-end;
+  align-items:center;
+}
+@media (max-width:560px){
+  .playlist-actions-row{ gap:3px; }
+  .queue-track,.edit-track,.delete-track{ font-size:10.5px; padding:3px 6px; }
+  .queue-item{ grid-template-columns:18px 32px 1fr auto; gap:7px; }
+  .queue-thumb{ width:32px; height:32px; }
+  .queue-thumb .qt-label{ inset:9px; font-size:6.5px; }
+  .queue-badge{ display:none; }
 }
 .track-header{ display:none !important; }
 .nowplaying-wrap{
@@ -2310,6 +2460,7 @@ body:not(.is-playing) .np-bar span{ animation-play-state: paused; opacity:.55; }
 .avatar-menu-item:active{background:#f0e4c4;}
 .avatar-menu-item .ami-ic{
   width:20px;flex-shrink:0;text-align:center;font-size:15px;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;
 }
 .avatar-menu-item.danger{color:#8a3a2a;}
 .avatar-menu-item.danger:hover{background:#ffeee6;border-color:#e8c3b2;}
@@ -2682,6 +2833,23 @@ html{ overflow-x: hidden; }
     </div>
   </div>
 
+  <script>
+  (function () {
+    var el = document.getElementById('preloader');
+    if (!el) return;
+    var done = false;
+    function hide() {
+      if (done) return;
+      done = true;
+      el.classList.add('hidden');
+      setTimeout(function () { el.style.display = 'none'; }, 400);
+    }
+    if (document.readyState === 'complete') setTimeout(hide, 800);
+    else window.addEventListener('load', function () { setTimeout(hide, 2000); });
+    setTimeout(hide, 3600);
+  })();
+  </script>
+
 
   <main class="player-shell">
     <div class="paper-card sketch-border">
@@ -2881,6 +3049,9 @@ html{ overflow-x: hidden; }
           </div>
           <span class="volume-label" id="volume-label">82%</span>
         </div>
+        <div>
+<p class="hint-text">Space <b>Play/Pause</b> • ← → <b>Prev / Next</b> • S <b>Shuffle</b> • L <b>Loop</b> • M <b>Mute</b></p>
+        </div>
       </section>
 
       <section class="playlist-section">
@@ -2913,7 +3084,15 @@ html{ overflow-x: hidden; }
           </ul>
         </div>
 
-        <p class="hint-text">Space <b>Play/Pause</b> • ← → <b>Prev / Next</b> • S <b>Shuffle</b> • L <b>Loop</b> • M <b>Mute</b></p>
+        <section class="queue-section" id="queue-section" hidden aria-label="Antrean lagu">
+          <div class="queue-header">
+            <h3 class="queue-title"><svg class="doodle-queue" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.6h10.5"/><path d="M4 11h10.5"/><path d="M4 15.4h5.5"/><path d="M18.4 10.2v7.6"/><path d="M14.6 14h7.6"/></svg> Next Queue <span class="queue-count" id="queue-count"></span></h3>
+            <button type="button" class="queue-clear" id="btn-queue-clear" title="Kosongkan antrean">Clear Queue</button>
+          </div>
+          <ol class="queue-list" id="queue-list"></ol>
+        </section>
+
+        
       </section>
 
       <section class="top10-section">
@@ -3250,7 +3429,7 @@ html{ overflow-x: hidden; }
         <section class="profile-preview-wrap" aria-label="Preview profil">
           <div class="pp-card sketch-border-soft" id="pf-preview-card">
             <div class="pp-banner" id="pf-preview-banner">
-              <button type="button" class="pp-banner-edit" id="pf-banner-edit" title="Ganti warna banner" aria-label="Ganti warna banner">✎</button>
+              <button type="button" class="pp-banner-edit" id="pf-banner-edit" title="Ganti warna banner" aria-label="Ganti warna banner"><svg class="doodle-pencil" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 19.6h8"/><path d="M16.9 3.5a2.15 2.15 0 0 1 3.1 3.1L8 18.5l-4 1.4 1.4-4Z"/><path d="M14.7 5.8l3.1 3.1"/></svg></button>
             </div>
             <div class="pp-avatar-overlay">
               <div class="pp-avatar-mid" id="pf-preview-avatar">?</div>
@@ -4636,7 +4815,7 @@ function caRenderTopbar() {
     return b;
   }
 
-  addItem('✎', 'Edit Profil', caOpenProfileModal);
+  addItem('<svg class="doodle-pencil" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 19.6h8"/><path d="M16.9 3.5a2.15 2.15 0 0 1 3.1 3.1L8 18.5l-4 1.4 1.4-4Z"/><path d="M14.7 5.8l3.1 3.1"/></svg>', 'Edit Profil', caOpenProfileModal);
   addItem('⇄', 'Ganti Akun', caOpenAccountSwitcher);
   const sep = document.createElement('div');
   sep.className = 'avatar-menu-sep';
@@ -4902,6 +5081,7 @@ function caDoSignOut() {
     isLoop = false;
     isShuffle = false;
     playOrder = [];
+    playQueue = [];
     try { audio.pause(); audio.loop = false; } catch (e) {}
     try {
       loopBtn.classList.remove('active');
@@ -5219,6 +5399,7 @@ function caStopPlaybackForSwitch() {
     if (typeof isLoop === 'boolean') isLoop = false;
     if (typeof isShuffle === 'boolean') isShuffle = false;
     if (Array.isArray(playOrder)) playOrder = [];
+    if (Array.isArray(playQueue)) playQueue = [];
   } catch (e) {}
 }
 
@@ -5415,28 +5596,6 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
   <script>
-
-window.addEventListener('load', function () {
-      const preloader = document.getElementById('preloader');
-      setTimeout(function () {
-        preloader.classList.add('hidden');
-        setTimeout(function () {
-          preloader.style.display = 'none';
-
-        }, 400);
-      }, 2000);
-    });
-
-    setTimeout(function () {
-      const preloader = document.getElementById('preloader');
-      if (!preloader.classList.contains('hidden')) {
-        preloader.classList.add('hidden');
-        setTimeout(function () {
-          preloader.style.display = 'none';
-
-        }, 400);
-      }
-    }, 3600);
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
 
@@ -5553,6 +5712,7 @@ let isLoop = false;
 let isSeeking = false;
 let playOrder = [];
 let shufflePointer = 0;
+let playQueue = [];
 
 window.ChirootHooks = {
   async onProfileReady() {
@@ -5815,6 +5975,7 @@ function saveState() {
   try {
     localStorage.setItem(LS_STATE, JSON.stringify({
       currentIndex,
+      queue: playQueue.slice(),
       time: audio.currentTime || 0,
       volume: audio.volume,
       isLoop,
@@ -5829,11 +5990,18 @@ function restoreState(){
     if (typeof s.volume === 'number') { audio.volume = s.volume; volumeInput.value = s.volume; }
     if (typeof s.isLoop === 'boolean') isLoop = s.isLoop;
     if (typeof s.isShuffle === 'boolean') isShuffle = s.isShuffle;
+    if (Array.isArray(s.queue)) {
+      playQueue = s.queue.map(String).filter(function (id) {
+        return tracks.some(function (t) { return String(t.id) === id; });
+      });
+    }
     audio._resumeTime = s.time || 0;
   }catch(e){}
+  renderQueue();
 }
 
 function renderPlaylist(){
+  syncQueueWithTracks();
   if(!tracks || tracks.length===0){
     playlistEl.innerHTML = '<li style="list-style:none;text-align:center;padding:28px 12px;color:#7a6548;font-family:Kalam,sans-serif;border:2px dashed #c9b88a;border-radius:16px;background:#fffcf5;">'
       + '<div style="font-size:34px;margin-bottom:6px;"></div>'
@@ -5877,11 +6045,15 @@ function renderPlaylist(){
       </div>
       <div class="playlist-right">
         <span class="p-duration" data-pd="${i}">--:--</span>
-        <button class="edit-track" data-edit="${i}" title="Edit record">✏️ edit</button><button class="delete-track" data-remove="${i}" title="Delete record"><svg class="doodle-trash" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:4px;"><path d="M3.5 6.5h17"/><path d="M8 6.5l1-2.5h6l1 2.5"/><path d="M19.2 6.5c-.3 3.8-.9 9-1.4 13.2-.1 1-1 1.8-2 1.8H8.2c-1 0-1.9-.8-2-1.8C5.7 15.5 5.1 10.3 4.8 6.5"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M7 6.5l.8 13" opacity=".45"/><path d="M17 6.5l-.8 13" opacity=".45"/></svg><span>hapus</span></button>
+        <div class="playlist-actions-row">
+          <button class="queue-track${isTrackQueued(t.id) ? ' queued' : ''}" data-queue="${i}" title="Add to Queue" aria-label="Add to Queue"><svg class="doodle-queue" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.6h10.5"/><path d="M4 11h10.5"/><path d="M4 15.4h5.5"/><path d="M18.4 10.2v7.6"/><path d="M14.6 14h7.6"/></svg><span>Add to Queue</span></button>
+          <button class="edit-track" data-edit="${i}" title="Edit record" aria-label="Edit record"><svg class="doodle-pencil" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 19.6h8"/><path d="M16.9 3.5a2.15 2.15 0 0 1 3.1 3.1L8 18.5l-4 1.4 1.4-4Z"/><path d="M14.7 5.8l3.1 3.1"/></svg><span>edit</span></button>
+          <button class="delete-track" data-remove="${i}" title="Delete record"><svg class="doodle-trash" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:4px;"><path d="M3.5 6.5h17"/><path d="M8 6.5l1-2.5h6l1 2.5"/><path d="M19.2 6.5c-.3 3.8-.9 9-1.4 13.2-.1 1-1 1.8-2 1.8H8.2c-1 0-1.9-.8-2-1.8C5.7 15.5 5.1 10.3 4.8 6.5"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M7 6.5l.8 13" opacity=".45"/><path d="M17 6.5l-.8 13" opacity=".45"/></svg><span>hapus</span></button>
+        </div>
       </div>
     `;
     li.addEventListener('click', (e)=>{
-      if (e.target.closest('.delete-track') || e.target.closest('.edit-track')) return;
+      if (e.target.closest('.delete-track') || e.target.closest('.edit-track') || e.target.closest('.queue-track')) return;
       jumpTo(i, true);
     });
     playlistEl.appendChild(li);
@@ -5899,6 +6071,13 @@ function renderPlaylist(){
       e.stopPropagation();
       const idx = parseInt(btn.dataset.edit,10);
       openEditTrack(idx);
+    });
+  });
+  playlistEl.querySelectorAll('.queue-track').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.queue,10);
+      addToQueue(idx);
     });
   });
 
@@ -5964,6 +6143,137 @@ function buildLabel(track){
 }
 
 let swapLock = false;
+function queueTrackIndex(id){
+  return tracks.findIndex(function (t) { return String(t.id) === String(id); });
+}
+
+function isTrackQueued(id){
+  return playQueue.some(function (q) { return String(q) === String(id); });
+}
+
+function syncQueueWithTracks(){
+  if (playQueue.length) {
+    const kept = playQueue.filter(function (id) { return queueTrackIndex(id) !== -1; });
+    if (kept.length !== playQueue.length) {
+      playQueue = kept;
+      saveState();
+    }
+  }
+  renderQueue();
+}
+
+function updateQueueButtons(){
+  if (!playlistEl) return;
+  playlistEl.querySelectorAll('.queue-track').forEach(function (btn) {
+    const idx = parseInt(btn.dataset.queue, 10);
+    const t = tracks[idx];
+    btn.classList.toggle('queued', !!t && isTrackQueued(t.id));
+    btn.title = (t && isTrackQueued(t.id)) ? 'Sudah di antrean – klik untuk tambah lagi' : 'Add to Queue';
+  });
+}
+
+function renderQueue(){
+  const secEl = document.getElementById('queue-section');
+  const listEl = document.getElementById('queue-list');
+  const countEl = document.getElementById('queue-count');
+  if (!listEl || !secEl) return;
+
+  listEl.innerHTML = '';
+  const total = playQueue.length;
+  secEl.hidden = total === 0;
+  if (countEl) countEl.textContent = total ? '• ' + total + ' Song' : '';
+  if (!total) return;
+
+  playQueue.forEach(function (id, i) {
+    const idx = queueTrackIndex(id);
+    const track = idx >= 0 ? tracks[idx] : null;
+    const li = document.createElement('li');
+    li.className = 'queue-item' + (i === 0 ? ' next' : '');
+    li.dataset.qindex = i;
+
+    const thumb = !track ? '' : (track.cover
+      ? '<img src="' + escapeHtmlAttr(track.cover) + '" alt="">'
+      : '<div class="qt-label" style="background:' + escapeHtmlAttr(track.labelColor || '#d84a3a') + '">' + escapeHtml(initials(track.title)) + '</div>');
+
+    li.innerHTML =
+      '<span class="queue-order">' + (i + 1) + '</span>' +
+      '<div class="queue-thumb" style="background:' + (track && track.cover ? '#15151c' : '#1f1f26') + '">' + thumb + '</div>' +
+      '<div class="queue-meta">' +
+        '<p class="q-title">' + escapeHtml(track ? track.title : 'Track tidak tersedia') + '</p>' +
+        '<div class="q-artist">' + escapeHtml(track ? track.artist : '—') + '</div>' +
+      '</div>' +
+      '<span class="queue-badge">' + (i === 0 ? 'Next' : 'Urutan ' + (i + 1)) + '</span>' +
+      '<button type="button" class="queue-remove" data-qremove="' + i + '" title="Keluarkan dari antrean" aria-label="Keluarkan dari antrean"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5l11 11"/><path d="M17.5 6.5l-11 11"/></svg></button>';
+
+    listEl.appendChild(li);
+  });
+
+  listEl.querySelectorAll('.queue-remove').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      removeFromQueue(parseInt(btn.dataset.qremove, 10), false);
+    });
+  });
+
+  listEl.querySelectorAll('.queue-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      const qIdx = parseInt(item.dataset.qindex, 10);
+      if (!(qIdx >= 0 && qIdx < playQueue.length)) return;
+      const idx = queueTrackIndex(playQueue[qIdx]);
+      removeFromQueue(qIdx, true);
+      if (idx === -1) return;
+      loadTrack(idx, true, true);
+    });
+  });
+}
+
+function addToQueue(idx){
+  if (!tracks || !tracks.length) return;
+  const track = tracks[idx];
+  if (!track) return;
+  playQueue.push(String(track.id));
+  renderQueue();
+  updateQueueButtons();
+  saveState();
+  showToast('"' + track.title + '" masuk antrean • posisi ' + playQueue.length);
+}
+
+function removeFromQueue(qIdx, silent){
+  if (!(qIdx >= 0 && qIdx < playQueue.length)) return;
+  const removed = playQueue.splice(qIdx, 1)[0];
+  renderQueue();
+  updateQueueButtons();
+  saveState();
+  if (silent) return;
+  const idx = queueTrackIndex(removed);
+  showToast(idx >= 0 ? '"' + tracks[idx].title + '" keluar dari antrean' : 'Lagu dikeluarkan dari antrean');
+}
+
+function clearQueue(announce){
+  if (!playQueue.length) return;
+  playQueue = [];
+  renderQueue();
+  updateQueueButtons();
+  saveState();
+  if (announce !== false) showToast('Antrean dikosongkan');
+}
+
+function playFromQueue(){
+  if (swapLock) return false;
+  while (playQueue.length) {
+    const idx = queueTrackIndex(playQueue.shift());
+    if (idx === -1) continue;
+    renderQueue();
+    updateQueueButtons();
+    saveState();
+    loadTrack(idx, true, true);
+    return true;
+  }
+  renderQueue();
+  updateQueueButtons();
+  return false;
+}
+
 function loadTrack(index, autoPlay=false, withTransition=true){
   if(!tracks || !tracks.length){ showEmptyState(); return; }
   if (index < 0 || index >= tracks.length) return;
@@ -6104,7 +6414,9 @@ function stop(){
 }
 
 function nextTrack(){
-  if(!tracks || !tracks.length) return;if (isShuffle) {
+  if(!tracks || !tracks.length) return;
+  if (playQueue.length && playFromQueue()) return;
+  if (isShuffle) {
     const nxt = nextShuffleIndex(1);
     if (nxt !== null) loadTrack(nxt, true, true);
     return;
@@ -6188,6 +6500,7 @@ function updateVolumeUI(){
 function safeOn(el, ev, fn){ try{ if(el) el.addEventListener(ev, fn); }catch(e){ console.warn('bind failed', ev, e); } }
 function bindEvents(){
   safeOn(playBtn,'click', ()=> isPlaying ? pause() : play());
+  safeOn(document.getElementById('btn-queue-clear'),'click', function(){ clearQueue(true); });
   safeOn(stopBtn,'click', stop);
   safeOn(nextBtn,'click', nextTrack);
   safeOn(prevBtn,'click', prevTrack);
@@ -6895,6 +7208,7 @@ function resetCrate(){
       else await caGuestReset();
       tracks = [];
       currentIndex = 0;
+      clearQueue(false);
       renderPlaylist();
       renderTop10();
       stop();
@@ -8363,4 +8677,5 @@ if (btnRefreshLyrics) {
   el.textContent = months[new Date().getMonth()];
 })();
 </script>
+</body>
 </html>
