@@ -1,0 +1,225 @@
+<script>
+(function () {
+  if (window.__chirootWidgetBridge) return;
+  window.__chirootWidgetBridge = true;
+
+  function Rt(url, key, channel, getToken) {
+    this.url = url.replace(/^http/i, 'ws') + '/realtime/v1/websocket?apikey=' + encodeURIComponent(key) + '&vsn=1.0.0';
+    this.topic = 'realtime:' + channel;
+    this.getToken = getToken;
+    this.handlers = {};
+    this.ref = 0;
+    this.joined = false;
+    this.closed = false;
+    this.retry = 0;
+  }
+  Rt.prototype.on = function (ev, cb) { (this.handlers[ev] = this.handlers[ev] || []).push(cb); return this; };
+  Rt.prototype.emit = function (ev, p) { (this.handlers[ev] || []).forEach(function (cb) { try { cb(p); } catch (e) { console.warn(e); } }); };
+  Rt.prototype.push = function (topic, event, payload) {
+    if (!this.ws || this.ws.readyState !== 1) return false;
+    this.ref += 1;
+    var m = { topic: topic, event: event, payload: payload, ref: String(this.ref) };
+    if (topic === this.topic) m.join_ref = this.joinRef;
+    this.ws.send(JSON.stringify(m));
+    return String(this.ref);
+  };
+  Rt.prototype.connect = function () {
+    var self = this;
+    if (self.closed) return;
+    var ws = new WebSocket(self.url);
+    self.ws = ws;
+    ws.onopen = function () {
+      self.retry = 0;
+      self.joinRef = self.push(self.topic, 'phx_join', {
+        config: { broadcast: { self: false, ack: false }, presence: { key: '' }, postgres_changes: [], private: true },
+        access_token: self.getToken() || undefined
+      });
+      clearInterval(self.hb);
+      self.hb = setInterval(function () {
+        self.push('phoenix', 'heartbeat', {});
+        var t = self.getToken();
+        if (t && t !== self.lastToken) { self.lastToken = t; self.push(self.topic, 'access_token', { access_token: t }); }
+      }, 25000);
+    };
+    ws.onmessage = function (ev) {
+      var m;
+      try { m = JSON.parse(ev.data); } catch (e) { return; }
+      if (m.topic !== self.topic) return;
+      if (m.event === 'phx_reply' && m.ref === self.joinRef) {
+        if (m.payload && m.payload.status === 'ok') { self.joined = true; self.emit('__joined'); }
+        return;
+      }
+      if (m.event === 'broadcast' && m.payload) self.emit(m.payload.event, m.payload.payload);
+      if (m.event === 'phx_error' || m.event === 'phx_close') { try { ws.close(); } catch (e) {} }
+    };
+    ws.onclose = function () {
+      self.joined = false;
+      clearInterval(self.hb);
+      if (self.closed) return;
+      self.retry = Math.min(self.retry + 1, 6);
+      setTimeout(function () { self.connect(); }, 800 * Math.pow(2, self.retry - 1));
+    };
+  };
+  Rt.prototype.send = function (event, payload) {
+    if (!this.joined) return false;
+    return !!this.push(this.topic, 'broadcast', { type: 'broadcast', event: event, payload: payload });
+  };
+  Rt.prototype.close = function () {
+    this.closed = true;
+    clearInterval(this.hb);
+    if (this.ws) { try { this.push(this.topic, 'phx_leave', {}); this.ws.close(); } catch (e) {} }
+  };
+
+  var rt = null;
+  var uid = null;
+  var lastSig = '';
+  var lastSent = 0;
+
+  function sess() { try { return (typeof ChirootAuth !== 'undefined' && ChirootAuth.session) ? ChirootAuth.session : null; } catch (e) { return null; } }
+  function sbUrl() { try { return String(SUPABASE_URL).trim().replace(/\/+$/, ''); } catch (e) { return ''; } }
+  function sbKey() { try { return String(SUPABASE_PUBLISHABLE_KEY).trim(); } catch (e) { return ''; } }
+  function el(id) { return document.getElementById(id); }
+
+  function absUrl(u) {
+    if (!u || typeof u !== 'string') return null;
+    if (/^(blob:|data:)/i.test(u)) return /^data:image\//i.test(u) && u.length < 60000 ? u : null;
+    try { return new URL(u, location.href).href; } catch (e) { return null; }
+  }
+
+  function trackInfo(t) {
+    if (!t) return null;
+    return { id: String(t.id), title: t.title || '', artist: t.artist || '', cover: absUrl(t.cover), labelColor: t.labelColor || null, vinylColor: t.vinylColor || null };
+  }
+
+  function buildState() {
+    var list = (typeof tracks !== 'undefined' && Array.isArray(tracks)) ? tracks : [];
+    var idx = typeof currentIndex === 'number' ? currentIndex : 0;
+    var cur = list[idx] || null;
+    var au = el('audio');
+    var q = (typeof playQueue !== 'undefined' && Array.isArray(playQueue)) ? playQueue : [];
+    var queue = q.map(function (id) {
+      var t = list.find(function (x) { return String(x.id) === String(id); });
+      return t ? trackInfo(t) : { id: String(id), title: 'Track tidak tersedia', artist: '—', cover: null };
+    });
+    var info = trackInfo(cur) || {};
+    var rv = el('btn-reverb');
+    var arm = el('tonearm');
+    return {
+      trackId: info.id || null,
+      title: info.title || '',
+      artist: info.artist || '',
+      cover: info.cover || null,
+      labelColor: info.labelColor,
+      vinylColor: info.vinylColor,
+      isPlaying: !!(au && !au.paused && !au.ended),
+      armOn: !!(arm && arm.classList.contains('on-record')),
+      isLoop: typeof isLoop !== 'undefined' ? !!isLoop : false,
+      isShuffle: typeof isShuffle !== 'undefined' ? !!isShuffle : false,
+      reverb: !!(rv && rv.classList.contains('active')),
+      position: au ? (au.currentTime || 0) : 0,
+      duration: au && isFinite(au.duration) ? au.duration : 0,
+      hasTracks: list.length > 0,
+      queue: queue,
+      ts: Date.now()
+    };
+  }
+
+  function pushState(force) {
+    if (!rt || !rt.joined) return;
+    var s = buildState();
+    var sig = JSON.stringify([s.trackId, s.title, s.cover, s.isPlaying, s.armOn, s.isLoop, s.isShuffle, s.reverb, Math.round(s.duration), s.queue.map(function (x) { return x.id; }).join(',')]);
+    if (!force && sig === lastSig && Date.now() - lastSent < 5000) return;
+    lastSig = sig;
+    lastSent = Date.now();
+    rt.send('state', s);
+  }
+
+  function later(f) { setTimeout(function () { f(); pushState(true); }, 0); setTimeout(function () { pushState(true); }, 600); }
+
+  function handleCmd(c) {
+    if (!c || !c.action) return;
+    var au = el('audio');
+    var list = (typeof tracks !== 'undefined' && Array.isArray(tracks)) ? tracks : [];
+    switch (c.action) {
+      case 'toggle': later(function () { var b = el('btn-play'); if (b) b.click(); }); break;
+      case 'play': later(function () { if (au && au.paused) el('btn-play').click(); }); break;
+      case 'pause': later(function () { if (au && !au.paused) el('btn-play').click(); }); break;
+      case 'stop': later(function () { if (typeof stop === 'function') stop(); else el('btn-stop').click(); }); break;
+      case 'next': later(function () { if (typeof nextTrack === 'function') nextTrack(); else el('btn-next').click(); }); break;
+      case 'prev': later(function () { if (typeof prevTrack === 'function') prevTrack(); else el('btn-prev').click(); }); break;
+      case 'loop': later(function () { var b = el('btn-loop'); if (b) b.click(); }); break;
+      case 'reverb': later(function () { var b = el('btn-reverb'); if (b) b.click(); }); break;
+      case 'shuffle': later(function () { var b = el('btn-shuffle'); if (b) b.click(); }); break;
+      case 'seek':
+        later(function () { if (au && c.arg && isFinite(c.arg.time)) au.currentTime = Math.max(0, Math.min(c.arg.time, au.duration || c.arg.time)); });
+        break;
+      case 'queue-play':
+        later(function () {
+          if (typeof playQueue === 'undefined' || !c.arg) return;
+          var qi = c.arg.index;
+          if (!(qi >= 0 && qi < playQueue.length) || String(playQueue[qi]) !== String(c.arg.id)) qi = playQueue.findIndex(function (x) { return String(x) === String(c.arg.id); });
+          if (qi < 0) return;
+          var idx = list.findIndex(function (t) { return String(t.id) === String(playQueue[qi]); });
+          removeFromQueue(qi, true);
+          if (idx >= 0) loadTrack(idx, true, true);
+        });
+        break;
+      case 'queue-remove':
+        later(function () {
+          if (typeof playQueue === 'undefined' || !c.arg) return;
+          var qi = c.arg.index;
+          if (!(qi >= 0 && qi < playQueue.length) || String(playQueue[qi]) !== String(c.arg.id)) qi = playQueue.findIndex(function (x) { return String(x) === String(c.arg.id); });
+          if (qi >= 0) removeFromQueue(qi, false);
+        });
+        break;
+      case 'queue-clear': later(function () { if (typeof clearQueue === 'function') clearQueue(true); }); break;
+    }
+  }
+
+  function start(s) {
+    if (rt) { rt.send('bye', {}); rt.close(); }
+    uid = s.user.id;
+    rt = new Rt(sbUrl(), sbKey(), 'chiroot-player-' + uid, function () { var x = sess(); return x ? x.access_token : null; });
+    rt.on('__joined', function () { pushState(true); });
+    rt.on('hello', function () { pushState(true); });
+    rt.on('cmd', handleCmd);
+    rt.connect();
+  }
+
+  function watch() {
+    var s = sess();
+    var id = s && s.user ? s.user.id : null;
+    if (id && id !== uid) start(s);
+    if (!id && rt) { rt.send('bye', {}); rt.close(); rt = null; uid = null; }
+  }
+
+  function bindAudio() {
+    var au = el('audio');
+    if (!au || au.__cwBound) return;
+    au.__cwBound = true;
+    ['play', 'pause', 'ended', 'loadedmetadata', 'seeked', 'emptied'].forEach(function (ev) {
+      au.addEventListener(ev, function () { pushState(true); });
+    });
+    ['btn-loop', 'btn-reverb', 'btn-shuffle', 'btn-stop'].forEach(function (id) {
+      var b = el(id);
+      if (b) b.addEventListener('click', function () { setTimeout(function () { pushState(true); }, 50); });
+    });
+    var ql = el('queue-list');
+    if (ql && window.MutationObserver) new MutationObserver(function () { pushState(false); }).observe(ql, { childList: true });
+    var li = el('label-inner');
+    if (li && window.MutationObserver) new MutationObserver(function () { pushState(false); }).observe(li, { childList: true });
+  }
+
+  window.addEventListener('pagehide', function () { if (rt) rt.send('bye', {}); });
+
+  function init() {
+    bindAudio();
+    watch();
+    setInterval(function () { watch(); bindAudio(); pushState(false); }, 1500);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a41a41bf7dc725fd',t:'MTc5MDUwOTQ3MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
