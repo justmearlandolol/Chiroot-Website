@@ -264,6 +264,9 @@ body{
 @keyframes spin{
   to { transform: rotate(360deg); }
 }
+.record{ animation: spin 3.8s linear infinite; animation-play-state: paused; }
+.record.playing{ animation-play-state: running; }
+.record.swap-out, .record.swap-in{ animation: none; }
 .record-grooves{
   position:absolute; inset:18px;
   border-radius:50%;
