@@ -8799,6 +8799,8 @@ if (btnRefreshLyrics) {
       reverb: !!(rv && rv.classList.contains('active')),
       position: au ? (au.currentTime || 0) : 0,
       duration: au && isFinite(au.duration) ? au.duration : 0,
+      volume: au ? au.volume : 0.82,
+      muted: au ? !!au.muted : false,
       hasTracks: list.length > 0,
       queue: queue,
       sid: SID,
@@ -8810,7 +8812,7 @@ if (btnRefreshLyrics) {
   function pushState(force) {
     if (!rt || !rt.joined) return;
     var s = buildState();
-    var sig = JSON.stringify([s.trackId, s.title, s.cover, s.isPlaying, s.armOn, s.isLoop, s.isShuffle, s.reverb, Math.round(s.duration), s.queue.map(function (x) { return x.id; }).join(',')]);
+    var sig = JSON.stringify([s.trackId, s.title, s.cover, s.isPlaying, s.armOn, s.isLoop, s.isShuffle, s.reverb, Math.round(s.volume * 100), s.muted, Math.round(s.duration), s.queue.map(function (x) { return x.id; }).join(',')]);
     if (!force && sig === lastSig && Date.now() - lastSent < 5000) return;
     lastSig = sig;
     lastSent = Date.now();
@@ -8856,6 +8858,16 @@ if (btnRefreshLyrics) {
           if (qi >= 0) removeFromQueue(qi, false);
         });
         break;
+      case 'volume':
+        later(function () {
+          if (!c.arg || !isFinite(c.arg.value)) return;
+          var v = Math.max(0, Math.min(1, Number(c.arg.value)));
+          var vi = el('volume');
+          if (vi) { vi.value = v; vi.dispatchEvent(new Event('input', { bubbles: true })); }
+          else if (au) { au.volume = v; au.muted = false; }
+        });
+        break;
+      case 'mute': later(function () { var b = el('btn-mute'); if (b) b.click(); else if (au) au.muted = !au.muted; }); break;
       case 'queue-clear': later(function () { if (typeof clearQueue === 'function') clearQueue(true); }); break;
     }
   }
@@ -8881,7 +8893,7 @@ if (btnRefreshLyrics) {
     var au = el('audio');
     if (!au || au.__cwBound) return;
     au.__cwBound = true;
-    ['play', 'pause', 'ended', 'loadedmetadata', 'seeked', 'emptied'].forEach(function (ev) {
+    ['play', 'pause', 'ended', 'loadedmetadata', 'seeked', 'emptied', 'volumechange'].forEach(function (ev) {
       au.addEventListener(ev, function () { pushState(true); });
     });
     ['btn-loop', 'btn-reverb', 'btn-shuffle', 'btn-stop'].forEach(function (id) {
@@ -8906,5 +8918,4 @@ if (btnRefreshLyrics) {
   else init();
 })();
 </script>
-</body>
 </html>
