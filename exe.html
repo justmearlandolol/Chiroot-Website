@@ -7,51 +7,95 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
 <style>
+:root{color-scheme:light;--ink:#141414;--paper:#f1eee6;--blue:#a9d8ff;--lime:#d7f36a;--muted:#555}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f7f3e9;color:#1a1a1a;font-family:'Patrick Hand',system-ui,sans-serif;padding:20px}
-.card{width:100%;max-width:540px;background:linear-gradient(180deg,#f4faff,#e6f0fb);border:2.5px solid #1a1a1a;border-radius:24px 18px 22px 20px/20px 22px 18px 24px;padding:32px 26px;text-align:center;box-shadow:6px 8px 0 #7ab6e0,0 16px 40px rgba(20,90,150,.15);transform:rotate(-.5deg)}
-.badge{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0b4d80;border:1.8px dashed #7ab6e0;padding:4px 12px;border-radius:50px;margin-bottom:14px}
-h1{font-family:'Caveat',cursive;font-size:36px;line-height:1.05;margin:0 0 8px;color:#0b4d80}
-h1 span{color:#00ADEF}
-p{margin:0 auto 14px;max-width:42ch;line-height:1.5;color:#3a6890;font-size:16px}
-.meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
-.pill{background:#f0f7fd;border:2px solid #1a1a1a;border-radius:999px;padding:5px 12px;font-size:13px;color:#0b4d80}
-.pill b{color:#0078c8}
-.progress-wrap{margin:20px 0 10px;display:none;transition:opacity .4s,transform .4s}
-.progress{height:10px;background:#d8ebfa;border:2px solid #1a1a1a;border-radius:20px;overflow:hidden}
-.bar{height:100%;width:0%;background:linear-gradient(90deg,#00ADEF,#0078c8);transition:width .15s ease}
-.status{font-size:13px;color:#5a84a8;margin-top:8px}
-.done-wrap{display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;margin:22px 0 6px;animation:pop .45s cubic-bezier(.34,1.56,.64,1)}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:34px 18px;background-color:var(--paper);background-image:var(--paper-image,linear-gradient(135deg,#eee4d2,#c7ad88));background-size:cover;background-position:center;background-repeat:no-repeat;background-attachment:fixed;color:var(--ink);font-family:'Patrick Hand','Trebuchet MS',system-ui,sans-serif}
+.card{position:relative;isolation:isolate;overflow:hidden;width:min(100%,590px);padding:32px;background:rgba(255,255,255,.72);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);border:3px solid var(--ink);border-radius:25px 19px 27px 21px;box-shadow:9px 9px 0 var(--ink)}
+.card>:not(.doodle){position:relative;z-index:1}
+.doodle{position:absolute;z-index:0;pointer-events:none;fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.doodle-top{top:12px;right:14px;width:116px;height:auto;transform:rotate(4deg);opacity:.83}
+.doodle-bottom{bottom:74px;left:-16px;width:94px;height:auto;transform:rotate(-8deg);opacity:.35}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-right:74px}
+.stamp{display:inline-flex;align-items:center;gap:7px;background:var(--lime);border:2px solid var(--ink);border-radius:999px;padding:5px 11px;box-shadow:3px 3px 0 var(--ink);font:700 12px/1.2 'Patrick Hand','Trebuchet MS',sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.stamp-dot{width:8px;height:8px;background:var(--ink);border-radius:50%}
+.hand-note{font:700 18px/1 'Caveat','Comic Sans MS',cursive;transform:rotate(-5deg);white-space:nowrap}
+h1{font:700 52px/.93 'Caveat','Comic Sans MS',cursive;letter-spacing:-.02em;margin:25px 0 12px;color:var(--ink)}
+h1 span{position:relative;display:inline-block;color:#2256c7}
+h1 span::after{content:"";position:absolute;z-index:-1;left:-2px;right:-4px;bottom:0;height:8px;background:var(--lime);border:1.5px solid var(--ink);border-radius:48% 35% 45% 40%;transform:rotate(-2deg)}
+#mainDesc{max-width:42ch;margin:0 0 20px;color:#333;font-size:17px;line-height:1.45}
+.progress-wrap{display:none;margin:19px 0 10px;transition:opacity .4s,transform .4s}
+.progress{height:12px;background:#fff;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.bar{height:100%;width:0%;background:var(--blue);border-right:2px solid var(--ink);transition:width .15s ease}
+.status{font-size:14px;color:var(--muted);margin-top:7px}
+.done-wrap{display:none;flex-direction:column;align-items:center;justify-content:center;gap:9px;margin:22px 0 10px;animation:pop .45s cubic-bezier(.34,1.56,.64,1)}
 @keyframes pop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
-.check-circle{width:84px;height:84px;border-radius:50%;background:linear-gradient(180deg,#d6f0d9,#b6e3bb);border:2.5px solid #1a1a1a;display:grid;place-items:center;box-shadow:0 4px 0 #5ebf7a}
-.check-circle svg{width:46px;height:46px}
-.check-circle .circle{stroke:#1a6a2a;stroke-width:2.6;stroke-dasharray:166;stroke-dashoffset:166;animation:drawCircle .6s ease forwards}
-.check-circle .check{stroke:#104a1c;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:48;stroke-dashoffset:48;animation:drawCheck .4s .6s ease forwards}
+.check-circle{width:78px;height:78px;border-radius:50%;background:var(--lime);border:3px solid var(--ink);display:grid;place-items:center;box-shadow:4px 4px 0 var(--ink)}
+.check-circle svg{width:44px;height:44px}
+.check-circle .circle{stroke:var(--ink);stroke-width:2.6;stroke-dasharray:166;stroke-dashoffset:166;animation:drawCircle .6s ease forwards}
+.check-circle .check{stroke:var(--ink);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:48;stroke-dashoffset:48;animation:drawCheck .4s .6s ease forwards}
 @keyframes drawCircle{to{stroke-dashoffset:0}}
 @keyframes drawCheck{to{stroke-dashoffset:0}}
-.done-title{font-family:'Caveat',cursive;font-size:30px;color:#104a1c;margin:0}
-.done-sub{font-size:15px;color:#3a6a4a;margin:0}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(180deg,#eaf5ff,#cfe6f9);border:2.5px solid #1a1a1a;color:#0b4d80;border-radius:16px 14px 18px 15px/14px 18px 14px 16px;padding:13px 24px;font-weight:700;font-size:17px;text-decoration:none;box-shadow:0 4px 0 #7ab6e0;transition:transform .12s;width:100%;cursor:pointer}
-.btn:hover{transform:translateY(-2px)}
-.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #7ab6e0}
-.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.btn-primary{background:linear-gradient(180deg,#d6f0d9,#b6e3bb);border-color:#1a6a2a;color:#104a1c;box-shadow:0 4px 0 #5ebf7a}
-.small{margin-top:14px;font-size:13px;color:#6b8aaa;display:block;line-height:1.4}
-.small a{color:#0b4d80;text-decoration:underline}
-.small code{background:#e4effb;border:1.5px solid #7ab6e0;padding:1px 6px;border-radius:6px;font-family:monospace}
+.done-title{font:700 30px/1 'Caveat','Comic Sans MS',cursive;color:var(--ink);margin:0}
+.done-sub{font-size:15px;color:#444;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--lime);border:3px solid var(--ink);color:var(--ink);border-radius:12px;padding:13px 20px;font-weight:700;font-size:18px;text-decoration:none;box-shadow:5px 5px 0 var(--ink);transition:transform .12s,box-shadow .12s;width:100%;cursor:pointer}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 var(--ink)}
+.btn-primary{background:var(--lime)}
+.release-section{margin-top:24px;padding-top:18px;border-top:2px dashed var(--ink);text-align:left}
+.release-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.release-heading h2{font:700 32px/1 'Caveat','Comic Sans MS',cursive;margin:0;color:var(--ink)}
+.release-live{font:700 11px/1 'Patrick Hand','Trebuchet MS',sans-serif;letter-spacing:.12em;color:#fff;background:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:6px 9px;box-shadow:2px 2px 0 var(--lime)}
+.release-intro{font-size:15px;margin:7px 0 13px;color:#444}
+.release-status{font-size:15px;color:#444;text-align:center;padding:14px 8px}
+.release-list{display:grid;gap:11px}
+.release-item{background:rgba(255,255,255,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:2px solid var(--ink);border-radius:12px;padding:12px 13px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:11px;box-shadow:3px 3px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+.release-item:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.release-info{min-width:0}
+.release-name{display:block;color:var(--ink);font-size:18px;font-weight:700;text-decoration:none;overflow-wrap:anywhere;line-height:1.2}
+.release-name:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.release-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:7px}
+.release-tag{font-size:12px;color:var(--ink);background:#fff;border:1.5px solid var(--ink);border-radius:7px;padding:2px 8px;box-shadow:1px 1px 0 var(--ink);overflow-wrap:anywhere}
+.release-kind{font-size:11px;color:var(--ink);background:var(--lime);border:1.5px solid var(--ink);border-radius:999px;padding:2px 8px}
+.release-date{font-size:13px;color:#555}
+.release-download{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;background:var(--blue);border:2px solid var(--ink);border-radius:9px;padding:7px 10px;color:var(--ink);font-size:14px;font-weight:700;text-decoration:none;box-shadow:2px 2px 0 var(--ink)}
+.release-download:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.release-all{display:inline-flex;align-items:center;gap:6px;margin-top:17px;color:var(--ink);font-size:16px;font-weight:700;text-decoration:none;border-bottom:2px solid var(--ink);padding:2px 1px}
+.release-all:hover{color:#2256c7}
+.small{margin-top:21px;padding-top:12px;border-top:1px solid rgba(20,20,20,.3);font-size:14px;color:#555;display:block;line-height:1.4}
+.small a{color:var(--ink);font-weight:700;text-decoration-thickness:1.5px;text-underline-offset:2px}
+@media(max-width:600px) and (orientation:portrait){body{background-size:auto 100vh;background-position:53% 50%}.card{background:rgba(249,243,229,.8);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}}
+@media(min-width:601px) and (max-width:1024px) and (orientation:portrait){body{background-size:auto 100vh;background-position:51% 50%}.card{background:rgba(249,243,229,.78)}}
+@media(min-width:601px) and (max-width:1024px) and (orientation:landscape){body{background-size:cover;background-position:50% 50%}}
+@media(min-width:1025px) and (max-width:1600px){body{background-size:cover;background-position:50% 50%}}
+@media(min-width:1601px){body{background-size:cover;background-position:50% 50%}}
+@media(max-width:480px){body{padding:23px 14px}.card{padding:25px 19px;box-shadow:7px 7px 0 var(--ink)}.doodle-top{width:88px;right:8px;top:10px}.doodle-bottom{width:72px}.hero-top{padding-right:54px}.hand-note{font-size:16px}h1{font-size:46px;margin-top:24px}.release-item{grid-template-columns:1fr}.release-download{justify-self:start}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
+<script src="paper.js" defer></script>
 </head>
 <body>
 <div class="card">
-
+<svg class="doodle doodle-top" viewBox="0 0 130 100" aria-hidden="true" focusable="false">
+<path d="M5 45c18-15 31-16 44-4 9 8 17 8 28 1"/>
+<path d="M91 16l5 13 14 2-11 9 3 14-12-8-12 7 4-14-10-9 14-1z"/>
+<path d="M17 70c12-8 25-8 36 1m4 7c9-5 16-5 23 0"/>
+<circle cx="119" cy="71" r="3"/>
+</svg>
+<svg class="doodle doodle-bottom" viewBox="0 0 100 80" aria-hidden="true" focusable="false">
+<path d="M10 42c8-16 19-19 28-8 8 11 18 12 28 2 8-9 16-9 24-1"/>
+<path d="M18 59l4-10 4 10 10 4-10 3-4 10-4-10-10-3z"/>
+</svg>
+<div class="hero-top">
+<span class="stamp"><span class="stamp-dot"></span> Chiroot / Windows</span>
+<span class="hand-note">fresh from GitHub ↘</span>
+</div>
 <h1 id="mainTitle">Download <span>Chiroot</span></h1>
-<p id="mainDesc">File .exe dari GitHub Release. Klik tombol di bawah untuk mulai download.</p>
-
+<p id="mainDesc">Rilis Windows paling baru. Klik tombol buat mengunduh file .exe.</p>
 <div class="progress-wrap" id="progressWrap">
 <div class="progress"><div class="bar" id="bar"></div></div>
 <div class="status" id="status">0%</div>
 </div>
-
 <div class="done-wrap" id="doneWrap">
 <div class="check-circle">
 <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,28 +106,34 @@ p{margin:0 auto 14px;max-width:42ch;line-height:1.5;color:#3a6890;font-size:16px
 <h2 class="done-title">Download selesai ✓</h2>
 <p class="done-sub">Cek folder Downloads kamu. File siap di-install.</p>
 </div>
-
 <button id="downloadBtn" class="btn btn-primary" type="button">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
 Download Chiroot.exe
 </button>
-
-<a href="https://github.com/justmearlandolol/Chiroot-Website/releases/tag/v1_2_2Windows" target="_blank" rel="noopener" class="btn" style="margin-top:10px;background:#fbf6e8">
-Lihat di GitHub Releases Terbaru
-</a>
-
-<span class="small">Source: <a href="https://github.com/justmearlandolol/Chiroot-Website" target="_blank" rel="noopener">justmearlandolol/Chiroot-Website</a></span>
-
+<section class="release-section" aria-labelledby="releaseTitle">
+<div class="release-heading">
+<h2 id="releaseTitle">Rilis terbaru</h2>
+<span class="release-live">LIVE FROM GITHUB</span>
 </div>
-
+<p class="release-intro">Versi dan file unduhan yang tersedia di repositori.</p>
+<div id="releaseStatus" class="release-status" role="status" aria-live="polite">Sedang memuat rilis dari GitHub...</div>
+<div id="releaseList" class="release-list"></div>
+<a class="release-all" href="https://github.com/justmearlandolol/Chiroot-Website/releases" target="_blank" rel="noopener">Lihat semua rilis di GitHub <span aria-hidden="true">↗</span></a>
+</section>
+<span class="small">Source: <a href="https://github.com/justmearlandolol/Chiroot-Website" target="_blank" rel="noopener">justmearlandolol/Chiroot-Website</a></span>
+</div>
 <script>
-const EXE_URL = "https://github.com/justmearlandolol/Chiroot-Website/releases/download/v1_2_2Windows/Chiroot.exe";
-const EXE_NAME = "Chiroot.exe";
+const RELEASES_API = 'https://api.github.com/repos/justmearlandolol/Chiroot-Website/releases?per_page=10';
+const RELEASES_PAGE = 'https://github.com/justmearlandolol/Chiroot-Website/releases';
+let currentExeUrl = 'https://github.com/justmearlandolol/Chiroot-Website/releases/download/v1_2_2Windows/Chiroot.exe';
+let currentExeName = 'Chiroot.exe';
 const downloadBtn = document.getElementById('downloadBtn');
 const statusEl = document.getElementById('status');
 const bar = document.getElementById('bar');
 const progressWrap = document.getElementById('progressWrap');
 const doneWrap = document.getElementById('doneWrap');
+const releaseList = document.getElementById('releaseList');
+const releaseStatus = document.getElementById('releaseStatus');
 let busy = false;
 function showDone() {
   bar.style.width = '100%';
@@ -103,8 +153,8 @@ function startDownload() {
   progressWrap.style.opacity = '1';
   progressWrap.style.transform = 'translateY(0)';
   const a = document.createElement('a');
-  a.href = EXE_URL;
-  a.download = EXE_NAME;
+  a.href = currentExeUrl;
+  a.download = currentExeName;
   a.rel = 'noopener';
   document.body.appendChild(a);
   a.click();
@@ -121,7 +171,94 @@ function startDownload() {
   }
   requestAnimationFrame(tick);
 }
+function makeLink(url, label, className) {
+  const link = document.createElement('a');
+  link.href = url || RELEASES_PAGE;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.className = className;
+  link.textContent = label;
+  return link;
+}
+function formatReleaseDate(value) {
+  const timestamp = Date.parse(value || '');
+  if (!Number.isFinite(timestamp)) return 'Tanggal tidak tersedia';
+  return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(timestamp));
+}
+function renderReleases(releases) {
+  releaseList.replaceChildren();
+  releases.slice(0, 6).forEach((release, index) => {
+    const item = document.createElement('article');
+    item.className = 'release-item';
+    const info = document.createElement('div');
+    info.className = 'release-info';
+    const title = makeLink(release.html_url || RELEASES_PAGE, release.name || release.tag_name || 'Rilis', 'release-name');
+    info.appendChild(title);
+    const meta = document.createElement('div');
+    meta.className = 'release-meta';
+    const tag = document.createElement('span');
+    tag.className = 'release-tag';
+    tag.textContent = release.tag_name || 'Release';
+    meta.appendChild(tag);
+    if (index === 0) {
+      const newest = document.createElement('span');
+      newest.className = 'release-kind';
+      newest.textContent = 'Terbaru';
+      meta.appendChild(newest);
+    }
+    if (release.prerelease) {
+      const prerelease = document.createElement('span');
+      prerelease.className = 'release-kind';
+      prerelease.textContent = 'Pre-release';
+      meta.appendChild(prerelease);
+    }
+    const date = document.createElement('span');
+    date.className = 'release-date';
+    date.textContent = formatReleaseDate(release.published_at || release.created_at);
+    meta.appendChild(date);
+    info.appendChild(meta);
+    item.appendChild(info);
+    const exeAsset = Array.isArray(release.assets) ? release.assets.find(asset => asset && asset.name && /\.exe$/i.test(asset.name) && asset.browser_download_url) : null;
+    if (exeAsset) {
+      item.appendChild(makeLink(exeAsset.browser_download_url, 'Unduh EXE', 'release-download'));
+    } else {
+      item.appendChild(makeLink(release.html_url || RELEASES_PAGE, 'Detail rilis', 'release-download'));
+    }
+    releaseList.appendChild(item);
+  });
+}
+async function loadReleases() {
+  try {
+    const response = await fetch(RELEASES_API, {
+      cache: 'no-store',
+      headers: {
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
+    if (!response.ok) throw new Error('GitHub API request failed');
+    const data = await response.json();
+    if (!Array.isArray(data)) throw new Error('Invalid GitHub API response');
+    const releases = data.filter(release => release && !release.draft);
+    releases.sort((a, b) => Date.parse(b.published_at || b.created_at || '') - Date.parse(a.published_at || a.created_at || ''));
+    if (releases.length === 0) {
+      releaseStatus.textContent = 'Belum ada rilis yang dipublikasikan.';
+      return;
+    }
+    const releaseWithExe = releases.find(release => Array.isArray(release.assets) && release.assets.some(asset => asset && asset.name && /\.exe$/i.test(asset.name) && asset.browser_download_url));
+    if (releaseWithExe) {
+      const latestExe = releaseWithExe.assets.find(asset => asset && asset.name && /\.exe$/i.test(asset.name) && asset.browser_download_url);
+      currentExeUrl = latestExe.browser_download_url;
+      currentExeName = latestExe.name;
+    }
+    renderReleases(releases);
+    releaseStatus.hidden = true;
+  } catch (error) {
+    releaseStatus.textContent = 'Daftar rilis gagal dimuat. Coba refresh atau buka langsung di GitHub.';
+  }
+}
 downloadBtn.addEventListener('click', startDownload);
+loadReleases();
 </script>
 </body>
 </html>
