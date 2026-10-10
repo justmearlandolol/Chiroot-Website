@@ -3202,7 +3202,6 @@ html{ overflow-x: hidden; }
       <div class="modal-actions" style="justify-content:space-between;align-items:center;">
         <div style="font-family:Kalam,sans-serif;font-size:13px;color:#7a6548;">
           <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="share-show-cover" checked> pakai cover</label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-top:4px;"><input type="checkbox" id="share-show-qr" checked> tambah QR</label>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button type="button" class="btn-secondary sketch-border-soft" id="btn-share-regen">⟳ Redraw</button>
@@ -7241,7 +7240,7 @@ function drawWobblyRect(ctx, x, y, w, h, r=24, wobble=4){
   ctx.closePath();
 }
 
-async function renderShareCard(track, opts={cover:true, qr:true}){
+async function renderShareCard(track, opts={cover:true}){
   const W=1080, H=1350;
   const canvas = document.getElementById('share-canvas');
   if(!canvas) return null;
@@ -7371,21 +7370,6 @@ async function renderShareCard(track, opts={cover:true, qr:true}){
   ctx.font='22px Kalam, sans-serif';
   ctx.fillText('doodle-gramophone.local  •  1924', cx, 1240);
 
-  if(opts.qr){
-    const qr=860, qy=H-260, qs=160;
-    ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=3;
-    drawWobblyRect(ctx, qr, qy, qs, qs, 14, 2);
-    ctx.stroke();
-    ctx.font='14px Kalam, sans-serif'; ctx.fillStyle='#5a4630';
-    ctx.fillText('SCAN', qr+qs/2, qy+qs/2-6);
-    ctx.fillText('TO PLAY', qr+qs/2, qy+qs/2+18);
-
-    [[qr+18,qy+18],[qr+qs-34,qy+18],[qr+18,qy+qs-34]].forEach(([x0,y0])=>{
-      ctx.fillStyle='#1a1a1a'; ctx.fillRect(x0,y0,16,16);
-      ctx.clearRect(x0+4,y0+4,8,8);
-    });
-  }
-
   ctx.save();
   ctx.translate(120, H-200);
   ctx.rotate(-0.12);
@@ -7408,13 +7392,11 @@ function openShareCard(){
   modal.setAttribute('aria-hidden','false');
   const redraw = async function() {
     var coverEl = document.getElementById('share-show-cover');
-    var qrEl = document.getElementById('share-show-qr');
     var useCover = (coverEl && coverEl.checked !== undefined) ? coverEl.checked : true;
-    var useQr = (qrEl && qrEl.checked !== undefined) ? qrEl.checked : true;
     if (document.fonts && document.fonts.ready) {
       await document.fonts.ready;
     }
-    await renderShareCard(track, {cover: useCover, qr: useQr});
+    await renderShareCard(track, {cover: useCover});
   };
   redraw();
 
@@ -7446,7 +7428,7 @@ function openShareCard(){
     }catch(e){ showToast('Clipboard not supported'); }
   });
 
-  ['share-show-cover','share-show-qr'].forEach(id=>{
+  ['share-show-cover'].forEach(id=>{
     const el=document.getElementById(id);
     if(el && !el._wired2){ el._wired2=true; el.addEventListener('change', redraw); }
   });
@@ -8921,4 +8903,6 @@ if (btnRefreshLyrics) {
   else init();
 })();
 </script>
+<script src="Lang.js" defer></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a482bde1ecb25888',t:'MTc5MTYwNTA3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
