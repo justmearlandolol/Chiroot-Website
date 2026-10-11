@@ -11,6 +11,15 @@ import eggAudio from './egg.js';
     if (!e.repeat && e.altKey && e.shiftKey && e.code === 'KeyW') openEgg();
   });
 
+  window.addEventListener('keydown', function (e) {
+    if (!open) return;
+    var k = e.key;
+    if (k === ' ' || k === 'k' || k === 'K' || k === 's' || k === 'S' || k === 'l' || k === 'L' || k === 'm' || k === 'M' || k.indexOf('Arrow') === 0) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
+
   document.addEventListener('click', function (e) {
     if (!matchMedia('(pointer: coarse)').matches) return;
     var t = e.target.closest ? e.target.closest('#btn-add-open, #empty-add-btn') : null;
@@ -86,7 +95,7 @@ import eggAudio from './egg.js';
       '<div class="egg-card" role="dialog" aria-modal="true" aria-label="Chiroot easter egg">' +
       '<button type="button" class="egg-x" aria-label="Tutup"><svg width="15" height="15" viewBox="0 0 16 16"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>' +
       '<svg class="egg-logo" viewBox="0 0 55 54" aria-hidden="true"><image href="' + STAR + '" width="55" height="54"/><image href="' + EYES + '" width="55" height="54"/></svg>' +
-      '<h3 class="egg-title">Bored with your own song?</h3>' +
+      '<h3 class="egg-title">You found the secret egg!</h3>' +
       '<p class="egg-sub">Enjoy the hidden Chiroot track.</p>' +
       '<div class="egg-actions">' +
       '<button type="button" class="egg-btn egg-secondary">Back to Chiroot</button>' +
