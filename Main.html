@@ -4032,9 +4032,11 @@ async function caApiCall(path, method, body) {
 }
 
 async function caStorageUpload(path, blob, contentType) {
+  // x-upsert: 'true' memungkinkan overwrite file lama (mis. saat edit cover/audio).
+  // Kalau 'false', Supabase Storage akan menolak dengan "The resource already exists".
   const res = await caFetch(caBase() + '/storage/v1/object/' + CHIROOT_CRATE_BUCKET + '/' + path, {
     method: 'POST',
-    headers: { 'Content-Type': contentType, 'x-upsert': 'false' },
+    headers: { 'Content-Type': contentType, 'x-upsert': 'true' },
     body: blob
   });
   if (!res.ok) {
@@ -4188,7 +4190,7 @@ function caMapCrateRow(row) {
 
 const GUEST_IDB_NAME = 'chiroot_guest_v1';
 const GUEST_IDB_STORE = 'tracks';
-let caGuestMem = null; // fallback jika IndexedDB tidak tersedia
+let caGuestMem = null; // fallback klo IndexedDB tidak tersedia
 
 function caIsGuest() {
   return !(ChirootAuth.session && ChirootAuth.profile);
@@ -4485,11 +4487,20 @@ async function caCrateUpdate(track, fields, audioBlob, coverBlob) {
     cover_path: coverPath
   });
   const row = (Array.isArray(rows) && rows.length) ? rows[0] : null;
+  // Bypass cache CDN/browser saat audio/cover diganti (CDN menyimpan versi lama sampai TTL habis).
+  const cacheBuster = (audioBlob || coverBlob) ? ('?v=' + Date.now()) : '';
   if (row) {
     const mapped = caMapCrateRow(row);
-    if (mapped) return mapped;
+    if (mapped) {
+      if (audioBlob && mapped.src && !mapped._audioUrl) mapped.src = caCratePublicUrl(audioPath) + cacheBuster;
+      if (coverBlob && mapped.cover && coverPath) mapped.cover = caCratePublicUrl(coverPath) + cacheBuster;
+      return mapped;
+    }
   }
-  return Object.assign({}, track, fields, { _audioPath: audioPath, _coverPath: coverPath, _audioUrl: audioUrl });
+  const merged = Object.assign({}, track, fields, { _audioPath: audioPath, _coverPath: coverPath, _audioUrl: audioUrl });
+  if (audioBlob && !audioUrl && audioPath) merged.src = caCratePublicUrl(audioPath) + cacheBuster;
+  if (coverBlob && coverPath) merged.cover = caCratePublicUrl(coverPath) + cacheBuster;
+  return merged;
 }
 
 async function caCrateDelete(track) {
