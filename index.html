@@ -563,6 +563,90 @@
         padding: 16px 18px;
         box-shadow: 6px 6px 0 rgba(26, 26, 26, 0.9);
       }
+      .hero-sub-linux {
+        max-width: 560px;
+      }
+      .linux-dl-label {
+        font-family: var(--font-cond);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 15px;
+        color: var(--teal);
+        margin-bottom: 12px;
+      }
+      .linux-dl-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .btn-linux {
+        background: var(--teal);
+        color: var(--paper);
+        padding: 11px 16px;
+        font-size: 15px;
+        box-shadow: 5px 5px 0 var(--ink);
+        text-decoration: none;
+        transform: rotate(-0.5deg);
+      }
+      .btn-linux:hover {
+        transform: rotate(-0.5deg) translate(-2px, -2px);
+        box-shadow: 7px 7px 0 var(--ink);
+      }
+      .linux-dl-cmd {
+        margin-top: 14px;
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .linux-dl-cmd code {
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        white-space: nowrap;
+        background: var(--ink);
+        color: var(--gold-soft);
+        font-family: var(--font-mono);
+        font-size: 12.5px;
+        padding: 10px 12px;
+        border: 2px solid var(--ink);
+      }
+      .linux-copy {
+        border: 2px solid var(--ink);
+        background: var(--gold);
+        color: var(--ink);
+        font-family: var(--font-cond);
+        font-weight: 800;
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        padding: 10px 14px;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+      .linux-copy:hover {
+        background: var(--gold-soft);
+        transform: translate(-1px, -1px);
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+      .linux-copy.copied {
+        background: var(--teal);
+        color: var(--paper);
+      }
+      @media (max-width: 640px) {
+        .hero-sub-linux {
+          max-width: none;
+        }
+        .linux-dl-row .btn-linux {
+          width: auto;
+          flex: 1 1 40%;
+          justify-content: center;
+          font-size: 14px;
+          padding: 12px 10px;
+        }
+        .linux-dl-cmd {
+          flex-wrap: wrap;
+        }
+      }
       .hero-actions {
         display: flex;
         flex-wrap: wrap;
@@ -2572,10 +2656,19 @@
                 />
               </svg>
             </div>
-            <p class="hero-sub">
-             udah Gratis + No ADS
-              enak bangettt
-            </p>
+            <div class="hero-sub hero-sub-linux" id="linux-dl">
+              <div class="linux-dl-label">Download untuk Linux</div>
+              <div class="linux-dl-row">
+                <a class="btn btn-linux" id="dl-deb" href="#" rel="noopener">.DEB</a>
+                <a class="btn btn-linux" id="dl-rpm" href="#" rel="noopener">.RPM</a>
+                <a class="btn btn-linux" id="dl-appimage" href="#" rel="noopener">APPIMAGE</a>
+                <a class="btn btn-linux" id="dl-tar" href="#" rel="noopener">TAR.GZ</a>
+              </div>
+              <div class="linux-dl-cmd">
+                <code id="linux-cmd">curl -fsSL https://github.com/justmearlandolol/chiroot-linux/releases/latest/download/install.sh | sh</code>
+                <button class="linux-copy" id="linux-copy" type="button">COPY</button>
+              </div>
+            </div>
             <div class="hero-actions">
               <button class="btn btn-primary" id="install-android" type="button">
                 <svg
@@ -3793,6 +3886,55 @@
 
     <script>
       (function () {
+        var LINUX_BASE =
+          "https://github.com/justmearlandolol/chiroot-linux/releases/latest/download";
+        var LINUX_FILES = {
+          "dl-deb": "/chiroot-amd64.deb",
+          "dl-rpm": "/chiroot-x86_64.rpm",
+          "dl-appimage": "/Chiroot-x86_64.AppImage",
+          "dl-tar": "/chiroot-linux-x86_64.tar.gz",
+        };
+        Object.keys(LINUX_FILES).forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) el.href = LINUX_BASE + LINUX_FILES[id];
+        });
+        var cmd = document.getElementById("linux-cmd");
+        if (cmd)
+          cmd.textContent =
+            "curl -fsSL " + LINUX_BASE + "/install.sh | sh";
+        var copyBtn = document.getElementById("linux-copy");
+        if (copyBtn && cmd) {
+          copyBtn.addEventListener("click", function () {
+            var text = cmd.textContent;
+            var done = function () {
+              copyBtn.textContent = "COPIED!";
+              copyBtn.classList.add("copied");
+              setTimeout(function () {
+                copyBtn.textContent = "COPY";
+                copyBtn.classList.remove("copied");
+              }, 1600);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(done, function () {});
+            } else {
+              var ta = document.createElement("textarea");
+              ta.value = text;
+              ta.style.position = "fixed";
+              ta.style.opacity = "0";
+              document.body.appendChild(ta);
+              ta.select();
+              try {
+                document.execCommand("copy");
+                done();
+              } catch (e) {}
+              ta.remove();
+            }
+          });
+        }
+      })();
+    </script>
+    <script>
+      (function () {
         var APK_URL =
           "https://drive.google.com/file/d/1xAnG_3_vbdTuZdEadXdbB6umwOVd6UuO/view?usp=drive_link";
         var toastEl = document.getElementById("install-toast");
@@ -3910,5 +4052,5 @@
           });
       })();
     </script>
-  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3e10339ed94eba0',t:'MTc4OTkwOTIyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3e10339ed94eba0',t:'MTc4OTkwOTIyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4e3d0985ad1c49b',t:'MTc5MjYyMjk1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
