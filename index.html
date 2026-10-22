@@ -2571,6 +2571,417 @@
         outline-offset: 2px;
         border-radius: 6px;
       }
+    
+      /* ===== LOFI 80s SKIN + BLACK LINUX BUTTON (shell outside) ===== */
+      body {
+        background: #0e0c14;
+      }
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 102;
+        opacity: 0.035;
+        background-image:
+          repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,0.9) 2px 3px),
+          repeating-linear-gradient(90deg, transparent 0 3px, rgba(255,255,255,0.25) 3px 4px);
+        mix-blend-mode: soft-light;
+      }
+      .paper-texture {
+        opacity: 0.18;
+      }
+      .site-nav {
+        background: #0a0a0f;
+        border-bottom-color: #0a0a0f;
+      }
+      .site-nav .brand {
+        background: #0a0a0f;
+        box-shadow: 4px 4px 0 #d8b24a;
+      }
+      .tick-bar {
+        background: #0a0a0f;
+        border-bottom-color: #0a0a0f;
+      }
+      .hero {
+        background: #fdf6e3;
+        position: relative;
+        overflow: clip;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: 36px;
+        width: min(560px, 88vw);
+        height: min(560px, 88vw);
+        border-radius: 50%;
+        background:
+          radial-gradient(ellipse at 30% 18%, rgba(255,220,160,0.95) 0 1.2%, transparent 1.4%),
+          radial-gradient(ellipse at 55% 12%, rgba(255,255,255,0.9) 0 0.9%, transparent 1.1%),
+          radial-gradient(ellipse at 70% 28%, rgba(255,255,255,0.7) 0 0.8%, transparent 1%),
+          radial-gradient(ellipse at 20% 35%, rgba(255,255,255,0.5) 0 0.7%, transparent 0.9%),
+          linear-gradient(180deg, #1b1b2e 0%, #0f0f1e 55%, #1a1022 100%);
+        border: 4px solid #0a0a0f;
+        box-shadow: 14px 14px 0 #0a0a0f;
+        z-index: 0;
+        opacity: 0.98;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: 36px;
+        width: min(560px, 88vw);
+        height: min(560px, 88vw);
+        border-radius: 50%;
+        background:
+          linear-gradient(to top, #0a0a0f 0 18%, transparent 18%),
+          repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 18px);
+        mask: radial-gradient(circle, black 68%, transparent 68%);
+        -webkit-mask: radial-gradient(circle, black 68%, transparent 68%);
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.55;
+      }
+      .hero-grid, .hero-copy {
+        position: relative;
+        z-index: 1;
+      }
+      .lofi-linux {
+        background: #fdf6e3;
+        border: 3px solid #0a0a0f;
+        border-left: 10px solid #0a0a0f;
+        box-shadow: 8px 8px 0 #0a0a0f;
+        padding: 18px 16px 16px;
+      }
+      .lofi-linux .linux-dl-label {
+        color: #0a0a0f;
+        letter-spacing: 0.14em;
+        font-size: 12px;
+        font-family: var(--font-mono);
+        font-weight: 800;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .lofi-linux .linux-dl-label::before {
+        content: "●";
+        color: #d84a3a;
+        font-size: 10px;
+      }
+      .btn-linux-main {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--red-label);
+        color: var(--paper);
+        border: 3px solid var(--ink);
+        box-shadow: 6px 6px 0 var(--ink);
+        padding: 15px 22px;
+        font-family: var(--font-cond);
+        font-weight: 800;
+        font-size: 17px;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 14px;
+        transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+      }
+      .btn-linux-main:hover {
+        background: var(--ink);
+        color: var(--gold-soft);
+        transform: translate(-2px, -2px);
+        box-shadow: 8px 8px 0 var(--ink);
+      }
+      .btn-linux-main:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 #0a0a0f;
+      }
+      .linux-icon {
+        display: inline-flex;
+        width: 22px;
+        height: 22px;
+        background: #ffffff;
+        color: #0a0a0f;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        border: 1.5px solid #0a0a0f;
+      }
+      .linux-icon svg {
+        width: 16px;
+        height: 16px;
+      }
+      .lofi-linux .linux-dl-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .lofi-linux .btn-linux {
+        background: #0a0a0f !important;
+        color: #ffffff !important;
+        border: 2.5px solid #0a0a0f !important;
+        box-shadow: 4px 4px 0 #0a0a0f !important;
+        font-family: var(--font-mono) !important;
+        font-weight: 800 !important;
+        font-size: 13px !important;
+        letter-spacing: 0.06em;
+        padding: 12px 10px !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transform: none !important;
+        transition: background 0.12s, transform 0.12s, box-shadow 0.12s;
+      }
+      .lofi-linux .btn-linux:hover {
+        background: #222 !important;
+        transform: translate(-1px, -1px) !important;
+        box-shadow: 5px 5px 0 #0a0a0f !important;
+      }
+      .linux-shell-outside {
+        margin-top: 14px;
+        background: #0a0a0f;
+        border: 3px solid #0a0a0f;
+        box-shadow: 8px 8px 0 #d8b24a;
+        padding: 12px 12px 12px 14px;
+        position: relative;
+        z-index: 1;
+      }
+      .shell-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #d8b24a;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .shell-label::before {
+        content: "▸";
+        color: #fff;
+      }
+      .shell-row {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+      }
+      .shell-row code {
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        white-space: nowrap;
+        background: #14141c;
+        color: #f7e9b5;
+        font-family: var(--font-mono);
+        font-size: 12.5px;
+        padding: 11px 12px;
+        border: 1.5px solid #2a2a34;
+        scrollbar-width: thin;
+      }
+      .shell-row .linux-copy {
+        background: #d8b24a;
+        color: #0a0a0f;
+        border: 2px solid #0a0a0f;
+        font-family: var(--font-cond);
+        font-weight: 900;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        padding: 10px 16px;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 #0a0a0f;
+        flex: none;
+        transition: transform 0.12s, box-shadow 0.12s;
+      }
+      .shell-row .linux-copy:hover {
+        background: #e8c96a;
+        transform: translate(-1px, -1px);
+        box-shadow: 5px 5px 0 #0a0a0f;
+      }
+      .shell-row .linux-copy.copied {
+        background: #3a8a6a;
+        color: #fff;
+      }
+      @media (max-width: 900px) {
+        .hero::before, .hero::after {
+          width: min(420px, 92vw);
+          height: min(420px, 92vw);
+          right: -20px;
+          top: 12px;
+          opacity: 0.45;
+        }
+      }
+      @media (max-width: 640px) {
+        .lofi-linux .linux-dl-row {
+          grid-template-columns: 1fr 1fr;
+        }
+        .btn-linux-main {
+          font-size: 15px;
+          padding: 14px 16px;
+        }
+        .shell-row {
+          flex-wrap: wrap;
+        }
+        .shell-row code {
+          font-size: 11.5px;
+        }
+        .hero::before, .hero::after {
+          display: none;
+        }
+      }
+      /* LOFI tint for other sections */
+      #features {
+        background: #fdf6e3;
+        position: relative;
+      }
+      #features::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(900px 400px at 70% 0%, rgba(216,178,74,0.12), transparent 60%);
+        pointer-events: none;
+      }
+      #faq {
+        background: #0a0a0f;
+      }
+      .cta-band.donate-band {
+        background: #1a1625;
+        border-top: 3px solid #0a0a0f;
+      }
+
+    
+      .linux-dropdown-wrap {
+        position: relative;
+      }
+      .linux-dropdown {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        background: #0a0a0f;
+        border: 3px solid #0a0a0f;
+        box-shadow: 8px 8px 0 #0a0a0f;
+        z-index: 20;
+        padding: 8px;
+        display: grid;
+        gap: 6px;
+      }
+      .linux-dropdown[hidden] {
+        display: none !important;
+      }
+      .linux-dropdown-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        background: #14141c;
+        color: #ffffff;
+        border: 2px solid #2a2a34;
+        padding: 12px 14px;
+        font-family: var(--font-mono);
+        font-weight: 800;
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: background 0.12s, color 0.12s, border-color 0.12s, transform 0.12s;
+      }
+      .linux-dropdown-item span {
+        font-family: var(--font-mono);
+        font-weight: 600;
+        font-size: 11px;
+        color: #d8b24a;
+        text-transform: none;
+        letter-spacing: 0;
+        white-space: nowrap;
+        margin-left: 8px;
+      }
+      .linux-dropdown-item:hover {
+        background: #fdf6e3;
+        color: #0a0a0f;
+        border-color: #0a0a0f;
+        transform: translate(-1px, -1px);
+      }
+      .linux-dropdown-item:hover span {
+        color: #7a5c1a;
+      }
+      .linux-dropdown-divider {
+        height: 2px;
+        background: #2a2a34;
+        margin: 2px 0;
+      }
+      .linux-dropdown-view {
+        background: #fdf6e3;
+        color: #0a0a0f;
+        border-color: #0a0a0f;
+        font-size: 12px;
+        justify-content: center;
+      }
+      .linux-dropdown-view:hover {
+        background: #d8b24a;
+      }
+      .dropdown-arrow {
+        margin-left: 10px;
+        font-size: 10px;
+        line-height: 1;
+        transition: transform 0.2s ease;
+        flex: none;
+      }
+      #linux-dropdown-btn[aria-expanded="true"] .dropdown-arrow {
+        transform: rotate(180deg);
+      }
+      #linux-dropdown-btn {
+        width: 100%;
+        justify-content: center;
+      }
+      @media (max-width: 640px) {
+        .linux-dropdown {
+          position: static;
+          box-shadow: 6px 6px 0 #0a0a0f;
+          margin-top: 10px;
+        }
+      }
+
+    
+      /* --- REQUEST: hilangin box linux + header teks putih --- */
+      .lofi-linux {
+        background: transparent !important;
+        border: none !important;
+        border-left: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+      .lofi-linux .linux-dl-label {
+        color: #ffffff !important;
+      }
+      .hero {
+        background: #0e0c14 !important;
+      }
+      .hero-title {
+        color: #ffffff !important;
+      }
+      .hero-title .typewriter-word {
+        color: #d84a3a !important;
+      }
+      .site-nav .nav-links a {
+        color: #ffffff !important;
+      }
+      .site-nav .nav-links a:hover {
+        color: #0a0a0f !important;
+      }
+      .brand-text {
+        color: #ffffff !important;
+      }
+      .tick-bar {
+        background: #0a0a0f !important;
+      }
+
     </style>
   </head>
   <body>
@@ -2634,7 +3045,6 @@
         <div class="hero-grid">
           <span class="pc-blob" aria-hidden="true"></span>
           <div class="hero-copy">
-            <div class="vinyl-stamp">✦ Chiroot 1924 ✦</div>
             <h1 class="hero-title">
               CHIROOT IS<br />
               <span
@@ -2656,16 +3066,30 @@
                 />
               </svg>
             </div>
-            <div class="hero-sub hero-sub-linux" id="linux-dl">
-              <div class="linux-dl-label">Download untuk Linux</div>
-              <div class="linux-dl-row">
-                <a class="btn btn-linux" id="dl-deb" href="#" rel="noopener">.DEB</a>
-                <a class="btn btn-linux" id="dl-rpm" href="#" rel="noopener">.RPM</a>
-                <a class="btn btn-linux" id="dl-appimage" href="#" rel="noopener">APPIMAGE</a>
-                <a class="btn btn-linux" id="dl-tar" href="#" rel="noopener">TAR.GZ</a>
+                        <div class="hero-sub hero-sub-linux lofi-linux" id="linux-dl">
+              <div class="linux-dl-label">DOWNLOAD UNTUK LINUX — LOFI EDITION</div>
+              <div class="linux-dropdown-wrap">
+                <button class="btn btn-linux-main" id="linux-dropdown-btn" type="button" aria-expanded="false" aria-haspopup="menu">
+                  <span class="linux-icon" aria-hidden="true">
+                  <svg aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#202020" d="M13.338 12.033c-.1-.112-.146-.319-.197-.54-.05-.22-.107-.457-.288-.61v-.001a.756.756 0 00-.223-.134c.252-.745.153-1.487-.1-2.157-.312-.823-.855-1.54-1.27-2.03-.464-.586-.918-1.142-.91-1.963.014-1.254.138-3.579-2.068-3.582-.09 0-.183.004-.28.012-2.466.198-1.812 2.803-1.849 3.675-.045.638-.174 1.14-.613 1.764-.515.613-1.24 1.604-1.584 2.637-.162.487-.24.984-.168 1.454-.023.02-.044.041-.064.063-.151.161-.263.357-.388.489-.116.116-.282.16-.464.225-.183.066-.383.162-.504.395v.001a.702.702 0 00-.077.339c0 .108.016.217.032.322.034.22.068.427.023.567-.144.395-.163.667-.061.865.102.199.31.286.547.335.473.1 1.114.075 1.619.342l.043-.082-.043.082c.54.283 1.089.383 1.526.284a.99.99 0 00.706-.552c.342-.002.717-.146 1.318-.18.408-.032.918.145 1.503.113a.806.806 0 00.068.183l.001.001c.227.455.65.662 1.1.627.45-.036.928-.301 1.315-.762l-.07-.06.07.06c.37-.448.982-.633 1.388-.878.203-.123.368-.276.38-.499.013-.222-.118-.471-.418-.805z"></path><path fill="#F8BF11" d="M13.571 12.828c-.007.137-.107.24-.29.35-.368.222-1.019.414-1.434.918-.362.43-.802.665-1.19.696-.387.03-.721-.13-.919-.526v-.002c-.123-.233-.072-.6.031-.987s.251-.785.271-1.108v-.001c.02-.415.044-.776.114-1.055.07-.28.179-.468.373-.575a.876.876 0 01.027-.014c.022.359.2.725.514.804.343.09.838-.204 1.047-.445l.122-.004c.184-.005.337.006.495.143v.001c.121.102.179.296.229.512.05.217.09.453.239.621.287.32.38.534.371.672zM6.592 13.843v.003c-.034.435-.28.672-.656.758-.377.086-.888 0-1.398-.266-.565-.3-1.237-.27-1.667-.36-.216-.045-.357-.113-.421-.238-.064-.126-.066-.345.071-.72v-.001l.001-.002c.068-.209.018-.438-.015-.653-.033-.214-.049-.41.024-.546l.001-.001c.094-.181.232-.246.403-.307.17-.062.373-.11.533-.27l.001-.001h.001c.148-.157.26-.353.39-.492.11-.117.22-.195.385-.196h.005a.61.61 0 01.093.008c.22.033.411.187.596.437l.533.971v.001c.142.296.441.622.695.954.254.333.45.666.425.921z"></path><path fill="#D6A312" d="M9.25 4.788c-.043-.084-.13-.164-.28-.225-.31-.133-.444-.142-.617-.254-.28-.181-.513-.244-.706-.244a.834.834 0 00-.272.047c-.236.08-.392.25-.49.342-.02.019-.044.035-.104.08-.06.043-.15.11-.28.208-.117.086-.154.2-.114.332.04.132.167.285.4.417h.001c.145.085.244.2.358.291a.801.801 0 00.189.117c.072.031.156.052.26.058.248.015.43-.06.59-.151.16-.092.296-.204.452-.255h.001c.32-.1.548-.301.62-.493a.324.324 0 00-.008-.27z"></path><path fill="#202020" d="M8.438 5.26c-.255.133-.552.294-.869.294-.316 0-.566-.146-.745-.289-.09-.07-.163-.142-.218-.193-.096-.075-.084-.181-.045-.178.066.008.076.095.117.134.056.052.126.12.211.187.17.135.397.266.68.266.284 0 .614-.166.816-.28.115-.064.26-.179.379-.266.09-.067.087-.147.162-.138.075.009.02.089-.085.18-.105.092-.27.214-.403.283z"></path><path fill="#ffffff" d="M12.337 10.694a1.724 1.724 0 00-.104 0h-.01c.088-.277-.106-.48-.621-.713-.534-.235-.96-.212-1.032.265-.005.025-.009.05-.011.076a.801.801 0 00-.12.054c-.252.137-.389.386-.465.692-.076.305-.098.674-.119 1.09-.013.208-.099.49-.186.79-.875.624-2.09.894-3.122.19-.07-.11-.15-.22-.233-.328a13.85 13.85 0 00-.16-.205.65.65 0 00.268-.05.34.34 0 00.186-.192c.063-.17 0-.408-.202-.68-.201-.273-.542-.58-1.043-.888-.368-.23-.574-.51-.67-.814-.097-.305-.084-.635-.01-.96.143-.625.51-1.233.743-1.614.063-.046.023.086-.236.567-.232.44-.667 1.455-.072 2.248.016-.564.15-1.14.377-1.677.329-.747 1.018-2.041 1.072-3.073.029.02.125.086.169.11.126.075.221.184.344.283a.85.85 0 00.575.2c.24 0 .427-.079.582-.168.17-.096.304-.204.433-.245.27-.085.486-.235.608-.41.21.83.7 2.027 1.014 2.611.167.31.5.969.643 1.762.091-.002.191.01.299.038.375-.973-.319-2.022-.636-2.314-.128-.124-.135-.18-.07-.177.343.304.795.917.96 1.608.075.315.09.646.01.973.04.017.08.034.12.054.603.293.826.548.719.897z"></path><path fill="#E6E6E6" d="M8.04 8.062c-.556.002-1.099.251-1.558.716-.46.464-.814 1.122-1.018 1.888l.061.038v.004c.47.298.805.598 1.012.878.219.296.316.584.223.834a.513.513 0 01-.27.283l-.041.015c.074.097.146.197.213.3.944.628 2.042.396 2.867-.172.08-.278.153-.536.163-.698.021-.415.042-.792.124-1.12.082-.33.242-.63.544-.795.017-.01.034-.015.051-.023a.756.756 0 01.022-.094c-.242-.622-.591-1.14-1.01-1.5-.42-.36-.897-.551-1.382-.554zm2.37 2.155l-.002.005v-.002l.001-.004z"></path><path fill="#ffffff" d="M9.278 3.833a1.05 1.05 0 01-.215.656 4.119 4.119 0 00-.218-.09l-.127-.045c.029-.035.085-.075.107-.127a.669.669 0 00.05-.243l.001-.01a.673.673 0 00-.035-.236.434.434 0 00-.108-.184.223.223 0 00-.156-.07H8.57a.228.228 0 00-.151.06.434.434 0 00-.122.175.676.676 0 00-.05.243v.01a.718.718 0 00.009.14 1.773 1.773 0 00-.354-.12 1.196 1.196 0 01-.01-.133v-.013a1.035 1.035 0 01.088-.447.793.793 0 01.25-.328.554.554 0 01.346-.123h.006c.125 0 .232.036.342.116a.78.78 0 01.257.324c.063.138.094.273.097.433l.001.012zM7.388 3.997a1.05 1.05 0 00-.277.125.623.623 0 00.002-.15v-.008a.651.651 0 00-.048-.192.37.37 0 00-.096-.141.158.158 0 00-.119-.045c-.042.004-.077.024-.11.065a.372.372 0 00-.07.156.626.626 0 00-.013.205v.008a.634.634 0 00.048.193.367.367 0 00.116.156l-.102.08-.078.056a.706.706 0 01-.16-.24c-.053-.12-.082-.24-.09-.381v-.001a1.071 1.071 0 01.045-.39.668.668 0 01.167-.292.359.359 0 01.264-.118c.084 0 .158.028.235.09a.68.68 0 01.199.271c.053.12.08.24.089.382v.001c.003.06.003.115-.002.17z"></path><path fill="#202020" d="M7.806 4.335c.01.034.065.029.097.045.027.014.05.045.08.046.03.001.076-.01.08-.04.005-.038-.052-.063-.088-.077-.047-.019-.107-.028-.151-.003-.01.005-.021.018-.018.03zM7.484 4.335c-.01.034-.065.029-.096.045-.028.014-.05.045-.081.046-.03.001-.076-.01-.08-.04-.005-.038.052-.063.088-.077.047-.019.108-.028.152-.003.01.005.02.018.017.03z"></path></g></svg>
+                  </span>
+                  Install for Linux
+                  <span class="dropdown-arrow" aria-hidden="true">▼</span>
+                </button>
+                <div class="linux-dropdown" id="linux-dropdown" role="menu" hidden>
+                  <a class="linux-dropdown-item" role="menuitem" id="dl-deb" href="#" rel="noopener">.DEB <span>— Ubuntu / Debian</span></a>
+                  <a class="linux-dropdown-item" role="menuitem" id="dl-rpm" href="#" rel="noopener">.RPM <span>— Fedora / openSUSE</span></a>
+                  <a class="linux-dropdown-item" role="menuitem" id="dl-appimage" href="#" rel="noopener">APPIMAGE <span>— Universal</span></a>
+                  <a class="linux-dropdown-item" role="menuitem" id="dl-tar" href="#" rel="noopener">TAR.GZ <span>— Manual install</span></a>
+                  <div class="linux-dropdown-divider" aria-hidden="true"></div>
+                  <a class="linux-dropdown-item linux-dropdown-view" role="menuitem" href="https://github.com/justmearlandolol/chiroot-linux/releases/tag/chiroot_for_linux" target="_blank" rel="noopener">↗ Lihat semua file di GitHub</a>
+                </div>
               </div>
-              <div class="linux-dl-cmd">
-                <code id="linux-cmd">curl -fsSL https://github.com/justmearlandolol/chiroot-linux/releases/latest/download/install.sh | sh</code>
+            </div>
+            <div class="linux-shell-outside">
+              <div class="shell-label">QUICK INSTALL — PASTE IN TERMINAL</div>
+              <div class="shell-row">
+                <code id="linux-cmd">curl -fsSL https://github.com/justmearlandolol/chiroot-linux/releases/download/chiroot_for_linux/install.sh | sh</code>
                 <button class="linux-copy" id="linux-copy" type="button">COPY</button>
               </div>
             </div>
@@ -3887,7 +4311,7 @@
     <script>
       (function () {
         var LINUX_BASE =
-          "https://github.com/justmearlandolol/chiroot-linux/releases/latest/download";
+          "https://github.com/justmearlandolol/chiroot-linux/releases/download/chiroot_for_linux";
         var LINUX_FILES = {
           "dl-deb": "/chiroot-amd64.deb",
           "dl-rpm": "/chiroot-x86_64.rpm",
@@ -3932,6 +4356,21 @@
           });
         }
       })();
+    </script>
+    <script>
+
+      (function () {
+        var btn = document.getElementById("linux-dropdown-btn");
+        var menu = document.getElementById("linux-dropdown");
+        if (!btn || !menu) return;
+        function closeMenu() { btn.setAttribute("aria-expanded", "false"); menu.hidden = true; }
+        function openMenu() { btn.setAttribute("aria-expanded", "true"); menu.hidden = false; }
+        btn.addEventListener("click", function (e) { e.stopPropagation(); if (menu.hidden) openMenu(); else closeMenu(); });
+        document.addEventListener("click", function (e) { if (!menu.hidden && !menu.contains(e.target) && e.target !== btn) closeMenu(); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menu.hidden) closeMenu(); });
+        menu.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
+      })();
+
     </script>
     <script>
       (function () {
@@ -4052,5 +4491,5 @@
           });
       })();
     </script>
-  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3e10339ed94eba0',t:'MTc4OTkwOTIyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4e3d0985ad1c49b',t:'MTc5MjYyMjk1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3e10339ed94eba0',t:'MTc4OTkwOTIyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4e704289ab17a21',t:'MTc5MjY1NjUyOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
