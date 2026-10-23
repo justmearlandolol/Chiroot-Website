@@ -15,7 +15,7 @@
         } catch (e) {}
       })();
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chiroot | Free Audio Player Tanpa Iklan</title>
     <meta name="description" content="Chiroot is a digital music service and free for everyone to use.." />
     <meta name="keywords" content="free audio player, no ads music player, chiroot" />
@@ -2674,10 +2674,10 @@
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        background: #181818;
+        background: var(--red-label);
         color: var(--paper);
-        border: 3px solid #d8b24a;
-        box-shadow: 6px 6px 0 #d8b24a;
+        border: 3px solid var(--ink);
+        box-shadow: 6px 6px 0 var(--ink);
         padding: 15px 22px;
         font-family: var(--font-cond);
         font-weight: 800;
@@ -2687,28 +2687,17 @@
         width: 100%;
         justify-content: center;
         margin-bottom: 14px;
-        transition: transform 0.12s, box-shadow 0.12s, background 0.12s,
-          color 0.12s;
+        transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
       }
       .btn-linux-main:hover {
-        background: #d8b24a;
-        color: #181818;
+        background: var(--ink);
+        color: var(--gold-soft);
         transform: translate(-2px, -2px);
-        box-shadow: 8px 8px 0 #d8b24a;
+        box-shadow: 8px 8px 0 var(--ink);
       }
       .btn-linux-main:active {
         transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0 #d8b24a;
-      }
-      .btn-linux-main:hover .linux-icon {
-        background: #181818;
-      }
-      .btn-linux-main:hover .linux-icon svg path {
-        fill: #d8b24a;
-      }
-      .btn-linux-main:hover .linux-icon svg path[fill="#F8BF11"],
-      .btn-linux-main:hover .linux-icon svg path[fill="#D6A312"] {
-        fill: #181818;
+        box-shadow: 2px 2px 0 #0a0a0f;
       }
       .linux-icon {
         display: inline-flex;
@@ -3004,292 +2993,297 @@
       }
       .pc-blob { display: none !important; }
 
-    
-      .hero-grid {
-        width: 100%;
+
+      @property --fire-angle {
+        syntax: "<angle>";
+        initial-value: 0deg;
+        inherits: false;
       }
-      .hero-copy {
-        width: 100%;
-        max-width: 760px;
-        min-width: 0;
-        margin: 0 auto;
-      }
-      .hero-copy > * {
-        max-width: 100%;
-      }
-      .platform-stack {
-        margin-top: 36px;
-        display: grid;
-        gap: 26px;
-        min-width: 0;
-        max-width: 100%;
-      }
-      .platform-block {
-        --accent: #d8b24a;
+      .nav-cta-item {
         position: relative;
-        min-width: 0;
-        max-width: 100%;
-        padding-left: 16px;
-        border-left: 5px solid var(--accent);
-      }
-      .platform-block.platform-android {
-        --accent: #aac148;
-      }
-      .platform-block.platform-windows {
-        --accent: #5b8def;
-      }
-      .platform-block > * {
-        max-width: 100%;
-      }
-      .linux-dl-label {
+        top: 10px;
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin: 0 0 12px;
-        color: #ffffff;
+      }
+      .nav-links .nav-cta {
+        position: relative;
+        isolation: isolate;
+      }
+      .nav-links .nav-cta::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 2.5px;
+        border-radius: 3px;
+        background: conic-gradient(
+          from var(--fire-angle),
+          #ff2d00,
+          #ff7a00,
+          #ffd400,
+          #ff9a1f,
+          #ff2d00,
+          #a10c00,
+          #ff6a00,
+          #ff2d00
+        );
+        -webkit-mask: linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        mask-composite: exclude;
+        animation: fireRingSpin 2.8s linear infinite,
+          fireRingFlicker 1.15s ease-in-out infinite alternate;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .nav-links .nav-cta::after {
+        content: "";
+        position: absolute;
+        inset: -8px;
+        padding: 8px;
+        border-radius: 8px;
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(255, 196, 60, 0.95) 0%,
+          rgba(255, 110, 0, 0.8) 42%,
+          rgba(255, 40, 0, 0.45) 62%,
+          rgba(255, 0, 0, 0) 76%
+        );
+        -webkit-mask: linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        mask-composite: exclude;
+        filter: blur(5px);
+        opacity: 0.85;
+        animation: fireGlowPulse 1.7s ease-in-out infinite;
+        pointer-events: none;
+        z-index: -1;
+      }
+      .site-nav .nav-links .nav-cta:hover {
+        color: var(--gold-soft) !important;
+      }
+      .cta-flame {
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 6px);
+        transform: translateX(-50%);
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        padding: 2px 7px 3px;
         font-family: var(--font-mono);
-        font-size: 11.5px;
-        font-weight: 800;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-      }
-      .linux-dl-label::before {
-        content: "\25CF";
-        color: var(--accent);
-        font-size: 9px;
+        font-size: 8.5px;
         line-height: 1;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: #fff4dc;
+        background: linear-gradient(180deg, #310d00 0%, #170400 100%);
+        border: 1.5px solid #ff6a00;
+        border-radius: 3px;
+        box-shadow: 0 0 0 1.5px rgba(26, 26, 26, 0.85),
+          0 0 12px rgba(255, 86, 0, 0.6), inset 0 0 10px rgba(255, 106, 0, 0.35);
+        animation: flameChipPulse 1.6s ease-in-out infinite;
+        z-index: 3;
       }
-      .platform-block .btn-linux-main {
-        width: 100%;
-        margin-bottom: 12px;
+      .cta-flame::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 1.5px;
+        border-radius: 3px;
+        background: conic-gradient(
+          from var(--fire-angle),
+          #ff2d00,
+          #ffb300,
+          #fff3b0,
+          #ff6a00,
+          #ff2d00,
+          #b30f00,
+          #ffd400,
+          #ff2d00
+        );
+        -webkit-mask: linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        mask-composite: exclude;
+        animation: fireRingSpin 2.2s linear infinite,
+          fireRingFlicker 0.9s ease-in-out infinite alternate;
+        pointer-events: none;
       }
-      .platform-btn {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 12px;
-        transform: none;
+      .cta-flame::after {
+        content: "";
+        position: absolute;
+        left: -5px;
+        right: -5px;
+        top: -4px;
+        height: 13px;
+        background: radial-gradient(
+            42% 100% at 18% 78%,
+            rgba(255, 214, 74, 0.9) 0%,
+            rgba(255, 110, 0, 0) 76%
+          ),
+          radial-gradient(
+            48% 115% at 50% 82%,
+            rgba(255, 150, 20, 0.85) 0%,
+            rgba(255, 60, 0, 0) 80%
+          ),
+          radial-gradient(
+            42% 100% at 82% 78%,
+            rgba(255, 214, 74, 0.85) 0%,
+            rgba(255, 110, 0, 0) 76%
+          );
+        filter: blur(2.6px);
+        transform-origin: 50% 100%;
+        animation: flameLick 0.95s ease-in-out infinite alternate;
+        pointer-events: none;
+        z-index: -1;
       }
-      .platform-block .btn-windows {
-        transform: none;
+      .cta-flame .cta-bat {
+        font-size: 10px;
+        line-height: 1;
+        margin-left: 1px;
+        animation: batFlap 1.5s ease-in-out infinite;
       }
-      .platform-btn:hover {
-        transform: translate(-2px, -2px);
+      .cta-flame .ember {
+        position: absolute;
+        bottom: 100%;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: #ffd24a;
+        box-shadow: 0 0 6px 1px rgba(255, 122, 0, 0.9);
+        opacity: 0;
+        pointer-events: none;
       }
-      .linux-shell-outside {
-        margin-top: 0;
-        min-width: 0;
-        max-width: 100%;
-        padding: 11px 12px 12px;
-        border: 3px solid #0a0a0f;
-        box-shadow: 6px 6px 0 var(--accent);
-        background: #0a0a0f;
+      .cta-flame .ember.e1 {
+        left: 18%;
+        animation: emberRise 1.6s linear infinite;
       }
-      .shell-label {
-        color: var(--accent);
-        font-size: 9.5px;
-        letter-spacing: 0.18em;
-        margin-bottom: 8px;
+      .cta-flame .ember.e2 {
+        left: 52%;
+        width: 2px;
+        height: 2px;
+        animation: emberRise 2s linear infinite 0.5s;
       }
-      .platform-stack > .linux-shell-outside {
-        --accent: #d8b24a;
-        margin-left: 16px;
+      .cta-flame .ember.e3 {
+        left: 80%;
+        animation: emberRise 1.8s linear infinite 1s;
       }
-      .shell-row {
-        display: flex;
-        min-width: 0;
-        gap: 8px;
+      @keyframes fireRingSpin {
+        to {
+          --fire-angle: 360deg;
+        }
       }
-      .shell-row code {
-        flex: 1 1 auto;
-        min-width: 0;
-        max-width: 100%;
-        white-space: pre-wrap;
-        overflow-wrap: anywhere;
-        word-break: break-word;
-        line-height: 1.55;
-        font-size: 11.5px;
-        padding: 10px 11px;
+      @keyframes fireRingFlicker {
+        from {
+          filter: brightness(0.92) saturate(1.05);
+        }
+        to {
+          filter: brightness(1.28) saturate(1.25);
+        }
       }
-      .shell-row .linux-copy {
-        flex: 0 0 auto;
-        align-self: stretch;
-        background: var(--accent);
-        color: #0a0a0f;
-        border: 2px solid #0a0a0f;
-        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55);
+      @keyframes fireGlowPulse {
+        0%,
+        100% {
+          opacity: 0.55;
+          transform: scale(0.99);
+        }
+        50% {
+          opacity: 0.95;
+          transform: scale(1.03);
+        }
       }
-      .shell-row .linux-copy:hover {
-        background: #ffffff;
-        color: #0a0a0f;
+      @keyframes flameChipPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 1.5px rgba(26, 26, 26, 0.85),
+            0 0 10px rgba(255, 86, 0, 0.5), inset 0 0 8px rgba(255, 106, 0, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 0 1.5px rgba(26, 26, 26, 0.85),
+            0 0 18px rgba(255, 110, 0, 0.8), inset 0 0 14px rgba(255, 130, 0, 0.45);
+        }
       }
-      .shell-row .linux-copy.copied {
-        background: #3a8a6a;
-        color: #ffffff;
+      @keyframes flameLick {
+        from {
+          transform: scaleY(0.78) scaleX(0.95);
+          opacity: 0.72;
+        }
+        to {
+          transform: scaleY(1.2) scaleX(1.05);
+          opacity: 1;
+        }
       }
-      .linux-dropdown {
-        max-width: 100%;
+      @keyframes emberRise {
+        0% {
+          opacity: 0;
+          transform: translateY(0) scale(0.7);
+        }
+        18% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-11px) translateX(3px) scale(0.25);
+        }
       }
-      .nav-inner {
-        gap: 10px;
+      @keyframes batFlap {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-6deg);
+        }
+        50% {
+          transform: translateY(-1.5px) rotate(6deg);
+        }
       }
-      .brand {
-        flex: none;
-        max-width: calc(100% - 70px);
-        overflow: hidden;
-        padding: 8px 12px;
-        gap: 8px;
+      @media (min-width: 861px) and (max-width: 900px) {
+        .nav-cta-item {
+          top: 0;
+          margin: 26px 0 8px;
+        }
+        .cta-flame {
+          bottom: calc(100% + 4px);
+          font-size: 8px;
+          padding: 2px 6px 3px;
+        }
       }
-      .brand-text {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      @media (max-width: 900px) {
-        .hb1,
-        .hb3,
-        .hb4 {
+      @media (max-width: 860px) {
+        .nav-cta-item {
+          display: block;
+          top: 0;
+        }
+        .cta-flame {
+          position: static;
+          transform: none;
+          display: flex;
+          width: max-content;
+          margin: 2px auto 10px;
+          font-size: 10px;
+        }
+        .cta-flame::before,
+        .cta-flame::after {
           display: none;
         }
-        .hb2 {
-          width: 150px;
-          height: 150px;
-          opacity: 0.22;
+        .cta-flame .ember {
+          display: none;
         }
-        .doodle-notes .note {
-          opacity: 0.28;
-        }
-        .linux-dropdown {
-          box-shadow: 6px 6px 0 var(--accent);
+        .nav-links .nav-cta::after {
+          inset: -6px;
+          padding: 6px;
         }
       }
-      @media (max-width: 640px) {
-        .hero {
-          padding-left: 16px;
-          padding-right: 16px;
-        }
-        .hero-title .typewriter-word {
-          display: block;
-          width: max-content;
-          max-width: 100%;
-          min-width: 0;
-        }
-        .hero-copy {
-          padding-top: 0;
-        }
-        .platform-stack {
-          margin-top: 30px;
-          gap: 24px;
-        }
-        .platform-block {
-          padding-left: 12px;
-          border-left-width: 4px;
-        }
-        .platform-stack > .linux-shell-outside {
-          margin-left: 12px;
-        }
-        .linux-dl-label {
-          font-size: 10.5px;
-          letter-spacing: 0.12em;
-        }
-        .platform-btn,
-        .platform-block .btn-linux-main {
-          padding: 13px 12px;
-          font-size: 15px;
-          gap: 8px;
-        }
-        .platform-btn svg,
-        .platform-block .btn-linux-main svg {
-          width: 18px;
-          height: 18px;
-          flex: none;
-        }
-        .shell-row {
-          flex-direction: column;
-        }
-        .shell-row code {
-          width: 100%;
-          font-size: 11px;
-        }
-        .shell-row .linux-copy {
-          width: 100%;
-          padding: 11px 12px;
-          align-self: stretch;
-        }
-        .linux-dropdown-item {
-          padding: 11px 12px;
-          font-size: 12px;
-        }
-        .nav-inner {
-          padding: 0 12px;
-        }
-        .brand {
-          padding: 7px 10px;
-        }
-        .brand-text {
-          font-size: 10.5px;
-          letter-spacing: 0.1em;
-        }
-        .brand-text span {
-          font-size: 13.5px;
-        }
-        .brand-mark {
-          width: 26px;
-          height: 26px;
-        }
-      }
-      @media (max-width: 640px) {
-        .footer-giant {
-          font-size: clamp(56px, 17vw, 140px);
-        }
-        .footer-inner {
-          padding-top: 56px;
-        }
-        .install-card {
-          padding: 30px 18px;
-          width: 100%;
-        }
-        .install-title {
-          font-size: 21px;
-          padding-right: 46px;
-        }
-        .install-sub {
-          font-size: 12px;
-        }
-        .install-steps > div {
-          font-size: 14px;
-          padding: 11px 12px;
-        }
-      }
-      @media (max-width: 380px) {
-        .btn {
-          font-size: 14px;
-          letter-spacing: 0.04em;
-        }
-        .brand {
-          padding: 7px 9px;
-          gap: 7px;
-        }
-        .brand-text {
-          font-size: 9px;
-          letter-spacing: 0.06em;
-        }
-        .brand-text span {
-          font-size: 12px;
-        }
-        .brand-mark {
-          width: 22px;
-          height: 22px;
-        }
-        .hero-title {
-          font-size: clamp(34px, 11vw, 52px);
-        }
-        .platform-btn,
-        .platform-block .btn-linux-main {
-          font-size: 13.5px;
-          letter-spacing: 0.03em;
-        }
-        .shell-row code {
-          font-size: 10.5px;
+      @media (prefers-reduced-motion: reduce) {
+        .nav-links .nav-cta::before,
+        .nav-links .nav-cta::after,
+        .cta-flame,
+        .cta-flame::before,
+        .cta-flame::after,
+        .cta-flame .cta-bat,
+        .cta-flame .ember {
+          animation: none !important;
         }
       }
     </style>
@@ -3322,7 +3316,10 @@
         <ul class="nav-links" id="nav-links">
 <li><a href="#features">Fitur</a></li>
           <li><a href="#faq">FAQ</a></li>
-          <li><a class="nav-cta" href="Main.html">Mulai Dengerin</a></li>
+          <li class="nav-cta-item">
+            <span class="cta-flame">HALOWEEN EVENT IS HERE!<span class="cta-bat" aria-hidden="true">🦇</span><i class="ember e1" aria-hidden="true"></i><i class="ember e2" aria-hidden="true"></i><i class="ember e3" aria-hidden="true"></i></span>
+            <a class="nav-cta" href="Main.html">Mulai Dengerin</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -3373,32 +3370,36 @@
                 />
               </svg>
             </div>
-                        <div class="platform-stack" id="linux-dl">
-              <div class="platform-block platform-linux">
-                <div class="linux-dl-label">DOWNLOAD UNTUK LINUX</div>
-                <div class="linux-dropdown-wrap">
-                  <button class="btn btn-linux-main" id="linux-dropdown-btn" type="button" aria-expanded="false" aria-haspopup="menu">
-                    <span class="linux-icon" aria-hidden="true">
-                      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#202020" d="M13.338 12.033c-.1-.112-.146-.319-.197-.54-.05-.22-.107-.457-.288-.61v-.001a.756.756 0 00-.223-.134c.252-.745.153-1.487-.1-2.157-.312-.823-.855-1.54-1.27-2.03-.464-.586-.918-1.142-.91-1.963.014-1.254.138-3.579-2.068-3.582-.09 0-.183.004-.28.012-2.466.198-1.812 2.803-1.849 3.675-.045.638-.174 1.14-.613 1.764-.515.613-1.24 1.604-1.584 2.637-.162.487-.24.984-.168 1.454-.023.02-.044.041-.064.063-.151.161-.263.357-.388.489-.116.116-.282.16-.464.225-.183.066-.383.162-.504.395v.001a.702.702 0 00-.077.339c0 .108.016.217.032.322.034.22.068.427.023.567-.144.395-.163.667-.061.865.102.199.31.286.547.335.473.1 1.114.075 1.619.342l.043-.082-.043.082c.54.283 1.089.383 1.526.284a.99.99 0 00.706-.552c.342-.002.717-.146 1.318-.18.408-.032.918.145 1.503.113a.806.806 0 00.068.183l.001.001c.227.455.65.662 1.1.627.45-.036.928-.301 1.315-.762l-.07-.06.07.06c.37-.448.982-.633 1.388-.878.203-.123.368-.276.38-.499.013-.222-.118-.471-.418-.805z"></path><path fill="#F8BF11" d="M13.571 12.828c-.007.137-.107.24-.29.35-.368.222-1.019.414-1.434.918-.362.43-.802.665-1.19.696-.387.03-.721-.13-.919-.526v-.002c-.123-.233-.072-.6.031-.987s.251-.785.271-1.108v-.001c.02-.415.044-.776.114-1.055.07-.28.179-.468.373-.575a.876.876 0 01.027-.014c.022.359.2.725.514.804.343.09.838-.204 1.047-.445l.122-.004c.184-.005.337.006.495.143v.001c.121.102.179.296.229.512.05.217.09.453.239.621.287.32.38.534.371.672zM6.592 13.843v.003c-.034.435-.28.672-.656.758-.377.086-.888 0-1.398-.266-.565-.3-1.237-.27-1.667-.36-.216-.045-.357-.113-.421-.238-.064-.126-.066-.345.071-.72v-.001l.001-.002c.068-.209.018-.438-.015-.653-.033-.214-.049-.41.024-.546l.001-.001c.094-.181.232-.246.403-.307.17-.062.373-.11.533-.27l.001-.001h.001c.148-.157.26-.353.39-.492.11-.117.22-.195.385-.196h.005a.61.61 0 01.093.008c.22.033.411.187.596.437l.533.971v.001c.142.296.441.622.695.954.254.333.45.666.425.921z"></path><path fill="#D6A312" d="M9.25 4.788c-.043-.084-.13-.164-.28-.225-.31-.133-.444-.142-.617-.254-.28-.181-.513-.244-.706-.244a.834.834 0 00-.272.047c-.236.08-.392.25-.49.342-.02.019-.044.035-.104.08-.06.043-.15.11-.28.208-.117.086-.154.2-.114.332.04.132.167.285.4.417h.001c.145.085.244.2.358.291a.801.801 0 00.189.117c.072.031.156.052.26.058.248.015.43-.06.59-.151.16-.092.296-.204.452-.255h.001c.32-.1.548-.301.62-.493a.324.324 0 00-.008-.27z"></path><path fill="#202020" d="M8.438 5.26c-.255.133-.552.294-.869.294-.316 0-.566-.146-.745-.289-.09-.07-.163-.142-.218-.193-.096-.075-.084-.181-.045-.178.066.008.076.095.117.134.056.052.126.12.211.187.17.135.397.266.68.266.284 0 .614-.166.816-.28.115-.064.26-.179.379-.266.09-.067.087-.147.162-.138.075.009.02.089-.085.18-.105.092-.27.214-.403.283z"></path><path fill="#ffffff" d="M12.337 10.694a1.724 1.724 0 00-.104 0h-.01c.088-.277-.106-.48-.621-.713-.534-.235-.96-.212-1.032.265-.005.025-.009.05-.011.076a.801.801 0 00-.12.054c-.252.137-.389.386-.465.692-.076.305-.098.674-.119 1.09-.013.208-.099.49-.186.79-.875.624-2.09.894-3.122.19-.07-.11-.15-.22-.233-.328a13.85 13.85 0 00-.16-.205.65.65 0 00.268-.05.34.34 0 00.186-.192c.063-.17 0-.408-.202-.68-.201-.273-.542-.58-1.043-.888-.368-.23-.574-.51-.67-.814-.097-.305-.084-.635-.01-.96.143-.625.51-1.233.743-1.614.063-.046.023.086-.236.567-.232.44-.667 1.455-.072 2.248.016-.564.15-1.14.377-1.677.329-.747 1.018-2.041 1.072-3.073.029.02.125.086.169.11.126.075.221.184.344.283a.85.85 0 00.575.2c.24 0 .427-.079.582-.168.17-.096.304-.204.433-.245.27-.085.486-.235.608-.41.21.83.7 2.027 1.014 2.611.167.31.5.969.643 1.762.091-.002.191.01.299.038.375-.973-.319-2.022-.636-2.314-.128-.124-.135-.18-.07-.177.343.304.795.917.96 1.608.075.315.09.646.01.973.04.017.08.034.12.054.603.293.826.548.719.897z"></path><path fill="#E6E6E6" d="M8.04 8.062c-.556.002-1.099.251-1.558.716-.46.464-.814 1.122-1.018 1.888l.061.038v.004c.47.298.805.598 1.012.878.219.296.316.584.223.834a.513.513 0 01-.27.283l-.041.015c.074.097.146.197.213.3.944.628 2.042.396 2.867-.172.08-.278.153-.536.163-.698.021-.415.042-.792.124-1.12.082-.33.242-.63.544-.795.017-.01.034-.015.051-.023a.756.756 0 01.022-.094c-.242-.622-.591-1.14-1.01-1.5-.42-.36-.897-.551-1.382-.554zm2.37 2.155l-.002.005v-.002l.001-.004z"></path><path fill="#ffffff" d="M9.278 3.833a1.05 1.05 0 01-.215.656 4.119 4.119 0 00-.218-.09l-.127-.045c.029-.035.085-.075.107-.127a.669.669 0 00.05-.243l.001-.01a.673.673 0 00-.035-.236.434.434 0 00-.108-.184.223.223 0 00-.156-.07H8.57a.228.228 0 00-.151.06.434.434 0 00-.122.175.676.676 0 00-.05.243v.01a.718.718 0 00.009.14 1.773 1.773 0 00-.354-.12 1.196 1.196 0 01-.01-.133v-.013a1.035 1.035 0 01.088-.447.793.793 0 01.25-.328.554.554 0 01.346-.123h.006c.125 0 .232.036.342.116a.78.78 0 01.257.324c.063.138.094.273.097.433l.001.012zM7.388 3.997a1.05 1.05 0 00-.277.125.623.623 0 00.002-.15v-.008a.651.651 0 00-.048-.192.37.37 0 00-.096-.141.158.158 0 00-.119-.045c-.042.004-.077.024-.11.065a.372.372 0 00-.07.156.626.626 0 00-.013.205v.008a.634.634 0 00.048.193.367.367 0 00.116.156l-.102.08-.078.056a.706.706 0 01-.16-.24c-.053-.12-.082-.24-.09-.381v-.001a1.071 1.071 0 01.045-.39.668.668 0 01.167-.292.359.359 0 01.264-.118c.084 0 .158.028.235.09a.68.68 0 01.199.271c.053.12.08.24.089.382v.001c.003.06.003.115-.002.17z"></path><path fill="#202020" d="M7.806 4.335c.01.034.065.029.097.045.027.014.05.045.08.046.03.001.076-.01.08-.04.005-.038-.052-.063-.088-.077-.047-.019-.107-.028-.151-.003-.01.005-.021.018-.018.03zM7.484 4.335c-.01.034-.065.029-.096.045-.028.014-.05.045-.081.046-.03.001-.076-.01-.08-.04-.005-.038.052-.063.088-.077.047-.019.108-.028.152-.003.01.005.02.018.017.03z"></path></g></svg>
-                    </span>
-                    Install for Linux
-                    <span class="dropdown-arrow" aria-hidden="true">&#9660;</span>
-                  </button>
-    <div class="linux-dropdown" id="linux-dropdown" role="menu" hidden>
-                      <a class="linux-dropdown-item" role="menuitem" id="dl-deb" href="#" rel="noopener">.DEB <span>— Ubuntu / Debian</span></a>
-                      <a class="linux-dropdown-item" role="menuitem" id="dl-rpm" href="#" rel="noopener">.RPM <span>— Fedora / openSUSE</span></a>
-                      <a class="linux-dropdown-item" role="menuitem" id="dl-appimage" href="#" rel="noopener">APPIMAGE <span>— Universal</span></a>
-                      <a class="linux-dropdown-item" role="menuitem" id="dl-tar" href="#" rel="noopener">TAR.GZ <span>— Manual install</span></a>
-                      <div class="linux-dropdown-divider" aria-hidden="true"></div>
-                      <a class="linux-dropdown-item linux-dropdown-view" role="menuitem" href="https://github.com/justmearlandolol/chiroot-linux/releases/tag/chiroot_for_linux" target="_blank" rel="noopener">↗ Lihat semua file di GitHub</a>
-                    </div>
+                        <div class="hero-sub hero-sub-linux lofi-linux" id="linux-dl">
+              <div class="linux-dl-label">DOWNLOAD UNTUK LINUX </div>
+              <div class="linux-dropdown-wrap">
+                <button class="btn btn-linux-main" id="linux-dropdown-btn" type="button" aria-expanded="false" aria-haspopup="menu">
+                  <span class="linux-icon" aria-hidden="true">
+                  <svg aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#202020" d="M13.338 12.033c-.1-.112-.146-.319-.197-.54-.05-.22-.107-.457-.288-.61v-.001a.756.756 0 00-.223-.134c.252-.745.153-1.487-.1-2.157-.312-.823-.855-1.54-1.27-2.03-.464-.586-.918-1.142-.91-1.963.014-1.254.138-3.579-2.068-3.582-.09 0-.183.004-.28.012-2.466.198-1.812 2.803-1.849 3.675-.045.638-.174 1.14-.613 1.764-.515.613-1.24 1.604-1.584 2.637-.162.487-.24.984-.168 1.454-.023.02-.044.041-.064.063-.151.161-.263.357-.388.489-.116.116-.282.16-.464.225-.183.066-.383.162-.504.395v.001a.702.702 0 00-.077.339c0 .108.016.217.032.322.034.22.068.427.023.567-.144.395-.163.667-.061.865.102.199.31.286.547.335.473.1 1.114.075 1.619.342l.043-.082-.043.082c.54.283 1.089.383 1.526.284a.99.99 0 00.706-.552c.342-.002.717-.146 1.318-.18.408-.032.918.145 1.503.113a.806.806 0 00.068.183l.001.001c.227.455.65.662 1.1.627.45-.036.928-.301 1.315-.762l-.07-.06.07.06c.37-.448.982-.633 1.388-.878.203-.123.368-.276.38-.499.013-.222-.118-.471-.418-.805z"></path><path fill="#F8BF11" d="M13.571 12.828c-.007.137-.107.24-.29.35-.368.222-1.019.414-1.434.918-.362.43-.802.665-1.19.696-.387.03-.721-.13-.919-.526v-.002c-.123-.233-.072-.6.031-.987s.251-.785.271-1.108v-.001c.02-.415.044-.776.114-1.055.07-.28.179-.468.373-.575a.876.876 0 01.027-.014c.022.359.2.725.514.804.343.09.838-.204 1.047-.445l.122-.004c.184-.005.337.006.495.143v.001c.121.102.179.296.229.512.05.217.09.453.239.621.287.32.38.534.371.672zM6.592 13.843v.003c-.034.435-.28.672-.656.758-.377.086-.888 0-1.398-.266-.565-.3-1.237-.27-1.667-.36-.216-.045-.357-.113-.421-.238-.064-.126-.066-.345.071-.72v-.001l.001-.002c.068-.209.018-.438-.015-.653-.033-.214-.049-.41.024-.546l.001-.001c.094-.181.232-.246.403-.307.17-.062.373-.11.533-.27l.001-.001h.001c.148-.157.26-.353.39-.492.11-.117.22-.195.385-.196h.005a.61.61 0 01.093.008c.22.033.411.187.596.437l.533.971v.001c.142.296.441.622.695.954.254.333.45.666.425.921z"></path><path fill="#D6A312" d="M9.25 4.788c-.043-.084-.13-.164-.28-.225-.31-.133-.444-.142-.617-.254-.28-.181-.513-.244-.706-.244a.834.834 0 00-.272.047c-.236.08-.392.25-.49.342-.02.019-.044.035-.104.08-.06.043-.15.11-.28.208-.117.086-.154.2-.114.332.04.132.167.285.4.417h.001c.145.085.244.2.358.291a.801.801 0 00.189.117c.072.031.156.052.26.058.248.015.43-.06.59-.151.16-.092.296-.204.452-.255h.001c.32-.1.548-.301.62-.493a.324.324 0 00-.008-.27z"></path><path fill="#202020" d="M8.438 5.26c-.255.133-.552.294-.869.294-.316 0-.566-.146-.745-.289-.09-.07-.163-.142-.218-.193-.096-.075-.084-.181-.045-.178.066.008.076.095.117.134.056.052.126.12.211.187.17.135.397.266.68.266.284 0 .614-.166.816-.28.115-.064.26-.179.379-.266.09-.067.087-.147.162-.138.075.009.02.089-.085.18-.105.092-.27.214-.403.283z"></path><path fill="#ffffff" d="M12.337 10.694a1.724 1.724 0 00-.104 0h-.01c.088-.277-.106-.48-.621-.713-.534-.235-.96-.212-1.032.265-.005.025-.009.05-.011.076a.801.801 0 00-.12.054c-.252.137-.389.386-.465.692-.076.305-.098.674-.119 1.09-.013.208-.099.49-.186.79-.875.624-2.09.894-3.122.19-.07-.11-.15-.22-.233-.328a13.85 13.85 0 00-.16-.205.65.65 0 00.268-.05.34.34 0 00.186-.192c.063-.17 0-.408-.202-.68-.201-.273-.542-.58-1.043-.888-.368-.23-.574-.51-.67-.814-.097-.305-.084-.635-.01-.96.143-.625.51-1.233.743-1.614.063-.046.023.086-.236.567-.232.44-.667 1.455-.072 2.248.016-.564.15-1.14.377-1.677.329-.747 1.018-2.041 1.072-3.073.029.02.125.086.169.11.126.075.221.184.344.283a.85.85 0 00.575.2c.24 0 .427-.079.582-.168.17-.096.304-.204.433-.245.27-.085.486-.235.608-.41.21.83.7 2.027 1.014 2.611.167.31.5.969.643 1.762.091-.002.191.01.299.038.375-.973-.319-2.022-.636-2.314-.128-.124-.135-.18-.07-.177.343.304.795.917.96 1.608.075.315.09.646.01.973.04.017.08.034.12.054.603.293.826.548.719.897z"></path><path fill="#E6E6E6" d="M8.04 8.062c-.556.002-1.099.251-1.558.716-.46.464-.814 1.122-1.018 1.888l.061.038v.004c.47.298.805.598 1.012.878.219.296.316.584.223.834a.513.513 0 01-.27.283l-.041.015c.074.097.146.197.213.3.944.628 2.042.396 2.867-.172.08-.278.153-.536.163-.698.021-.415.042-.792.124-1.12.082-.33.242-.63.544-.795.017-.01.034-.015.051-.023a.756.756 0 01.022-.094c-.242-.622-.591-1.14-1.01-1.5-.42-.36-.897-.551-1.382-.554zm2.37 2.155l-.002.005v-.002l.001-.004z"></path><path fill="#ffffff" d="M9.278 3.833a1.05 1.05 0 01-.215.656 4.119 4.119 0 00-.218-.09l-.127-.045c.029-.035.085-.075.107-.127a.669.669 0 00.05-.243l.001-.01a.673.673 0 00-.035-.236.434.434 0 00-.108-.184.223.223 0 00-.156-.07H8.57a.228.228 0 00-.151.06.434.434 0 00-.122.175.676.676 0 00-.05.243v.01a.718.718 0 00.009.14 1.773 1.773 0 00-.354-.12 1.196 1.196 0 01-.01-.133v-.013a1.035 1.035 0 01.088-.447.793.793 0 01.25-.328.554.554 0 01.346-.123h.006c.125 0 .232.036.342.116a.78.78 0 01.257.324c.063.138.094.273.097.433l.001.012zM7.388 3.997a1.05 1.05 0 00-.277.125.623.623 0 00.002-.15v-.008a.651.651 0 00-.048-.192.37.37 0 00-.096-.141.158.158 0 00-.119-.045c-.042.004-.077.024-.11.065a.372.372 0 00-.07.156.626.626 0 00-.013.205v.008a.634.634 0 00.048.193.367.367 0 00.116.156l-.102.08-.078.056a.706.706 0 01-.16-.24c-.053-.12-.082-.24-.09-.381v-.001a1.071 1.071 0 01.045-.39.668.668 0 01.167-.292.359.359 0 01.264-.118c.084 0 .158.028.235.09a.68.68 0 01.199.271c.053.12.08.24.089.382v.001c.003.06.003.115-.002.17z"></path><path fill="#202020" d="M7.806 4.335c.01.034.065.029.097.045.027.014.05.045.08.046.03.001.076-.01.08-.04.005-.038-.052-.063-.088-.077-.047-.019-.107-.028-.151-.003-.01.005-.021.018-.018.03zM7.484 4.335c-.01.034-.065.029-.096.045-.028.014-.05.045-.081.046-.03.001-.076-.01-.08-.04-.005-.038.052-.063.088-.077.047-.019.108-.028.152-.003.01.005.02.018.017.03z"></path></g></svg>
+                  </span>
+                  Install for Linux
+                  <span class="dropdown-arrow" aria-hidden="true">▼</span>
+                </button>
+                <div class="linux-dropdown" id="linux-dropdown" role="menu" hidden>
+                  <a class="linux-dropdown-item" role="menuitem" id="dl-deb" href="#" rel="noopener">.DEB <span>— Ubuntu / Debian</span></a>
+                  <a class="linux-dropdown-item" role="menuitem" id="dl-rpm" href="#" rel="noopener">.RPM <span>— Fedora / openSUSE</span></a>
+                  <a class="linux-dropdown-item" role="menuitem" id="dl-appimage" href="#" rel="noopener">APPIMAGE <span>— Universal</span></a>
+                  <a class="linux-dropdown-item" role="menuitem" id="dl-tar" href="#" rel="noopener">TAR.GZ <span>— Manual install</span></a>
+                  <div class="linux-dropdown-divider" aria-hidden="true"></div>
+                  <a class="linux-dropdown-item linux-dropdown-view" role="menuitem" href="https://github.com/justmearlandolol/chiroot-linux/releases/tag/chiroot_for_linux" target="_blank" rel="noopener">↗ Lihat semua file di GitHub</a>
                 </div>
               </div>
-
-              <div class="platform-block platform-android">
-                <div class="linux-dl-label">DOWNLOAD UNTUK ANDROID</div>
-                <button class="btn btn-primary platform-btn" id="install-android" type="button">
-                  <svg
+            </div>
+            <div class="linux-shell-outside">
+              <div class="shell-label">QUICK INSTALL — PASTE IN TERMINAL</div>
+              <div class="shell-row">
+                <code id="linux-cmd">curl -fsSL https://github.com/justmearlandolol/chiroot-linux/releases/download/chiroot_for_linux/install.sh | sh</code>
+                <button class="linux-copy" id="linux-copy" type="button">COPY</button>
+              </div>
+            </div>
+            <div class="hero-actions">
+              <button class="btn btn-primary" id="install-android" type="button">
+                <svg
                   width="20"
                   height="20"
                   viewBox="0 0 413.137 413.137"
@@ -3425,19 +3426,15 @@
                     ></path>
                   </g>
                 </svg>
-                  Install untuk Android
-                </button>
-              </div>
-
-              <div class="platform-block platform-windows">
-                <div class="linux-dl-label">DOWNLOAD DENGAN WINDOWS</div>
-                <button
-                  class="btn btn-windows platform-btn"
-                  id="install-windows"
-                  type="button"
-                  title="Download installer Windows (.exe) - terverifikasi SHA-256"
-                >
-                  <svg
+                Install untuk Android
+              </button>
+              <button
+                class="btn btn-windows"
+                id="install-windows"
+                type="button"
+                title="Download installer Windows (.exe) - terverifikasi SHA-256"
+              >
+                <svg
                   width="20"
                   height="20"
                   viewBox="-0.5 0 257 257"
@@ -3450,16 +3447,13 @@
                     fill="#00ADEF"
                   ></path>
                 </svg>
-                  Install dengan Windows
-                </button>
-              </div>
-              <div class="linux-shell-outside">
-                <div class="shell-label">QUICK INSTALL LINUX &mdash; PASTE IN TERMINAL</div>
-                <div class="shell-row">
-                  <code id="linux-cmd">curl -fsSL https://github.com/justmearlandolol/chiroot-linux/releases/download/chiroot_for_linux/install.sh | sh</code>
-                  <button class="linux-copy" id="linux-copy" type="button" data-copy="#linux-cmd">COPY</button>
-                </div>
-              </div>
+                Install dengan Windows
+              </button>
+            </div>
+            <div class="hero-meta">
+              <p class="meta-text">
+                .
+              </p>
             </div>
 
             
@@ -3726,46 +3720,38 @@
           if (el) el.href = LINUX_BASE + LINUX_FILES[id];
         });
         var cmd = document.getElementById("linux-cmd");
-        if (cmd) cmd.textContent = "curl -fsSL " + LINUX_BASE + "/install.sh | sh";
-      })();
-      (function () {
-        function fallbackCopy(text, done) {
-          var ta = document.createElement("textarea");
-          ta.value = text;
-          ta.style.position = "fixed";
-          ta.style.opacity = "0";
-          document.body.appendChild(ta);
-          ta.select();
-          try {
-            document.execCommand("copy");
-            done();
-          } catch (e) {}
-          ta.remove();
-        }
-        function copyText(text, done) {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(done, function () {
-              fallbackCopy(text, done);
-            });
-          } else {
-            fallbackCopy(text, done);
-          }
-        }
-        document.querySelectorAll("[data-copy]").forEach(function (btn) {
-          var label = btn.textContent;
-          btn.addEventListener("click", function () {
-            var target = document.querySelector(btn.getAttribute("data-copy"));
-            if (!target) return;
-            copyText(target.textContent.trim(), function () {
-              btn.textContent = "COPIED!";
-              btn.classList.add("copied");
+        if (cmd)
+          cmd.textContent =
+            "curl -fsSL " + LINUX_BASE + "/install.sh | sh";
+        var copyBtn = document.getElementById("linux-copy");
+        if (copyBtn && cmd) {
+          copyBtn.addEventListener("click", function () {
+            var text = cmd.textContent;
+            var done = function () {
+              copyBtn.textContent = "COPIED!";
+              copyBtn.classList.add("copied");
               setTimeout(function () {
-                btn.textContent = label;
-                btn.classList.remove("copied");
+                copyBtn.textContent = "COPY";
+                copyBtn.classList.remove("copied");
               }, 1600);
-            });
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(done, function () {});
+            } else {
+              var ta = document.createElement("textarea");
+              ta.value = text;
+              ta.style.position = "fixed";
+              ta.style.opacity = "0";
+              document.body.appendChild(ta);
+              ta.select();
+              try {
+                document.execCommand("copy");
+                done();
+              } catch (e) {}
+              ta.remove();
+            }
           });
-        });
+        }
       })();
     </script>
     <script>
@@ -3902,5 +3888,5 @@
           });
       })();
     </script>
-  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3e10339ed94eba0',t:'MTc4OTkwOTIyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4e7e1d099a70ce9',t:'MTc5MjY2NTYwNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3e10339ed94eba0',t:'MTc4OTkwOTIyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
