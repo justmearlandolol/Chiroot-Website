@@ -2571,7 +2571,7 @@
         border-radius: 6px;
       }
     
-      /* ===== LOFI 80s SKIN + BLACK LINUX BUTTON (shell outside) ===== */
+      
       body {
         background: #0e0c14;
       }
@@ -2834,7 +2834,7 @@
           display: none;
         }
       }
-      /* LOFI tint for other sections */
+      
       #features {
         background: #fdf6e3;
         position: relative;
@@ -2948,7 +2948,7 @@
       }
 
     
-      /* --- REQUEST: hilangin box linux + header teks putih --- */
+      
       .lofi-linux {
         background: transparent !important;
         border: none !important;
@@ -2982,7 +2982,7 @@
       }
 
     
-      /* preview removed - hero single column */
+      
       .hero-grid {
         grid-template-columns: 1fr !important;
         gap: 0 !important;
@@ -3286,7 +3286,103 @@
           animation: none !important;
         }
       }
+    
+      img { max-width: 100%; }
+      .hero-grid, .hero-copy, .section-inner, .footer-inner > *, .hero-actions > *, .linux-dropdown-wrap { min-width: 0; }
+      .hero-copy { width: 100%; }
+      .nav-inner { gap: 16px; }
+      .poster-preview { max-width: 760px; margin: 0 auto; padding: 0 24px 64px; color: #fdf6e3; }
+      .poster-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+      .poster-heading h2 { font-family: var(--font-display); font-size: clamp(24px, 5vw, 36px); margin: 0; }
+      .poster-heading span { font-family: var(--font-mono); color: #d8b24a; font-size: 12px; }
+      .poster-stage { border: 2px solid #d8b24a; background: #14111d; box-shadow: 7px 7px 0 #332845; overflow: hidden; touch-action: pan-y; }
+      .poster-slide { margin: 0; }
+      .poster-slide[hidden] { display: none; }
+      .poster-art { aspect-ratio: 4 / 5; max-height: 540px; display: grid; place-content: center; text-align: center; padding: 28px; background: radial-gradient(circle at 50% 40%, #49335e, #14111d 70%); }
+      .poster-slide:nth-child(2) .poster-art { background: radial-gradient(circle at 50% 40%, #633521, #14111d 70%); }
+      .poster-slide:nth-child(3) .poster-art { background: radial-gradient(circle at 50% 40%, #234f48, #14111d 70%); }
+      .poster-art b { font-size: clamp(70px, 18vw, 130px); color: #d8b24a; }
+      .poster-art strong { font-family: var(--font-display); font-size: 24px; }
+      .poster-art p { color: #d5c9df; font-size: 14px; }
+      .poster-slide img { display: block; width: 100%; height: auto; max-height: 540px; object-fit: contain; }
+      .poster-slide figcaption { padding: 16px; font-family: var(--font-mono); font-size: 12px; border-top: 1px solid #44384e; }
+      .poster-controls { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 22px; }
+      .poster-controls button { min-width: 44px; min-height: 44px; border: 1px solid #d8b24a; background: #14111d; color: #fdf6e3; cursor: pointer; }
+      .poster-controls button[aria-current="true"] { background: #d8b24a; color: #14111d; }
+      @media (max-width: 900px) {
+        :root { --nav-h: 100px; }
+        .nav-inner { padding: 18px 16px; min-height: var(--nav-h); justify-content: space-between; gap: 12px; }
+        .site-nav .brand { padding: 8px; gap: 7px; flex-shrink: 0; }
+        .site-nav .brand-text { font-size: 10px; letter-spacing: 0; }
+        .site-nav .brand-text span { font-size: 14px; }
+        .site-nav .brand-mark { width: 24px; height: 24px; }
+        .site-nav .nav-links { display: flex; position: static; flex-direction: row; margin: 0; padding: 0; background: transparent; border: 0; transform: none; opacity: 1; visibility: visible; gap: 0; }
+        .site-nav .nav-links > li:not(.nav-cta-item) { display: none; }
+        .site-nav .nav-links .nav-cta-item { display: flex; flex-direction: column; top: auto; margin: 0; padding: 0; border: 0; }
+        .site-nav .cta-flame { position: relative; left: auto; bottom: auto; transform: none; width: auto; margin: 0 0 7px; padding: 4px; font-size: clamp(6px, 1.7vw, 9px); letter-spacing: 0; }
+        .site-nav .nav-links .nav-cta { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px; font-size: 11px; letter-spacing: 0; white-space: nowrap; }
+        .hero-grid { grid-template-columns: minmax(0, 1fr) !important; }
+        .hero { padding: 36px 20px 48px; }
+        .hero-copy { padding-top: 0; }
+        .hero-title { font-size: clamp(34px, 9vw, 68px); overflow-wrap: anywhere; }
+        .typewriter-word { min-width: 0; max-width: 100%; }
+        .hero-actions { flex-direction: column; align-items: stretch; }
+        .hero-actions .btn { width: 100%; transform: none; white-space: normal; }
+        .linux-shell-outside, .shell-row { max-width: 100%; min-width: 0; }
+        .shell-row { flex-wrap: wrap; }
+        .shell-row code { white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+        .linux-dropdown { position: static; margin-top: 12px; }
+        .linux-dropdown-item { flex-wrap: wrap; }
+        .linux-dropdown-item span { white-space: normal; margin-left: 0; }
+        .section-head { flex-wrap: wrap; gap: 20px; }
+        .section-head > * { min-width: 0; max-width: 100%; }
+        .feature-card, .faq-card { min-width: 0; overflow-wrap: anywhere; }
+        .footer-inner { padding: 40px 20px; }
+        .footer-bottom { padding-inline: 20px; text-align: center; }
+        .install-card { max-width: 100%; max-height: 85dvh; overflow-y: auto; }
+        .doodle-notes { display: none; }
+      }
+      @media (max-width: 360px) {
+        .nav-inner { padding-inline: 10px; gap: 8px; }
+        .site-nav .brand-mark { display: none; }
+        .hero, .section-inner { padding-inline: 16px; }
+        .poster-preview { padding-inline: 16px; }
+        .poster-controls { gap: 7px; }
+      }
+
+    
+      .shell-toggle { display: none; }
+      .poster-preview { max-width: 960px; padding: 0 20px 64px; }
+      .poster-stage { border: 0; background: transparent; box-shadow: none; overflow: hidden; touch-action: pan-y; }
+      .poster-track { display: flex; width: max-content; animation: poster-drift 48s linear infinite; }
+      .poster-set { display: flex; flex-shrink: 0; gap: 20px; padding-right: 20px; }
+      .poster-slide { flex: 0 0 auto; width: clamp(180px, 55vw, 300px); border: 0; box-shadow: none; background: transparent; }
+      .poster-art { aspect-ratio: 4 / 5; padding: 16px; }
+      .poster-slide img { width: 100%; height: auto; max-height: none; object-fit: contain; border: 0; border-radius: 0; box-shadow: none; }
+      @keyframes poster-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+      @media (max-width: 900px) {
+        .shell-toggle { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; background: #14141c; color: #d8b24a; border: 1px solid #51462d; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+        #linux-shell-content { display: none; }
+        .shell-open #linux-shell-content { display: block; margin-top: 14px; }
+        .linux-shell-outside { padding: 0; background: transparent; border: 0; box-shadow: none; }
+        .poster-preview { padding-inline: 16px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .poster-track { animation: none; width: auto; }
+        .poster-set { flex-wrap: wrap; padding: 0; justify-content: center; width: 100%; }
+        .poster-set[aria-hidden="true"] { display: none; }
+      }
+
+
+      .poster-section { position: relative; background: #0e0c14; padding: clamp(36px, 6vw, 72px) 0; }
+      .poster-section .poster-preview { padding-bottom: 0; }
+    
+      .posters-intro { max-width: 960px; margin: 0 auto 28px; padding: 0 20px; }
+      .posters-intro h2 { margin: 0 0 12px; color: #fdf6e3; font-family: var(--font-display); font-size: clamp(30px, 5vw, 48px); line-height: 1.15; }
+      .posters-intro p { margin: 0; color: #d5c9df; font-size: clamp(14px, 2vw, 17px); line-height: 1.6; }
+      @media (max-width: 900px) { .posters-intro { padding-inline: 16px; } }
     </style>
+    <script src="index.js" defer></script>
   </head>
   <body>
     <div class="paper-texture" aria-hidden="true"></div>
@@ -3305,19 +3401,12 @@
           <img src="favicon.png" class="brand-mark" alt="Chiroot" width="30" height="30" decoding="async" />
           <div class="brand-text"><span>Chiroot</span> Audio</div>
         </a>
-        <button
-          class="nav-toggle"
-          id="nav-toggle"
-          aria-label="Buka menu"
-          aria-expanded="false"
-        >
-          <span></span>
-        </button>
+        
         <ul class="nav-links" id="nav-links">
 <li><a href="#features">Fitur</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li class="nav-cta-item">
-            <span class="cta-flame">HALOWEEN EVENT IS HERE!<span class="cta-bat" aria-hidden="true">🦇</span><i class="ember e1" aria-hidden="true"></i><i class="ember e2" aria-hidden="true"></i><i class="ember e3" aria-hidden="true"></i></span>
+            <span class="cta-flame">HALLOWEEN EVENT IS HERE!<span class="cta-bat" aria-hidden="true">🦇</span><i class="ember e1" aria-hidden="true"></i><i class="ember e2" aria-hidden="true"></i><i class="ember e3" aria-hidden="true"></i></span>
             <a class="nav-cta" href="Main.html">Mulai Dengerin</a>
           </li>
         </ul>
@@ -3391,11 +3480,14 @@
               </div>
             </div>
             <div class="linux-shell-outside">
+<button class="shell-toggle" type="button" aria-expanded="false" aria-controls="linux-shell-content">›_ Lihat command Linux</button>
+<div id="linux-shell-content">
               <div class="shell-label">QUICK INSTALL — PASTE IN TERMINAL</div>
               <div class="shell-row">
                 <code id="linux-cmd">curl -fsSL https://github.com/justmearlandolol/chiroot-linux/releases/download/chiroot_for_linux/install.sh | sh</code>
                 <button class="linux-copy" id="linux-copy" type="button">COPY</button>
               </div>
+            </div>
             </div>
             <div class="hero-actions">
               <button class="btn btn-primary" id="install-android" type="button">
@@ -3463,7 +3555,11 @@
         </div>
       </section>
 
-      <section class="section" id="features">
+      <section class="section poster-section" id="posters" aria-labelledby="posters-title">
+<div class="posters-intro"><h2 id="posters-title">Posters</h2><p>Share your favorite song with your friends!</p></div>
+<div class="poster-preview" id="poster-preview" role="region" aria-label="Preview poster lagu"><div class="poster-stage"><div class="poster-track"><div class="poster-set"><div class="poster-slide"><img data-poster-image="poster-1" alt="Poster Halloween Smile — Lilly Allen" width="1080" height="1350" decoding="async" /></div><div class="poster-slide"><img data-poster-image="poster-2" alt="Poster Halloween Snowman — Sia" width="1080" height="1350" decoding="async" /></div><div class="poster-slide"><img data-poster-image="poster-3" alt="Poster Halloween Just the Two of Us — Grover Washington, Jr." width="1080" height="1350" decoding="async" /></div></div><div class="poster-set" aria-hidden="true" inert><div class="poster-slide"><img data-poster-image="poster-1" alt="Poster Halloween Smile — Lilly Allen" width="1080" height="1350" decoding="async" /></div><div class="poster-slide"><img data-poster-image="poster-2" alt="Poster Halloween Snowman — Sia" width="1080" height="1350" decoding="async" /></div><div class="poster-slide"><img data-poster-image="poster-3" alt="Poster Halloween Just the Two of Us — Grover Washington, Jr." width="1080" height="1350" decoding="async" /></div></div></div></div></div>
+</section>
+<section class="section" id="features">
         <span class="bg-word features-bg-word" aria-hidden="true">BEDA</span>
         <div class="section-inner">
           <div class="section-head">
@@ -3625,7 +3721,7 @@
         <div class="footer-col">
           <h4>Others</h4>
           <ul>
-            <li><a href="exe.html">Buka website</a></li>
+            <li><a href="Main.html">Buka website</a></li>
 </ul>
         </div>
       </div>
@@ -3888,5 +3984,17 @@
           });
       })();
     </script>
-  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3da963e8d8f8b8a',t:'MTc4OTg0MTg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3e10339ed94eba0',t:'MTc4OTkwOTIyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <script>
+(function () {
+  var toggle = document.querySelector(".shell-toggle");
+  var shell = document.querySelector(".linux-shell-outside");
+  toggle.addEventListener("click", function () {
+    var expanded = toggle.getAttribute("aria-expanded") !== "true";
+    toggle.setAttribute("aria-expanded", String(expanded));
+    shell.classList.toggle("shell-open", expanded);
+    toggle.textContent = expanded ? "− Tutup command Linux" : "›_ Lihat command Linux";
+  });
+})();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4f7e6126a61919f',t:'MTc5MjgzMzU1NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
