@@ -13,6 +13,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="website/chiroot-widget-bridge.html">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="melissa-inpage.css">
   <style>
 :root{
   --pumpkin:#FF6A00;
@@ -2873,6 +2874,7 @@ button:focus-visible, input:focus-visible{outline:2px solid var(--pumpkin); outl
 #share-modal .btn-primary:hover{background:linear-gradient(180deg,#FF9A3D,#E05600)}
 @media (max-width:480px){.preloader-card{padding:28px 22px 26px}.logo-wrapper .star-face{width:90px}.brand-text{font-size:23px;letter-spacing:0}.loading-ring{width:34px;height:34px}}
 
+/* ==== Gaya add-on Melissa dipindah ke css/melissa-inpage.css (di-scope, tidak mengubah gaya Chiroot) ==== */
 </style>
 </head>
 <body>
@@ -9339,7 +9341,10 @@ if (btnRefreshLyrics) {
   else init();
 })();
 </script>
+<script src="melissa-core.js" defer></script>
+<script src="melissa-rewards.js" defer></script>
+<script src="melissa-inpage.js" defer></script>
 <script type="module" src="normal.js"></script>
 <script src="Lang.js" defer></script>
 <script src="Decor.js" defer></script>
-</html>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4fa10bb6ac2400b',t:'MTc5Mjg1NjI3Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>
