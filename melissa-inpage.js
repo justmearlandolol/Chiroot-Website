@@ -7,7 +7,6 @@
   var VISIT_MS = Number(window.MELISSA_VISIT_MS) || 30 * 60 * 1000; // 30 menit
   var TICK_MS = 20 * 1000;
   var NEXT_KEY = 'melissa_next_visit_at';
-  var ASSET = 'assets/';
 
   var state = {
     products: [], filtered: [], categories: [], activeCategory: 'all', search: '',
