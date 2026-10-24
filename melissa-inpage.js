@@ -1,16 +1,3 @@
-/* =====================================================================
- * Melissa Shop — add-on IN-PAGE untuk Main.html Chiroot AfterDark.
- *
- * Perilaku:
- *  - Karakter Mellissa MUNCUL setiap 30 menit (jadwal persisten di
- *    localStorage, tidak reset saat reload).
- *  - Klik Mellissa -> overlay toko terbuka di halaman yang sama.
- *  - Semua harga/stok/saldo/transaksi tetap server-authoritative via
- *    MelissaCore (Supabase). Tidak ada halaman terpisah.
- *
- * Add-on murni: DOM dibuat sendiri, di-scope di .melissa-root, tidak
- * mengubah elemen/state Chiroot mana pun.
- * ===================================================================== */
 (function () {
   'use strict';
 
@@ -33,7 +20,7 @@
 
   // ------------------------------------------------------------- template
   function coinIcon(size) {
-    return '<img src="' + ASSET + 'halloween-coin.png" alt="koin" draggable="false" width="' + (size || 18) + '" height="' + (size || 18) + '">';
+    return '<img src="' + 'halloween-coin.png" alt="koin" draggable="false" width="' + (size || 18) + '" height="' + (size || 18) + '">';
   }
 
   function buildMarkup() {
@@ -52,25 +39,24 @@
           '<span class="mc-spark s3" style="left:0%;top:48%;--dx:-16px;--dy:-8px;--d:.52s" aria-hidden="true">✦</span>' +
           '<span class="mc-spark s4" style="left:90%;top:44%;--dx:14px;--dy:-10px;--d:.68s" aria-hidden="true">✧</span>' +
           '<span class="mc-spark s5 ambient" style="left:70%;top:74%;--dx:8px;--dy:-14px;--d:.85s" aria-hidden="true">✦</span>' +
-          '<img class="mc-img" src="' + ASSET + 'mellissa.png" alt="Mellissa, penyihir shopkeeper" draggable="false">' +
+          '<img class="mc-img" src="' + 'mellissa.png" alt="Mellissa, penyihir shopkeeper" draggable="false">' +
           '<span class="mc-shadow" aria-hidden="true"></span>' +
         '</button>' +
       '</div>' +
 
-      /* ---------- overlay toko ---------- */
       '<div class="ms-overlay" id="mli-overlay" role="dialog" aria-modal="true" aria-labelledby="mli-title">' +
         '<div class="ms-panel">' +
           '<button type="button" class="ms-close-x" id="mli-overlay-close" aria-label="Tutup toko">✕</button>' +
           '<div class="ms-panel-head">' +
             '<div class="ms-house-frame">' +
-              '<img src="' + ASSET + 'shopfront-pixel.png" alt="Rumah toko Halloween Mellissa" draggable="false">' +
+              '<img src="'  + 'shopfront-pixel.png" alt="Rumah toko Halloween Mellissa" draggable="false">' +
             '</div>' +
             '<div class="ms-head-copy">' +
               '<h2 id="mli-title">Melissa Shop</h2>' +
               '<p>Mellissa hanya mampir sesekali. Tukar Halloween Coins yang kamu kumpulkan dari menyelesaikan lagu di Chiroot dengan harta karun musiman.</p>' +
               '<div class="ms-head-actions">' +
                 '<span class="ms-coin-chip" id="mli-coin-chip" title="Saldo Halloween Coin kamu">' +
-                  '<img src="' + ASSET + 'halloween-coin.png" alt="" draggable="false">' +
+                  '<img src="' + 'halloween-coin.png" alt="" draggable="false">' +
                   '<span id="mli-balance">–</span>&nbsp;Coins' +
                 '</span>' +
                 '<button type="button" class="ms-login-btn" id="mli-login"><span>Login with Google</span></button>' +
