@@ -1,0 +1,745 @@
+/* =====================================================================
+ * Melissa Shop — in-page add-on untuk Main.html
+ * SEMUA aturan di-scope di bawah .melissa-root / id komponen agar tidak
+ * pernah mengubah gaya Chiroot AfterDark.
+ * Palet mengikuti variabel Halloween Chiroot.
+ * ===================================================================== */
+.melissa-root,
+.melissa-root * { box-sizing: border-box; }
+.melissa-root img { -webkit-user-drag: none; user-select: none; }
+
+.melissa-root {
+  --pumpkin: #ff6a00;
+  --pumpkin-deep: #c94a00;
+  --pumpkin-soft: #ff9a4d;
+  --witch-purple: #4a0e4e;
+  --witch-soft: #6d2c72;
+  --dark-plum: #24102a;
+  --plum-panel: #1a0b20;
+  --midnight: #090909;
+  --cream: #f2e3c6;
+  --cream-muted: #c9b895;
+  --gold: #c89b3c;
+  --gold-soft: #e2c86a;
+  --danger: #b4503c;
+  --ok: #7fbf8a;
+  --line: rgba(200, 155, 60, 0.32);
+  --line-soft: rgba(242, 227, 198, 0.12);
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font-hand: 'Kalam', 'Patrick Hand', cursive;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  color: var(--cream);
+  font-family: var(--font-serif);
+}
+.melissa-root .ms-hidden { display: none !important; }
+.melissa-root img { max-width: 100%; display: block; }
+.melissa-root button { font-family: var(--font-serif); cursor: pointer; }
+
+/* ============ Notifikasi koin (dipakai melissa-rewards.js) ============ */
+#melissa-coin-toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(14px);
+  display: flex; align-items: center; gap: 10px;
+  background: #fff8ea; color: #2a1735;
+  border: 2px solid #4a0e4e;
+  border-radius: 14px;
+  padding: 10px 18px;
+  font-family: 'Kalam', cursive;
+  font-size: 15px; font-weight: 700;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .45);
+  z-index: 1400;
+  opacity: 0;
+  transition: opacity .28s ease, transform .28s cubic-bezier(.22, 1, .36, 1);
+  pointer-events: none;
+  max-width: 90vw;
+}
+#melissa-coin-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+#melissa-coin-toast .mct-coin { width: 26px; height: 26px; animation: mct-coin-pop .5s ease; }
+@keyframes mct-coin-pop {
+  0% { transform: scale(.4) rotate(-14deg); }
+  70% { transform: scale(1.15) rotate(6deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* ============ Karakter Mellissa: entrance + idle ============ */
+.melissa-character {
+  position: fixed;
+  right: 22px;
+  bottom: 16px;
+  z-index: 900;
+  width: 168px;
+  visibility: hidden; /* figur mengatur fade-in-nya sendiri lewat keyframes */
+}
+.melissa-character.visible { visibility: visible; }
+
+.melissa-character .mc-figure {
+  position: relative;
+  border: 0;
+  background: none;
+  padding: 0;
+  width: 100%;
+  cursor: pointer;
+  will-change: transform, opacity, filter;
+}
+
+/* --- Entrance 1.1s: naik dari bawah, scale .92, blur halus, spring overshoot --- */
+.melissa-character.visible .mc-figure {
+  animation: mli-entrance 1.1s cubic-bezier(.22, 1, .36, 1) both;
+}
+@keyframes mli-entrance {
+  0%   { opacity: 0; transform: translateY(34px) scale(.92); filter: blur(6px); }
+  42%  { opacity: 1; filter: blur(2px); }
+  62%  { opacity: 1; filter: blur(0); }
+  72%  { transform: translateY(-10px) scale(1.025); filter: blur(0); } /* overshoot */
+  86%  { transform: translateY(3px) scale(.995); }                     /* settle */
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* --- Idle: mengambang + sway halus (whole-asset, tanpa distorsi bagian tubuh) --- */
+.melissa-character .mc-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  transform-origin: center bottom;
+  will-change: transform;
+  filter: drop-shadow(0 16px 18px rgba(0, 0, 0, .55));
+}
+.melissa-character.visible .mc-img {
+  animation: mli-idle-float 3.4s ease-in-out 1.1s infinite;
+}
+@keyframes mli-idle-float {
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50%      { transform: translateY(-12px) rotate(1.2deg); }
+}
+
+/* --- Bayangan lembut menyinkron dengan idle --- */
+.melissa-character .mc-shadow {
+  position: absolute;
+  bottom: -8px; left: 50%;
+  width: 110px; height: 16px;
+  margin-left: -55px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, .6), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.melissa-character.visible .mc-shadow {
+  animation: mli-idle-shadow 3.4s ease-in-out 1.1s infinite;
+}
+@keyframes mli-idle-shadow {
+  0%, 100% { transform: scale(1); opacity: .6; }
+  50%      { transform: scale(.85); opacity: .35; }
+}
+
+/* --- Magical glow: fade-in saat entrance, lalu berdenyut lembut --- */
+.melissa-character .mc-glow {
+  position: absolute;
+  left: -10%; right: -10%; top: 4%; bottom: 6%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(255, 154, 77, .4) 0%,
+    rgba(109, 44, 114, .32) 55%,
+    transparent 72%);
+  filter: blur(14px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.melissa-character.visible .mc-glow {
+  animation:
+    mli-glow-in 1.1s ease-out both,
+    mli-glow-pulse 3.6s ease-in-out 1.1s infinite;
+}
+@keyframes mli-glow-in {
+  from { opacity: 0; }
+  60%  { opacity: 1; }
+  to   { opacity: .9; }
+}
+@keyframes mli-glow-pulse {
+  0%, 100% { opacity: .55; }
+  50%      { opacity: .95; }
+}
+
+/* --- Sparkles: muncul bergantian selama entrance, memudar perlahan --- */
+.melissa-character .mc-spark {
+  position: absolute;
+  color: var(--gold-soft);
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  text-shadow: 0 0 10px rgba(226, 200, 106, .85);
+}
+.melissa-character.visible .mc-spark {
+  animation: mli-spark 1.5s ease-out var(--d, .3s) both;
+}
+@keyframes mli-spark {
+  0%   { opacity: 0; transform: translate(0, 10px) scale(.4) rotate(0); }
+  35%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx, 0), var(--dy, -14px)) scale(1.15) rotate(45deg); }
+}
+/* satu sparkle ambient tetap hidup sesekali saat idle */
+.melissa-character.visible .mc-spark.ambient {
+  animation:
+    mli-spark 1.5s ease-out var(--d, .8s) both,
+    mli-spark-ambient 3.8s ease-in-out calc(var(--d, .8s) + 1.6s) infinite;
+}
+@keyframes mli-spark-ambient {
+  0%, 100% { opacity: 0; transform: translateY(6px) scale(.7); }
+  50%      { opacity: .9; transform: translateY(-6px) scale(1.05); }
+}
+
+/* --- Bubble dialog: masuk di tengah entrance --- */
+.melissa-character .mc-bubble {
+  position: absolute;
+  bottom: calc(100% - 6px);
+  right: -6px;
+  width: 218px;
+  background: #fff8ea;
+  color: #33203a;
+  border: 2px solid var(--witch-purple);
+  border-radius: 14px;
+  padding: 10px 13px;
+  font-family: var(--font-hand);
+  font-size: 13.5px;
+  line-height: 1.45;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .4);
+  opacity: 0;
+  z-index: 3;
+}
+.melissa-character.visible .mc-bubble {
+  animation: mc-bubble-in .5s ease .45s both;
+}
+.melissa-character .mc-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -11px; right: 30px;
+  border-width: 11px 9px 0 9px;
+  border-style: solid;
+  border-color: var(--witch-purple) transparent transparent transparent;
+}
+.melissa-character .mc-bubble::before {
+  content: "";
+  position: absolute;
+  bottom: -7px; right: 32px;
+  border-width: 9px 7px 0 7px;
+  border-style: solid;
+  border-color: #fff8ea transparent transparent transparent;
+  z-index: 1;
+}
+@keyframes mc-bubble-in {
+  from { opacity: 0; transform: translateY(8px) scale(.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.melissa-character .mc-close {
+  position: absolute;
+  top: -4px; left: -6px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1.6px solid var(--line);
+  background: var(--dark-plum);
+  color: var(--cream);
+  font-size: 14px;
+  z-index: 4;
+  display: flex; align-items: center; justify-content: center;
+}
+.melissa-character .mc-close:hover { border-color: var(--gold); color: var(--gold-soft); }
+
+/* --- Ping penanda "klik aku": mulai setelah entrance --- */
+.melissa-character .mc-ping {
+  position: absolute;
+  top: 6px; right: 4px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--pumpkin);
+  box-shadow: 0 0 0 0 rgba(255, 106, 0, .6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.melissa-character.visible .mc-ping {
+  animation: mc-ping 1.8s ease-out 1.15s infinite;
+}
+@keyframes mc-ping {
+  0%   { opacity: 1; box-shadow: 0 0 0 0 rgba(255, 106, 0, .55); }
+  70%  { opacity: 1; box-shadow: 0 0 0 14px rgba(255, 106, 0, 0); }
+  100% { opacity: 0; box-shadow: 0 0 0 0 rgba(255, 106, 0, 0); }
+}
+@keyframes mli-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ============ Overlay toko ============ */
+.melissa-root .ms-overlay {
+  position: fixed; inset: 0;
+  background: rgba(5, 2, 8, .78);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 1000;
+}
+.melissa-root .ms-overlay.open { display: flex; }
+.melissa-root .ms-panel {
+  width: min(1040px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background:
+    radial-gradient(ellipse at 82% 0%, rgba(255, 106, 0, .08), transparent 55%),
+    linear-gradient(180deg, #2c1433, #14081b);
+  border: 1.8px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 24px 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .65);
+  position: relative;
+}
+.melissa-root .ms-panel-head {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: 22px;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 16px;
+}
+.melissa-root .ms-house-frame {
+  border-radius: var(--radius-sm);
+  border: 2px solid rgba(200, 155, 60, .45);
+  background: radial-gradient(circle at 50% 40%, rgba(74, 14, 78, .55), #0d0512 75%);
+  padding: 10px;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 230px;
+}
+.melissa-root .ms-house-frame img {
+  width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.melissa-root .ms-head-copy { min-width: 0; }
+.melissa-root .ms-head-copy h2 {
+  margin: 0 0 6px;
+  font-size: clamp(22px, 3vw, 30px);
+  color: var(--gold-soft);
+  letter-spacing: .03em;
+}
+.melissa-root .ms-head-copy p {
+  margin: 0 0 12px;
+  color: var(--cream-muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.melissa-root .ms-head-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.melissa-root .ms-close-x {
+  position: absolute; top: 12px; right: 14px;
+  background: transparent; border: 0;
+  color: var(--cream-muted);
+  font-size: 22px;
+  z-index: 2;
+}
+.melissa-root .ms-close-x:hover { color: var(--gold-soft); }
+
+.melissa-root .ms-coin-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(180deg, #2c1433, #1c0c22);
+  border: 1.6px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 15px 7px 9px;
+  font-weight: 700; font-size: 14.5px;
+  color: var(--gold-soft);
+  white-space: nowrap;
+}
+.melissa-root .ms-coin-chip img { width: 25px; height: 25px; }
+.melissa-root .ms-coin-chip.bump { animation: ms-chip-bump .55s ease; }
+@keyframes ms-chip-bump {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.melissa-root .ms-login-btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: var(--cream);
+  border: 1.4px solid var(--gold);
+  color: #1a0e12;
+  padding: 9px 15px;
+  border-radius: 12px;
+  font-weight: 700; font-size: 13.5px;
+  box-shadow: 0 2px 0 #8e8a82;
+}
+.melissa-root .ms-login-btn:hover { transform: translateY(-1px); }
+.melissa-root .ms-avatar-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--dark-plum);
+  border: 1.6px solid var(--line);
+  color: var(--cream);
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+.melissa-root .ms-avatar-btn .dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--pumpkin);
+  box-shadow: 0 0 8px var(--pumpkin);
+}
+
+/* dialog Mellissa di dalam panel */
+.melissa-root .ms-dialogue {
+  background: #fff8ea;
+  color: #33203a;
+  border: 2px solid var(--witch-purple);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-family: var(--font-hand);
+  font-size: 14.5px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  position: relative;
+}
+.melissa-root .ms-dialogue::before {
+  content: "🎃 ";
+}
+
+/* toolbar */
+.melissa-root .ms-toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+.melissa-root .ms-search {
+  flex: 1 1 240px;
+  display: flex; align-items: center; gap: 9px;
+  background: var(--plum-panel);
+  border: 1.6px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 16px;
+}
+.melissa-root .ms-search input {
+  flex: 1;
+  background: transparent; border: 0; outline: none;
+  color: var(--cream);
+  font-family: var(--font-hand); font-size: 15px;
+}
+.melissa-root .ms-search input::placeholder { color: rgba(201, 184, 149, .65); }
+.melissa-root .ms-cats { display: flex; gap: 8px; flex-wrap: wrap; }
+.melissa-root .ms-cat {
+  background: rgba(74, 14, 78, .45);
+  border: 1.4px solid var(--line-soft);
+  color: var(--cream-muted);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-family: var(--font-hand); font-size: 13.5px;
+}
+.melissa-root .ms-cat:hover { border-color: var(--gold); color: var(--cream); }
+.melissa-root .ms-cat.active {
+  background: linear-gradient(180deg, var(--pumpkin), var(--pumpkin-deep));
+  border-color: var(--gold-soft);
+  color: #fff4e6;
+  box-shadow: 0 3px 12px rgba(255, 106, 0, .35);
+}
+.melissa-root .ms-cart-btn,
+.melissa-root .ms-admin-btn {
+  position: relative;
+  background: linear-gradient(180deg, #3a1740, #24102a);
+  border: 1.6px solid var(--line);
+  color: var(--cream);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-family: var(--font-hand); font-size: 14.5px;
+}
+.melissa-root .ms-cart-btn .count {
+  position: absolute; top: -7px; right: -7px;
+  min-width: 20px; height: 20px; padding: 0 5px;
+  border-radius: 999px;
+  background: var(--pumpkin);
+  color: #1a0b08;
+  font-weight: 700; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid #120616;
+}
+
+/* grid produk */
+.melissa-root .ms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+  gap: 14px;
+}
+.melissa-root .ms-card {
+  background: linear-gradient(180deg, rgba(44, 20, 51, .85), rgba(22, 10, 27, .92));
+  border: 1.6px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.melissa-root .ms-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, .45);
+}
+.melissa-root .ms-card-img {
+  aspect-ratio: 1 / 1;
+  background: #120616;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.melissa-root .ms-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.melissa-root .ms-card-img .ph { font-size: 38px; color: rgba(200, 155, 60, .45); }
+.melissa-root .ms-card-body { padding: 12px 13px 14px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+.melissa-root .ms-card-name { margin: 0; font-size: 15.5px; color: var(--cream); }
+.melissa-root .ms-card-desc {
+  margin: 0; font-size: 12.6px; color: var(--cream-muted); line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1;
+}
+.melissa-root .ms-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.melissa-root .ms-price { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--gold-soft); font-size: 14px; }
+.melissa-root .ms-price img { width: 18px; height: 18px; }
+.melissa-root .ms-stock { font-family: var(--font-hand); font-size: 12.5px; color: var(--cream-muted); }
+.melissa-root .ms-stock.low { color: var(--pumpkin-soft); }
+.melissa-root .ms-btn {
+  border: 1.4px solid var(--gold);
+  border-radius: 10px;
+  padding: 8px 13px;
+  font-family: var(--font-hand); font-size: 14px;
+  transition: transform .12s ease, opacity .12s ease;
+}
+.melissa-root .ms-btn:hover { transform: translateY(-1px); }
+.melissa-root .ms-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.melissa-root .ms-btn-primary { background: linear-gradient(180deg, var(--pumpkin), var(--pumpkin-deep)); color: #fff4e6; border-color: var(--gold-soft); }
+.melissa-root .ms-btn-ghost { background: transparent; color: var(--cream); border-color: var(--line); }
+.melissa-root .ms-btn-dark { background: var(--dark-plum); color: var(--cream); border-color: var(--line); }
+
+/* empty state */
+.melissa-root .ms-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 46px 20px 40px;
+  border: 1.6px dashed var(--line);
+  border-radius: var(--radius);
+  background: rgba(26, 11, 32, .55);
+}
+.melissa-root .ms-empty img.shop-logo { width: 118px; margin: 0 auto 12px; opacity: .92; }
+.melissa-root .ms-empty h3 { margin: 0 0 8px; color: var(--gold-soft); font-size: 18.5px; }
+.melissa-root .ms-empty p { margin: 0; color: var(--cream-muted); font-family: var(--font-hand); font-size: 14.5px; }
+.melissa-root .ms-skeleton {
+  grid-column: 1 / -1;
+  background: linear-gradient(90deg, rgba(74, 14, 78, .25) 25%, rgba(200, 155, 60, .12) 50%, rgba(74, 14, 78, .25) 75%);
+  background-size: 200% 100%;
+  animation: ms-shimmer 1.3s infinite;
+  border-radius: var(--radius-sm);
+  min-height: 220px;
+}
+@keyframes ms-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* riwayat */
+.melissa-root .ms-section-head { display: flex; align-items: center; gap: 12px; margin: 24px 2px 12px; }
+.melissa-root .ms-section-head h3 { margin: 0; font-size: 18px; color: var(--gold-soft); }
+.melissa-root .ms-section-head .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+.melissa-root .ms-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.melissa-root .ms-tab {
+  background: transparent;
+  border: 1.4px solid var(--line-soft);
+  color: var(--cream-muted);
+  border-radius: 10px 10px 0 0;
+  padding: 8px 15px;
+  font-family: var(--font-hand); font-size: 14px;
+}
+.melissa-root .ms-tab.active { color: var(--gold-soft); border-color: var(--line); background: rgba(74, 14, 78, .4); border-bottom-color: transparent; }
+.melissa-root .ms-panel-box {
+  border: 1.6px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: rgba(20, 9, 26, .75);
+  padding: 14px;
+}
+.melissa-root .ms-table-wrap { overflow-x: auto; }
+.melissa-root table.ms-table { width: 100%; border-collapse: collapse; font-size: 13.2px; min-width: 480px; }
+.melissa-root .ms-table th, .melissa-root .ms-table td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line-soft); }
+.melissa-root .ms-table th { color: var(--gold-soft); font-family: var(--font-hand); font-weight: 400; letter-spacing: .04em; }
+.melissa-root .ms-table tr:last-child td { border-bottom: 0; }
+.melissa-root .ms-amount-pos { color: var(--ok); font-weight: 700; }
+.melissa-root .ms-amount-neg { color: var(--pumpkin-soft); font-weight: 700; }
+.melissa-root .ms-muted { color: var(--cream-muted); font-size: 12.5px; }
+.melissa-root .ms-history-empty { padding: 24px; text-align: center; color: var(--cream-muted); font-family: var(--font-hand); }
+
+/* modal detail (di dalam overlay) */
+.melissa-root .ms-modal {
+  width: min(540px, 94%);
+  max-height: 86vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #2c1433, #170a1e);
+  border: 1.8px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .6);
+}
+.melissa-root .ms-modal h3 { margin: 0 34px 14px 0; color: var(--gold-soft); font-size: 19px; }
+.melissa-root .ms-detail-grid { display: grid; grid-template-columns: 170px 1fr; gap: 18px; }
+.melissa-root .ms-detail-img {
+  aspect-ratio: 1/1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #120616;
+  border: 1.6px solid var(--line);
+}
+.melissa-root .ms-detail-img img { width: 100%; height: 100%; object-fit: cover; }
+.melissa-root .ms-detail-info p { color: var(--cream-muted); font-size: 13.3px; line-height: 1.6; }
+.melissa-root .ms-qty { display: inline-flex; align-items: center; gap: 10px; margin: 8px 0 14px; }
+.melissa-root .ms-qty button {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1.4px solid var(--line);
+  background: var(--dark-plum);
+  color: var(--cream);
+  font-size: 17px;
+}
+.melissa-root .ms-qty span { min-width: 26px; text-align: center; font-weight: 700; }
+.melissa-root .ms-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; flex-wrap: wrap; }
+
+/* drawer keranjang */
+.melissa-root .ms-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(400px, 94vw);
+  background: linear-gradient(180deg, #24102a, #120616);
+  border-left: 1.8px solid var(--line);
+  box-shadow: -18px 0 50px rgba(0, 0, 0, .55);
+  transform: translateX(105%);
+  transition: transform .28s cubic-bezier(.22, 1, .36, 1);
+  z-index: 1100;
+  display: flex; flex-direction: column;
+}
+.melissa-root .ms-drawer.open { transform: translateX(0); }
+.melissa-root .ms-drawer-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.melissa-root .ms-drawer-head h3 { margin: 0; color: var(--gold-soft); font-size: 18px; }
+.melissa-root .ms-drawer-head .ms-modal-close { background: none; border: 0; color: var(--cream-muted); font-size: 20px; }
+.melissa-root .ms-drawer-body { flex: 1; overflow-y: auto; padding: 14px 20px; display: flex; flex-direction: column; gap: 12px; }
+.melissa-root .ms-cart-line {
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  gap: 11px;
+  align-items: center;
+  background: rgba(74, 14, 78, .32);
+  border: 1.4px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  padding: 9px;
+}
+.melissa-root .ms-cart-line img { width: 54px; height: 54px; object-fit: cover; border-radius: 9px; }
+.melissa-root .ms-cart-line .name { font-size: 13.6px; margin: 0 0 3px; }
+.melissa-root .ms-cart-line .meta { font-family: var(--font-hand); font-size: 12.3px; color: var(--cream-muted); }
+.melissa-root .ms-cart-line .rm { background: none; border: 0; color: var(--danger); font-size: 16px; padding: 2px 6px; }
+.melissa-root .ms-drawer-foot { padding: 16px 20px 22px; border-top: 1px solid var(--line-soft); }
+.melissa-root .ms-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 13px; font-size: 15px; }
+.melissa-root .ms-drawer-scrim {
+  position: fixed; inset: 0;
+  background: rgba(5, 2, 8, .55);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s ease;
+  z-index: 1050;
+}
+.melissa-root .ms-drawer-scrim.open { opacity: 1; pointer-events: auto; }
+
+/* konfirmasi */
+.melissa-root .ms-confirm-icon { text-align: center; font-size: 32px; margin-bottom: 6px; }
+.melissa-root .ms-confirm-summary {
+  background: rgba(74, 14, 78, .35);
+  border: 1.4px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px; margin: 12px 0;
+  font-size: 13.3px;
+}
+.melissa-root .ms-confirm-summary .row { display: flex; justify-content: space-between; padding: 3px 0; color: var(--cream-muted); }
+.melissa-root .ms-confirm-summary .row.total {
+  color: var(--gold-soft); font-weight: 700;
+  border-top: 1px solid var(--line-soft); margin-top: 6px; padding-top: 9px;
+}
+
+/* admin */
+.melissa-root .ms-admin-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.melissa-root .ms-admin-form label { display: flex; flex-direction: column; gap: 5px; font-family: var(--font-hand); font-size: 13px; color: var(--cream-muted); }
+.melissa-root .ms-admin-form input,
+.melissa-root .ms-admin-form select,
+.melissa-root .ms-admin-form textarea {
+  background: var(--midnight);
+  border: 1.4px solid var(--line-soft);
+  border-radius: 9px;
+  color: var(--cream);
+  padding: 9px 11px;
+  font-family: var(--font-serif); font-size: 13.3px;
+  outline: none;
+}
+.melissa-root .ms-admin-form input:focus,
+.melissa-root .ms-admin-form textarea:focus { border-color: var(--gold); }
+.melissa-root .ms-admin-form .full { grid-column: 1 / -1; }
+.melissa-root .ms-modal.wide { width: min(720px, 94%); }
+
+/* toast in-page */
+.melissa-root .ms-toast {
+  position: fixed;
+  bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(14px);
+  background: #fff8ea;
+  color: #2a1735;
+  border: 2px solid var(--witch-purple);
+  border-radius: 14px;
+  padding: 10px 17px;
+  font-family: var(--font-hand); font-size: 14.5px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .45);
+  z-index: 1300;
+  opacity: 0;
+  transition: opacity .25s ease, transform .25s ease;
+  max-width: 90vw;
+  display: flex; align-items: center; gap: 9px;
+}
+.melissa-root .ms-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.melissa-root .ms-toast.error { border-color: var(--danger); }
+.melissa-root .ms-toast img { width: 22px; height: 22px; }
+
+/* ============ Responsif ============ */
+@media (max-width: 860px) {
+  .melissa-root .ms-panel-head { grid-template-columns: 1fr; }
+  .melissa-root .ms-house-frame { min-height: 180px; }
+  .melissa-root .ms-house-frame img { max-height: 200px; }
+  .melissa-root .ms-detail-grid { grid-template-columns: 1fr; }
+  .melissa-root .ms-detail-img { width: 190px; margin: 0 auto; }
+}
+@media (max-width: 600px) {
+  .melissa-character { width: 124px; right: 12px; bottom: 10px; }
+  .melissa-character .mc-bubble { width: 188px; right: 0; font-size: 12.8px; }
+  .melissa-root .ms-panel { padding: 18px 14px 22px; }
+  .melissa-root .ms-admin-form { grid-template-columns: 1fr; }
+  .melissa-root .ms-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+}
+
+/* ============ Reduced motion ============ */
+@media (prefers-reduced-motion: reduce) {
+  /* Entrance diganti fade sederhana; idle float, glow, sparkles dimatikan */
+  .melissa-character.visible .mc-figure {
+    animation: mli-fade-in .3s ease both !important;
+  }
+  .melissa-character.visible .mc-img,
+  .melissa-character.visible .mc-shadow,
+  .melissa-character.visible .mc-bubble,
+  .melissa-character.visible .mc-ping,
+  .melissa-character.visible .mc-glow,
+  .melissa-character.visible .mc-spark,
+  .melissa-root .ms-coin-chip.bump,
+  .melissa-root .ms-skeleton,
+  #melissa-coin-toast .mct-coin {
+    animation: none !important;
+  }
+  .melissa-character.visible .mc-bubble { opacity: 1; }
+  .melissa-character.visible .mc-glow { opacity: .65; }
+  .melissa-character.visible .mc-spark { display: none; }
+  .melissa-root .ms-drawer,
+  .melissa-root .ms-toast,
+  .melissa-root .ms-card,
+  .melissa-root .ms-btn,
+  .melissa-root .ms-login-btn { transition: none; }
+  .melissa-root .ms-card:hover,
+  .melissa-root .ms-btn:hover,
+  .melissa-root .ms-login-btn:hover { transform: none; }
+}
