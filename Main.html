@@ -13,6 +13,102 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="chiroot-widget-bridge.html">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <style>
+.ms-hidden{display:none!important}
+.melissa-root{font-family:Georgia,'Times New Roman',serif;color:#F2E3C6}
+.melissa-character{position:fixed;right:18px;bottom:18px;z-index:1340;display:none;flex-direction:column;align-items:flex-end}
+.melissa-character.visible{display:flex}
+.mc-close{width:26px;height:26px;border-radius:50%;border:1.4px solid #C89B3C;background:#1A0E1E;color:#F2E3C6;cursor:pointer;font-size:12px;margin-bottom:4px;z-index:3}
+.mc-figure{position:relative;background:transparent;border:none;padding:0;cursor:pointer;width:104px;height:116px;display:flex;align-items:center;justify-content:center}
+.mc-img{width:100%;height:100%;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 6px 14px rgba(0,0,0,.7))}
+.mc-bubble{position:absolute;right:105%;bottom:54%;width:190px;padding:8px 11px;border-radius:12px;background:#1A0E1E;border:1.4px solid #C89B3C;color:#F2E3C6;font-size:12px;line-height:1.35;box-shadow:0 8px 20px rgba(0,0,0,.55);text-align:left;z-index:4}
+.mc-glow{position:absolute;inset:8px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,0,.28),transparent 70%);pointer-events:none}
+.mc-spark{position:absolute;color:#E2C86A;font-size:12px;pointer-events:none}
+.ms-overlay{position:fixed;inset:0;z-index:1500;background:rgba(9,9,9,.78);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px}
+.ms-overlay.open{display:flex}
+.ms-panel{position:relative;width:min(940px,100%);max-height:calc(100dvh - 32px);overflow-y:auto;background:linear-gradient(180deg,#161018 0%,#0B0B0B 100%);border:2px solid #C89B3C;border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.8)}
+.ms-close-x,.ms-modal-close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:10px;border:1.4px solid rgba(200,155,60,.45);background:#1A0E1E;color:#F2E3C6;cursor:pointer;font-size:15px;display:inline-flex;align-items:center;justify-content:center;z-index:5}
+.ms-modal-close{position:static}
+.ms-panel-head{display:flex;gap:16px;align-items:center;margin-bottom:14px;padding-right:36px}
+.ms-house-frame{width:88px;height:88px;border-radius:14px;border:1.5px solid #C89B3C;background:#120A14;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.ms-house-frame img{width:100%;height:100%;object-fit:cover}
+.ms-head-copy{min-width:0;flex:1}
+.ms-head-copy h2{margin:0 0 4px;font-size:26px;color:#F2E3C6}
+.ms-head-copy p{margin:0 0 10px;font-size:13px;color:#C9B895;line-height:1.45}
+.ms-head-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ms-coin-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:#24102A;border:1.4px solid #C89B3C;color:#FFE6A4;font-weight:700;font-size:13px}
+.ms-coin-chip img{width:18px;height:18px;object-fit:contain}
+.ms-login-btn,.ms-avatar-btn,.ms-admin-btn,.ms-cart-btn,.ms-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 13px;border-radius:10px;border:1.4px solid #C89B3C;background:#1A0E1E;color:#F2E3C6;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600}
+.ms-btn-primary{background:linear-gradient(180deg,#FF7A1A,#C94A00);color:#120808;font-weight:700}
+.ms-btn-ghost{background:#1A0E1E;color:#F2E3C6}
+.ms-btn:disabled{opacity:.5;cursor:not-allowed}
+.ms-dialogue{padding:10px 14px;border-radius:12px;background:rgba(36,16,42,.65);border:1.2px dashed rgba(200,155,60,.45);color:#E8D9B8;font-size:13px;margin-bottom:14px}
+.ms-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.ms-search{flex:1 1 200px;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:10px;background:#0B0B0B;border:1.4px solid rgba(200,155,60,.28)}
+.ms-search input{flex:1;min-width:0;background:transparent;border:none;color:#F2E3C6;font-size:14px;outline:none}
+.ms-cats{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ms-cat{padding:6px 11px;border-radius:999px;border:1.2px solid rgba(200,155,60,.28);background:#120A14;color:#C9B895;cursor:pointer;font-size:12px;white-space:nowrap}
+.ms-cat.active{background:#FF6A00;color:#120808;border-color:#C89B3C;font-weight:700}
+.ms-cart-btn .count{background:#FF6A00;color:#090909;border-radius:999px;padding:1px 7px;font-size:11px;font-weight:700}
+.ms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;margin-bottom:22px}
+.ms-card{background:linear-gradient(180deg,#1A111D 0%,#0E0B10 100%);border:1.4px solid rgba(200,155,60,.24);border-radius:14px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:transform .14s ease,border-color .14s ease}
+.ms-card:hover{transform:translateY(-2px);border-color:#FF6A00}
+.ms-card-img{position:relative;height:164px;background:radial-gradient(circle at 50% 50%,rgba(74,14,78,.5),#0B080D 75%);display:flex;align-items:center;justify-content:center;padding:12px}
+.ms-card-img>img{max-width:100%;max-height:100%;object-fit:contain}
+.ms-card-body{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.ms-card-name{margin:0;font-size:15px;color:#F2E3C6;line-height:1.25}
+.ms-card-desc{margin:0;font-size:12px;color:#9E9484;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.ms-card-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:6px;padding-top:8px;border-top:1px dashed rgba(200,155,60,.16)}
+.ms-price{display:inline-flex;align-items:center;gap:5px;color:#FFE6A4;font-weight:700;font-size:14px}
+.ms-price img{width:17px;height:17px;object-fit:contain}
+.ms-stock{font-size:11px;color:#C9B895}
+.ms-empty,.ms-history-empty{grid-column:1/-1;text-align:center;padding:24px 14px;color:#C9B895;font-size:13px}
+.ms-section-head{display:flex;align-items:center;gap:12px;margin:10px 0}
+.ms-section-head h3{margin:0;font-size:17px;color:#F2E3C6}
+.ms-section-head .rule{flex:1;height:1px;background:rgba(200,155,60,.22)}
+.ms-tabs{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.ms-tab{padding:7px 13px;border-radius:10px;border:1.2px solid rgba(200,155,60,.24);background:#120A14;color:#C9B895;cursor:pointer;font-size:12.5px}
+.ms-tab.active{background:#24102A;color:#FFE6A4;border-color:#C89B3C;font-weight:700}
+.ms-panel-box{background:#0D090F;border:1.2px solid rgba(200,155,60,.18);border-radius:12px;padding:8px}
+.ms-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ms-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.ms-table th,.ms-table td{padding:8px 10px;text-align:left;border-bottom:1px solid rgba(200,155,60,.12)}
+.ms-amount-pos{color:#6ee7b7;font-weight:700}
+.ms-amount-neg{color:#fda4af;font-weight:700}
+.ms-modal{position:relative;width:min(520px,96%);max-height:calc(100dvh - 28px);overflow-y:auto;background:linear-gradient(180deg,#18111B 0%,#0C090E 100%);border:2px solid #C89B3C;border-radius:16px;padding:20px}
+.ms-modal.wide{width:min(600px,96%)}
+.ms-detail-grid{display:grid;grid-template-columns:180px 1fr;gap:16px;align-items:center;margin-top:12px}
+.ms-detail-img{height:180px;border-radius:14px;background:radial-gradient(circle,rgba(74,14,78,.55),#0B080D 75%);border:1.2px solid rgba(200,155,60,.22);display:flex;align-items:center;justify-content:center;padding:12px}
+.ms-detail-img>img{max-width:100%;max-height:100%;object-fit:contain}
+.ms-qty{display:inline-flex;align-items:center;gap:10px;margin:10px 0 14px;background:#0B0B0B;border:1.2px solid rgba(200,155,60,.28);border-radius:10px;padding:4px 8px}
+.ms-qty button{width:28px;height:28px;border-radius:7px;border:1px solid rgba(200,155,60,.3);background:#1A0E1E;color:#F2E3C6;cursor:pointer}
+.ms-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+.ms-drawer-scrim{position:fixed;inset:0;z-index:1540;background:rgba(0,0,0,.6);display:none}
+.ms-drawer-scrim.open{display:block}
+.ms-drawer{position:fixed;top:0;right:0;bottom:0;z-index:1550;width:min(380px,100vw);background:#120B15;border-left:2px solid #C89B3C;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .24s ease}
+.ms-drawer.open{transform:translateX(0)}
+.ms-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid rgba(200,155,60,.2)}
+.ms-drawer-head h3{margin:0;font-size:18px}
+.ms-drawer-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.ms-cart-line{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:#1A1020;border:1px solid rgba(200,155,60,.2)}
+.ms-cart-line img{width:52px;height:52px;object-fit:contain;border-radius:8px;background:#0B080D;flex-shrink:0}
+.ms-cart-line .name{margin:0 0 3px;font-size:13.5px;font-weight:700}
+.ms-cart-line .meta{font-size:12px;color:#C9B895}
+.ms-cart-line .rm{margin-left:auto;width:30px;height:30px;border-radius:8px;border:1px solid rgba(200,155,60,.25);background:#120814;color:#fda4af;cursor:pointer;flex-shrink:0}
+.ms-drawer-foot{padding:14px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid rgba(200,155,60,.2);background:#0D0810}
+.ms-total-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-weight:700}
+.ms-confirm-summary{margin:12px 0;padding:10px 12px;border-radius:10px;background:#0B080D;border:1px solid rgba(200,155,60,.2);display:flex;flex-direction:column;gap:6px;font-size:13px}
+.ms-confirm-summary .row{display:flex;justify-content:space-between;gap:8px}
+.ms-confirm-summary .row.total{border-top:1px dashed rgba(200,155,60,.28);padding-top:6px;font-weight:700;color:#FFE6A4}
+.ms-admin-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ms-admin-form label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:#C9B895}
+.ms-admin-form label.full{grid-column:1/-1}
+.ms-admin-form input[type="text"],.ms-admin-form input[type="number"],.ms-admin-form input[type="url"],.ms-admin-form textarea{padding:8px 10px;border-radius:9px;border:1.2px solid rgba(200,155,60,.3);background:#0B080D;color:#F2E3C6;font-family:inherit;font-size:14px}
+.ms-toast,#melissa-coin-toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);z-index:1700;display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:12px;background:#1D1024;border:1.5px solid #C89B3C;color:#FFE6A4;font-size:13px;font-weight:600;box-shadow:0 12px 32px rgba(0,0,0,.65);opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;max-width:calc(100vw - 24px)}
+.ms-toast.show,#melissa-coin-toast.show{opacity:1;transform:translate(-50%,0)}
+.ms-toast.error{border-color:#e11d48;color:#fecdd3}
+.ms-toast img{width:20px;height:20px;object-fit:contain}
+  </style>
   <link rel="stylesheet" href="melissa-inpage.css">
   <style>
 :root{
@@ -2880,16 +2976,174 @@ button:focus-visible, input:focus-visible{outline:2px solid var(--pumpkin); outl
 
 <style>
 .account-cluster{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
-#account-cluster #halloween-wallet{position:static;inset:auto;transform:none;z-index:auto;display:inline-flex;flex-direction:row;align-items:center;justify-content:center;gap:5px;width:auto;min-width:48px;max-width:140px;min-height:30px;padding:3px 8px;border:1px solid rgba(190,143,60,.55);border-radius:9px;background:rgba(42,17,47,.9);color:#ffe6a4;box-shadow:none;font:700 12px system-ui;cursor:pointer;animation:none;transition:none;flex-shrink:0}
-#account-cluster #halloween-wallet img{display:block;width:23px;height:23px;object-fit:contain;image-rendering:pixelated}
-#account-cluster #halloween-wallet>span{display:inline-flex;align-items:center;min-width:0}
-#account-cluster #halloween-balance{display:inline;font-size:12px;line-height:1.2;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-#account-cluster #halloween-wallet.bump{animation:none;transform:none}
-#account-cluster #halloween-wallet:focus-visible{outline:2px solid #e8b644;outline-offset:2px}
-.account-edit-row{display:flex;align-items:center;gap:6px;padding-right:10px}
-.account-edit-row>.avatar-menu-item{flex:1;min-width:0}
-#account-cluster .account-edit-row #halloween-wallet{min-width:46px;padding:2px 6px;min-height:28px}
-@media(max-width:600px){.account-cluster{gap:6px}#account-cluster #halloween-wallet{padding:3px 6px;min-height:28px}#account-cluster #halloween-wallet img{width:21px;height:21px}}
+html body #chiroot-topbar #account-cluster #halloween-wallet{position:static!important;inset:auto!important;transform:none!important;z-index:auto!important;display:inline-flex!important;visibility:visible!important;opacity:1!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:6px;width:auto;min-width:52px;max-width:180px;min-height:32px;padding:4px 10px;border:1.4px solid rgba(200,155,60,.72);border-radius:10px;background:linear-gradient(180deg,rgba(52,22,58,.96),rgba(28,11,33,.96));color:#ffe6a4;box-shadow:0 2px 10px rgba(0,0,0,.35);font:700 12.5px system-ui,-apple-system,sans-serif;cursor:pointer;flex-shrink:0}
+html body #chiroot-topbar #account-cluster #halloween-wallet .hw-coin-svg{width:19px;height:19px;flex-shrink:0;display:block}
+html body #chiroot-topbar #account-cluster #halloween-wallet>span{display:inline-flex!important;align-items:center;gap:4px;min-width:0}
+html body #chiroot-topbar #account-cluster #halloween-balance{display:inline!important;font-size:12.5px;line-height:1.2;font-variant-numeric:tabular-nums;color:#ffe6a4;font-weight:800}
+html body #chiroot-topbar #account-cluster .hw-mobile-lbl{display:none;font-size:11.5px;font-weight:700;color:#f5cfa0}
+html body #chiroot-topbar #account-cluster #halloween-wallet.bump{animation:hw-pop .42s ease}
+html body #chiroot-topbar #account-cluster #halloween-wallet:focus-visible{outline:2px solid #e8b644;outline-offset:2px}
+.pf-wallet-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pf-wallet-kicker{margin:0}
+.pf-coin-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1.4px solid #C89B3C;background:linear-gradient(180deg,#2A1230,#160A1B);color:#FFE6A4;font:700 12.5px system-ui,-apple-system,sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.4);transition:transform .14s ease,border-color .14s ease}
+.pf-coin-badge:hover{transform:translateY(-1px);border-color:#FF9A3D}
+.pf-coin-badge .pf-shop-cta{font-size:11px;font-weight:600;color:#FFB86B;padding-left:4px;border-left:1px solid rgba(200,155,60,.35)}
+.amh-coin-pill{display:inline-flex;align-items:center;gap:5px;margin-top:5px;padding:3px 9px;border-radius:999px;border:1px solid rgba(200,155,60,.55);background:rgba(38,16,44,.92);color:#FFE6A4;font:700 11.5px system-ui,-apple-system,sans-serif;cursor:pointer}
+.ms-despawn-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:999px;background:#1B1022;border:1.3px solid rgba(200,155,60,.55);color:#F3D999;font-weight:700;font-size:12px;font-variant-numeric:tabular-nums}
+.ms-despawn-chip.urgent{background:#351118;border-color:#FF6A00;color:#FFD0B0;animation:hw-pop .9s ease infinite}
+.mc-star-burst{position:absolute;inset:0;pointer-events:none;z-index:6;overflow:visible}
+.mc-burst-flash{position:absolute;left:50%;top:52%;width:30px;height:30px;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,#fffdf0 0%,#ffd466 45%,rgba(255,122,26,0) 74%);animation:mcBurstFlash .58s ease-out forwards}
+.mc-burst-ring{position:absolute;left:50%;top:52%;width:22px;height:22px;border-radius:50%;border:2.5px solid #ffd466;box-shadow:0 0 16px rgba(255,212,102,.9);transform:translate(-50%,-50%) scale(.2);opacity:0;animation:mcBurstRing .78s cubic-bezier(.16,1,.3,1) forwards}
+.mc-burst-ring.r2{border-color:#ff9e3d;animation-delay:.08s;animation-duration:.88s}
+.mc-star-particle{position:absolute;left:50%;top:52%;font-size:18px;line-height:1;font-weight:700;text-shadow:0 0 10px currentColor,0 0 18px #ff9e3d;transform:translate(-50%,-50%) scale(0);opacity:0;animation:mcStarFly var(--dur,.76s) cubic-bezier(.15,.88,.26,1) var(--dly,0s) forwards}
+.melissa-character.despawning{pointer-events:none}
+.melissa-character.despawning .mc-close,.melissa-character.despawning .mc-spark,.melissa-character.despawning .mc-shadow,.melissa-character.despawning .mc-glow,.melissa-character.despawning .mc-ping{opacity:0!important;transition:opacity .18s ease}
+.melissa-character.despawning .mc-img{animation:melissaShrinkOut .82s cubic-bezier(.36,0,.66,-.35) forwards!important;transform-origin:50% 56%!important}
+@keyframes melissaShrinkOut{0%{transform:scale(1) rotate(0deg);opacity:1;filter:drop-shadow(0 0 10px #ffd466) brightness(1.15)}22%{transform:scale(1.14) rotate(-5deg);opacity:1;filter:drop-shadow(0 0 24px #ffbe3b) brightness(1.45)}100%{transform:scale(0) rotate(18deg);opacity:0;filter:drop-shadow(0 0 32px #fff4c2) brightness(2)}}
+@keyframes mcBurstFlash{0%{transform:translate(-50%,-50%) scale(.2);opacity:1}45%{transform:translate(-50%,-50%) scale(3.6);opacity:.95}100%{transform:translate(-50%,-50%) scale(5.2);opacity:0}}
+@keyframes mcBurstRing{0%{transform:translate(-50%,-50%) scale(.25);opacity:1}100%{transform:translate(-50%,-50%) scale(5.6);opacity:0}}
+@keyframes mcStarFly{0%{transform:translate(-50%,-50%) scale(.35) rotate(0deg);opacity:1}18%{opacity:1}100%{transform:translate(calc(-50% + var(--tx,0px)),calc(-50% + var(--ty,0px))) scale(var(--sc,1)) rotate(var(--rot,180deg));opacity:0}}
+@media(max-width:600px){.account-cluster{gap:8px;width:100%;justify-content:space-between}html body #chiroot-topbar #account-cluster #halloween-wallet{padding:6px 12px!important;min-height:36px!important;border-radius:999px!important;border-width:1.6px!important;max-width:none!important}html body #chiroot-topbar #account-cluster #halloween-wallet .hw-coin-svg{width:20px;height:20px}html body #chiroot-topbar #account-cluster #halloween-balance{font-size:13.5px!important}html body #chiroot-topbar #account-cluster .hw-mobile-lbl{display:inline!important}}
+</style>
+<style>
+.has-pfp-border{position:relative!important;overflow:visible!important}
+.has-pfp-border .pfp-photo{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%}
+.has-pfp-border .pfp-init{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;overflow:hidden}
+.has-pfp-border .pfp-border-frame{position:absolute;left:50%;top:50%;width:152%!important;height:152%!important;max-width:none!important;transform:translate(-50%,-50%);object-fit:contain!important;pointer-events:none;z-index:3;border-radius:0!important;filter:drop-shadow(0 2px 6px rgba(0,0,0,.65))}
+.topbar-avatar.has-pfp-border{margin:4px 5px}
+.avatar-menu-head .amh-av.has-pfp-border{margin:4px}
+.pp-avatar-big.has-pfp-border{margin:6px}
+.pp-avatar-overlay{margin-left:18px}
+.acct-av.has-pfp-border{margin:3px}
+.ms-border-stage{position:relative;width:82px;height:82px;display:flex;align-items:center;justify-content:center}
+.ms-border-stage.lg{width:106px;height:106px}
+.ms-bp-circle{width:100%;height:100%;border-radius:50%;overflow:hidden;background:linear-gradient(180deg,#2A1433,#140A18);border:1.6px solid rgba(200,155,60,.4);display:flex;align-items:center;justify-content:center;color:#FFE6A4;font-weight:700;font-size:24px}
+.ms-bp-pfp{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%}
+.ms-bp-frame{position:absolute;left:50%;top:50%;width:152%;height:152%;max-width:none;transform:translate(-50%,-50%);object-fit:contain;pointer-events:none;z-index:2;filter:drop-shadow(0 4px 10px rgba(0,0,0,.7))}
+.ms-owned-pill{position:absolute;top:8px;left:8px;z-index:4;padding:3px 8px;border-radius:999px;background:rgba(18,10,22,.9);border:1px solid #C89B3C;color:#FFE6A4;font-size:10.5px;font-weight:700}
+.ms-owned-pill.equipped{background:linear-gradient(180deg,#FF7A1A,#C94A00);color:#120808;border-color:#FFE6A4}
+.pf-border-picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px;margin-top:4px}
+.pf-border-opt{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 4px 6px;border-radius:11px;border:1.4px solid rgba(200,155,60,.22);background:#0B0B0B;color:var(--cream);cursor:pointer;font-family:Georgia,serif;font-size:10px;transition:transform .12s ease,border-color .12s ease}
+.pf-border-opt:hover{transform:translateY(-1px);border-color:rgba(255,106,0,.5)}
+.pf-border-opt.active{border-color:var(--pumpkin);box-shadow:0 0 0 2px rgba(255,106,0,.28);background:#1B0F20}
+.pf-border-opt.locked{opacity:.72}
+.pf-border-opt .pbo-ring{position:relative;width:36px;height:36px;border-radius:50%;background:#1A0E1E;border:1.2px solid rgba(200,155,60,.35);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--cream-muted)}
+.pf-border-opt .pbo-ring img{position:absolute;left:50%;top:50%;width:152%;height:152%;max-width:none;transform:translate(-50%,-50%);object-fit:contain;pointer-events:none}
+.pf-border-opt .pbo-lbl{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cream-muted)}
+
+html,body{max-width:100%;overflow-x:hidden}
+
+@media (max-width:780px){
+  .player-shell{padding:18px 12px calc(32px + env(safe-area-inset-bottom));align-items:flex-start}
+  .paper-card{padding:20px 16px 18px;border-radius:16px}
+  .gramophone-stage{padding:10px 0 22px}
+  .turntable-base{width:100%;max-width:460px;margin:10px auto 0;padding:22px 14px 20px}
+  .platter-ring{width:min(260px,68vw);height:min(260px,68vw)}
+  .vinyl-stage{width:min(246px,64vw);height:min(246px,64vw)}
+  .record{width:min(236px,61vw);height:min(236px,61vw)}
+  .record-label{width:min(90px,23vw);height:min(90px,23vw)}
+  .tonearm-pivot{right:8px;top:8px;transform:scale(.84);transform-origin:top right}
+  .ms-overlay{padding:10px}
+  .ms-panel{padding:16px 14px 20px;max-height:calc(100dvh - 20px);border-radius:16px}
+  .ms-detail-grid{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .ms-detail-img{width:100%;max-width:220px;height:168px}
+  .ms-detail-info .ms-actions{justify-content:center!important}
+  .ms-admin-form{grid-template-columns:1fr}
+}
+
+@media (max-width:600px){
+  .player-shell{padding:10px 8px calc(28px + env(safe-area-inset-bottom))}
+  .paper-card{padding:15px 11px 16px;border-radius:14px}
+  .paper-card::before{inset:5px;border-radius:10px}
+  .chiroot-topbar{padding:10px 11px;gap:8px;margin-bottom:10px}
+  .topbar-greeting{font-size:16.5px;white-space:normal;line-height:1.25;flex:1 1 100%}
+  .account-cluster{width:100%;justify-content:space-between;gap:8px}
+  #account-cluster #halloween-wallet{min-height:34px;padding:4px 10px;font-size:12.5px}
+  .topbar-user{margin-left:auto;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .google-btn{padding:7px 11px;font-size:12.5px}
+  .avatar-menu{right:0!important;left:auto!important;min-width:min(256px,calc(100vw - 28px))!important;max-width:calc(100vw - 28px)!important;z-index:1300}
+  .vinyl-stamp{font-size:9.5px;padding:3px 10px;letter-spacing:.1em}
+  .vinyl-stamp::after{font-size:8px;letter-spacing:.1em;padding-left:6px}
+  .song-title{font-size:clamp(22px,6.5vw,30px);word-break:break-word}
+  .artist-name{font-size:13.5px}
+  .nowplaying-wrap{margin:2px auto 12px}
+  .nowplaying-card{width:100%;padding:10px 12px}
+  .np-track{font-size:clamp(18px,5.5vw,24px);word-break:break-word}
+  .gramo-stickers{display:none}
+  .turntable-base{padding:18px 10px 18px}
+  .platter-ring{width:min(224px,66vw);height:min(224px,66vw)}
+  .vinyl-stage{width:min(210px,62vw);height:min(210px,62vw)}
+  .record{width:min(202px,60vw);height:min(202px,60vw)}
+  .record-grooves{inset:12px}
+  .record-grooves.g2{inset:36px}
+  .record-grooves.g3{inset:64px}
+  .record-label{width:min(78px,23vw);height:min(78px,23vw)}
+  .tonearm-pivot{right:4px;top:4px;transform:scale(.74);transform-origin:top right}
+  .crank-handle{display:none}
+  .control-panel{padding:12px 10px}
+  .transport{gap:7px;margin-bottom:10px}
+  .ctrl-btn,.ctrl-btn.big{min-width:42px;min-height:42px;padding:8px 9px}
+  .ctrl-btn.play-main{min-width:54px;min-height:54px;padding:10px}
+  #btn-reverb{min-width:42px!important;min-height:42px!important;padding:8px 9px!important}
+  #btn-reverb svg{width:20px;height:20px}
+  .volume-row{gap:8px;flex-wrap:nowrap}
+  .volume-track{min-width:0;flex:1}
+  .hint-text{display:none}
+  .playlist-header{flex-direction:column;align-items:stretch;gap:8px}
+  .playlist-title{font-size:21px}
+  .playlist-actions{width:100%;justify-content:flex-start;gap:6px;flex-wrap:wrap}
+  .playlist-actions .add-btn{margin-left:auto;padding:8px 13px;font-size:13px}
+  .playlist-wrap{padding:8px;max-height:360px}
+  .playlist-item{grid-template-columns:44px minmax(0,1fr);gap:8px 10px;padding:10px}
+  .playlist-thumb{width:44px;height:44px}
+  .playlist-meta{min-width:0}
+  .playlist-meta .p-title{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .playlist-meta .p-artist{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .playlist-right{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:6px;padding-top:6px;border-top:1px dashed rgba(200,155,60,.14);text-align:left}
+  .playlist-actions-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+  .queue-track,.edit-track,.delete-track{min-height:30px;padding:4px 8px;font-size:11px}
+  .top10-item{grid-template-columns:28px 42px minmax(0,1fr) auto;gap:8px;padding:8px 9px}
+  .top10-thumb{width:42px;height:42px}
+  .top10-meta{min-width:0}
+  .top10-meta .top10-song-title{font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .top10-meta .top10-artist{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .top10-add-btn{font-size:11.5px;padding:6px 9px;min-height:34px;white-space:nowrap}
+  .modal-overlay{padding:8px;align-items:center}
+  .modal-overlay .modal-card{width:100%;max-width:100%;max-height:calc(100dvh - 16px);padding:14px 12px;border-radius:14px}
+  input,textarea,select,.sketch-input,.ms-search input,.ms-admin-form input,.ms-admin-form textarea{font-size:16px!important}
+  .melissa-character{right:10px;bottom:calc(12px + env(safe-area-inset-bottom))}
+  .mc-figure{width:80px;height:90px}
+  .mc-bubble{width:156px;font-size:11px;padding:6px 9px;bottom:62%}
+  .ms-overlay{padding:6px;align-items:flex-end}
+  .ms-panel{width:100%;max-height:calc(100dvh - 12px);padding:14px 11px calc(18px + env(safe-area-inset-bottom));border-radius:16px 16px 12px 12px}
+  .ms-panel-head{flex-direction:column;align-items:flex-start;gap:10px;padding-right:34px}
+  .ms-house-frame{width:64px;height:64px}
+  .ms-head-copy h2{font-size:21px}
+  .ms-head-copy p{font-size:12px}
+  .ms-head-actions{width:100%;gap:6px}
+  .ms-toolbar{flex-direction:column;align-items:stretch;gap:8px}
+  .ms-search{flex:none;width:100%}
+  .ms-cats{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .ms-cart-btn{width:100%;justify-content:center;min-height:40px}
+  .ms-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .ms-card-img{height:136px;padding:8px}
+  .ms-border-stage{width:66px;height:66px}
+  .ms-card-body{padding:9px}
+  .ms-card-name{font-size:13px}
+  .ms-card-desc{font-size:11px;-webkit-line-clamp:2}
+  .ms-price{font-size:13px}
+  .ms-modal,.ms-modal.wide{width:100%;max-height:calc(100dvh - 14px);padding:16px 12px}
+  .ms-drawer{width:100vw}
+  .ms-table th,.ms-table td{padding:7px 8px;font-size:11.5px;white-space:nowrap}
+}
+
+@media (max-width:360px){
+  .ms-grid{grid-template-columns:1fr}
+  .transport{gap:5px}
+  .ctrl-btn,.ctrl-btn.big{min-width:38px;min-height:38px;padding:6px 7px}
+  .ctrl-btn.play-main{min-width:48px;min-height:48px}
+  #btn-reverb{min-width:38px!important;min-height:38px!important;padding:6px 7px!important}
+}
 </style>
 </head>
 <body>
@@ -3001,7 +3255,7 @@ button:focus-visible, input:focus-visible{outline:2px solid var(--pumpkin); outl
 
       <section class="chiroot-topbar" id="chiroot-topbar" aria-label="Sapaan dan akun">
         <div class="topbar-greeting" id="greeting-text">✦ Selamat datang di Chiroot</div>
-        <div class="account-cluster" id="account-cluster"><button type="button" id="halloween-wallet" title="Buka Melissa Shop" aria-label="Buka toko dan saldo Halloween Coins"><img src="halloween-coin.png" alt="" onerror="this.hidden=true"><span><span id="halloween-balance" aria-live="polite">—</span></span></button><div class="topbar-auth" id="topbar-auth" aria-live="polite"></div></div>
+        <div class="account-cluster" id="account-cluster"><button type="button" id="halloween-wallet" title="Buka Melissa Shop" aria-label="Buka toko dan saldo Halloween Coins"><svg class="hw-coin-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="#f3a620" stroke="#7d4300" stroke-width="1.6"/><circle cx="12" cy="12" r="7.8" fill="#ffd466" stroke="#b96c06" stroke-width="1"/><path d="M12 6.8l1.55 3.35 3.65.45-2.7 2.5.72 3.6L12 14.9l-3.22 1.8.72-3.6-2.7-2.5 3.65-.45z" fill="#9a4e00"/></svg><span><span id="halloween-balance" aria-live="polite">0</span><span class="hw-mobile-lbl">Coins</span></span></button><div class="topbar-auth" id="topbar-auth" aria-live="polite"></div></div>
       </section>
 
       <header class="track-header">
@@ -3523,7 +3777,14 @@ button:focus-visible, input:focus-visible{outline:2px solid var(--pumpkin); outl
       <p class="modal-sub">Ubah nama, foto, deskripsi &amp; warna banner. Preview langsung berubah di sebelah kanan.</p>
       <div class="profile-grid">
         <section class="profile-panel" aria-label="Pengaturan profil">
-          <div class="pp-kicker">✦ Pengaturan</div>
+          <div class="pf-wallet-row">
+            <div class="pp-kicker pf-wallet-kicker">✦ Pengaturan</div>
+            <button type="button" class="pf-coin-badge" id="pf-coin-badge" title="Buka Melissa Shop">
+              <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10.5" fill="#f3a620" stroke="#7d4300" stroke-width="1.6"/><circle cx="12" cy="12" r="7.8" fill="#ffd466" stroke="#b96c06" stroke-width="1"/><path d="M12 6.8l1.55 3.35 3.65.45-2.7 2.5.72 3.6L12 14.9l-3.22 1.8.72-3.6-2.7-2.5 3.65-.45z" fill="#9a4e00"/></svg>
+              <span><span id="pf-coin-balance">0</span> Coins</span>
+              <span class="pf-shop-cta">Melissa Shop →</span>
+            </button>
+          </div>
           <div class="pp-avatar-block">
             <div class="pp-avatar-big" id="pf-avatar">?</div>
             <div class="pp-avatar-side">
@@ -3560,6 +3821,10 @@ button:focus-visible, input:focus-visible{outline:2px solid var(--pumpkin); outl
                 <input type="color" id="pf-banner-custom" value="#d84a3a">
               </label>
             </div>
+          </div>
+          <div class="field">
+            <span>Halloween PFP Border (30 Coins di Melissa Shop)</span>
+            <div class="pf-border-picker" id="pf-border-picker"></div>
           </div>
           <div class="modal-actions">
             <button type="button" class="btn-secondary sketch-border-soft" id="pf-cancel">Batal</button>
@@ -3996,6 +4261,17 @@ button:focus-visible, input:focus-visible{outline:2px solid var(--pumpkin); outl
   </div>
 
   <script>const CHIROOT_AUTH_KEY = "chiroot_auth_v1";
+(function() {
+    try {
+        var qs = new URLSearchParams(window.location.search);
+        if (qs.has("code") || qs.has("error")) {
+            var popTs = Number(localStorage.getItem("chiroot_oauth_popup_ts") || 0);
+            if (window.name === "chiroot_google_login" || (popTs > 0 && Date.now() - popTs < 3e5)) {
+                window.__CHIROOT_OAUTH_POPUP_RECEIVER__ = true;
+            }
+        }
+    } catch (e) {}
+})();
 
 let caAdminRole = "";
 
@@ -5071,16 +5347,34 @@ function caSetLoginButtonsBusy(busy) {
     });
 }
 
-function caAvatarInner(profile) {
+function caBorderSrcFor(uid, overrideKey) {
+    const api = window.ChirootBorders;
+    if (!api) return "";
+    const key = overrideKey !== undefined ? overrideKey : api.getEquipped(uid);
+    return key ? api.getSrc(key) : "";
+}
+
+function caAvatarInner(profile, uidOverride, borderKeyOverride) {
+    const uid = uidOverride || (profile && profile.id) || (ChirootAuth.session && ChirootAuth.session.user && ChirootAuth.session.user.id) || "";
+    const frameSrc = caBorderSrcFor(uid, borderKeyOverride);
+    const frameHtml = frameSrc ? '<img class="pfp-border-frame" src="' + escapeHtmlAttr(frameSrc) + '" alt="" draggable="false">' : "";
     if (profile && profile.pfp) {
-        return '<img src="' + escapeHtmlAttr(profile.pfp) + '" alt="">';
+        return '<img class="pfp-photo" src="' + escapeHtmlAttr(profile.pfp) + '" alt="">' + frameHtml;
     }
     let name = "";
     if (profile && profile.display_name) name = profile.display_name; else if (profile && profile.email) name = profile.email.split("@")[0];
     const init = String(name).trim().split(/\s+/).slice(0, 2).map(function(w) {
         return w.charAt(0).toUpperCase();
     }).join("") || "?";
-    return escapeHtml(init);
+    return '<span class="pfp-init">' + escapeHtml(init) + "</span>" + frameHtml;
+}
+
+function caDecorateAvatarEl(el, profile, uidOverride, borderKeyOverride) {
+    if (!el) return;
+    const uid = uidOverride || (profile && profile.id) || (ChirootAuth.session && ChirootAuth.session.user && ChirootAuth.session.user.id) || "";
+    const frameSrc = caBorderSrcFor(uid, borderKeyOverride);
+    el.classList.toggle("has-pfp-border", !!frameSrc);
+    el.innerHTML = caAvatarInner(profile, uid, borderKeyOverride);
 }
 
 function caRenderTopbar() {
@@ -5133,7 +5427,7 @@ function caRenderTopbar() {
     avatar.setAttribute("aria-label", "Buka menu akun");
     avatar.setAttribute("aria-haspopup", "menu");
     avatar.setAttribute("aria-expanded", "false");
-    avatar.innerHTML = caAvatarInner(profile);
+    caDecorateAvatarEl(avatar, profile);
     const caret = document.createElement("span");
     caret.className = "avatar-caret";
     caret.setAttribute("aria-hidden", "true");
@@ -5146,7 +5440,7 @@ function caRenderTopbar() {
     head.className = "avatar-menu-head";
     const headAv = document.createElement("div");
     headAv.className = "amh-av";
-    headAv.innerHTML = caAvatarInner(profile);
+    caDecorateAvatarEl(headAv, profile);
     const headTxt = document.createElement("div");
     headTxt.className = "amh-txt";
     const nameEl = document.createElement("div");
@@ -5160,6 +5454,19 @@ function caRenderTopbar() {
         mailEl.textContent = mail;
         headTxt.appendChild(mailEl);
     }
+    const curBalEl = document.getElementById("halloween-balance");
+    const curBalTxt = curBalEl ? curBalEl.textContent : "0";
+    const menuCoinPill = document.createElement("button");
+    menuCoinPill.type = "button";
+    menuCoinPill.className = "amh-coin-pill";
+    menuCoinPill.id = "amh-coin-pill";
+    menuCoinPill.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10.5" fill="#f3a620" stroke="#7d4300" stroke-width="1.6"/><circle cx="12" cy="12" r="7.8" fill="#ffd466" stroke="#b96c06" stroke-width="1"/><path d="M12 6.8l1.55 3.35 3.65.45-2.7 2.5.72 3.6L12 14.9l-3.22 1.8.72-3.6-2.7-2.5 3.65-.45z" fill="#9a4e00"/></svg><span id="amh-coin-balance">' + escapeHtml(curBalTxt || "0") + "</span><span>Coins • Shop</span>";
+    menuCoinPill.addEventListener("click", function(ev) {
+        ev.stopPropagation();
+        closeMenu();
+        if (window.MelissaInpage) window.MelissaInpage.openShop();
+    });
+    headTxt.appendChild(menuCoinPill);
     head.appendChild(headAv);
     head.appendChild(headTxt);
     menu.appendChild(head);
@@ -5179,14 +5486,7 @@ function caRenderTopbar() {
         menu.appendChild(b);
         return b;
     }
-    const editProfileItem = addItem('<svg class="doodle-pencil" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 19.6h8"/><path d="M16.9 3.5a2.15 2.15 0 0 1 3.1 3.1L8 18.5l-4 1.4 1.4-4Z"/><path d="M14.7 5.8l3.1 3.1"/></svg>', "Edit Profil", caOpenProfileModal);
-    if (caAdminRole && coinCounter) {
-        const editRow = document.createElement("div");
-        editRow.className = "account-edit-row";
-        menu.insertBefore(editRow, editProfileItem);
-        editRow.appendChild(editProfileItem);
-        editRow.appendChild(coinCounter);
-    }
+    addItem('<svg class="doodle-pencil" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 19.6h8"/><path d="M16.9 3.5a2.15 2.15 0 0 1 3.1 3.1L8 18.5l-4 1.4 1.4-4Z"/><path d="M14.7 5.8l3.1 3.1"/></svg>', "Edit Profil", caOpenProfileModal);
     addItem("⇄", "Ganti Akun", caOpenAccountSwitcher);
     const sep = document.createElement("div");
     sep.className = "avatar-menu-sep";
@@ -5220,9 +5520,9 @@ function caRenderTopbar() {
     wrap.appendChild(avatar);
     wrap.appendChild(caret);
     wrap.appendChild(menu);
-    if (!caAdminRole && coinCounter) user.appendChild(coinCounter);
     user.appendChild(wrap);
     el.appendChild(user);
+    if (coinCounter && accountCluster) accountCluster.insertBefore(coinCounter, el);
 }
 
 function caGreetingFor(date) {
@@ -5361,7 +5661,8 @@ let pfDraft = {
     email: "",
     description: "",
     bannerColor: "#d84a3a",
-    pfp: ""
+    pfp: "",
+    borderKey: ""
 };
 
 function caMemberSince(iso) {
@@ -5369,6 +5670,45 @@ function caMemberSince(iso) {
     if (isNaN(d.getTime())) return "Member since —";
     const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
     return "Member since " + months[d.getMonth()] + " " + d.getFullYear();
+}
+
+function caRenderProfileBorderPicker() {
+    const wrap = document.getElementById("pf-border-picker");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    const api = window.ChirootBorders;
+    const uid = ChirootAuth.session && ChirootAuth.session.user ? ChirootAuth.session.user.id : "";
+    const noneBtn = document.createElement("button");
+    noneBtn.type = "button";
+    noneBtn.className = "pf-border-opt" + (!pfDraft.borderKey ? " active" : "");
+    noneBtn.innerHTML = '<span class="pbo-ring">✕</span><span class="pbo-lbl">Tanpa</span>';
+    noneBtn.addEventListener("click", function() {
+        pfDraft.borderKey = "";
+        caRenderProfileBorderPicker();
+        caRenderProfilePreview();
+    });
+    wrap.appendChild(noneBtn);
+    if (!api) return;
+    api.getCatalog().forEach(function(item, idx) {
+        const owned = api.isOwned(item.key, uid);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "pf-border-opt" + (pfDraft.borderKey === item.key ? " active" : "") + (owned ? "" : " locked");
+        btn.title = owned ? item.name + " (Klik untuk pakai)" : item.name + " — Beli 30 Coins di Melissa Shop";
+        const ringInner = item.src ? '<img src="' + escapeHtmlAttr(item.src) + '" alt="" draggable="false">' : "";
+        btn.innerHTML = '<span class="pbo-ring">' + (owned ? "✦" : "🔒") + ringInner + '</span><span class="pbo-lbl">' + (owned ? "#" + String(idx + 1).padStart(2, "0") : "30 Koin") + "</span>";
+        btn.addEventListener("click", function() {
+            if (!owned) {
+                caCloseProfileModal();
+                if (window.MelissaInpage) window.MelissaInpage.openShop();
+                return;
+            }
+            pfDraft.borderKey = item.key;
+            caRenderProfileBorderPicker();
+            caRenderProfilePreview();
+        });
+        wrap.appendChild(btn);
+    });
 }
 
 function caRenderProfilePreview() {
@@ -5386,9 +5726,10 @@ function caRenderProfilePreview() {
         descEl.style.display = d ? "block" : "none";
     }
     if (bannerEl) bannerEl.style.background = pfDraft.bannerColor;
-    const avatarHtml = pfDraft.pfp ? '<img src="' + escapeHtmlAttr(pfDraft.pfp) + '" alt="">' : escapeHtml(initials(name));
-    if (avatarEl) avatarEl.innerHTML = avatarHtml;
-    if (bigAvatar) bigAvatar.innerHTML = avatarHtml;
+    const uid = ChirootAuth.session && ChirootAuth.session.user ? ChirootAuth.session.user.id : "";
+    const draftProfile = { id: uid, display_name: name, pfp: pfDraft.pfp };
+    if (avatarEl) caDecorateAvatarEl(avatarEl, draftProfile, uid, pfDraft.borderKey || "");
+    if (bigAvatar) caDecorateAvatarEl(bigAvatar, draftProfile, uid, pfDraft.borderKey || "");
     if (sinceEl) sinceEl.textContent = caMemberSince(ChirootAuth.profile ? ChirootAuth.profile.created_at : "");
 }
 
@@ -5396,12 +5737,14 @@ function caOpenProfileModal() {
     const modal = document.getElementById("profile-modal");
     const p = ChirootAuth.profile;
     if (!modal || !p) return;
+    const uid = ChirootAuth.session && ChirootAuth.session.user ? ChirootAuth.session.user.id : p.id;
     pfDraft = {
         name: p.display_name,
         email: p.email,
         description: p.description,
         bannerColor: p.banner_color,
-        pfp: p.pfp
+        pfp: p.pfp,
+        borderKey: window.ChirootBorders ? window.ChirootBorders.getEquipped(uid) : ""
     };
     const nameEl = document.getElementById("pf-name");
     const emailEl = document.getElementById("pf-email");
@@ -5428,6 +5771,18 @@ function caOpenProfileModal() {
         if (match) presetMatched = true;
     });
     if (custom && custom.closest(".pf-swatch")) custom.closest(".pf-swatch").classList.toggle("active", !presetMatched);
+    const pfCoinBal = document.getElementById("pf-coin-balance");
+    const hwBal = document.getElementById("halloween-balance");
+    if (pfCoinBal && hwBal) pfCoinBal.textContent = hwBal.textContent || "0";
+    const pfCoinBadge = document.getElementById("pf-coin-badge");
+    if (pfCoinBadge && !pfCoinBadge._bound) {
+        pfCoinBadge._bound = true;
+        pfCoinBadge.addEventListener("click", function() {
+            caCloseProfileModal();
+            if (window.MelissaInpage) window.MelissaInpage.openShop();
+        });
+    }
+    caRenderProfileBorderPicker();
     caRenderProfilePreview();
     modal.classList.add("open");
     modal.setAttribute("aria-hidden", "false");
@@ -5476,6 +5831,7 @@ async function caProfileSave() {
         });
         if (!updated) throw new Error("Gagal memperbarui profil.");
         ChirootAuth.profile = updated;
+        if (window.ChirootBorders) window.ChirootBorders.setEquipped(pfDraft.borderKey || "", updated.id);
         caAccountRemember();
         caRenderTopbar();
         caRenderGreeting();
@@ -5527,10 +5883,112 @@ function caDoSignOut() {
         showEmptyState();
         caRenderTopbar();
         caRenderGreeting();
+        document.dispatchEvent(new CustomEvent("chiroot:live-logout"));
         await caEnterGuestMode("Sampai jumpa lagi! Kamu masih bisa dengar musik sebagai Guest.");
     }).catch(function(err) {
         showToast("Gagal keluar: " + (err && err.message ? err.message : err));
     });
+}
+
+let caLiveLoginBusy = false;
+
+async function caAdoptLiveSession() {
+    if (caLiveLoginBusy || window.__CHIROOT_OAUTH_POPUP_RECEIVER__) return;
+    const incoming = caLoadSession();
+    if (!incoming || !incoming.user) return;
+    const curUid = ChirootAuth.session && ChirootAuth.session.user ? ChirootAuth.session.user.id : "";
+    if (curUid === incoming.user.id && ChirootAuth.profile) {
+        ChirootAuth.session = incoming;
+        return;
+    }
+    caLiveLoginBusy = true;
+    try {
+        ChirootAuth.session = incoming;
+        caAdminChecked = false;
+        await caLoadAdminRole(true);
+        let profile = null;
+        try {
+            profile = await caFetchProfile();
+        } catch (e) {
+            profile = null;
+        }
+        if (profile) {
+            ChirootAuth.profile = profile;
+            caAccountRemember();
+            caRenderTopbar();
+            caRenderGreeting();
+            const musicPlaying = typeof audio !== "undefined" && audio && !audio.paused;
+            if (!musicPlaying) {
+                caFireHook("onProfileReady");
+            } else {
+                try {
+                    await loadPlaylist();
+                    renderPlaylist();
+                    renderTop10();
+                } catch (e) {}
+            }
+            caSettled(true);
+            return;
+        }
+        caRenderTopbar();
+        caRenderGreeting();
+        caOpenOnboarding();
+    } finally {
+        caLiveLoginBusy = false;
+    }
+}
+
+document.addEventListener("chiroot:live-login", function() {
+    caAdoptLiveSession();
+});
+
+window.addEventListener("storage", function(ev) {
+    if (ev && (ev.key === "chiroot_auth_v1" || ev.key === "chiroot_oauth_done")) {
+        caAdoptLiveSession();
+    }
+});
+
+function caFinishPopupOAuth(ok, errMsg) {
+    try {
+        localStorage.removeItem("chiroot_oauth_popup_ts");
+    } catch (e) {}
+    const payload = {
+        type: "chiroot-oauth-complete",
+        ok: ok,
+        session: ok ? ChirootAuth.session : null,
+        error: errMsg || "",
+        ts: Date.now()
+    };
+    try {
+        localStorage.setItem("chiroot_oauth_done", JSON.stringify(payload));
+    } catch (e) {}
+    try {
+        if (typeof BroadcastChannel === "function") {
+            const bc = new BroadcastChannel("chiroot_oauth_bc");
+            bc.postMessage(payload);
+            setTimeout(function() {
+                try {
+                    bc.close();
+                } catch (e) {}
+            }, 400);
+        }
+    } catch (e) {}
+    try {
+        if (window.opener && !window.opener.closed) {
+            window.opener.postMessage(payload, window.location.origin);
+        }
+    } catch (e) {}
+    caGateHide();
+    document.body.innerHTML = '<div style="min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px;background:#0D0910;color:#F2E3C6;font-family:Georgia,serif;text-align:center"><div style="max-width:340px;padding:24px 20px;border-radius:16px;border:1.8px solid #C89B3C;background:#18101D;box-shadow:0 16px 40px rgba(0,0,0,.65)"><div style="font-size:32px;margin-bottom:8px">' + (ok ? "🎃" : "⚠️") + '</div><h2 style="margin:0 0 8px;font-size:20px;color:#FFE6A4">' + (ok ? "Login Google Berhasil!" : "Login Gagal") + '</h2><p style="margin:0 0 16px;font-size:13.5px;color:#C9B895;line-height:1.45">' + (ok ? "Akun sudah terhubung ke Melissa Shop tanpa me-refresh halaman utama." : escapeHtml(errMsg || "Silakan coba lagi dari Melissa Shop.")) + '</p><button type="button" id="popup-close-now" style="padding:9px 18px;border-radius:10px;border:1.4px solid #C89B3C;background:linear-gradient(180deg,#FF7A1A,#C94A00);color:#120808;font-weight:700;cursor:pointer">Tutup Jendela</button></div></div>';
+    const closeBtn = document.getElementById("popup-close-now");
+    if (closeBtn) closeBtn.addEventListener("click", function() {
+        window.close();
+    });
+    setTimeout(function() {
+        try {
+            window.close();
+        } catch (e) {}
+    }, 120);
 }
 
 async function caBootProfileStep(fresh) {
@@ -5575,8 +6033,17 @@ async function caBoot() {
     try {
         fromCallback = await caHandleAuthCallback();
     } catch (err) {
+        if (window.__CHIROOT_OAUTH_POPUP_RECEIVER__) {
+            caFinishPopupOAuth(false, err && err.message ? err.message : "Gagal menukar kode OAuth.");
+            return;
+        }
         ChirootAuth.session = null;
         await caEnterGuestMode("Login gagal" + (err && err.message ? ": " + err.message : "") + " — lanjut sebagai Guest. Coba login lagi dari tombol di atas.");
+        return;
+    }
+    if (window.__CHIROOT_OAUTH_POPUP_RECEIVER__) {
+        if (!ChirootAuth.session) ChirootAuth.session = caLoadSession();
+        caFinishPopupOAuth(!!ChirootAuth.session, ChirootAuth.session ? "" : "Sesi tidak ditemukan.");
         return;
     }
     if (!fromCallback) {
@@ -5918,14 +6385,7 @@ function caRenderAccountList() {
                 av.style.borderColor = row.banner_color;
             } catch (e) {}
         }
-        if (row.pfp) {
-            const img = document.createElement("img");
-            img.src = row.pfp;
-            img.alt = "";
-            av.appendChild(img);
-        } else {
-            av.textContent = caAccountInitials(row);
-        }
+        caDecorateAvatarEl(av, { id: row.user_id, display_name: row.display_name, email: row.email, pfp: row.pfp }, row.user_id);
         const meta = document.createElement("span");
         meta.className = "acct-meta";
         const nm = document.createElement("span");
@@ -6259,6 +6719,10 @@ let playOrder = [];
 let shufflePointer = 0;
 
 let playQueue = [];
+
+window.__chirootGetCurrentTrack = function() {
+    return tracks && typeof currentIndex === "number" && tracks[currentIndex] ? tracks[currentIndex] : null;
+};
 
 window.ChirootHooks = {
     async onProfileReady() {
@@ -7124,6 +7588,11 @@ function bindEvents() {
         document.body.classList.remove("is-playing");
     });
     safeOn(audio, "ended", () => {
+        if (window.MelissaRewards && typeof window.MelissaRewards.onBeforeTrackAdvance === "function") {
+            try {
+                window.MelissaRewards.onBeforeTrackAdvance();
+            } catch (e) {}
+        }
         recordEl.classList.remove("playing");
         if (isLoop) {
             audio.currentTime = 0;
@@ -10176,6 +10645,7 @@ if (btnRefreshLyrics) {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();</script>
+<script src="pfp_borders.js" defer></script>
 <script src="melissa-core.js" defer></script>
 <script src="melissa-rewards.js" defer></script>
 <script src="melissa-inpage.js" defer></script>
@@ -10196,12 +10666,19 @@ if (btnRefreshLyrics) {
         if (window.ChirootAuth && window.ChirootAuth.session && typeof caApiCall === "function") return caApiCall(path, "GET");
         return window.MelissaCore.apiCall(path, "GET");
     }
+    function syncSecondaryCounters(text) {
+        var pfEl = document.getElementById("pf-coin-balance");
+        if (pfEl) pfEl.textContent = text;
+        var amhEl = document.getElementById("amh-coin-balance");
+        if (amhEl) amhEl.textContent = text;
+    }
     function render(value, bump) {
         var n = Number(value);
         if (!Number.isFinite(n) || n < 0) return;
         var text = n.toLocaleString("id-ID");
         var changed = balance.textContent !== text;
         balance.textContent = text;
+        syncSecondaryCounters(text);
         if (bump && changed) {
             chip.classList.remove("bump");
             void chip.offsetWidth;
@@ -10213,6 +10690,7 @@ if (btnRefreshLyrics) {
         if (!s || !s.user) {
             userId = null;
             balance.textContent = "0";
+            syncSecondaryCounters("0");
             return Promise.resolve();
         }
         userId = s.user.id;
@@ -10222,28 +10700,53 @@ if (btnRefreshLyrics) {
             if (version !== revision || !current || current.user.id !== uid) return;
             render(rows && rows.length ? rows[0].balance : 0, bump);
         }).catch(function() {
-            if (version === revision && balance.textContent === "—") balance.textContent = "—";
+            if (version === revision && balance.textContent === "—") {
+                balance.textContent = "0";
+                syncSecondaryCounters("0");
+            }
         });
     }
     chip.addEventListener("click", function() {
         if (window.MelissaInpage) window.MelissaInpage.openShop();
     });
-    document.addEventListener("melissa:reward", function(e) {
-        var result = e.detail;
-        if (!result || result.ok !== true || result.duplicate) return;
-        document.getElementById("halloween-reward-text").textContent = "Halloween Coins berhasil diterima!";
+    function showCoinToast(text) {
+        document.getElementById("halloween-reward-text").textContent = text;
         toast.classList.add("show");
         clearTimeout(timer);
         timer = setTimeout(function() {
             toast.classList.remove("show");
         }, 4e3);
+    }
+    document.addEventListener("melissa:reward", function(e) {
+        var result = e.detail;
+        if (!result || result.ok !== true || result.duplicate) return;
+        var amt = Number(result.coins_awarded || result.amount || result.reward || 0);
+        showCoinToast(amt > 0 ? "+" + amt + " Halloween Coins berhasil diterima!" : "Halloween Coins berhasil diterima!");
         refresh(true);
+    });
+    document.addEventListener("melissa:reward-duplicate", function() {
+        showCoinToast("Lagu selesai • Reward lagu ini sudah pernah diklaim");
+        refresh(false);
+    });
+    document.addEventListener("chiroot:border-equipped", function() {
+        if (typeof caRenderTopbar === "function") caRenderTopbar();
+    });
+    document.addEventListener("chiroot:borders-updated", function() {
+        if (typeof caRenderTopbar === "function") caRenderTopbar();
     });
     document.addEventListener("melissa:balance", function(e) {
         if (session()) {
             revision++;
             render(e.detail.balance, true);
         }
+    });
+    document.addEventListener("chiroot:live-login", function() {
+        setTimeout(function() {
+            refresh(true);
+        }, 120);
+    });
+    document.addEventListener("chiroot:live-logout", function() {
+        refresh(false);
     });
     document.addEventListener("visibilitychange", function() {
         if (!document.hidden) refresh(false);
@@ -10266,4 +10769,5 @@ if (btnRefreshLyrics) {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4fa48267c165fa3',t:'MTc5Mjg1ODU0Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>
