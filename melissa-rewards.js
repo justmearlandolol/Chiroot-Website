@@ -37,6 +37,11 @@
             var t = deps.getCurrentTrack();
             return t && t.id != null ? String(t.id) : null;
         }
+        function isLooping() {
+            if (audio && audio.loop) return true;
+            if (typeof deps.isLooping === "function" && deps.isLooping()) return true;
+            return false;
+        }
         function invalidate(reason, target) {
             var s = target || st;
             if (!s.invalid && !s.claiming && !s.claimed) {
@@ -98,6 +103,11 @@
             if (!id || !deps.isAuthed()) return;
             var curPos = audio.currentTime || 0;
             if (st.trackId !== id || st.claimed || st.claiming || (st.invalid && curPos <= 1.2)) reset();
+            if (isLooping()) {
+                st.trackId = id;
+                invalidate("loop_active");
+                return;
+            }
             if (!st.trackId) {
                 st.trackId = id;
                 st.lastPosition = curPos;
@@ -138,6 +148,10 @@
         }
         function handleTimeUpdate() {
             var id = trackId();
+            if (isLooping()) {
+                if (st.trackId && !st.invalid) invalidate("loop_active");
+                return;
+            }
             if (!st.trackId || st.claimed || st.claiming) {
                 if (!audio.paused && id && deps.isAuthed() && (audio.currentTime || 0) <= 1.5) {
                     handlePlay();
@@ -214,7 +228,10 @@
         }
         function finalizeCurrentSession(forceEnded) {
             var s = st;
-            if (!s.trackId || s.invalid || s.claimed || s.claiming) return Promise.resolve(null);
+            if (isLooping() || !s.trackId || s.invalid || s.claimed || s.claiming) {
+                if (isLooping() && s.trackId && !s.invalid) invalidate("loop_active", s);
+                return Promise.resolve(null);
+            }
             var now = clock();
             var liveDur = isFinite(audio.duration) && audio.duration > 0 ? audio.duration : s.duration;
             var effectiveDur = s.duration > 0 && liveDur > 0 ? Math.min(s.duration, liveDur) : s.duration || liveDur;
@@ -333,6 +350,11 @@
             onBeforeTrackAdvance: function() {
                 return finalizeCurrentSession(true);
             },
+            onLoopChange: function(loopOn) {
+                if (loopOn || isLooping()) {
+                    if (st.trackId && !st.invalid) invalidate("loop_active");
+                }
+            },
             _state: function() {
                 return st;
             },
@@ -349,6 +371,12 @@
             if (!audio || !global.MelissaCore) return;
             var engine = createMelissaRewardEngine({
                 audio: audio,
+                isLooping: function() {
+                    if (audio && audio.loop) return true;
+                    if (typeof global.__chirootIsLooping === "function" && global.__chirootIsLooping()) return true;
+                    var lb = document.getElementById("btn-loop");
+                    return !!(lb && lb.classList.contains("active"));
+                },
                 getCurrentTrack: function() {
                     try {
                         if (global.__chirootGetCurrentTrack) return global.__chirootGetCurrentTrack();
@@ -392,6 +420,9 @@
                 }
             });
             engine.attach();
+            document.addEventListener("chiroot:loop-change", function(e) {
+                engine.onLoopChange(!!(e && e.detail && e.detail.isLoop));
+            });
             global.MelissaRewards = engine;
         }
         if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
