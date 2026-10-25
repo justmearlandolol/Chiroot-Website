@@ -6760,6 +6760,10 @@ window.__chirootGetCurrentTrack = function() {
     return tracks && typeof currentIndex === "number" && tracks[currentIndex] ? tracks[currentIndex] : null;
 };
 
+window.__chirootIsLooping = function() {
+    return !!(isLoop || audio && audio.loop);
+};
+
 window.ChirootHooks = {
     async onProfileReady() {
         cleanupLegacyStorage();
@@ -7053,7 +7057,10 @@ function restoreState() {
             audio.volume = s.volume;
             volumeInput.value = s.volume;
         }
-        if (typeof s.isLoop === "boolean") isLoop = s.isLoop;
+        if (typeof s.isLoop === "boolean") {
+            isLoop = s.isLoop;
+            audio.loop = isLoop;
+        }
         if (typeof s.isShuffle === "boolean") isShuffle = s.isShuffle;
         if (Array.isArray(s.queue)) {
             playQueue = s.queue.map(String).filter(function(id) {
@@ -7354,7 +7361,7 @@ function loadTrack(index, autoPlay = false, withTransition = true) {
         labelInner.innerHTML = buildLabel(track);
         audio.src = track.src;
         audio.load();
-        audio.loop = false;
+        audio.loop = isLoop;
         audio._resumeTime = 0;
         if ("mediaSession" in navigator) {
             navigator.mediaSession.metadata = new MediaMetadata({
@@ -7552,8 +7559,9 @@ function bindEvents() {
     safeOn(prevBtn, "click", prevTrack);
     safeOn(loopBtn, "click", () => {
         isLoop = !isLoop;
-        audio.loop = false;
+        audio.loop = isLoop;
         loopBtn.classList.toggle("active", isLoop);
+        document.dispatchEvent(new CustomEvent("chiroot:loop-change", { detail: { isLoop: isLoop } }));
         saveState();
     });
     safeOn(shuffleBtn, "click", () => {
@@ -7618,7 +7626,7 @@ function bindEvents() {
         document.body.classList.remove("is-playing");
     });
     safeOn(audio, "ended", () => {
-        if (window.MelissaRewards && typeof window.MelissaRewards.onBeforeTrackAdvance === "function") {
+        if (!isLoop && !audio.loop && window.MelissaRewards && typeof window.MelissaRewards.onBeforeTrackAdvance === "function") {
             try {
                 window.MelissaRewards.onBeforeTrackAdvance();
             } catch (e) {}
@@ -10853,5 +10861,5 @@ if (btnRefreshLyrics) {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a50193446ced3f67',t:'MTc5MjkzNTAyMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a501aac83b853fca',t:'MTc5MjkzNTk4Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
