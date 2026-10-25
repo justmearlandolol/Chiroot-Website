@@ -279,7 +279,7 @@
         updateDespawnChip();
         spawnStarExplosion();
         $("character").classList.add("despawning");
-        toast("✦ Waktu kunjungan 10 menit habis! Mellissa menghilang dalam ledakan bintang~");
+        toast("Cya later guys!~");
         setTimeout(function() {
             $("character").classList.remove("visible", "despawning");
             if ($("star-burst")) $("star-burst").innerHTML = "";
