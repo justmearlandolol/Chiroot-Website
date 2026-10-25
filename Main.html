@@ -7046,7 +7046,7 @@ function restoreState() {
                 });
             });
         }
-        audio._resumeTime = s.time || 0;
+        audio._resumeTime = 0;
     } catch (e) {}
     renderQueue();
 }
@@ -7338,19 +7338,13 @@ function loadTrack(index, autoPlay = false, withTransition = true) {
         labelInner.innerHTML = buildLabel(track);
         audio.src = track.src;
         audio.load();
-        audio.loop = isLoop;
+        audio.loop = false;
+        audio._resumeTime = 0;
         if ("mediaSession" in navigator) {
             navigator.mediaSession.metadata = new MediaMetadata({
                 title: track.title,
                 artist: track.artist,
                 album: "Chiroot"
-            });
-        }
-        if (audio._resumeTime && index === currentIndex) {
-            safeOn(audio, "loadedmetadata", function once() {
-                audio.currentTime = Math.min(audio._resumeTime, (audio.duration || 999) - .5);
-                audio._resumeTime = 0;
-                audio.removeEventListener("loadedmetadata", once);
             });
         }
         renderPlaylist();
@@ -7542,7 +7536,7 @@ function bindEvents() {
     safeOn(prevBtn, "click", prevTrack);
     safeOn(loopBtn, "click", () => {
         isLoop = !isLoop;
-        audio.loop = isLoop;
+        audio.loop = false;
         loopBtn.classList.toggle("active", isLoop);
         saveState();
     });
@@ -10789,9 +10783,14 @@ if (btnRefreshLyrics) {
     document.addEventListener("melissa:reward", function(e) {
         var result = e.detail;
         if (!result || result.ok !== true || result.duplicate) return;
-        var amt = Number(result.coins_awarded || result.amount || result.reward || 0);
-        showCoinToast(amt > 0 ? "+" + amt + " Halloween Coins berhasil diterima!" : "Halloween Coins berhasil diterima!");
-        refresh(true);
+        var amt = Number(result.rewarded || result.coins_awarded || result.amount || result.reward || 2);
+        showCoinToast("+" + amt + " Halloween Coins berhasil diterima!");
+        if (typeof result.balance === "number" && isFinite(result.balance)) {
+            revision++;
+            render(result.balance, true);
+        } else {
+            refresh(true);
+        }
     });
     document.addEventListener("melissa:reward-duplicate", function() {
         showCoinToast("Lagu selesai • Reward lagu ini sudah pernah diklaim");
@@ -10838,5 +10837,5 @@ if (btnRefreshLyrics) {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4fe5e883881cde1',t:'MTc5MjkwMTQwMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a50183dbd8608796',t:'MTc5MjkzNDM4OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
