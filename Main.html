@@ -1176,10 +1176,16 @@ body::before{
   font-size:13px;
   font-style:italic;
 }
-.add-form .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-.field{display:flex; flex-direction:column; gap:5px; font-family:Georgia, serif; font-size:12px; color:var(--cream-muted); letter-spacing:.04em; text-transform:uppercase}
+#add-modal .modal-card{max-width:540px;padding:22px 22px 18px;box-sizing:border-box}
+.add-form{width:100%;min-width:0}
+.add-form .form-grid{display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); gap:12px; width:100%; box-sizing:border-box}
+.field{display:flex; flex-direction:column; gap:5px; min-width:0; max-width:100%; font-family:Georgia, serif; font-size:12px; color:var(--cream-muted); letter-spacing:.04em; text-transform:uppercase}
 .field span{font-size:11px; color:var(--cream-muted)}
 .sketch-input{
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
   font-family:Georgia, serif;
   font-size:14px;
   padding:10px 12px;
@@ -1192,7 +1198,7 @@ body::before{
 }
 .sketch-input::placeholder{color:var(--vintage-gray-dark)}
 .sketch-input:focus{background:#0F0A0F; border-color:var(--pumpkin); box-shadow:0 0 0 3px rgba(255,106,0,0.14)}
-.file-field input[type=file]{font-family:Georgia, serif; font-size:12px; color:var(--vintage-gray)}
+.file-field input[type=file]{width:100%; min-width:0; max-width:100%; box-sizing:border-box; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:Georgia, serif; font-size:12px; color:var(--vintage-gray)}
 .file-field input[type=file]::file-selector-button{
   background:#1A0E1E;
   border:1.2px solid rgba(200,155,60,0.22);
@@ -3034,6 +3040,15 @@ html body #chiroot-topbar #account-cluster #halloween-wallet:focus-visible{outli
 .pf-border-opt .pbo-ring img{position:absolute;left:50%;top:50%;width:152%;height:152%;max-width:none;transform:translate(-50%,-50%);object-fit:contain;pointer-events:none}
 .pf-border-opt .pbo-lbl{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cream-muted)}
 
+html body #add-modal .modal-card{width:min(540px,100%)!important;max-width:540px!important;padding:22px 22px 18px!important;box-sizing:border-box!important;overflow-x:hidden!important}
+html body #add-modal .report-box{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
+html body #add-modal #input-youtube-url{flex:1 1 180px!important;width:auto!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+html body #add-modal .add-form{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+html body #add-modal .add-form .form-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:12px!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important}
+html body #add-modal .field{min-width:0!important;max-width:100%!important;width:100%!important;box-sizing:border-box!important}
+html body #add-modal .field .sketch-input,html body #add-modal .file-field input[type=file]{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+html body #add-modal .file-field input[type=file]{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+
 html,body{max-width:100%;overflow-x:hidden}
 
 @media (max-width:780px){
@@ -3113,6 +3128,8 @@ html,body{max-width:100%;overflow-x:hidden}
   .top10-add-btn{font-size:11.5px;padding:6px 9px;min-height:34px;white-space:nowrap}
   .modal-overlay{padding:8px;align-items:center}
   .modal-overlay .modal-card{width:100%;max-width:100%;max-height:calc(100dvh - 16px);padding:14px 12px;border-radius:14px}
+  html body #add-modal .modal-card{width:100%!important;max-width:100%!important;padding:16px 14px 14px!important}
+  html body #add-modal .add-form .form-grid{grid-template-columns:minmax(0,1fr)!important;gap:10px!important}
   input,textarea,select,.sketch-input,.ms-search input,.ms-admin-form input,.ms-admin-form textarea{font-size:16px!important}
   .melissa-character{right:10px;bottom:calc(12px + env(safe-area-inset-bottom))}
   .mc-figure{width:80px;height:90px}
@@ -10821,5 +10838,5 @@ if (btnRefreshLyrics) {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4fe51113b72fe05',t:'MTc5MjkwMDg1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4fe5e883881cde1',t:'MTc5MjkwMTQwMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
