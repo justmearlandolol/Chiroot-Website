@@ -19,7 +19,8 @@
                 duration: 0,
                 liveDuration: 0,
                 accumulated: 0,
-                wallElapsed: 0,
+                serverAcc: 0,
+                serverAt: now,
                 lastPosition: 0,
                 lastAt: now,
                 lastReportAt: now,
@@ -47,21 +48,42 @@
             generation++;
             st = fresh();
         }
+        function safeClampPos(s, rawPos) {
+            var dur = s.duration > 0 ? s.duration : s.liveDuration || rawPos || 0;
+            var p = Math.max(0, Number(rawPos) || 0);
+            if (dur > 0) p = Math.min(p, dur + 1.5);
+            return Math.round(p * 100) / 100;
+        }
+        function safeClampAcc(s, desiredAcc) {
+            var now = clock();
+            var serverElapsed = Math.max(0, (now - s.serverAt) / 1e3);
+            var maxAllowedByWall = s.serverAcc + serverElapsed + 1.5;
+            var dur = s.duration > 0 ? s.duration : s.liveDuration || desiredAcc || 0;
+            var acc = Math.max(s.serverAcc, Math.min(Number(desiredAcc) || 0, maxAllowedByWall));
+            if (dur > 0) acc = Math.min(acc, dur);
+            return Math.round(acc * 100) / 100;
+        }
         function enqueueReport(s, event, extra, posOverride, accOverride) {
             if (!s.sessionId) return Promise.resolve(null);
-            var posVal = posOverride != null ? posOverride : audio.currentTime || 0;
-            var accVal = accOverride != null ? accOverride : s.accumulated;
-            var args = Object.assign({
-                p_session_id: s.sessionId,
-                p_position_seconds: Math.round(posVal * 100) / 100,
-                p_accumulated_seconds: Math.round(accVal * 100) / 100,
-                p_event: event
-            }, extra || {});
             s.queue = s.queue.then(function() {
-                return deps.rpc("record_playback_progress", args);
-            }).then(function(r) {
-                if (r && r.ok === false) invalidate(r.reason || event, s);
-                return r;
+                if (!s.sessionId || s.invalid) return null;
+                var posVal = safeClampPos(s, posOverride != null ? posOverride : audio.currentTime || 0);
+                var accVal = safeClampAcc(s, accOverride != null ? accOverride : s.accumulated);
+                var args = Object.assign({
+                    p_session_id: s.sessionId,
+                    p_position_seconds: posVal,
+                    p_accumulated_seconds: accVal,
+                    p_event: event
+                }, extra || {});
+                return deps.rpc("record_playback_progress", args).then(function(r) {
+                    if (r && r.ok === false) {
+                        invalidate(r.reason || r.status || event, s);
+                    } else {
+                        s.serverAcc = accVal;
+                        s.serverAt = clock();
+                    }
+                    return r;
+                });
             }).catch(function() {
                 if (event !== "completed") invalidate("progress_failed", s);
                 return null;
@@ -75,17 +97,17 @@
             var id = trackId();
             if (!id || !deps.isAuthed()) return;
             var curPos = audio.currentTime || 0;
-            if (st.trackId !== id || st.claimed || (st.invalid && curPos <= .6)) reset();
+            if (st.trackId !== id || st.claimed || st.claiming || (st.invalid && curPos <= 1.2)) reset();
             if (!st.trackId) {
                 st.trackId = id;
                 st.lastPosition = curPos;
                 st.lastAt = clock();
-                if (st.lastPosition > .6) {
+                if (st.lastPosition > 1.5) {
                     invalidate("not_from_start");
                     return;
                 }
             }
-            if (audio.playbackRate > 1.001) {
+            if (audio.playbackRate > 1.02) {
                 invalidate("playback_speed");
                 return;
             }
@@ -101,6 +123,9 @@
                 var sid = extractSessionId(res);
                 if (sid && token === generation && s === st) {
                     s.sessionId = sid;
+                    s.serverAcc = 0;
+                    s.serverAt = clock();
+                    s.lastReportAt = clock();
                 } else if (!sid && s === st) {
                     invalidate("session_failed", s);
                 }
@@ -113,15 +138,16 @@
         }
         function handleTimeUpdate() {
             var id = trackId();
-            if (!st.trackId) {
-                if (!audio.paused && id && deps.isAuthed() && (audio.currentTime || 0) <= 1) {
+            if (!st.trackId || st.claimed || st.claiming) {
+                if (!audio.paused && id && deps.isAuthed() && (audio.currentTime || 0) <= 1.5) {
                     handlePlay();
                 }
                 return;
             }
             if (st.invalid || audio.seeking) return;
             if (id && id !== st.trackId) {
-                if (!st.claiming) reset();
+                reset();
+                if (!audio.paused && (audio.currentTime || 0) <= 1.5) handlePlay();
                 return;
             }
             if (!st.sessionId && !st.opening && deps.isAuthed() && isFinite(audio.duration) && audio.duration > 0) {
@@ -133,20 +159,17 @@
                 st.liveDuration = audio.duration;
                 if (!st.duration) st.duration = audio.duration;
             }
-            if (audio.playbackRate > 1.001) invalidate("playback_speed");
-            if (delta > Math.max(1.8, elapsed + 1.5)) invalidate("forward_seek");
-            if (!audio.paused && elapsed > 0) {
-                st.wallElapsed += Math.min(elapsed, Math.max(delta + .5, 1.5));
-            }
+            if (audio.playbackRate > 1.02) invalidate("playback_speed");
+            if (delta > Math.max(2.5, elapsed + 2)) invalidate("forward_seek");
             if (delta > 0 && !st.invalid) {
-                var maxDur = Math.max(st.duration || 0, st.liveDuration || 0, pos);
-                var nextAcc = st.accumulated + delta;
-                if (st.wallElapsed > 0) nextAcc = Math.min(nextAcc, st.wallElapsed + .75);
+                var maxDur = st.duration > 0 ? st.duration : st.liveDuration || pos;
+                var gain = Math.min(delta, Math.max(elapsed + .6, 1.2));
+                var nextAcc = st.accumulated + gain;
                 st.accumulated = maxDur > 0 ? Math.min(maxDur, nextAcc) : nextAcc;
             }
             st.lastPosition = pos;
             st.lastAt = now;
-            if (st.sessionId && now - st.lastReportAt >= 5e3) {
+            if (st.sessionId && now - st.lastReportAt >= 1e4) {
                 st.lastReportAt = now;
                 report("progress");
             }
@@ -154,18 +177,18 @@
         function handleSeeking() {
             if (!st.trackId || st.claiming) return;
             var to = audio.currentTime || 0;
-            if (to <= .6) return;
-            if (to - st.lastPosition > 1) invalidate("forward_seek");
+            if (to <= 1.2) return;
+            if (to - st.lastPosition > 2) invalidate("forward_seek");
         }
         function handleSeeked() {
             if (st.claiming) return;
             var from = st.lastPosition, to = audio.currentTime || 0;
-            if (to <= .6) {
+            if (to <= 1.2) {
                 reset();
                 if (!audio.paused) handlePlay();
                 return;
             }
-            if (to - from > 1) invalidate("forward_seek");
+            if (to - from > 2) invalidate("forward_seek");
             report("seek", {
                 p_seek_from: Math.round(from * 100) / 100,
                 p_seek_to: Math.round(to * 100) / 100
@@ -174,7 +197,7 @@
             st.lastAt = clock();
         }
         function handleRateChange() {
-            if (st.trackId && audio.playbackRate > 1.001) invalidate("playback_speed");
+            if (st.trackId && audio.playbackRate > 1.02) invalidate("playback_speed");
         }
         function handleDurationChange() {
             if (isFinite(audio.duration) && audio.duration > 0) {
@@ -193,26 +216,30 @@
             var s = st;
             if (!s.trackId || s.invalid || s.claimed || s.claiming) return Promise.resolve(null);
             var now = clock();
-            var rawPos = audio.currentTime || 0;
-            var pos = Math.max(rawPos, s.lastPosition);
-            var elapsed = Math.max(0, (now - s.lastAt) / 1e3);
-            var delta = Math.max(0, pos - s.lastPosition);
-            if (elapsed > 0) s.wallElapsed += Math.min(elapsed, Math.max(delta + .5, 1.5));
-            if (delta > 0 && delta <= Math.max(1.8, elapsed + 1.5)) {
-                s.accumulated += delta;
-                if (s.wallElapsed > 0) s.accumulated = Math.min(s.accumulated, s.wallElapsed + .75);
-            }
-            s.lastPosition = pos;
-            s.lastAt = now;
             var liveDur = isFinite(audio.duration) && audio.duration > 0 ? audio.duration : s.duration;
             var effectiveDur = s.duration > 0 && liveDur > 0 ? Math.min(s.duration, liveDur) : s.duration || liveDur;
             if (!(effectiveDur > 0)) return Promise.resolve(null);
             var isEnded = !!(forceEnded || audio.ended);
-            var tolerance = Math.max(1.5, effectiveDur * .02);
-            if (!isEnded || pos < effectiveDur - tolerance || s.accumulated < effectiveDur - tolerance) {
+            var rawPos = audio.currentTime || 0;
+            var elapsed = Math.max(0, (now - s.lastAt) / 1e3);
+            if (isEnded && rawPos < s.lastPosition && elapsed >= Math.max(0, effectiveDur - s.lastPosition - 2)) {
+                rawPos = effectiveDur;
+            }
+            var pos = Math.max(rawPos, s.lastPosition);
+            var delta = Math.max(0, pos - s.lastPosition);
+            if (delta > 0 && delta <= Math.max(2.5, elapsed + 2)) {
+                s.accumulated = Math.min(s.duration || effectiveDur, s.accumulated + Math.min(delta, Math.max(elapsed + .6, 1.2)));
+            }
+            s.lastPosition = pos;
+            s.lastAt = now;
+            var minPos = Math.max(0, (s.duration || effectiveDur) - 2.8);
+            var minAcc = Math.min(effectiveDur * .9, (s.duration || effectiveDur) * .9);
+            if (!isEnded || pos < minPos && effectiveDur - pos > 2.8 || s.accumulated < minAcc) {
                 return Promise.resolve(null);
             }
             s.claiming = true;
+            generation++;
+            st = fresh();
             var waitOpen = s.opening && s.openingPromise ? s.openingPromise : Promise.resolve();
             return waitOpen.then(function() {
                 if (!s.sessionId || s.invalid) {
@@ -220,11 +247,10 @@
                     return null;
                 }
                 var targetDur = s.duration || effectiveDur;
-                var finalPos = Math.max(pos, targetDur);
-                var finalAcc = Math.min(targetDur, Math.max(s.accumulated, Math.min(targetDur, s.wallElapsed + .75)));
+                var finalPos = Math.max(pos, targetDur - .2);
                 var sid = s.sessionId;
-                return enqueueReport(s, "completed", null, finalPos, finalAcc).then(function(progress) {
-                    if (progress && progress.ok === false) return null;
+                return enqueueReport(s, "completed", null, finalPos, s.accumulated).then(function(progress) {
+                    if (!progress || progress.ok === false) return null;
                     return deps.rpc("claim_track_reward", {
                         playback_session_id: sid
                     });
@@ -238,7 +264,8 @@
                         }
                     }
                     return result;
-                }).catch(function() {
+                }).catch(function(err) {
+                    if (deps.onError) deps.onError(err);
                     return null;
                 }).then(function(r) {
                     s.claiming = false;
@@ -256,7 +283,7 @@
             if (!audio.paused) handlePlay();
         }
         function handleEmptied() {
-            reset();
+            if (!st.claiming) reset();
         }
         var handlers = {
             loadedmetadata: handleLoadedMetadata,
@@ -353,6 +380,13 @@
                     document.dispatchEvent(new CustomEvent("melissa:reward-invalid", {
                         detail: {
                             reason: reason
+                        }
+                    }));
+                },
+                onError: function(err) {
+                    document.dispatchEvent(new CustomEvent("melissa:reward-error", {
+                        detail: {
+                            message: err && err.message ? err.message : String(err || "error")
                         }
                     }));
                 }
