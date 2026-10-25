@@ -5,9 +5,13 @@
         console.warn("[Melissa] MelissaCore tidak ada; add-on nonaktif.");
         return;
     }
+    var bordersApi = window.ChirootBorders;
     var VISIT_MS = Number(window.MELISSA_VISIT_MS) || 30 * 60 * 1e3;
-    var TICK_MS = 20 * 1e3;
+    var DESPAWN_MS = Number(window.MELISSA_DESPAWN_MS) || 10 * 60 * 1e3;
+    var TICK_MS = 1e4;
     var NEXT_KEY = "melissa_next_visit_at";
+    var ACTIVE_UNTIL_KEY = "melissa_active_until";
+    var REOPEN_SHOP_KEY = "melissa_reopen_shop";
     var state = {
         products: [],
         filtered: [],
@@ -19,25 +23,53 @@
         qty: 1,
         balance: null,
         isAdmin: false,
+        syncingBorders: false,
         purchaseInFlight: false,
         idempotencyKey: null,
         shopLoaded: false,
-        characterVisible: false
+        characterVisible: false,
+        despawning: false,
+        despawnAt: 0,
+        loginBusy: false
     };
     var els = {};
     var bubbleTimer = null;
+    var despawnTimer = null;
+    function coinSvg(size) {
+        var sz = size || 18;
+        return '<svg class="ms-coin-svg" width="' + sz + '" height="' + sz + '" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink:0;display:inline-block;vertical-align:middle"><circle cx="12" cy="12" r="10.5" fill="#f3a620" stroke="#7d4300" stroke-width="1.6"/><circle cx="12" cy="12" r="7.8" fill="#ffd466" stroke="#b96c06" stroke-width="1"/><path d="M12 6.8l1.55 3.35 3.65.45-2.7 2.5.72 3.6L12 14.9l-3.22 1.8.72-3.6-2.7-2.5 3.65-.45z" fill="#9a4e00"/></svg>';
+    }
     function coinIcon(size) {
-        return '<img src="' + 'halloween-coin.png" alt="koin" draggable="false" width="' + (size || 18) + '" height="' + (size || 18) + '">';
+        return coinSvg(size);
+    }
+    function userAvatarData() {
+        var pfp = "";
+        var label = "✦";
+        if (window.ChirootAuth && window.ChirootAuth.profile) {
+            pfp = window.ChirootAuth.profile.pfp || "";
+            var dn = String(window.ChirootAuth.profile.display_name || "").trim();
+            if (dn) label = dn.charAt(0).toUpperCase();
+        } else if (core.isAuthed()) {
+            var sess = core.getSession();
+            if (sess && sess.user && sess.user.email) label = sess.user.email.charAt(0).toUpperCase();
+        }
+        return { pfp: pfp, label: label };
+    }
+    function borderPreviewHtml(borderSrc, borderName, large) {
+        var av = userAvatarData();
+        var cls = "ms-border-stage" + (large ? " lg" : "");
+        var inner = av.pfp ? '<img class="ms-bp-pfp" src="' + esc(av.pfp) + '" alt="" draggable="false">' : '<span class="ms-bp-init">' + esc(av.label) + "</span>";
+        return '<div class="' + cls + '"><div class="ms-bp-circle">' + inner + '</div><img class="ms-bp-frame" src="' + esc(borderSrc) + '" alt="' + esc(borderName) + '" draggable="false"></div>';
     }
     function buildMarkup() {
         var root = document.createElement("div");
         root.className = "melissa-root";
-        root.innerHTML = '<div class="melissa-character" id="mli-character" aria-live="polite">' + '<button type="button" class="mc-close" id="mli-char-close" aria-label="Sembunyikan Mellissa sampai kunjungan berikutnya">✕</button>' + '<button type="button" class="mc-figure" id="mli-char-figure" aria-label="Buka toko Mellissa" title="Klik untuk lihat barang dagangan Mellissa">' + '<span class="mc-bubble" id="mli-bubble">Aku datang bawa barang dagangan! Klik aku ya~</span>' + '<span class="mc-ping" aria-hidden="true"></span>' + '<span class="mc-glow" aria-hidden="true"></span>' + '<span class="mc-spark s1" style="left:6%;top:16%;--dx:-14px;--dy:-16px;--d:.18s" aria-hidden="true">✦</span>' + '<span class="mc-spark s2" style="left:84%;top:10%;--dx:12px;--dy:-18px;--d:.34s" aria-hidden="true">✧</span>' + '<span class="mc-spark s3" style="left:0%;top:48%;--dx:-16px;--dy:-8px;--d:.52s" aria-hidden="true">✦</span>' + '<span class="mc-spark s4" style="left:90%;top:44%;--dx:14px;--dy:-10px;--d:.68s" aria-hidden="true">✧</span>' + '<span class="mc-spark s5 ambient" style="left:70%;top:74%;--dx:8px;--dy:-14px;--d:.85s" aria-hidden="true">✦</span>' + '<img class="mc-img" src="' + 'mellissa.png" alt="Mellissa, penyihir shopkeeper" draggable="false">' + '<span class="mc-shadow" aria-hidden="true"></span>' + "</button>" + "</div>" + '<div class="ms-overlay" id="mli-overlay" role="dialog" aria-modal="true" aria-labelledby="mli-title">' + '<div class="ms-panel">' + '<button type="button" class="ms-close-x" id="mli-overlay-close" aria-label="Tutup toko">✕</button>' + '<div class="ms-panel-head">' + '<div class="ms-house-frame">' + '<img src="' + 'shopfront-pixel.png" alt="Rumah toko Halloween Mellissa" draggable="false">' + "</div>" + '<div class="ms-head-copy">' + '<h2 id="mli-title">Melissa Shop</h2>' + "<p>Mellissa hanya mampir sesekali. Tukar Halloween Coins yang kamu kumpulkan dari menyelesaikan lagu di Chiroot dengan harta karun musiman.</p>" + '<div class="ms-head-actions">' + '<span class="ms-coin-chip" id="mli-coin-chip" title="Saldo Halloween Coin kamu">' + '<img src="' + 'halloween-coin.png" alt="" draggable="false">' + '<span id="mli-balance">–</span>&nbsp;Coins' + "</span>" + '<button type="button" class="ms-login-btn" id="mli-login"><span>Login with Google</span></button>' + '<button type="button" class="ms-avatar-btn ms-hidden" id="mli-avatar"><span class="dot"></span><span id="mli-avatar-name">Akun</span></button>' + '<button type="button" class="ms-admin-btn ms-hidden" id="mli-admin-open">★ Admin</button>' + "</div>" + "</div>" + "</div>" + '<div class="ms-dialogue" id="mli-dialogue">Welcome, traveler! Ready to explore my little Halloween shop?</div>' + '<div class="ms-toolbar">' + '<div class="ms-search"><span aria-hidden="true" style="color:var(--gold)">🔍</span>' + '<input type="search" id="mli-search" placeholder="Cari harta karun…" aria-label="Cari produk"></div>' + '<div class="ms-cats" id="mli-cats"></div>' + '<button type="button" class="ms-cart-btn" id="mli-cart-open">🛒 Keranjang<span class="count ms-hidden" id="mli-cart-count">0</span></button>' + "</div>" + '<div class="ms-grid" id="mli-grid"><div class="ms-skeleton"></div></div>' + '<div class="ms-section-head"><h3>Riwayat Kamu</h3><div class="rule"></div></div>' + '<div class="ms-tabs">' + '<button type="button" class="ms-tab active" id="mli-tab-txn">Transaksi Koin</button>' + '<button type="button" class="ms-tab" id="mli-tab-purchase">Riwayat Pembelian</button>' + "</div>" + '<div class="ms-panel-box" id="mli-panel-txn"><div class="ms-table-wrap"><table class="ms-table">' + '<thead><tr><th>Waktu</th><th>Tipe</th><th>Keterangan</th><th style="text-align:right">Jumlah</th><th style="text-align:right">Saldo</th></tr></thead>' + '<tbody id="mli-txn-body"></tbody></table></div>' + '<div class="ms-history-empty ms-hidden" id="mli-txn-empty">Belum ada transaksi koin. Selesaikan lagu pertamamu di Chiroot!</div></div>' + '<div class="ms-panel-box ms-hidden" id="mli-panel-purchase"><div class="ms-table-wrap"><table class="ms-table">' + '<thead><tr><th>Waktu</th><th>Item</th><th style="text-align:right">Total</th><th>Status</th></tr></thead>' + '<tbody id="mli-purchase-body"></tbody></table></div>' + '<div class="ms-history-empty ms-hidden" id="mli-purchase-empty">Belum ada pembelian.</div></div>' + "</div>" + "</div>" + '<div class="ms-overlay" id="mli-detail-overlay" role="dialog" aria-modal="true" aria-label="Detail produk">' + '<div class="ms-modal">' + '<button type="button" class="ms-close-x" id="mli-detail-close">✕</button>' + '<h3 id="mli-detail-title">Produk</h3>' + '<div class="ms-detail-grid">' + '<div class="ms-detail-img" id="mli-detail-img"></div>' + '<div class="ms-detail-info">' + '<p id="mli-detail-desc"></p>' + '<div class="ms-stock" id="mli-detail-stock"></div>' + '<div class="ms-price" id="mli-detail-price" style="margin:8px 0 4px;font-size:16px"></div>' + '<div class="ms-qty">' + '<button type="button" id="mli-qty-minus" aria-label="Kurangi">−</button>' + '<span id="mli-qty-value">1</span>' + '<button type="button" id="mli-qty-plus" aria-label="Tambah">+</button>' + "</div>" + '<div class="ms-actions" style="justify-content:flex-start;margin:0">' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-add-cart">+ Masukkan keranjang</button>' + "</div>" + "</div>" + "</div>" + "</div>" + "</div>" + '<div class="ms-drawer-scrim" id="mli-scrim"></div>' + '<aside class="ms-drawer" id="mli-drawer" aria-label="Keranjang belanja">' + '<div class="ms-drawer-head"><h3>Keranjang Treasure</h3>' + '<button type="button" class="ms-modal-close" id="mli-cart-close" aria-label="Tutup keranjang">✕</button></div>' + '<div class="ms-drawer-body" id="mli-cart-body"></div>' + '<div class="ms-drawer-foot">' + '<div class="ms-total-row"><span>Total</span><span class="ms-price">' + coinIcon() + '<span id="mli-cart-total">0</span></span></div>' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-checkout" style="width:100%">Checkout dengan Halloween Coins</button>' + "</div>" + "</aside>" + '<div class="ms-overlay" id="mli-confirm-overlay" role="dialog" aria-modal="true" aria-label="Konfirmasi pembelian">' + '<div class="ms-modal" style="width:min(440px,94%)">' + '<div class="ms-confirm-icon">🎃</div>' + '<h3 style="margin:0 0 4px">Konfirmasi pembelian</h3>' + '<p class="ms-muted" style="margin:0">Server akan memvalidasi saldo &amp; stok.</p>' + '<div class="ms-confirm-summary" id="mli-confirm-summary"></div>' + '<div class="ms-actions">' + '<button type="button" class="ms-btn ms-btn-ghost" id="mli-confirm-cancel">Batal</button>' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-confirm-ok">Ya, beli sekarang</button>' + "</div>" + "</div>" + "</div>" + '<div class="ms-overlay" id="mli-admin-overlay" role="dialog" aria-modal="true" aria-label="Panel admin produk">' + '<div class="ms-modal wide">' + '<button type="button" class="ms-close-x" id="mli-admin-close">✕</button>' + "<h3>Admin — Tambah / Edit Produk</h3>" + '<p class="ms-muted" style="margin:0 0 14px">Harga &amp; stok hanya bisa diubah lewat panel ini; database berwenang penuh.</p>' + '<form class="ms-admin-form" id="mli-admin-form">' + '<input type="hidden" id="mli-ap-id">' + '<label>Nama produk<input type="text" id="mli-ap-name" maxlength="120" required placeholder="Pumpkin Lantern"></label>' + '<label>Kategori<input type="text" id="mli-ap-category" maxlength="40" placeholder="dekorasi" list="mli-category-list"><datalist id="mli-category-list"></datalist></label>' + '<label>Harga (Coins)<input type="number" id="mli-ap-price" min="1" step="1" required placeholder="10"></label>' + '<label>Stok<input type="number" id="mli-ap-stock" min="0" step="1" required placeholder="25"></label>' + '<label class="full">URL gambar (https / Supabase Storage)<input type="url" id="mli-ap-image" maxlength="1024" placeholder="https://astuagdezahmuuwjoghf.supabase.co/storage/v1/object/public/…"></label>' + '<label class="full">Deskripsi<textarea id="mli-ap-desc" rows="3" maxlength="600" placeholder="Cerita singkat harta karun ini…"></textarea></label>' + '<label class="full" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="mli-ap-active" checked> Produk aktif (tampil di katalog)</label>' + '<div class="full ms-actions" style="margin:4px 0 0"><button type="submit" class="ms-btn ms-btn-primary">Simpan produk</button></div>' + "</form>" + "</div>" + "</div>" + '<div class="ms-toast" id="mli-toast" role="status" aria-live="polite"></div>';
+        root.innerHTML = '<div class="melissa-character" id="mli-character" aria-live="polite">' + '<button type="button" class="mc-close" id="mli-char-close" aria-label="Sembunyikan Mellissa sampai kunjungan berikutnya">✕</button>' + '<button type="button" class="mc-figure" id="mli-char-figure" aria-label="Buka toko Mellissa" title="Klik untuk lihat barang dagangan Mellissa">' + '<span class="mc-bubble" id="mli-bubble">Aku datang bawa barang dagangan! Klik aku ya~</span>' + '<span class="mc-ping" aria-hidden="true"></span>' + '<span class="mc-glow" aria-hidden="true"></span>' + '<span class="mc-star-burst" id="mli-star-burst" aria-hidden="true"></span>' + '<span class="mc-spark s1" style="left:6%;top:16%;--dx:-14px;--dy:-16px;--d:.18s" aria-hidden="true">✦</span>' + '<span class="mc-spark s2" style="left:84%;top:10%;--dx:12px;--dy:-18px;--d:.34s" aria-hidden="true">✧</span>' + '<span class="mc-spark s3" style="left:0%;top:48%;--dx:-16px;--dy:-8px;--d:.52s" aria-hidden="true">✦</span>' + '<span class="mc-spark s4" style="left:90%;top:44%;--dx:14px;--dy:-10px;--d:.68s" aria-hidden="true">✧</span>' + '<span class="mc-spark s5 ambient" style="left:70%;top:74%;--dx:8px;--dy:-14px;--d:.85s" aria-hidden="true">✦</span>' + '<img class="mc-img" src="mellissa.png" alt="Mellissa, penyihir shopkeeper" draggable="false">' + '<span class="mc-shadow" aria-hidden="true"></span>' + "</button>" + "</div>" + '<div class="ms-overlay" id="mli-overlay" role="dialog" aria-modal="true" aria-labelledby="mli-title">' + '<div class="ms-panel">' + '<button type="button" class="ms-close-x" id="mli-overlay-close" aria-label="Tutup toko">✕</button>' + '<div class="ms-panel-head">' + '<div class="ms-house-frame">' + '<img src="shopfront-pixel.png" alt="Rumah toko Halloween Mellissa" draggable="false">' + "</div>" + '<div class="ms-head-copy">' + '<h2 id="mli-title">Melissa Shop</h2>' + "<p>Mellissa mampir selama 10 menit sebelum menghilang. Tukar Halloween Coins dari lagu Chiroot dengan PFP Border (30 Coins) &amp; harta karun musiman.</p>" + '<div class="ms-head-actions">' + '<span class="ms-coin-chip" id="mli-coin-chip" title="Saldo Halloween Coin kamu">' + coinSvg(18) + '<span id="mli-balance">–</span>&nbsp;Coins' + "</span>" + '<span class="ms-despawn-chip ms-hidden" id="mli-despawn-chip" title="Sisa waktu kunjungan Mellissa">⏳ <span id="mli-despawn-time">10:00</span></span>' + '<button type="button" class="ms-login-btn" id="mli-login"><span>Login with Google</span></button>' + '<button type="button" class="ms-avatar-btn ms-hidden" id="mli-avatar"><span class="dot"></span><span id="mli-avatar-name">Akun</span></button>' + '<button type="button" class="ms-admin-btn ms-hidden" id="mli-admin-open">★ Admin</button>' + "</div>" + "</div>" + "</div>" + '<div class="ms-dialogue" id="mli-dialogue">Welcome, traveler! Ready to explore my little Halloween shop?</div>' + '<div class="ms-toolbar">' + '<div class="ms-search"><span aria-hidden="true" style="color:var(--gold)">🔍</span>' + '<input type="search" id="mli-search" placeholder="Cari PFP Border atau treasure…" aria-label="Cari produk"></div>' + '<div class="ms-cats" id="mli-cats"></div>' + '<button type="button" class="ms-cart-btn" id="mli-cart-open">🛒 Keranjang<span class="count ms-hidden" id="mli-cart-count">0</span></button>' + "</div>" + '<div class="ms-grid" id="mli-grid"><div class="ms-skeleton"></div></div>' + '<div class="ms-section-head"><h3>Riwayat Kamu</h3><div class="rule"></div></div>' + '<div class="ms-tabs">' + '<button type="button" class="ms-tab active" id="mli-tab-txn">Transaksi Koin</button>' + '<button type="button" class="ms-tab" id="mli-tab-purchase">Riwayat Pembelian</button>' + "</div>" + '<div class="ms-panel-box" id="mli-panel-txn"><div class="ms-table-wrap"><table class="ms-table">' + '<thead><tr><th>Waktu</th><th>Tipe</th><th>Keterangan</th><th style="text-align:right">Jumlah</th><th style="text-align:right">Saldo</th></tr></thead>' + '<tbody id="mli-txn-body"></tbody></table></div>' + '<div class="ms-history-empty ms-hidden" id="mli-txn-empty">Belum ada transaksi koin. Selesaikan lagu pertamamu di Chiroot!</div></div>' + '<div class="ms-panel-box ms-hidden" id="mli-panel-purchase"><div class="ms-table-wrap"><table class="ms-table">' + '<thead><tr><th>Waktu</th><th>Item</th><th style="text-align:right">Total</th><th>Status</th></tr></thead>' + '<tbody id="mli-purchase-body"></tbody></table></div>' + '<div class="ms-history-empty ms-hidden" id="mli-purchase-empty">Belum ada pembelian.</div></div>' + "</div>" + "</div>" + '<div class="ms-overlay" id="mli-detail-overlay" role="dialog" aria-modal="true" aria-label="Detail produk">' + '<div class="ms-modal">' + '<button type="button" class="ms-close-x" id="mli-detail-close">✕</button>' + '<h3 id="mli-detail-title">Produk</h3>' + '<div class="ms-detail-grid">' + '<div class="ms-detail-img" id="mli-detail-img"></div>' + '<div class="ms-detail-info">' + '<p id="mli-detail-desc"></p>' + '<div class="ms-stock" id="mli-detail-stock"></div>' + '<div class="ms-price" id="mli-detail-price" style="margin:8px 0 4px;font-size:16px"></div>' + '<div class="ms-qty" id="mli-qty-wrap">' + '<button type="button" id="mli-qty-minus" aria-label="Kurangi">−</button>' + '<span id="mli-qty-value">1</span>' + '<button type="button" id="mli-qty-plus" aria-label="Tambah">+</button>' + "</div>" + '<div class="ms-actions" style="justify-content:flex-start;margin:0;flex-wrap:wrap;gap:8px">' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-add-cart">+ Masukkan keranjang</button>' + '<button type="button" class="ms-btn ms-btn-ghost ms-hidden" id="mli-equip-btn">✦ Pakai Border Ini</button>' + "</div>" + "</div>" + "</div>" + "</div>" + "</div>" + '<div class="ms-drawer-scrim" id="mli-scrim"></div>' + '<aside class="ms-drawer" id="mli-drawer" aria-label="Keranjang belanja">' + '<div class="ms-drawer-head"><h3>Keranjang Treasure</h3>' + '<button type="button" class="ms-modal-close" id="mli-cart-close" aria-label="Tutup keranjang">✕</button></div>' + '<div class="ms-drawer-body" id="mli-cart-body"></div>' + '<div class="ms-drawer-foot">' + '<div class="ms-total-row"><span>Total</span><span class="ms-price">' + coinIcon() + '<span id="mli-cart-total">0</span></span></div>' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-checkout" style="width:100%">Checkout dengan Halloween Coins</button>' + "</div>" + "</aside>" + '<div class="ms-overlay" id="mli-confirm-overlay" role="dialog" aria-modal="true" aria-label="Konfirmasi pembelian">' + '<div class="ms-modal" style="width:min(440px,94%)">' + '<div class="ms-confirm-icon">🎃</div>' + '<h3 style="margin:0 0 4px">Konfirmasi pembelian</h3>' + '<p class="ms-muted" style="margin:0">Server akan memvalidasi saldo &amp; stok.</p>' + '<div class="ms-confirm-summary" id="mli-confirm-summary"></div>' + '<div class="ms-actions">' + '<button type="button" class="ms-btn ms-btn-ghost" id="mli-confirm-cancel">Batal</button>' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-confirm-ok">Ya, beli sekarang</button>' + "</div>" + "</div>" + "</div>" + '<div class="ms-overlay" id="mli-admin-overlay" role="dialog" aria-modal="true" aria-label="Panel admin produk">' + '<div class="ms-modal wide">' + '<button type="button" class="ms-close-x" id="mli-admin-close">✕</button>' + "<h3>Admin — Tambah / Edit Produk</h3>" + '<p class="ms-muted" style="margin:0 0 14px">Harga &amp; stok hanya bisa diubah lewat panel ini; database berwenang penuh.</p>' + '<form class="ms-admin-form" id="mli-admin-form">' + '<input type="hidden" id="mli-ap-id">' + '<label>Nama produk<input type="text" id="mli-ap-name" maxlength="120" required placeholder="Pumpkin & Ribbon Border #01"></label>' + '<label>Kategori<input type="text" id="mli-ap-category" maxlength="40" placeholder="PFP Border" list="mli-category-list"><datalist id="mli-category-list"></datalist></label>' + '<label>Harga (Coins)<input type="number" id="mli-ap-price" min="1" step="1" required placeholder="30"></label>' + '<label>Stok<input type="number" id="mli-ap-stock" min="0" step="1" required placeholder="9999"></label>' + '<label class="full">URL gambar / Kode PFP Border<input type="url" id="mli-ap-image" maxlength="1024" placeholder="https://astuagdezahmuuwjoghf.supabase.co/pfp/pfp_border_01.png"></label>' + '<label class="full">Deskripsi<textarea id="mli-ap-desc" rows="3" maxlength="600" placeholder="Cerita singkat harta karun ini…"></textarea></label>' + '<label class="full" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="mli-ap-active" checked> Produk aktif (tampil di katalog)</label>' + '<div class="full ms-actions" style="margin:4px 0 0;flex-wrap:wrap;gap:8px"><button type="button" class="ms-btn ms-btn-ghost" id="mli-sync-borders">🎃 Sinkron 10 PFP Border (30 Coins)</button><button type="submit" class="ms-btn ms-btn-primary">Simpan produk</button></div>' + "</form>" + "</div>" + "</div>" + '<div class="ms-toast" id="mli-toast" role="status" aria-live="polite"></div>';
         document.body.appendChild(root);
         root.addEventListener("dragstart", function(e) {
             e.preventDefault();
         });
-        [ "character", "char-close", "char-figure", "bubble", "overlay", "overlay-close", "coin-chip", "balance", "login", "avatar", "avatar-name", "admin-open", "dialogue", "search", "cats", "cart-open", "cart-count", "grid", "tab-txn", "tab-purchase", "panel-txn", "panel-purchase", "txn-body", "txn-empty", "purchase-body", "purchase-empty", "detail-overlay", "detail-close", "detail-title", "detail-img", "detail-desc", "detail-stock", "detail-price", "qty-minus", "qty-value", "qty-plus", "add-cart", "scrim", "drawer", "cart-close", "cart-body", "cart-total", "checkout", "confirm-overlay", "confirm-summary", "confirm-cancel", "confirm-ok", "admin-overlay", "admin-close", "admin-form", "ap-id", "ap-name", "ap-category", "ap-price", "ap-stock", "ap-image", "ap-desc", "ap-active", "category-list", "toast" ].forEach(function(id) {
+        [ "character", "char-close", "char-figure", "bubble", "star-burst", "overlay", "overlay-close", "coin-chip", "balance", "despawn-chip", "despawn-time", "login", "avatar", "avatar-name", "admin-open", "dialogue", "search", "cats", "cart-open", "cart-count", "grid", "tab-txn", "tab-purchase", "panel-txn", "panel-purchase", "txn-body", "txn-empty", "purchase-body", "purchase-empty", "detail-overlay", "detail-close", "detail-title", "detail-img", "detail-desc", "detail-stock", "detail-price", "qty-wrap", "qty-minus", "qty-value", "qty-plus", "add-cart", "equip-btn", "scrim", "drawer", "cart-close", "cart-body", "cart-total", "checkout", "confirm-overlay", "confirm-summary", "confirm-cancel", "confirm-ok", "admin-overlay", "admin-close", "admin-form", "ap-id", "ap-name", "ap-category", "ap-price", "ap-stock", "ap-image", "ap-desc", "ap-active", "sync-borders", "category-list", "toast" ].forEach(function(id) {
             els[id] = document.getElementById("mli-" + id);
         });
     }
@@ -48,7 +80,7 @@
         return core.esc(v);
     }
     function say(line) {
-        $("dialogue").textContent = line;
+        if ($("dialogue")) $("dialogue").textContent = line;
     }
     function fmtDate(iso) {
         try {
@@ -63,17 +95,71 @@
             return iso || "—";
         }
     }
+    function resolveBorderKey(p) {
+        if (!p) return "";
+        if (bordersApi) return bordersApi.resolveKey(p);
+        return "";
+    }
     function productImage(p) {
-        return p && p.image_url && /^https:\/\/[^"'\s<>]+$/.test(p.image_url) ? p.image_url : "";
+        if (!p) return "";
+        var bKey = resolveBorderKey(p);
+        if (bKey && bordersApi) {
+            var bSrc = bordersApi.getSrc(bKey);
+            if (bSrc) return bSrc;
+        }
+        if (p.image_url && /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/]+=*$/.test(p.image_url)) return p.image_url;
+        return p.image_url && /^https:\/\/[^"'\s<>]+$/.test(p.image_url) ? p.image_url : "";
+    }
+    function mergeWithBorderCatalog(dbRows) {
+        var rows = Array.isArray(dbRows) ? dbRows.slice() : [];
+        var byBorderKey = {};
+        var normalized = rows.map(function(row) {
+            var copy = Object.assign({}, row);
+            var bKey = resolveBorderKey(copy);
+            if (bKey) {
+                copy.border_key = bKey;
+                if (!copy.category || copy.category === "general") copy.category = "PFP Border";
+                byBorderKey[bKey] = copy;
+            }
+            return copy;
+        });
+        if (bordersApi) {
+            bordersApi.getCatalog().forEach(function(item) {
+                if (!byBorderKey[item.key]) {
+                    normalized.push({
+                        id: "local_" + item.key,
+                        border_key: item.key,
+                        name: item.name,
+                        description: item.description,
+                        image_url: item.image_marker,
+                        category: item.category,
+                        price: 30,
+                        stock: 9999,
+                        is_active: true,
+                        _unseeded: true
+                    });
+                }
+            });
+        }
+        normalized.sort(function(a, b) {
+            var ka = a.border_key || "";
+            var kb = b.border_key || "";
+            if (ka && kb) return ka.localeCompare(kb);
+            if (ka) return -1;
+            if (kb) return 1;
+            return 0;
+        });
+        return normalized;
     }
     function openLayer(id) {
-        $(id).classList.add("open");
+        if ($(id)) $(id).classList.add("open");
     }
     function closeLayer(id) {
-        $(id).classList.remove("open");
+        if ($(id)) $(id).classList.remove("open");
     }
     function toast(msg, isError) {
         var el = $("toast");
+        if (!el) return;
         el.className = "ms-toast" + (isError ? " error" : "");
         el.innerHTML = "";
         if (!isError) {
@@ -102,30 +188,143 @@
         }
         return v;
     }
-    function showCharacter() {
+    function readActiveUntil() {
+        var v = Number(localStorage.getItem(ACTIVE_UNTIL_KEY));
+        return isFinite(v) && v > 0 ? v : 0;
+    }
+    function formatRemaining(ms) {
+        var sec = Math.max(0, Math.ceil(ms / 1e3));
+        var m = Math.floor(sec / 60);
+        var s = sec % 60;
+        return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+    }
+    function updateDespawnChip() {
+        if (!$("despawn-chip") || !$("despawn-time")) return;
+        if (state.characterVisible && !state.despawning && state.despawnAt > 0) {
+            var rem = Math.max(0, state.despawnAt - Date.now());
+            $("despawn-chip").classList.remove("ms-hidden");
+            $("despawn-time").textContent = formatRemaining(rem);
+            $("despawn-chip").classList.toggle("urgent", rem <= 6e4);
+        } else {
+            $("despawn-chip").classList.add("ms-hidden");
+        }
+    }
+    function armDespawnTimer(targetTs) {
+        state.despawnAt = targetTs;
+        try {
+            localStorage.setItem(ACTIVE_UNTIL_KEY, String(targetTs));
+        } catch (e) {}
+        clearTimeout(despawnTimer);
+        var wait = Math.max(0, targetTs - Date.now());
+        despawnTimer = setTimeout(function() {
+            despawnCharacter(true);
+        }, wait);
+        updateDespawnChip();
+    }
+    function spawnStarExplosion() {
+        var box = $("star-burst");
+        if (!box) return;
+        var glyphs = [ "✦", "✧", "★", "✶" ];
+        var colors = [ "#ffd466", "#fff4c2", "#ff9e3d", "#e3b5ff", "#ffbe3b" ];
+        var html = '<span class="mc-burst-flash"></span><span class="mc-burst-ring"></span><span class="mc-burst-ring r2"></span>';
+        var count = 24;
+        for (var i = 0; i < count; i++) {
+            var angle = (Math.PI * 2 * i) / count + (Math.random() - .5) * .22;
+            var dist = 56 + Math.round(Math.random() * 76);
+            var tx = Math.round(Math.cos(angle) * dist);
+            var ty = Math.round(Math.sin(angle) * dist) - 8;
+            var rot = Math.round((Math.random() - .5) * 420);
+            var sc = (.75 + Math.random() * .75).toFixed(2);
+            var dur = (.62 + Math.random() * .3).toFixed(2);
+            var dly = (Math.random() * .08).toFixed(2);
+            var clr = colors[i % colors.length];
+            var gl = glyphs[i % glyphs.length];
+            html += '<span class="mc-star-particle" style="--tx:' + tx + "px;--ty:" + ty + "px;--rot:" + rot + "deg;--sc:" + sc + ";--dur:" + dur + "s;--dly:" + dly + "s;color:" + clr + '">' + gl + "</span>";
+        }
+        box.innerHTML = html;
+    }
+    function despawnCharacter(byTimer) {
+        if (state.despawning || !state.characterVisible) return;
+        if (byTimer && state.purchaseInFlight) {
+            clearTimeout(despawnTimer);
+            despawnTimer = setTimeout(function() {
+                despawnCharacter(true);
+            }, 4e3);
+            return;
+        }
+        state.despawning = true;
+        clearTimeout(bubbleTimer);
+        clearTimeout(despawnTimer);
+        try {
+            localStorage.removeItem(ACTIVE_UNTIL_KEY);
+        } catch (e) {}
+        scheduleNext();
+        [ "admin-overlay", "confirm-overlay", "detail-overlay" ].forEach(closeLayer);
+        if ($("drawer")) $("drawer").classList.remove("open");
+        if ($("scrim")) $("scrim").classList.remove("open");
+        closeShop();
+        $("bubble").hidden = true;
+        updateDespawnChip();
+        spawnStarExplosion();
+        $("character").classList.add("despawning");
+        if (byTimer) {
+            toast("✦ Waktu kunjungan 10 menit habis! Mellissa menghilang dalam ledakan bintang~");
+        }
+        setTimeout(function() {
+            $("character").classList.remove("visible", "despawning");
+            if ($("star-burst")) $("star-burst").innerHTML = "";
+            state.characterVisible = false;
+            state.despawning = false;
+            state.despawnAt = 0;
+            updateDespawnChip();
+        }, 950);
+    }
+    function showCharacter(existingUntil, silentToast) {
+        clearTimeout(despawnTimer);
+        if ($("star-burst")) $("star-burst").innerHTML = "";
+        $("character").classList.remove("despawning");
+        state.despawning = false;
         state.characterVisible = true;
         $("character").classList.add("visible");
-        var lines = [ "Aku datang bawa barang dagangan! Klik aku ya~", "Toko keliling Mellissa sudah buka! Cek yuk~", "Ada treasure baru hari ini! Klik aku~", "Hai traveler! Mau lihat koleksi Halloween-ku?" ];
+        var until = existingUntil && existingUntil > Date.now() ? existingUntil : Date.now() + DESPAWN_MS;
+        armDespawnTimer(until);
+        var lines = [ "Aku datang 10 menit bawa dagangan! Klik aku ya~", "Toko keliling Mellissa buka 10 menit! Cek PFP Border yuk~", "Ada 10 PFP Border Halloween 30 Coins! Klik aku~", "Hai traveler! Mampir yuk sebelum aku menghilang~" ];
         clearTimeout(bubbleTimer);
         $("bubble").hidden = false;
         bubbleTimer = setTimeout(function() {
             $("bubble").hidden = true;
         }, 1e4);
         $("bubble").textContent = lines[Math.floor(Math.random() * lines.length)];
-        toast("Mellissa muncul! Klik dia untuk lihat barang dagangan.");
+        if (!silentToast) toast("Mellissa muncul selama 10 menit! Klik dia untuk belanja.");
     }
     function hideCharacter() {
-        clearTimeout(bubbleTimer);
-        $("bubble").hidden = true;
-        state.characterVisible = false;
-        $("character").classList.remove("visible");
+        despawnCharacter(false);
     }
     function scheduleNext() {
         localStorage.setItem(NEXT_KEY, String(Date.now() + VISIT_MS));
     }
     function tick() {
+        if (state.despawning) return;
+        if (state.characterVisible) {
+            if (state.despawnAt > 0 && Date.now() >= state.despawnAt) {
+                despawnCharacter(true);
+            } else {
+                updateDespawnChip();
+            }
+            return;
+        }
+        var activeUntil = readActiveUntil();
+        if (activeUntil > Date.now()) {
+            showCharacter(activeUntil, true);
+            return;
+        }
+        if (activeUntil > 0 && activeUntil <= Date.now()) {
+            try {
+                localStorage.removeItem(ACTIVE_UNTIL_KEY);
+            } catch (e) {}
+        }
         if (Date.now() >= readNextAt()) {
-            if (!state.characterVisible) showCharacter();
+            showCharacter();
             scheduleNext();
         }
     }
@@ -138,17 +337,27 @@
             $("balance").textContent = "0";
             return;
         }
-        if (authed) {
-            var s = core.getSession();
-            var name = s.user.email ? s.user.email.split("@")[0] : "Traveler";
-            $("avatar-name").textContent = name.replace(/[._-]+/g, " ");
+        var s = core.getSession();
+        var name = s && s.user && s.user.email ? s.user.email.split("@")[0] : "Traveler";
+        if (window.ChirootAuth && window.ChirootAuth.profile && window.ChirootAuth.profile.display_name) {
+            name = window.ChirootAuth.profile.display_name;
         }
+        $("avatar-name").textContent = name.replace(/[._-]+/g, " ");
     }
     function logout() {
+        if (typeof window.caAskSignOut === "function") {
+            window.caAskSignOut();
+            return;
+        }
         var s = core.getSession();
         var done = function() {
             core.clearSession();
-            window.location.reload();
+            state.balance = 0;
+            state.isAdmin = false;
+            renderAuth();
+            renderGrid();
+            document.dispatchEvent(new CustomEvent("melissa:balance", { detail: { balance: 0 } }));
+            toast("Berhasil keluar dari akun.");
         };
         if (s) {
             fetch(core.config.url + "/auth/v1/logout", {
@@ -188,10 +397,13 @@
     }
     function loadProducts() {
         return core.apiCall("/rest/v1/products?select=*&order=created_at.desc", "GET").then(function(rows) {
-            state.products = Array.isArray(rows) ? rows : [];
-            if (!state.isAdmin) state.products = state.products.filter(function(p) {
-                return p.is_active;
-            });
+            var merged = mergeWithBorderCatalog(rows);
+            if (!state.isAdmin) {
+                merged = merged.filter(function(p) {
+                    return p.is_active !== false;
+                });
+            }
+            state.products = merged;
             var cats = {};
             state.products.forEach(function(p) {
                 if (p.category) cats[p.category] = true;
@@ -199,13 +411,72 @@
             state.categories = Object.keys(cats).sort();
             renderCats();
             applyFilters();
-            if (!state.products.length && core.isAuthed()) say("My shelves are waiting for new treasures!");
+            return state.products;
         }).catch(function(err) {
-            state.products = [];
-            state.categories = [];
+            state.products = mergeWithBorderCatalog([]);
+            var cats = {};
+            state.products.forEach(function(p) {
+                if (p.category) cats[p.category] = true;
+            });
+            state.categories = Object.keys(cats).sort();
             renderCats();
             applyFilters();
             if (err && err.status !== 404) console.warn("[Melissa] loadProducts", err.message);
+            return state.products;
+        });
+    }
+    function syncBordersToServer(announce) {
+        if (!core.isAuthed() || state.syncingBorders || !bordersApi) return Promise.resolve(false);
+        var catalog = bordersApi.getCatalog();
+        var tasks = catalog.map(function(item) {
+            var existing = state.products.find(function(p) {
+                return !p._unseeded && p.border_key === item.key;
+            });
+            if (existing && Number(existing.price) === 30 && existing.is_active) return null;
+            return {
+                p_id: existing ? existing.id : null,
+                p_name: item.name,
+                p_description: item.description,
+                p_image_url: item.image_marker,
+                p_category: "PFP Border",
+                p_price: 30,
+                p_stock: existing ? Math.max(Number(existing.stock) || 0, 9999) : 9999,
+                p_is_active: true
+            };
+        }).filter(Boolean);
+        if (!tasks.length) {
+            if (announce) toast("Semua 10 PFP Border (30 Coins) sudah sinkron di database!");
+            return Promise.resolve(true);
+        }
+        state.syncingBorders = true;
+        var chain = Promise.resolve();
+        tasks.forEach(function(args) {
+            chain = chain.then(function() {
+                return core.rpc("admin_upsert_product", args);
+            });
+        });
+        return chain.then(function() {
+            if (announce) toast("10 PFP Border (30 Coins) berhasil disimpan ke database!");
+            return loadProducts().then(function() {
+                state.cart.forEach(function(line) {
+                    if (line.border_key) {
+                        var real = state.products.find(function(p) {
+                            return !p._unseeded && p.border_key === line.border_key;
+                        });
+                        if (real) {
+                            line.product_id = real.id;
+                            line._unseeded = false;
+                        }
+                    }
+                });
+                return true;
+            });
+        }).catch(function(err) {
+            if (announce) toast(err && err.message || "Gagal sinkron PFP Border.", true);
+            return false;
+        }).then(function(ok) {
+            state.syncingBorders = false;
+            return ok;
         });
     }
     function renderCats() {
@@ -249,33 +520,61 @@
             if (state.products.length) {
                 empty.innerHTML = "<h3>Tidak ada yang cocok</h3><p>Coba kata kunci atau kategori lain, traveler.</p>";
             } else {
-                empty.innerHTML = '<img class="shop-logo" src="' + ASSET + 'melissa-shop-logo.png" alt="Logo Melissa Shop" draggable="false" style="width:118px;margin:0 auto 12px">' + "<h3>My shelves are waiting for new treasures!</h3>" + "<p>Belum ada produk aktif. Saat admin menambahkan treasure, rak ini terisi otomatis.</p>";
+                empty.innerHTML = '<div style="font-size:42px;margin:0 auto 8px">🎃</div>' + "<h3>My shelves are waiting for new treasures!</h3>" + "<p>Belum ada produk aktif. Saat admin menambahkan treasure, rak ini terisi otomatis.</p>";
             }
             grid.appendChild(empty);
             return;
         }
+        var equippedKey = core.isAuthed() && bordersApi ? bordersApi.getEquipped() : "";
         state.filtered.forEach(function(p) {
             var card = document.createElement("article");
             card.className = "ms-card";
             var img = productImage(p);
-            card.innerHTML = '<div class="ms-card-img">' + (img ? '<img src="' + esc(img) + '" alt="' + esc(p.name) + '" draggable="false">' : '<span class="ph">🎃</span>') + "</div>" + '<div class="ms-card-body">' + '<h3 class="ms-card-name">' + esc(p.name) + "</h3>" + '<p class="ms-card-desc">' + esc(p.description || "") + "</p>" + '<div class="ms-card-foot">' + '<span class="ms-price">' + coinIcon() + esc(String(p.price)) + "</span>" + '<span class="ms-stock' + (p.stock <= 5 ? " low" : "") + '">Stok ' + esc(String(p.stock)) + "</span>" + "</div>" + "</div>";
+            var bKey = resolveBorderKey(p);
+            var owned = core.isAuthed() && bKey && bordersApi && bordersApi.isOwned(bKey);
+            var isEquipped = owned && equippedKey === bKey;
+            var badgeHtml = isEquipped ? '<span class="ms-owned-pill equipped">✦ Terpasang</span>' : owned ? '<span class="ms-owned-pill">✓ Dimiliki</span>' : "";
+            var mediaHtml = bKey && img ? borderPreviewHtml(img, p.name, false) : img ? '<img src="' + esc(img) + '" alt="' + esc(p.name) + '" draggable="false">' : '<span class="ph">🎃</span>';
+            var stockLabel = owned ? "Koleksi kamu" : bKey ? "PFP Border" : "Stok " + esc(String(p.stock));
+            card.innerHTML = '<div class="ms-card-img">' + badgeHtml + mediaHtml + "</div>" + '<div class="ms-card-body">' + '<h3 class="ms-card-name">' + esc(p.name) + "</h3>" + '<p class="ms-card-desc">' + esc(p.description || "") + "</p>" + '<div class="ms-card-foot">' + '<span class="ms-price">' + coinIcon() + esc(String(p.price)) + "</span>" + '<span class="ms-stock' + (!owned && !bKey && p.stock <= 5 ? " low" : "") + '">' + stockLabel + "</span>" + "</div>" + "</div>";
             card.addEventListener("click", function() {
                 openDetail(p);
             });
             grid.appendChild(card);
         });
     }
+    function refreshDetailEquipUI(p) {
+        var bKey = resolveBorderKey(p);
+        var owned = core.isAuthed() && bKey && bordersApi && bordersApi.isOwned(bKey);
+        var equipped = owned && bordersApi.getEquipped() === bKey;
+        var qtyWrap = $("qty-wrap");
+        var addBtn = $("add-cart");
+        var eqBtn = $("equip-btn");
+        if (owned) {
+            if (qtyWrap) qtyWrap.classList.add("ms-hidden");
+            addBtn.classList.add("ms-hidden");
+            eqBtn.classList.remove("ms-hidden");
+            eqBtn.textContent = equipped ? "Lepas Border dari Profil" : "✦ Pakai Border Ini";
+            $("detail-stock").textContent = equipped ? "Status: Sedang terpasang di profil kamu ✦" : "Status: Sudah kamu miliki — siap dipasang!";
+        } else {
+            if (qtyWrap) qtyWrap.classList.toggle("ms-hidden", !!bKey);
+            addBtn.classList.remove("ms-hidden");
+            eqBtn.classList.add("ms-hidden");
+            addBtn.disabled = p.stock < 1;
+            $("detail-stock").textContent = bKey ? "Item permanen untuk foto profil Chiroot" : "Stok tersedia: " + p.stock + (p.stock <= 5 ? " · hampir habis!" : "");
+        }
+    }
     function openDetail(p) {
         state.selected = p;
         state.qty = 1;
         $("detail-title").textContent = p.name;
         $("detail-desc").textContent = p.description || "Belum ada deskripsi untuk treasure ini.";
-        $("detail-stock").textContent = "Stok tersedia: " + p.stock + (p.stock <= 5 ? " · hampir habis!" : "");
         $("detail-price").innerHTML = coinIcon(20) + " " + esc(String(p.price)) + " Halloween Coins";
         var img = productImage(p);
-        $("detail-img").innerHTML = img ? '<img src="' + esc(img) + '" alt="' + esc(p.name) + '" draggable="false">' : '<span class="ph" style="font-size:50px">🎃</span>';
+        var bKey = resolveBorderKey(p);
+        $("detail-img").innerHTML = bKey && img ? borderPreviewHtml(img, p.name, true) : img ? '<img src="' + esc(img) + '" alt="' + esc(p.name) + '" draggable="false">' : '<span class="ph" style="font-size:50px">🎃</span>';
         $("qty-value").textContent = "1";
-        $("add-cart").disabled = p.stock < 1;
+        refreshDetailEquipUI(p);
         openLayer("detail-overlay");
     }
     function cartCount() {
@@ -296,13 +595,13 @@
         $("cart-total").textContent = String(cartTotal());
         $("checkout").disabled = state.cart.length === 0 || state.purchaseInFlight;
         if (!state.cart.length) {
-            body.innerHTML = '<div class="ms-history-empty">Keranjang masih kosong. Pilih treasure dari rak dulu yuk!</div>';
+            body.innerHTML = '<div class="ms-history-empty">Keranjang masih kosong. Pilih PFP Border atau treasure dari rak dulu yuk!</div>';
             return;
         }
         state.cart.forEach(function(line) {
             var div = document.createElement("div");
             div.className = "ms-cart-line";
-            div.innerHTML = (line.image ? '<img src="' + esc(line.image) + '" alt="" draggable="false">' : '<div style="width:54px;height:54px;border-radius:9px;background:#120616;display:flex;align-items:center;justify-content:center;font-size:22px">🎃</div>') + '<div><p class="name">' + esc(line.name) + "</p>" + '<div class="meta">' + line.quantity + " × " + line.unit_price + " = " + line.unit_price * line.quantity + " koin</div></div>" + '<button type="button" class="rm" aria-label="Hapus ' + esc(line.name) + '" title="Hapus">✕</button>';
+            div.innerHTML = (line.image ? '<img src="' + esc(line.image) + '" alt="" draggable="false">' : '<div style="width:54px;height:54px;border-radius:9px;background:#120616;display:flex;align-items:center;justify-content:center;font-size:22px">🎃</div>') + '<div style="min-width:0;flex:1"><p class="name">' + esc(line.name) + "</p>" + '<div class="meta">' + line.quantity + " × " + line.unit_price + " = " + line.unit_price * line.quantity + " koin</div></div>" + '<button type="button" class="rm" aria-label="Hapus ' + esc(line.name) + '" title="Hapus">✕</button>';
             div.querySelector(".rm").addEventListener("click", function() {
                 state.cart = state.cart.filter(function(l) {
                     return l.product_id !== line.product_id;
@@ -315,9 +614,19 @@
     function addSelectedToCart() {
         var p = state.selected;
         if (!p || p.stock < 1) return;
+        var bKey = resolveBorderKey(p);
+        if (bKey && core.isAuthed() && bordersApi && bordersApi.isOwned(bKey)) {
+            toast("Kamu sudah memiliki border ini!", true);
+            return;
+        }
         var existing = state.cart.find(function(l) {
-            return l.product_id === p.id;
+            return l.product_id === p.id || bKey && l.border_key === bKey;
         });
+        if (bKey && existing) {
+            closeLayer("detail-overlay");
+            toast('"' + p.name + '" sudah ada di keranjang.');
+            return;
+        }
         var currentQty = existing ? existing.quantity : 0;
         if (currentQty + state.qty > p.stock) {
             toast("Stok " + p.name + " hanya " + p.stock + ".", true);
@@ -325,10 +634,12 @@
         }
         if (existing) existing.quantity += state.qty; else state.cart.push({
             product_id: p.id,
+            border_key: bKey || "",
+            _unseeded: !!p._unseeded,
             name: p.name,
             image: productImage(p),
             unit_price: Number(p.price),
-            quantity: state.qty,
+            quantity: bKey ? 1 : state.qty,
             stock: p.stock
         });
         closeLayer("detail-overlay");
@@ -353,29 +664,52 @@
         if (!state.idempotencyKey) {
             state.idempotencyKey = crypto.randomUUID ? crypto.randomUUID() : "p_" + Date.now() + "_" + Math.random().toString(36).slice(2);
         }
-        var payload = state.cart.map(function(l) {
-            return {
-                product_id: l.product_id,
-                quantity: l.quantity
-            };
+        var hasUnseeded = state.cart.some(function(l) {
+            return l._unseeded || /^local_/.test(String(l.product_id));
         });
-        core.rpc("purchase_products", {
-            p_items: payload,
-            p_idempotency_key: state.idempotencyKey
-        }).then(function(res) {
-            if (!res || res.ok !== true) throw new Error("Pembelian gagal diproses server.");
-            var spent = Number(res.total_spent || cartTotal());
-            state.cart = [];
-            state.idempotencyKey = null;
-            closeLayer("confirm-overlay");
-            renderCart();
-            say("Excellent choice! Enjoy your new treasure.");
-            toast("Pembelian sukses! −" + spent + " Halloween Coins");
-            return Promise.all([ loadBalance(true), loadProducts(), loadTransactions(), loadPurchases() ]);
+        var prep = hasUnseeded ? syncBordersToServer(false) : Promise.resolve(true);
+        prep.then(function() {
+            var stillLocal = state.cart.some(function(l) {
+                return l._unseeded || /^local_/.test(String(l.product_id));
+            });
+            if (stillLocal) {
+                throw new Error("SEED_REQUIRED");
+            }
+            var payload = state.cart.map(function(l) {
+                return {
+                    product_id: l.product_id,
+                    quantity: l.quantity
+                };
+            });
+            var boughtBorders = state.cart.map(function(l) {
+                return l.border_key;
+            }).filter(Boolean);
+            return core.rpc("purchase_products", {
+                p_items: payload,
+                p_idempotency_key: state.idempotencyKey
+            }).then(function(res) {
+                if (!res || res.ok !== true) throw new Error("Pembelian gagal diproses server.");
+                var spent = Number(res.total_spent || cartTotal());
+                if (boughtBorders.length && bordersApi) {
+                    bordersApi.markOwned(boughtBorders);
+                    bordersApi.setEquipped(boughtBorders[0]);
+                }
+                state.cart = [];
+                state.idempotencyKey = null;
+                closeLayer("confirm-overlay");
+                $("drawer").classList.remove("open");
+                $("scrim").classList.remove("open");
+                renderCart();
+                renderGrid();
+                say(boughtBorders.length ? "Border baru langsung terpasang di foto profilmu!" : "Excellent choice! Enjoy your new treasure.");
+                toast(boughtBorders.length ? "Pembelian sukses! −" + spent + " Coins • Border terpasang!" : "Pembelian sukses! −" + spent + " Halloween Coins");
+                return Promise.all([ loadBalance(true), loadProducts(), loadTransactions(), loadPurchases() ]);
+            });
         }).catch(function(err) {
             var msg = err && err.message ? err.message : "Pembelian gagal.";
             var friendly = {
-                INSUFFICIENT_FUNDS: "Saldo Halloween Coins kamu tidak cukup.",
+                SEED_REQUIRED: "Produk PFP Border belum terdaftar di tabel products Supabase. Buka sekali dengan akun Admin atau jalankan SQL seed produk.",
+                INSUFFICIENT_FUNDS: "Saldo Halloween Coins kamu tidak cukup (butuh " + cartTotal() + " Coins).",
                 INSUFFICIENT_STOCK: "Stok produk tidak mencukupi.",
                 PRODUCT_UNAVAILABLE: "Salah satu produk sudah tidak aktif.",
                 UNKNOWN_PRODUCT: "Produk tidak ditemukan di server.",
@@ -430,9 +764,19 @@
             return core.apiCall("/rest/v1/purchase_items?select=*", "GET").then(function(items) {
                 items = Array.isArray(items) ? items : [];
                 var nameById = {};
+                var borderById = {};
                 state.products.forEach(function(p) {
                     nameById[p.id] = p.name;
+                    if (p.border_key) borderById[p.id] = p.border_key;
                 });
+                var ownedBorderKeys = [];
+                items.forEach(function(i) {
+                    if (borderById[i.product_id]) ownedBorderKeys.push(borderById[i.product_id]);
+                });
+                if (ownedBorderKeys.length && bordersApi) {
+                    bordersApi.markOwned(ownedBorderKeys);
+                    renderGrid();
+                }
                 $("purchase-body").innerHTML = purchases.map(function(pu) {
                     var summary = items.filter(function(i) {
                         return i.purchase_id === pu.id;
@@ -456,7 +800,11 @@
         return core.rpc("is_melissa_admin", {}).then(function(v) {
             state.isAdmin = v === true;
             $("admin-open").classList.toggle("ms-hidden", !state.isAdmin);
-            if (state.isAdmin) return loadProducts();
+            if (state.isAdmin) {
+                return loadProducts().then(function() {
+                    return syncBordersToServer(false);
+                });
+            }
             return null;
         }).catch(function() {
             state.isAdmin = false;
@@ -465,11 +813,16 @@
     }
     function submitAdmin(e) {
         e.preventDefault();
+        var rawImg = $("ap-image").value.trim();
+        var bKey = resolveBorderKey(rawImg);
+        if (bKey && !/^https:\/\//.test(rawImg)) {
+            rawImg = core.config.url + "/pfp/" + bKey + ".png";
+        }
         var args = {
             p_id: $("ap-id").value || null,
             p_name: $("ap-name").value.trim(),
             p_description: $("ap-desc").value.trim(),
-            p_image_url: $("ap-image").value.trim() || null,
+            p_image_url: rawImg || null,
             p_category: $("ap-category").value.trim() || "general",
             p_price: Number($("ap-price").value),
             p_stock: Number($("ap-stock").value),
@@ -485,24 +838,51 @@
         });
     }
     function openShop() {
+        if (state.despawning) return;
+        if (!state.characterVisible) {
+            showCharacter(readActiveUntil(), true);
+        } else {
+            updateDespawnChip();
+        }
         openLayer("overlay");
         renderAuth();
         if (!state.shopLoaded) {
             state.shopLoaded = true;
-            loadProducts();
-            if (core.isAuthed()) bootAuthedData(); else say("Welcome, traveler! Login dulu untuk mengumpulkan Halloween Coins.");
+            loadProducts().then(function() {
+                if (core.isAuthed()) return bootAuthedData();
+                say("Welcome, traveler! Login dulu untuk mengumpulkan Halloween Coins & beli PFP Border (30 Coins).");
+                return null;
+            });
         } else {
             renderAuth();
-            loadProducts();
-            if (core.isAuthed()) loadBalance(false);
+            loadProducts().then(function() {
+                if (core.isAuthed()) {
+                    loadBalance(false);
+                    loadTransactions();
+                    loadPurchases();
+                }
+            });
         }
     }
     function closeShop() {
         closeLayer("overlay");
     }
     function bootAuthedData() {
-        say("Welcome, traveler! Ready to explore my little Halloween shop?");
+        say("Welcome, traveler! Koleksi 10 PFP Border Halloween tersedia seharga 30 Coins!");
         return Promise.all([ loadBalance(false), loadTransactions(), loadPurchases(), checkAdmin() ]);
+    }
+    function refreshLiveAuth() {
+        renderAuth();
+        if (core.isAuthed()) {
+            bootAuthedData().then(function() {
+                renderGrid();
+            });
+        } else {
+            state.balance = 0;
+            state.isAdmin = false;
+            $("admin-open").classList.add("ms-hidden");
+            renderGrid();
+        }
     }
     function bindEvents() {
         $("char-figure").addEventListener("click", openShop);
@@ -515,7 +895,55 @@
             if (e.target === $("overlay")) closeShop();
         });
         $("login").addEventListener("click", function() {
-            core.loginWithGoogle("Main.html").catch(function() {
+            if (state.loginBusy) return;
+            state.loginBusy = true;
+            var btn = $("login");
+            var labelSpan = btn.querySelector("span") || btn;
+            var origLabel = labelSpan.textContent;
+            btn.disabled = true;
+            labelSpan.textContent = "Menunggu Google…";
+            try {
+                localStorage.setItem(REOPEN_SHOP_KEY, "1");
+                if (state.characterVisible && state.despawnAt > Date.now()) {
+                    localStorage.setItem(ACTIVE_UNTIL_KEY, String(state.despawnAt));
+                }
+            } catch (e) {}
+            var resetBtn = function() {
+                state.loginBusy = false;
+                btn.disabled = false;
+                labelSpan.textContent = origLabel;
+            };
+            var fn = typeof core.loginWithGooglePopup === "function" ? core.loginWithGooglePopup : core.loginWithGoogle;
+            fn("Main.html").then(function(sess) {
+                try {
+                    localStorage.removeItem(REOPEN_SHOP_KEY);
+                } catch (e) {}
+                resetBtn();
+                refreshLiveAuth();
+                document.dispatchEvent(new CustomEvent("chiroot:live-login", {
+                    detail: {
+                        session: sess || core.getSession()
+                    }
+                }));
+                toast("Login berhasil! Melissa Shop siap digunakan tanpa reload.");
+            }).catch(function(err) {
+                try {
+                    localStorage.removeItem(REOPEN_SHOP_KEY);
+                } catch (e) {}
+                resetBtn();
+                if (err && err.message === "POPUP_CLOSED") {
+                    if (core.isAuthed()) {
+                        refreshLiveAuth();
+                        document.dispatchEvent(new CustomEvent("chiroot:live-login", {
+                            detail: {
+                                session: core.getSession()
+                            }
+                        }));
+                    } else {
+                        toast("Jendela login ditutup sebelum selesai.");
+                    }
+                    return;
+                }
                 toast("Gagal membuka login Google.", true);
             });
         });
@@ -549,10 +977,21 @@
         });
         $("qty-plus").addEventListener("click", function() {
             var max = state.selected ? state.selected.stock : 1;
+            if (resolveBorderKey(state.selected)) max = 1;
             state.qty = Math.min(max, state.qty + 1);
             $("qty-value").textContent = String(state.qty);
         });
         $("add-cart").addEventListener("click", addSelectedToCart);
+        $("equip-btn").addEventListener("click", function() {
+            if (!state.selected || !bordersApi) return;
+            var bKey = resolveBorderKey(state.selected);
+            if (!bKey) return;
+            var currently = bordersApi.getEquipped() === bKey;
+            bordersApi.setEquipped(currently ? "" : bKey);
+            refreshDetailEquipUI(state.selected);
+            renderGrid();
+            toast(currently ? "PFP Border dilepas dari profil." : "PFP Border dipasang ke profil!");
+        });
         $("checkout").addEventListener("click", openConfirm);
         $("confirm-cancel").addEventListener("click", function() {
             closeLayer("confirm-overlay");
@@ -577,6 +1016,9 @@
             $("ap-active").checked = true;
             openLayer("admin-overlay");
         });
+        $("sync-borders").addEventListener("click", function() {
+            syncBordersToServer(true);
+        });
         $("admin-close").addEventListener("click", function() {
             closeLayer("admin-overlay");
         });
@@ -590,33 +1032,79 @@
             closeDrawer();
             closeShop();
         });
-        document.addEventListener("melissa:reward", function() {
-            say("Wonderful! You've earned 2 Halloween Coins.");
-            if (state.shopLoaded && core.isAuthed()) loadBalance(true);
+        document.addEventListener("melissa:reward", function(e) {
+            var r = e && e.detail || {};
+            var amt = Number(r.coins_awarded || r.amount || r.reward || 2);
+            say("Wonderful! You've earned " + amt + " Halloween Coins.");
+            if (core.isAuthed()) {
+                loadBalance(true);
+                if (state.shopLoaded) loadTransactions();
+            }
+        });
+        document.addEventListener("chiroot:border-equipped", function() {
+            if (state.shopLoaded) renderGrid();
+        });
+        document.addEventListener("chiroot:live-login", function() {
+            refreshLiveAuth();
+        });
+        document.addEventListener("chiroot:live-logout", function() {
+            refreshLiveAuth();
+        });
+        window.addEventListener("storage", function(ev) {
+            if (ev && ev.key === "chiroot_auth_v1") {
+                refreshLiveAuth();
+            }
         });
         document.addEventListener("visibilitychange", function() {
             if (!document.hidden) tick();
         });
     }
     function boot() {
+        if (window.__CHIROOT_OAUTH_POPUP_RECEIVER__) return;
         buildMarkup();
         bindEvents();
         renderAuth();
-        loadProducts();
+        loadProducts().then(function() {
+            if (core.isAuthed()) {
+                loadPurchases();
+                checkAdmin();
+            }
+        });
         readNextAt();
         setInterval(tick, TICK_MS);
+        setInterval(function() {
+            if (state.characterVisible && !state.despawning) tick();
+        }, 1e3);
         tick();
-        setTimeout(renderAuth, 1200);
-        setTimeout(renderAuth, 3e3);
+        var shouldReopen = false;
+        try {
+            shouldReopen = localStorage.getItem(REOPEN_SHOP_KEY) === "1";
+            if (shouldReopen) localStorage.removeItem(REOPEN_SHOP_KEY);
+        } catch (e) {}
+        if (shouldReopen) {
+            openShop();
+        }
+        setTimeout(function() {
+            renderAuth();
+            if (core.isAuthed()) {
+                loadPurchases();
+                checkAdmin();
+            }
+        }, 1800);
     }
     window.MelissaInpage = {
         showCharacter: showCharacter,
         hideCharacter: hideCharacter,
+        despawnCharacter: despawnCharacter,
         openShop: openShop,
         closeShop: closeShop,
+        syncBordersToServer: syncBordersToServer,
         visitNow: function() {
             showCharacter();
             scheduleNext();
+        },
+        despawnNow: function() {
+            despawnCharacter(true);
         },
         state: state
     };
