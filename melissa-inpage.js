@@ -64,12 +64,12 @@
     function buildMarkup() {
         var root = document.createElement("div");
         root.className = "melissa-root";
-        root.innerHTML = '<div class="melissa-character" id="mli-character" aria-live="polite">' + '<button type="button" class="mc-close" id="mli-char-close" aria-label="Sembunyikan Mellissa sampai kunjungan berikutnya">✕</button>' + '<button type="button" class="mc-figure" id="mli-char-figure" aria-label="Buka toko Mellissa" title="Klik untuk lihat barang dagangan Mellissa">' + '<span class="mc-bubble" id="mli-bubble">Aku datang bawa barang dagangan! Klik aku ya~</span>' + '<span class="mc-ping" aria-hidden="true"></span>' + '<span class="mc-glow" aria-hidden="true"></span>' + '<span class="mc-star-burst" id="mli-star-burst" aria-hidden="true"></span>' + '<span class="mc-spark s1" style="left:6%;top:16%;--dx:-14px;--dy:-16px;--d:.18s" aria-hidden="true">✦</span>' + '<span class="mc-spark s2" style="left:84%;top:10%;--dx:12px;--dy:-18px;--d:.34s" aria-hidden="true">✧</span>' + '<span class="mc-spark s3" style="left:0%;top:48%;--dx:-16px;--dy:-8px;--d:.52s" aria-hidden="true">✦</span>' + '<span class="mc-spark s4" style="left:90%;top:44%;--dx:14px;--dy:-10px;--d:.68s" aria-hidden="true">✧</span>' + '<span class="mc-spark s5 ambient" style="left:70%;top:74%;--dx:8px;--dy:-14px;--d:.85s" aria-hidden="true">✦</span>' + '<img class="mc-img" src="mellissa.png" alt="Mellissa, penyihir shopkeeper" draggable="false">' + '<span class="mc-shadow" aria-hidden="true"></span>' + "</button>" + "</div>" + '<div class="ms-overlay" id="mli-overlay" role="dialog" aria-modal="true" aria-labelledby="mli-title">' + '<div class="ms-panel">' + '<button type="button" class="ms-close-x" id="mli-overlay-close" aria-label="Tutup toko">✕</button>' + '<div class="ms-panel-head">' + '<div class="ms-house-frame">' + '<img src="shopfront-pixel.png" alt="Rumah toko Halloween Mellissa" draggable="false">' + "</div>" + '<div class="ms-head-copy">' + '<h2 id="mli-title">Melissa Shop</h2>' + "<p>Mellissa mampir selama 10 menit sebelum menghilang. Tukar Halloween Coins dari lagu Chiroot dengan PFP Border (30 Coins) &amp; harta karun musiman.</p>" + '<div class="ms-head-actions">' + '<span class="ms-coin-chip" id="mli-coin-chip" title="Saldo Halloween Coin kamu">' + coinSvg(18) + '<span id="mli-balance">–</span>&nbsp;Coins' + "</span>" + '<span class="ms-despawn-chip ms-hidden" id="mli-despawn-chip" title="Sisa waktu kunjungan Mellissa">⏳ <span id="mli-despawn-time">10:00</span></span>' + '<button type="button" class="ms-login-btn" id="mli-login"><span>Login with Google</span></button>' + '<button type="button" class="ms-avatar-btn ms-hidden" id="mli-avatar"><span class="dot"></span><span id="mli-avatar-name">Akun</span></button>' + '<button type="button" class="ms-admin-btn ms-hidden" id="mli-admin-open">★ Admin</button>' + "</div>" + "</div>" + "</div>" + '<div class="ms-dialogue" id="mli-dialogue">Welcome, traveler! Ready to explore my little Halloween shop?</div>' + '<div class="ms-toolbar">' + '<div class="ms-search"><span aria-hidden="true" style="color:var(--gold)">🔍</span>' + '<input type="search" id="mli-search" placeholder="Cari PFP Border atau treasure…" aria-label="Cari produk"></div>' + '<div class="ms-cats" id="mli-cats"></div>' + '<button type="button" class="ms-cart-btn" id="mli-cart-open">🛒 Keranjang<span class="count ms-hidden" id="mli-cart-count">0</span></button>' + "</div>" + '<div class="ms-grid" id="mli-grid"><div class="ms-skeleton"></div></div>' + '<div class="ms-section-head"><h3>Riwayat Kamu</h3><div class="rule"></div></div>' + '<div class="ms-tabs">' + '<button type="button" class="ms-tab active" id="mli-tab-txn">Transaksi Koin</button>' + '<button type="button" class="ms-tab" id="mli-tab-purchase">Riwayat Pembelian</button>' + "</div>" + '<div class="ms-panel-box" id="mli-panel-txn"><div class="ms-table-wrap"><table class="ms-table">' + '<thead><tr><th>Waktu</th><th>Tipe</th><th>Keterangan</th><th style="text-align:right">Jumlah</th><th style="text-align:right">Saldo</th></tr></thead>' + '<tbody id="mli-txn-body"></tbody></table></div>' + '<div class="ms-history-empty ms-hidden" id="mli-txn-empty">Belum ada transaksi koin. Selesaikan lagu pertamamu di Chiroot!</div></div>' + '<div class="ms-panel-box ms-hidden" id="mli-panel-purchase"><div class="ms-table-wrap"><table class="ms-table">' + '<thead><tr><th>Waktu</th><th>Item</th><th style="text-align:right">Total</th><th>Status</th></tr></thead>' + '<tbody id="mli-purchase-body"></tbody></table></div>' + '<div class="ms-history-empty ms-hidden" id="mli-purchase-empty">Belum ada pembelian.</div></div>' + "</div>" + "</div>" + '<div class="ms-overlay" id="mli-detail-overlay" role="dialog" aria-modal="true" aria-label="Detail produk">' + '<div class="ms-modal">' + '<button type="button" class="ms-close-x" id="mli-detail-close">✕</button>' + '<h3 id="mli-detail-title">Produk</h3>' + '<div class="ms-detail-grid">' + '<div class="ms-detail-img" id="mli-detail-img"></div>' + '<div class="ms-detail-info">' + '<p id="mli-detail-desc"></p>' + '<div class="ms-stock" id="mli-detail-stock"></div>' + '<div class="ms-price" id="mli-detail-price" style="margin:8px 0 4px;font-size:16px"></div>' + '<div class="ms-qty" id="mli-qty-wrap">' + '<button type="button" id="mli-qty-minus" aria-label="Kurangi">−</button>' + '<span id="mli-qty-value">1</span>' + '<button type="button" id="mli-qty-plus" aria-label="Tambah">+</button>' + "</div>" + '<div class="ms-actions" style="justify-content:flex-start;margin:0;flex-wrap:wrap;gap:8px">' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-add-cart">+ Masukkan keranjang</button>' + '<button type="button" class="ms-btn ms-btn-ghost ms-hidden" id="mli-equip-btn">✦ Pakai Border Ini</button>' + "</div>" + "</div>" + "</div>" + "</div>" + "</div>" + '<div class="ms-drawer-scrim" id="mli-scrim"></div>' + '<aside class="ms-drawer" id="mli-drawer" aria-label="Keranjang belanja">' + '<div class="ms-drawer-head"><h3>Keranjang Treasure</h3>' + '<button type="button" class="ms-modal-close" id="mli-cart-close" aria-label="Tutup keranjang">✕</button></div>' + '<div class="ms-drawer-body" id="mli-cart-body"></div>' + '<div class="ms-drawer-foot">' + '<div class="ms-total-row"><span>Total</span><span class="ms-price">' + coinIcon() + '<span id="mli-cart-total">0</span></span></div>' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-checkout" style="width:100%">Checkout dengan Halloween Coins</button>' + "</div>" + "</aside>" + '<div class="ms-overlay" id="mli-confirm-overlay" role="dialog" aria-modal="true" aria-label="Konfirmasi pembelian">' + '<div class="ms-modal" style="width:min(440px,94%)">' + '<div class="ms-confirm-icon">🎃</div>' + '<h3 style="margin:0 0 4px">Konfirmasi pembelian</h3>' + '<p class="ms-muted" style="margin:0">Server akan memvalidasi saldo &amp; stok.</p>' + '<div class="ms-confirm-summary" id="mli-confirm-summary"></div>' + '<div class="ms-actions">' + '<button type="button" class="ms-btn ms-btn-ghost" id="mli-confirm-cancel">Batal</button>' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-confirm-ok">Ya, beli sekarang</button>' + "</div>" + "</div>" + "</div>" + '<div class="ms-overlay" id="mli-admin-overlay" role="dialog" aria-modal="true" aria-label="Panel admin produk">' + '<div class="ms-modal wide">' + '<button type="button" class="ms-close-x" id="mli-admin-close">✕</button>' + "<h3>Admin — Tambah / Edit Produk</h3>" + '<p class="ms-muted" style="margin:0 0 14px">Harga &amp; stok hanya bisa diubah lewat panel ini; database berwenang penuh.</p>' + '<form class="ms-admin-form" id="mli-admin-form">' + '<input type="hidden" id="mli-ap-id">' + '<label>Nama produk<input type="text" id="mli-ap-name" maxlength="120" required placeholder="Pumpkin & Ribbon Border #01"></label>' + '<label>Kategori<input type="text" id="mli-ap-category" maxlength="40" placeholder="PFP Border" list="mli-category-list"><datalist id="mli-category-list"></datalist></label>' + '<label>Harga (Coins)<input type="number" id="mli-ap-price" min="1" step="1" required placeholder="30"></label>' + '<label>Stok<input type="number" id="mli-ap-stock" min="0" step="1" required placeholder="9999"></label>' + '<label class="full">URL gambar / Kode PFP Border<input type="url" id="mli-ap-image" maxlength="1024" placeholder="https://astuagdezahmuuwjoghf.supabase.co/pfp/pfp_border_01.png"></label>' + '<label class="full">Deskripsi<textarea id="mli-ap-desc" rows="3" maxlength="600" placeholder="Cerita singkat harta karun ini…"></textarea></label>' + '<label class="full" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="mli-ap-active" checked> Produk aktif (tampil di katalog)</label>' + '<div class="full ms-actions" style="margin:4px 0 0;flex-wrap:wrap;gap:8px"><button type="button" class="ms-btn ms-btn-ghost" id="mli-sync-borders">🎃 Sinkron 10 PFP Border (30 Coins)</button><button type="submit" class="ms-btn ms-btn-primary">Simpan produk</button></div>' + "</form>" + "</div>" + "</div>" + '<div class="ms-toast" id="mli-toast" role="status" aria-live="polite"></div>';
+        root.innerHTML = '<div class="melissa-character" id="mli-character" aria-live="polite">' + '<button type="button" class="mc-figure" id="mli-char-figure" aria-label="Buka toko Mellissa" title="Klik untuk lihat barang dagangan Mellissa">' + '<span class="mc-bubble" id="mli-bubble">Aku datang bawa barang dagangan! Klik aku ya~</span>' + '<span class="mc-ping" aria-hidden="true"></span>' + '<span class="mc-glow" aria-hidden="true"></span>' + '<span class="mc-star-burst" id="mli-star-burst" aria-hidden="true"></span>' + '<span class="mc-spark s1" style="left:6%;top:16%;--dx:-14px;--dy:-16px;--d:.18s" aria-hidden="true">✦</span>' + '<span class="mc-spark s2" style="left:84%;top:10%;--dx:12px;--dy:-18px;--d:.34s" aria-hidden="true">✧</span>' + '<span class="mc-spark s3" style="left:0%;top:48%;--dx:-16px;--dy:-8px;--d:.52s" aria-hidden="true">✦</span>' + '<span class="mc-spark s4" style="left:90%;top:44%;--dx:14px;--dy:-10px;--d:.68s" aria-hidden="true">✧</span>' + '<span class="mc-spark s5 ambient" style="left:70%;top:74%;--dx:8px;--dy:-14px;--d:.85s" aria-hidden="true">✦</span>' + '<img class="mc-img" src="mellissa.png" alt="Mellissa, penyihir shopkeeper" draggable="false">' + '<span class="mc-shadow" aria-hidden="true"></span>' + "</button>" + '<span class="mc-timer-pill ms-hidden" id="mli-char-timer" aria-hidden="true">⏳ <span id="mli-char-timer-val">10:00</span></span>' + "</div>" + '<div class="ms-overlay" id="mli-overlay" role="dialog" aria-modal="true" aria-labelledby="mli-title">' + '<div class="ms-panel">' + '<button type="button" class="ms-close-x" id="mli-overlay-close" aria-label="Tutup toko">✕</button>' + '<div class="ms-panel-head">' + '<div class="ms-house-frame">' + '<img src="shopfront-pixel.png" alt="Rumah toko Halloween Mellissa" draggable="false">' + "</div>" + '<div class="ms-head-copy">' + '<h2 id="mli-title">Melissa Shop</h2>' + "<p>Mellissa mampir selama 10 menit sebelum menghilang. Tukar Halloween Coins dari lagu Chiroot dengan PFP Border (30 Coins) &amp; harta karun musiman.</p>" + '<div class="ms-head-actions">' + '<span class="ms-coin-chip" id="mli-coin-chip" title="Saldo Halloween Coin kamu">' + coinSvg(18) + '<span id="mli-balance">–</span>&nbsp;Coins' + "</span>" + '<span class="ms-despawn-chip ms-hidden" id="mli-despawn-chip" title="Sisa waktu kunjungan Mellissa">⏳ <span id="mli-despawn-time">10:00</span></span>' + '<button type="button" class="ms-login-btn" id="mli-login"><span>Login with Google</span></button>' + '<button type="button" class="ms-avatar-btn ms-hidden" id="mli-avatar"><span class="dot"></span><span id="mli-avatar-name">Akun</span></button>' + '<button type="button" class="ms-admin-btn ms-hidden" id="mli-admin-open">★ Admin</button>' + "</div>" + "</div>" + "</div>" + '<div class="ms-dialogue" id="mli-dialogue">Welcome, traveler! Ready to explore my little Halloween shop?</div>' + '<div class="ms-toolbar">' + '<div class="ms-search"><span aria-hidden="true" style="color:var(--gold)">🔍</span>' + '<input type="search" id="mli-search" placeholder="Cari PFP Border atau treasure…" aria-label="Cari produk"></div>' + '<div class="ms-cats" id="mli-cats"></div>' + '<button type="button" class="ms-cart-btn" id="mli-cart-open">🛒 Keranjang<span class="count ms-hidden" id="mli-cart-count">0</span></button>' + "</div>" + '<div class="ms-grid" id="mli-grid"><div class="ms-skeleton"></div></div>' + '<div class="ms-section-head"><h3>Riwayat Kamu</h3><div class="rule"></div></div>' + '<div class="ms-tabs">' + '<button type="button" class="ms-tab active" id="mli-tab-txn">Transaksi Koin</button>' + '<button type="button" class="ms-tab" id="mli-tab-purchase">Riwayat Pembelian</button>' + "</div>" + '<div class="ms-panel-box" id="mli-panel-txn"><div class="ms-table-wrap"><table class="ms-table">' + '<thead><tr><th>Waktu</th><th>Tipe</th><th>Keterangan</th><th style="text-align:right">Jumlah</th><th style="text-align:right">Saldo</th></tr></thead>' + '<tbody id="mli-txn-body"></tbody></table></div>' + '<div class="ms-history-empty ms-hidden" id="mli-txn-empty">Belum ada transaksi koin. Selesaikan lagu pertamamu di Chiroot!</div></div>' + '<div class="ms-panel-box ms-hidden" id="mli-panel-purchase"><div class="ms-table-wrap"><table class="ms-table">' + '<thead><tr><th>Waktu</th><th>Item</th><th style="text-align:right">Total</th><th>Status</th></tr></thead>' + '<tbody id="mli-purchase-body"></tbody></table></div>' + '<div class="ms-history-empty ms-hidden" id="mli-purchase-empty">Belum ada pembelian.</div></div>' + "</div>" + "</div>" + '<div class="ms-overlay" id="mli-detail-overlay" role="dialog" aria-modal="true" aria-label="Detail produk">' + '<div class="ms-modal">' + '<button type="button" class="ms-close-x" id="mli-detail-close">✕</button>' + '<h3 id="mli-detail-title">Produk</h3>' + '<div class="ms-detail-grid">' + '<div class="ms-detail-img" id="mli-detail-img"></div>' + '<div class="ms-detail-info">' + '<p id="mli-detail-desc"></p>' + '<div class="ms-stock" id="mli-detail-stock"></div>' + '<div class="ms-price" id="mli-detail-price" style="margin:8px 0 4px;font-size:16px"></div>' + '<div class="ms-qty" id="mli-qty-wrap">' + '<button type="button" id="mli-qty-minus" aria-label="Kurangi">−</button>' + '<span id="mli-qty-value">1</span>' + '<button type="button" id="mli-qty-plus" aria-label="Tambah">+</button>' + "</div>" + '<div class="ms-actions" style="justify-content:flex-start;margin:0;flex-wrap:wrap;gap:8px">' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-add-cart">+ Masukkan keranjang</button>' + '<button type="button" class="ms-btn ms-btn-ghost ms-hidden" id="mli-equip-btn">✦ Pakai Border Ini</button>' + "</div>" + "</div>" + "</div>" + "</div>" + "</div>" + '<div class="ms-drawer-scrim" id="mli-scrim"></div>' + '<aside class="ms-drawer" id="mli-drawer" aria-label="Keranjang belanja">' + '<div class="ms-drawer-head"><h3>Keranjang Treasure</h3>' + '<button type="button" class="ms-modal-close" id="mli-cart-close" aria-label="Tutup keranjang">✕</button></div>' + '<div class="ms-drawer-body" id="mli-cart-body"></div>' + '<div class="ms-drawer-foot">' + '<div class="ms-total-row"><span>Total</span><span class="ms-price">' + coinIcon() + '<span id="mli-cart-total">0</span></span></div>' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-checkout" style="width:100%">Checkout dengan Halloween Coins</button>' + "</div>" + "</aside>" + '<div class="ms-overlay" id="mli-confirm-overlay" role="dialog" aria-modal="true" aria-label="Konfirmasi pembelian">' + '<div class="ms-modal" style="width:min(440px,94%)">' + '<div class="ms-confirm-icon">🎃</div>' + '<h3 style="margin:0 0 4px">Konfirmasi pembelian</h3>' + '<p class="ms-muted" style="margin:0">Server akan memvalidasi saldo &amp; stok.</p>' + '<div class="ms-confirm-summary" id="mli-confirm-summary"></div>' + '<div class="ms-actions">' + '<button type="button" class="ms-btn ms-btn-ghost" id="mli-confirm-cancel">Batal</button>' + '<button type="button" class="ms-btn ms-btn-primary" id="mli-confirm-ok">Ya, beli sekarang</button>' + "</div>" + "</div>" + "</div>" + '<div class="ms-overlay" id="mli-admin-overlay" role="dialog" aria-modal="true" aria-label="Panel admin produk">' + '<div class="ms-modal wide">' + '<button type="button" class="ms-close-x" id="mli-admin-close">✕</button>' + "<h3>Admin — Tambah / Edit Produk</h3>" + '<p class="ms-muted" style="margin:0 0 14px">Harga &amp; stok hanya bisa diubah lewat panel ini; database berwenang penuh.</p>' + '<form class="ms-admin-form" id="mli-admin-form">' + '<input type="hidden" id="mli-ap-id">' + '<label>Nama produk<input type="text" id="mli-ap-name" maxlength="120" required placeholder="Pumpkin & Ribbon Border #01"></label>' + '<label>Kategori<input type="text" id="mli-ap-category" maxlength="40" placeholder="PFP Border" list="mli-category-list"><datalist id="mli-category-list"></datalist></label>' + '<label>Harga (Coins)<input type="number" id="mli-ap-price" min="1" step="1" required placeholder="30"></label>' + '<label>Stok<input type="number" id="mli-ap-stock" min="0" step="1" required placeholder="9999"></label>' + '<label class="full">URL gambar / Kode PFP Border<input type="url" id="mli-ap-image" maxlength="1024" placeholder="https://astuagdezahmuuwjoghf.supabase.co/pfp/pfp_border_01.png"></label>' + '<label class="full">Deskripsi<textarea id="mli-ap-desc" rows="3" maxlength="600" placeholder="Cerita singkat harta karun ini…"></textarea></label>' + '<label class="full" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="mli-ap-active" checked> Produk aktif (tampil di katalog)</label>' + '<div class="full ms-actions" style="margin:4px 0 0;flex-wrap:wrap;gap:8px"><button type="button" class="ms-btn ms-btn-ghost" id="mli-sync-borders">🎃 Sinkron 10 PFP Border (30 Coins)</button><button type="submit" class="ms-btn ms-btn-primary">Simpan produk</button></div>' + "</form>" + "</div>" + "</div>" + '<div class="ms-toast" id="mli-toast" role="status" aria-live="polite"></div>';
         document.body.appendChild(root);
         root.addEventListener("dragstart", function(e) {
             e.preventDefault();
         });
-        [ "character", "char-close", "char-figure", "bubble", "star-burst", "overlay", "overlay-close", "coin-chip", "balance", "despawn-chip", "despawn-time", "login", "avatar", "avatar-name", "admin-open", "dialogue", "search", "cats", "cart-open", "cart-count", "grid", "tab-txn", "tab-purchase", "panel-txn", "panel-purchase", "txn-body", "txn-empty", "purchase-body", "purchase-empty", "detail-overlay", "detail-close", "detail-title", "detail-img", "detail-desc", "detail-stock", "detail-price", "qty-wrap", "qty-minus", "qty-value", "qty-plus", "add-cart", "equip-btn", "scrim", "drawer", "cart-close", "cart-body", "cart-total", "checkout", "confirm-overlay", "confirm-summary", "confirm-cancel", "confirm-ok", "admin-overlay", "admin-close", "admin-form", "ap-id", "ap-name", "ap-category", "ap-price", "ap-stock", "ap-image", "ap-desc", "ap-active", "sync-borders", "category-list", "toast" ].forEach(function(id) {
+        [ "character", "char-figure", "char-timer", "char-timer-val", "bubble", "star-burst", "overlay", "overlay-close", "coin-chip", "balance", "despawn-chip", "despawn-time", "login", "avatar", "avatar-name", "admin-open", "dialogue", "search", "cats", "cart-open", "cart-count", "grid", "tab-txn", "tab-purchase", "panel-txn", "panel-purchase", "txn-body", "txn-empty", "purchase-body", "purchase-empty", "detail-overlay", "detail-close", "detail-title", "detail-img", "detail-desc", "detail-stock", "detail-price", "qty-wrap", "qty-minus", "qty-value", "qty-plus", "add-cart", "equip-btn", "scrim", "drawer", "cart-close", "cart-body", "cart-total", "checkout", "confirm-overlay", "confirm-summary", "confirm-cancel", "confirm-ok", "admin-overlay", "admin-close", "admin-form", "ap-id", "ap-name", "ap-category", "ap-price", "ap-stock", "ap-image", "ap-desc", "ap-active", "sync-borders", "category-list", "toast" ].forEach(function(id) {
             els[id] = document.getElementById("mli-" + id);
         });
     }
@@ -199,21 +199,30 @@
         return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
     }
     function updateDespawnChip() {
-        if (!$("despawn-chip") || !$("despawn-time")) return;
-        if (state.characterVisible && !state.despawning && state.despawnAt > 0) {
-            var rem = Math.max(0, state.despawnAt - Date.now());
-            $("despawn-chip").classList.remove("ms-hidden");
-            $("despawn-time").textContent = formatRemaining(rem);
-            $("despawn-chip").classList.toggle("urgent", rem <= 6e4);
-        } else {
-            $("despawn-chip").classList.add("ms-hidden");
+        var visibleTimer = state.characterVisible && !state.despawning && state.despawnAt > 0;
+        var rem = visibleTimer ? Math.max(0, state.despawnAt - Date.now()) : 0;
+        var label = formatRemaining(rem);
+        if ($("despawn-chip") && $("despawn-time")) {
+            if (visibleTimer) {
+                $("despawn-chip").classList.remove("ms-hidden");
+                $("despawn-time").textContent = label;
+                $("despawn-chip").classList.toggle("urgent", rem <= 6e4);
+            } else {
+                $("despawn-chip").classList.add("ms-hidden");
+            }
+        }
+        if ($("char-timer") && $("char-timer-val")) {
+            if (visibleTimer) {
+                $("char-timer").classList.remove("ms-hidden");
+                $("char-timer-val").textContent = label;
+                $("char-timer").classList.toggle("urgent", rem <= 6e4);
+            } else {
+                $("char-timer").classList.add("ms-hidden");
+            }
         }
     }
     function armDespawnTimer(targetTs) {
         state.despawnAt = targetTs;
-        try {
-            localStorage.setItem(ACTIVE_UNTIL_KEY, String(targetTs));
-        } catch (e) {}
         clearTimeout(despawnTimer);
         var wait = Math.max(0, targetTs - Date.now());
         despawnTimer = setTimeout(function() {
@@ -243,12 +252,12 @@
         }
         box.innerHTML = html;
     }
-    function despawnCharacter(byTimer) {
+    function despawnCharacter() {
         if (state.despawning || !state.characterVisible) return;
-        if (byTimer && state.purchaseInFlight) {
+        if (state.purchaseInFlight) {
             clearTimeout(despawnTimer);
             despawnTimer = setTimeout(function() {
-                despawnCharacter(true);
+                despawnCharacter();
             }, 4e3);
             return;
         }
@@ -257,8 +266,11 @@
         clearTimeout(despawnTimer);
         try {
             localStorage.removeItem(ACTIVE_UNTIL_KEY);
+            var curNext = Number(localStorage.getItem(NEXT_KEY));
+            if (!isFinite(curNext) || curNext <= Date.now()) {
+                localStorage.setItem(NEXT_KEY, String(Date.now() + VISIT_MS));
+            }
         } catch (e) {}
-        scheduleNext();
         [ "admin-overlay", "confirm-overlay", "detail-overlay" ].forEach(closeLayer);
         if ($("drawer")) $("drawer").classList.remove("open");
         if ($("scrim")) $("scrim").classList.remove("open");
@@ -267,9 +279,7 @@
         updateDespawnChip();
         spawnStarExplosion();
         $("character").classList.add("despawning");
-        if (byTimer) {
-            toast("✦ Waktu kunjungan 10 menit habis! Mellissa menghilang dalam ledakan bintang~");
-        }
+        toast("✦ Waktu kunjungan 10 menit habis! Mellissa menghilang dalam ledakan bintang~");
         setTimeout(function() {
             $("character").classList.remove("visible", "despawning");
             if ($("star-burst")) $("star-burst").innerHTML = "";
@@ -279,15 +289,19 @@
             updateDespawnChip();
         }, 950);
     }
-    function showCharacter(existingUntil, silentToast) {
+    function presentCharacterUntil(untilTs, silentToast) {
+        if (!untilTs || untilTs <= Date.now()) return false;
+        if (state.characterVisible && !state.despawning) {
+            if (state.despawnAt !== untilTs) armDespawnTimer(untilTs); else updateDespawnChip();
+            return true;
+        }
         clearTimeout(despawnTimer);
         if ($("star-burst")) $("star-burst").innerHTML = "";
         $("character").classList.remove("despawning");
         state.despawning = false;
         state.characterVisible = true;
         $("character").classList.add("visible");
-        var until = existingUntil && existingUntil > Date.now() ? existingUntil : Date.now() + DESPAWN_MS;
-        armDespawnTimer(until);
+        armDespawnTimer(untilTs);
         var lines = [ "Aku datang 10 menit bawa dagangan! Klik aku ya~", "Toko keliling Mellissa buka 10 menit! Cek PFP Border yuk~", "Ada 10 PFP Border Halloween 30 Coins! Klik aku~", "Hai traveler! Mampir yuk sebelum aku menghilang~" ];
         clearTimeout(bubbleTimer);
         $("bubble").hidden = false;
@@ -296,36 +310,49 @@
         }, 1e4);
         $("bubble").textContent = lines[Math.floor(Math.random() * lines.length)];
         if (!silentToast) toast("Mellissa muncul selama 10 menit! Klik dia untuk belanja.");
+        return true;
     }
-    function hideCharacter() {
-        despawnCharacter(false);
-    }
-    function scheduleNext() {
-        localStorage.setItem(NEXT_KEY, String(Date.now() + VISIT_MS));
+    function startScheduledVisit() {
+        var now = Date.now();
+        var existing = readActiveUntil();
+        if (existing > now) {
+            return presentCharacterUntil(existing, true);
+        }
+        if (now < readNextAt()) return false;
+        var until = now + DESPAWN_MS;
+        var nextAt = until + VISIT_MS;
+        try {
+            localStorage.setItem(ACTIVE_UNTIL_KEY, String(until));
+            localStorage.setItem(NEXT_KEY, String(nextAt));
+        } catch (e) {}
+        return presentCharacterUntil(until, false);
     }
     function tick() {
         if (state.despawning) return;
+        var now = Date.now();
+        var activeUntil = readActiveUntil();
         if (state.characterVisible) {
-            if (state.despawnAt > 0 && Date.now() >= state.despawnAt) {
-                despawnCharacter(true);
+            var deadline = activeUntil > 0 ? Math.min(state.despawnAt || activeUntil, activeUntil) : state.despawnAt;
+            if (!deadline || now >= deadline) {
+                despawnCharacter();
             } else {
-                updateDespawnChip();
+                if (state.despawnAt !== deadline) armDespawnTimer(deadline); else updateDespawnChip();
             }
             return;
         }
-        var activeUntil = readActiveUntil();
-        if (activeUntil > Date.now()) {
-            showCharacter(activeUntil, true);
+        if (activeUntil > now) {
+            presentCharacterUntil(activeUntil, true);
             return;
         }
-        if (activeUntil > 0 && activeUntil <= Date.now()) {
+        if (activeUntil > 0 && activeUntil <= now) {
             try {
                 localStorage.removeItem(ACTIVE_UNTIL_KEY);
+                var nAt = Number(localStorage.getItem(NEXT_KEY));
+                if (!isFinite(nAt) || nAt <= now) localStorage.setItem(NEXT_KEY, String(now + VISIT_MS));
             } catch (e) {}
         }
-        if (Date.now() >= readNextAt()) {
-            showCharacter();
-            scheduleNext();
+        if (now >= readNextAt()) {
+            startScheduledVisit();
         }
     }
     function renderAuth() {
@@ -839,11 +866,15 @@
     }
     function openShop() {
         if (state.despawning) return;
-        if (!state.characterVisible) {
-            showCharacter(readActiveUntil(), true);
-        } else {
-            updateDespawnChip();
+        tick();
+        var now = Date.now();
+        var activeUntil = readActiveUntil();
+        if (!state.characterVisible || activeUntil <= now) {
+            var waitMs = Math.max(0, readNextAt() - now);
+            toast("✦ Mellissa sedang berkelana! Toko buka lagi dalam " + formatRemaining(waitMs) + ".");
+            return;
         }
+        updateDespawnChip();
         openLayer("overlay");
         renderAuth();
         if (!state.shopLoaded) {
@@ -886,10 +917,6 @@
     }
     function bindEvents() {
         $("char-figure").addEventListener("click", openShop);
-        $("char-close").addEventListener("click", function(e) {
-            e.stopPropagation();
-            hideCharacter();
-        });
         $("overlay-close").addEventListener("click", closeShop);
         $("overlay").addEventListener("click", function(e) {
             if (e.target === $("overlay")) closeShop();
@@ -1051,8 +1078,11 @@
             refreshLiveAuth();
         });
         window.addEventListener("storage", function(ev) {
-            if (ev && ev.key === "chiroot_auth_v1") {
+            if (!ev) return;
+            if (ev.key === "chiroot_auth_v1") {
                 refreshLiveAuth();
+            } else if (ev.key === ACTIVE_UNTIL_KEY || ev.key === NEXT_KEY) {
+                tick();
             }
         });
         document.addEventListener("visibilitychange", function() {
@@ -1093,18 +1123,11 @@
         }, 1800);
     }
     window.MelissaInpage = {
-        showCharacter: showCharacter,
-        hideCharacter: hideCharacter,
-        despawnCharacter: despawnCharacter,
         openShop: openShop,
         closeShop: closeShop,
         syncBordersToServer: syncBordersToServer,
-        visitNow: function() {
-            showCharacter();
-            scheduleNext();
-        },
-        despawnNow: function() {
-            despawnCharacter(true);
+        isVisiting: function() {
+            return state.characterVisible && !state.despawning && readActiveUntil() > Date.now();
         },
         state: state
     };
