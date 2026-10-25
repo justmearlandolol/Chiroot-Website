@@ -1061,10 +1061,15 @@
         });
         document.addEventListener("melissa:reward", function(e) {
             var r = e && e.detail || {};
-            var amt = Number(r.coins_awarded || r.amount || r.reward || 2);
+            var amt = Number(r.rewarded || r.coins_awarded || r.amount || r.reward || 2);
             say("Wonderful! You've earned " + amt + " Halloween Coins.");
             if (core.isAuthed()) {
-                loadBalance(true);
+                if (typeof r.balance === "number" && isFinite(r.balance)) {
+                    state.balance = r.balance;
+                    $("balance").textContent = String(r.balance);
+                } else {
+                    loadBalance(true);
+                }
                 if (state.shopLoaded) loadTransactions();
             }
         });
