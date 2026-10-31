@@ -1906,13 +1906,14 @@ button:focus-visible, input:focus-visible{outline:2px solid var(--pumpkin); outl
 #doodle-toast{
   position:fixed; bottom:22px; left:50%;
   transform:translateX(-50%) translateY(12px);
-  background:#0F0D0F;
+  background:#F4E8CE;
   border:1.4px solid #C89B3C;
   padding:10px 16px;
   border-radius:12px;
   font-family:Georgia, serif;
   font-size:13px;
-  color:var(--cream);
+  font-weight:600;
+  color:#2A1338;
   z-index:99;
   box-shadow:0 8px 22px rgba(0,0,0,.45), 0 0 18px rgba(255,106,0,0.1);
   opacity:0;
@@ -4581,6 +4582,14 @@ async function caStorageUpload(path, blob, contentType, upsert) {
     return path;
 }
 
+// Supabase Storage mengirim Cache-Control (default 3600s) untuk object public.
+// Kalau file audio/cover ditimpa di path yang sama, browser masih memutar byte LAMA
+// dari cache. Menambah query unik memaksa browser & CDN ambil file baru.
+function caBustUrl(url) {
+    if (typeof url !== "string" || !url) return url;
+    return url + (url.indexOf("?") >= 0 ? "&" : "?") + "v=" + Date.now().toString(36);
+}
+
 async function caStorageDelete(path) {
     const res = await caFetch(caBase() + "/storage/v1/object/" + CHIROOT_CRATE_BUCKET + "/" + path, {
         method: "DELETE"
@@ -5034,7 +5043,13 @@ async function caFetchCrate() {
     const uid = ChirootAuth.session.user.id;
     const rows = await caApiCall("/rest/v1/crate_tracks?select=*&user_id=eq." + encodeURIComponent(uid) + "&order=position.asc", "GET");
     if (!Array.isArray(rows)) return [];
-    return rows.map(caMapCrateRow).filter(Boolean);
+    // Cache-bust juga saat load: file di Storage bisa saja sudah ditimpa (edit) tapi
+    // browser/CDN masih menyimpan versi lama sampai Cache-Control habis.
+    return rows.map(caMapCrateRow).filter(Boolean).map(function(t) {
+        if (t.src && t._audioPath) t.src = caBustUrl(t.src);
+        if (t.cover && t._coverPath) t.cover = caBustUrl(t.cover);
+        return t;
+    });
 }
 
 async function caNextPosition() {
@@ -5128,13 +5143,20 @@ async function caCrateUpdate(track, fields, audioBlob, coverBlob) {
     const row = Array.isArray(rows) && rows.length ? rows[0] : null;
     if (row) {
         const mapped = caMapCrateRow(row);
-        if (mapped) return mapped;
+        if (mapped) {
+            if (audioBlob && mapped.src) mapped.src = caBustUrl(mapped.src);
+            if (coverBlob && mapped.cover) mapped.cover = caBustUrl(mapped.cover);
+            return mapped;
+        }
     }
-    return Object.assign({}, track, fields, {
+    const fallback = Object.assign({}, track, fields, {
         _audioPath: audioPath,
         _coverPath: coverPath,
         _audioUrl: audioUrl
     });
+    if (audioBlob) fallback.src = caBustUrl(fallback.src || caCratePublicUrl(audioPath));
+    if (coverBlob && coverPath) fallback.cover = caBustUrl(caCratePublicUrl(coverPath));
+    return fallback;
 }
 
 async function caCrateDelete(track) {
@@ -7353,6 +7375,30 @@ function playFromQueue() {
     return false;
 }
 
+// Set sumber audio tanpa "nyangkut" di cache browser:
+// - src dibersihkan dulu + load() supaya buffer lama dibuang
+// - URL Supabase Storage selalu diberi query unik (file ditimpa di path yang sama saat edit)
+// - error media (file lama/404/format salah) di-reset agar lagu berikutnya tetap bisa diputar
+function setAudioSource(src) {
+    try {
+        audio.pause();
+    } catch (e) {}
+    try {
+        audio.removeAttribute("src");
+        audio.load();
+    } catch (e) {}
+    const busted = typeof caBustUrl === "function" ? caBustUrl(src) : src;
+    audio.onerror = function() {
+        if (!audio.getAttribute("src")) return;
+        console.warn("Audio gagal dimuat:", busted);
+        if (typeof showToast === "function") showToast("Audio gagal dimuat. Coba tekan play lagi ya.");
+        audio.onerror = null;
+    };
+    audio.src = busted;
+    audio.load();
+    audio._resumeTime = 0;
+}
+
 function loadTrack(index, autoPlay = false, withTransition = true) {
     if (!tracks || !tracks.length) {
         showEmptyState();
@@ -7383,8 +7429,7 @@ function loadTrack(index, autoPlay = false, withTransition = true) {
         applyVinylColor(track.vinylColor || "#1e1e24");
         labelInner.classList.toggle("has-cover", !!track.cover);
         labelInner.innerHTML = buildLabel(track);
-        audio.src = track.src;
-        audio.load();
+        setAudioSource(track.src);
         audio.loop = isLoop;
         audio._resumeTime = 0;
         if ("mediaSession" in navigator) {
@@ -7679,8 +7724,9 @@ function bindEvents() {
         audioRetryCount++;
         const resumeAt = audio.currentTime || 0;
         const wasPlaying = isPlaying;
-        const src = audio.src;
+        const src = audio.currentSrc || audio.src;
         setTimeout(() => {
+            // src di sini sudah berisi query unik, jadi aman dipakai ulang
             audio.src = src;
             audio.load();
             safeOn(audio, "loadedmetadata", function once() {
@@ -8167,7 +8213,18 @@ function setupAddModal() {
                 renderPlaylist();
                 renderTop10();
                 if (editIndex === currentIndex) {
-                    loadTrack(currentIndex, false, true);
+                    // Reload lagu yang sedang aktif. loadTrack -> setAudioSource() menambah
+                    // query unik + load() ulang, jadi byte baru diambil dari network,
+                    // bukan dari cache file lama yang sudah ditimpa.
+                    loadTrack(currentIndex, isPlaying, true);
+                    updatePlayPauseUI();
+                }
+                if (audioBlob) {
+                    showToast("Audio berhasil diganti ✦");
+                } else if (coverBlob) {
+                    showToast("Cover berhasil diganti ✦");
+                } else {
+                    showToast("Perubahan tersimpan ✦");
                 }
                 close();
                 ok = true;
@@ -8328,7 +8385,7 @@ function showToast(msg) {
     if (!t) {
         t = document.createElement("div");
         t.id = "doodle-toast";
-        t.style.cssText = "position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(12px);background:#fff9e8;border:2.3px solid #1a1a1a;padding:10px 16px;border-radius:16px;font-family:Kalam,sans-serif;z-index:99;box-shadow:0 8px 20px rgba(40,24,8,.18);opacity:0;transition: all .28s cubic-bezier(.22,1,.36,1);";
+        t.style.cssText = "position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(12px);background:#F4E8CE;color:#2A1338;font-weight:600;border:2.3px solid #C89B3C;padding:10px 16px;border-radius:16px;font-family:Georgia,serif;font-size:13px;z-index:99;box-shadow:0 8px 20px rgba(40,24,8,.18);opacity:0;transition: all .28s cubic-bezier(.22,1,.36,1);";
         document.body.appendChild(t);
     }
     t.textContent = msg;
@@ -11395,5 +11452,5 @@ if (btnRefreshLyrics) {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a501c9a5ade89d14',t:'MTc5MjkzNzI0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a501c9a5ade89d14',t:'MTc5MjkzNzI0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a52f38c5c85af8f4',t:'MTc5MzQxMzY1OA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a52f38c5c85af8f4',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
