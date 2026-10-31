@@ -4555,15 +4555,25 @@ async function caApiCall(path, method, body) {
     return data;
 }
 
-async function caStorageUpload(path, blob, contentType) {
-    const res = await caFetch(caBase() + "/storage/v1/object/" + CHIROOT_CRATE_BUCKET + "/" + path, {
+async function caStorageUpload(path, blob, contentType, upsert) {
+    const url = caBase() + "/storage/v1/object/" + CHIROOT_CRATE_BUCKET + "/" + path;
+    const headers = {
+        "Content-Type": contentType,
+        "x-upsert": upsert === true ? "true" : "false"
+    };
+    let res = await caFetch(url, {
         method: "POST",
-        headers: {
-            "Content-Type": contentType,
-            "x-upsert": "false"
-        },
+        headers: headers,
         body: blob
     });
+    // Kalau overwrite ditolak (mis. kebijakan bucket memblokir UPDATE), coba sekali lagi lewat PUT
+    if (!res.ok && upsert === true && (res.status === 400 || res.status === 403 || res.status === 409)) {
+        res = await caFetch(url, {
+            method: "PUT",
+            headers: headers,
+            body: blob
+        });
+    }
     if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(caErrorFrom(data, "Upload file gagal (HTTP " + res.status + ")"));
@@ -5088,9 +5098,23 @@ async function caCrateUpdate(track, fields, audioBlob, coverBlob) {
     let audioPath = track._audioPath || null;
     let coverPath = track._coverPath || null;
     let audioUrl = track._audioUrl || null;
-    if (audioBlob && !audioPath) audioPath = uid + "/" + track.id + ".mp3";
-    if (coverBlob && !coverPath) coverPath = uid + "/" + track.id + "_cover.jpg";
-    await Promise.all([ audioBlob ? caStorageUpload(audioPath, audioBlob, "audio/mpeg") : Promise.resolve(), coverBlob ? caStorageUpload(coverPath, coverBlob, "image/jpeg") : Promise.resolve() ]);
+    // Selalu pakai path milik baris ini. Kalau baris belum punya path, buat path baru
+    // (bukan menimpa file track lain) supaya tidak kena "The resource already exists".
+    if (audioBlob) audioPath = audioPath || uid + "/" + track.id + ".mp3";
+    if (coverBlob) coverPath = coverPath || uid + "/" + track.id + "_cover.jpg";
+    if (audioBlob || coverBlob) {
+        // upsert = true : timpa file lama milik track yang sama.
+        // Sebelumnya pakai x-upsert:false -> Storage balas 409 "The resource already exists"
+        // setiap kali user ganti audio/cover pada lagu yang sudah ada.
+        try {
+            await Promise.all([
+                audioBlob ? caStorageUpload(audioPath, audioBlob, "audio/mpeg", true) : Promise.resolve(),
+                coverBlob ? caStorageUpload(coverPath, coverBlob, "image/jpeg", true) : Promise.resolve()
+            ]);
+        } catch (uploadErr) {
+            throw new Error("Gagal upload file baru: " + (uploadErr && uploadErr.message ? uploadErr.message : uploadErr));
+        }
+    }
     if (audioBlob) audioUrl = null;
     const rows = await caApiCall("/rest/v1/crate_tracks?id=eq." + encodeURIComponent(track.id), "PATCH", {
         title: fields.title,
@@ -7903,6 +7927,18 @@ function setupAddModal() {
         editIndex = idx;
         youtubeCoverBlob = null;
         if (youtubeInput) youtubeInput.value = "";
+        // Reset pilihan file: <input type=file> tidak ikut form.reset(),
+        // jadi tanpa ini file dari sesi sebelumnya bisa ikut terkirim saat edit.
+        if (audioInput) audioInput.value = "";
+        if (coverInput) coverInput.value = "";
+        if (audioHint) {
+            audioHint.textContent = "MP3 only – max 25 MB";
+            audioHint.style.color = "";
+        }
+        if (coverHint) {
+            coverHint.textContent = "jpg / png – doodle label will use it";
+            coverHint.style.color = "";
+        }
         modal.classList.add("open");
         modal.setAttribute("aria-hidden", "false");
         if (editMode && tracks[idx]) {
@@ -8114,8 +8150,10 @@ function setupAddModal() {
             if (cf) {
                 coverBlob = await imageBlobToJpegBlob(cf, 900);
             } else if (youtubeCoverBlob) {
+                // Jangan sampai thumbnail YouTube "nyangkut" dari sesi lain lalu menimpa cover lagu.
                 coverBlob = youtubeCoverBlob;
             }
+            youtubeCoverBlob = null;
             if (editMode && editIndex >= 0) {
                 const t = tracks[editIndex];
                 const audioBlob = af || null;
