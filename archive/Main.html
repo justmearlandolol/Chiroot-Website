@@ -13,6 +13,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="chiroot-widget-bridge.html">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>:root{
   --paper: #f7f3e9;
   --paper-2: #f1e9d6;
@@ -2769,7 +2770,6 @@ html{ overflow-x: hidden; }
   border-radius: 6px;
 }
 
-/* Vinyl spin play-state & responsive modal fixes ported from Main.html */
 html body #vinyl-stage #record:not(.swap-out):not(.swap-in){animation:spin 3.8s linear infinite!important;animation-play-state:paused!important}
 html body #vinyl-stage #record.playing:not(.swap-out):not(.swap-in){animation:spin 3.8s linear infinite!important;animation-play-state:running!important}
 html body #vinyl-stage #record.swap-out,html body #vinyl-stage #record.swap-in{animation:none!important}
@@ -2787,6 +2787,779 @@ html body #add-modal .file-field input[type=file]{overflow:hidden!important;text
   html body #add-modal .modal-card{width:100%!important;max-width:100%!important;padding:16px 14px 14px!important}
   html body #add-modal .add-form .form-grid{grid-template-columns:minmax(0,1fr)!important;gap:10px!important}
   input,textarea,select,.sketch-input{font-size:16px!important}
+}
+
+#share-show-qr, [for="share-show-qr"], .share-qr { display: none !important; }
+</style>
+<style id="chiroot-mobile-player-style">
+#chiroot-mobile-player {
+  display: none;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes cmpVinylSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  
+  .control-panel {
+    display: none !important;
+  }
+
+  body {
+    padding-bottom: calc(98px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  .track-header {
+    margin-bottom: 4px !important;
+  }
+  .gramophone-stage {
+    padding-bottom: 14px !important;
+  }
+  .gramophone-stage .turntable-base {
+    cursor: pointer;
+  }
+  #doodle-toast {
+    bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 160 !important;
+  }
+  html body .melissa-root #mli-character,
+  .melissa-character {
+    bottom: calc(98px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  #chiroot-mobile-player {
+    display: block;
+  }
+
+  .cmp-mini {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom, 12px));
+    max-width: 500px;
+    margin: 0 auto;
+    z-index: 42;
+    background: linear-gradient(180deg, #FBF5EE 0%, #F4EAE0 100%);
+    border: 2px solid #241911;
+    border-radius: 26px;
+    padding: 10px 12px;
+    box-shadow: 0 10px 28px rgba(42, 24, 10, 0.18), 0 2px 0 rgba(36, 25, 17, 0.08);
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+  }
+  .cmp-mini:active {
+    transform: scale(0.992);
+  }
+  #chiroot-mobile-player.is-expanded .cmp-mini {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px) scale(0.97);
+  }
+
+  .cmp-mini-cover {
+    width: 52px;
+    height: 52px;
+    border-radius: 13px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    background: linear-gradient(145deg, #A86B40 0%, #7F4B28 100%);
+    border: 1.5px solid #2A1A10;
+    box-shadow: 0 3px 8px rgba(48, 28, 12, 0.18);
+  }
+  .cmp-mini-cover img.cmp-mini-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: relative;
+    z-index: 2;
+  }
+  .cmp-mini-deck-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  #chiroot-mobile-player.is-playing .cmp-mini-disc {
+    transform-origin: 26px 26px;
+    animation: cmpVinylSpin 6.5s linear infinite;
+  }
+
+  .cmp-mini-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cmp-mini-title {
+    font-size: 15.5px;
+    font-weight: 800;
+    color: #1E1007;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+  .cmp-mini-sub {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #634E3F;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 2px 0 6px;
+  }
+  .cmp-mini-prog {
+    width: 100%;
+    height: 5px;
+    border-radius: 999px;
+    background: #D7C5B5;
+    overflow: hidden;
+    position: relative;
+  }
+  .cmp-mini-prog-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #865538 0%, #6D4127 100%);
+    transition: width 0.1s linear;
+  }
+
+  .cmp-mini-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .cmp-mini-play {
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    border: none;
+    background: #E5D2C2;
+    color: #2E1B0F;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 2px 6px rgba(62, 36, 16, 0.1);
+    transition: transform 0.12s ease, background 0.15s ease;
+  }
+  .cmp-mini-play:active {
+    transform: scale(0.93);
+    background: #DCC5B2;
+  }
+  .cmp-mini-more,
+  .cmp-exp-more {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1.4px solid #E5D6C8;
+    background: #FCF6F0;
+    color: #2B1A0E;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 3px 8px rgba(72, 42, 18, 0.08);
+    transition: transform 0.12s ease, background 0.15s ease;
+  }
+  .cmp-mini-more:active,
+  .cmp-exp-more:active {
+    transform: scale(0.93);
+    background: #F2E6DA;
+  }
+  .cmp-exp-more.is-open {
+    background: #EAD8C7;
+    border-color: #865538;
+    color: #5C351E;
+  }
+
+  .cmp-sheet-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 46;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    pointer-events: none;
+    visibility: hidden;
+    transition: visibility 0.28s linear;
+  }
+  #chiroot-mobile-player.is-expanded .cmp-sheet-wrap {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .cmp-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(24, 15, 8, 0.44);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.28s ease;
+  }
+  #chiroot-mobile-player.is-expanded .cmp-backdrop {
+    opacity: 1;
+  }
+
+  .cmp-sheet {
+    position: relative;
+    z-index: 2;
+    width: calc(100% - 20px);
+    max-width: 470px;
+    max-height: calc(100dvh - 18px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 auto max(10px, env(safe-area-inset-bottom, 10px));
+    background: linear-gradient(180deg, #FAF3EC 0%, #F3E8DC 100%);
+    border: 2.2px solid #241911;
+    border-radius: 32px;
+    padding: 10px 20px 20px;
+    box-shadow: 0 18px 48px rgba(24, 13, 5, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    transform: translateY(108%);
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    color: #1E1007;
+  }
+  #chiroot-mobile-player.is-expanded .cmp-sheet {
+    transform: translateY(0);
+  }
+  .cmp-sheet.is-dragging {
+    transition: none !important;
+  }
+
+  .cmp-handle-area {
+    width: 100%;
+    padding: 4px 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    background: transparent;
+    border: none;
+    touch-action: none;
+  }
+  .cmp-handle-pill {
+    width: 48px;
+    height: 5px;
+    border-radius: 999px;
+    background: #A58D7B;
+  }
+
+  .cmp-art-outer {
+    position: relative;
+    width: min(214px, 53vw);
+    height: min(214px, 53vw);
+    margin: 4px auto 20px;
+    user-select: none;
+    cursor: pointer;
+  }
+  .cmp-wood-deck {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 26px;
+    background: linear-gradient(155deg, #AA6E42 0%, #8C5530 55%, #764423 100%);
+    border: 2px solid #24170E;
+    box-shadow: 0 12px 24px rgba(58, 32, 12, 0.22), inset 0 1.5px 0 rgba(255, 236, 216, 0.32), inset 0 -3px 0 rgba(42, 22, 9, 0.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .cmp-wood-deck::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(45, 22, 8, 0.04) 0px,
+      rgba(45, 22, 8, 0.04) 2px,
+      transparent 2px,
+      transparent 9px
+    );
+    pointer-events: none;
+  }
+
+  .cmp-full-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 24px;
+    z-index: 6;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+  .cmp-art-outer.show-full-cover .cmp-full-cover {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .cmp-art-outer.show-full-cover .cmp-badge {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .cmp-vinyl {
+    width: 86%;
+    height: 86%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at center, transparent 36%, rgba(255,255,255,0.05) 37%, transparent 38%),
+      radial-gradient(circle at center, transparent 49%, rgba(255,255,255,0.045) 50%, transparent 51%),
+      radial-gradient(circle at center, transparent 61%, rgba(255,255,255,0.05) 62%, transparent 63%),
+      radial-gradient(circle at center, transparent 74%, rgba(255,255,255,0.04) 75%, transparent 76%),
+      conic-gradient(from 35deg, #161618 0deg, #252529 38deg, #151517 82deg, #151517 180deg, #26262A 218deg, #151517 262deg, #161618 360deg);
+    border: 2px solid #0E0E10;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    animation: cmpVinylSpin 7.5s linear infinite;
+    animation-play-state: paused;
+  }
+  #chiroot-mobile-player.is-playing .cmp-vinyl {
+    animation-play-state: running;
+  }
+
+  .cmp-vinyl-label {
+    width: 39%;
+    height: 39%;
+    border-radius: 50%;
+    background: #D94B3B;
+    border: 2px solid #141416;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #FFF8EE;
+    font-family: 'Kalam', 'Caveat', cursive;
+    line-height: 1.02;
+    box-shadow: inset 0 1px 3px rgba(255,255,255,0.28);
+  }
+  .cmp-vinyl-label img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cmp-vinyl-label-txt {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+  }
+  .cmp-spindle {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #F6EFE6;
+    border: 1.6px solid #18181A;
+    z-index: 3;
+  }
+
+  .cmp-tonearm {
+    position: absolute;
+    top: -4px;
+    right: 6px;
+    width: 48%;
+    height: 48%;
+    z-index: 4;
+    pointer-events: none;
+    transform-origin: 82% 14%;
+    transform: rotate(-10deg);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.32));
+  }
+  #chiroot-mobile-player.is-playing .cmp-tonearm {
+    transform: rotate(3deg);
+  }
+
+  .cmp-badge {
+    position: absolute;
+    z-index: 5;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .cmp-badge-chopper {
+    top: 16%;
+    left: -14%;
+    background: #FBF4E9;
+    border: 1.8px solid #241911;
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-family: 'Kalam', cursive;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.05;
+    color: #1E1108;
+    text-align: center;
+    transform: rotate(-4deg);
+    box-shadow: 0 4px 10px rgba(42, 24, 10, 0.14);
+  }
+  .cmp-badge-heart {
+    bottom: 12%;
+    left: -7%;
+    background: #FFF7EF;
+    border: 2px solid #C94C3D;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #BA3E30;
+    transform: rotate(-10deg);
+    box-shadow: 0 3px 8px rgba(42, 24, 10, 0.13);
+  }
+  .cmp-badge-chiroot {
+    bottom: 24%;
+    right: -15%;
+    background: #FDF2FF;
+    border: 2px solid #B554B8;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #8A2E8E;
+    transform: rotate(10deg);
+    box-shadow: 0 4px 10px rgba(42, 24, 10, 0.14);
+  }
+  .cmp-badge-gramo {
+    bottom: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FBF3E6;
+    border: 1.8px solid #241911;
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-family: 'Kalam', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #241911;
+    white-space: nowrap;
+    box-shadow: 0 3px 8px rgba(42, 24, 10, 0.15);
+  }
+
+  .cmp-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 4px 0 12px;
+  }
+  .cmp-meta-text {
+    min-width: 0;
+    flex: 1;
+  }
+  .cmp-exp-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #1E1007;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .cmp-exp-sub {
+    margin: 3px 0 0;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #624E40;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cmp-more-drawer {
+    display: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    background: #F4E8DA;
+    border: 1.5px solid #DECBB8;
+    border-radius: 18px;
+    padding: 10px;
+    margin-bottom: 14px;
+  }
+  .cmp-more-drawer.is-open {
+    display: grid;
+  }
+  .cmp-more-item {
+    background: #FCF6F0;
+    border: 1.4px solid #E3D3C3;
+    border-radius: 13px;
+    padding: 8px 6px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    color: #2E1B0F;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.12s ease, background 0.15s ease;
+  }
+  .cmp-more-item:active {
+    transform: scale(0.95);
+  }
+  .cmp-more-item.is-active {
+    background: #E8D3BE;
+    border-color: #7B4D32;
+    color: #5C351E;
+  }
+
+  .cmp-prog-row {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) 38px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .cmp-time {
+    font-size: 13px;
+    font-weight: 600;
+    color: #523E30;
+    font-variant-numeric: tabular-nums;
+  }
+  .cmp-time.end {
+    text-align: right;
+  }
+  .cmp-seek-wrap {
+    position: relative;
+    height: 28px;
+    display: flex;
+    align-items: center;
+  }
+  .cmp-seek-track {
+    width: 100%;
+    height: 7px;
+    border-radius: 999px;
+    background: #D5C3B3;
+    position: relative;
+  }
+  .cmp-seek-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #865538 0%, #6D4127 100%);
+  }
+  .cmp-seek-thumb {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FFFDF9;
+    border: 3px solid #6E4228;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 6px rgba(45, 24, 10, 0.22);
+    pointer-events: none;
+  }
+  .cmp-seek-input {
+    position: absolute;
+    inset: -8px 0;
+    width: 100%;
+    height: calc(100% + 16px);
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+    z-index: 3;
+    touch-action: none;
+  }
+
+  .cmp-transport {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 0 auto 18px;
+    max-width: 380px;
+  }
+  .cmp-ctrl-btn {
+    width: 52px;
+    height: 48px;
+    border-radius: 17px;
+    border: 1.5px solid #E4D4C5;
+    background: #FAF3EC;
+    color: #2D1B10;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 4px 10px rgba(78, 46, 20, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .cmp-ctrl-btn:active {
+    transform: translateY(1.5px) scale(0.96);
+  }
+  .cmp-ctrl-btn.is-active {
+    background: #EAD6C3;
+    border-color: #7B4D32;
+    color: #5E361E;
+  }
+  .cmp-ctrl-play {
+    width: 68px;
+    height: 62px;
+    border-radius: 21px;
+    border: 1.8px solid #4A2A16;
+    background: linear-gradient(180deg, #885638 0%, #643B22 100%);
+    color: #FFFDF9;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 4px 0 #422413, 0 10px 20px rgba(84, 48, 24, 0.28), inset 0 1px 0 rgba(255, 232, 212, 0.28);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .cmp-ctrl-play:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #422413, 0 4px 10px rgba(84, 48, 24, 0.22);
+  }
+
+  .cmp-vol-card {
+    background: #FAF3EC;
+    border: 1.5px solid #E4D5C7;
+    border-radius: 20px;
+    padding: 10px 12px;
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  }
+  .cmp-mute-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: #2E1B0F;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  .cmp-mute-btn:active {
+    background: #EFE2D5;
+  }
+  .cmp-vol-wrap {
+    position: relative;
+    height: 26px;
+    display: flex;
+    align-items: center;
+  }
+  .cmp-vol-track {
+    width: 100%;
+    height: 7px;
+    border-radius: 999px;
+    background: #D5C3B3;
+    position: relative;
+  }
+  .cmp-vol-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 82%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #865538 0%, #6D4127 100%);
+  }
+  .cmp-vol-thumb {
+    position: absolute;
+    top: 50%;
+    left: 82%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FFFDF9;
+    border: 3px solid #6E4228;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 5px rgba(45, 24, 10, 0.2);
+    pointer-events: none;
+  }
+  .cmp-vol-input {
+    position: absolute;
+    inset: -8px 0;
+    width: 100%;
+    height: calc(100% + 16px);
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+    z-index: 3;
+    touch-action: none;
+  }
+  .cmp-vol-pct {
+    background: #EEDFD3;
+    color: #382315;
+    font-size: 12.5px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    padding: 5px 10px;
+    border-radius: 10px;
+    min-width: 48px;
+    text-align: center;
+  }
+
+}
+
+@media (max-width: 380px) {
+  .cmp-sheet {
+    padding: 8px 15px 16px;
+    border-radius: 28px;
+  }
+  .cmp-art-outer {
+    width: 176px;
+    height: 176px;
+    margin-bottom: 14px;
+  }
+  .cmp-exp-title {
+    font-size: 19.5px;
+  }
+  .cmp-ctrl-btn {
+    width: 46px;
+    height: 44px;
+  }
+  .cmp-ctrl-play {
+    width: 60px;
+    height: 56px;
+  }
 }
 </style>
 </head>
@@ -2872,7 +3645,6 @@ html body #add-modal .file-field input[type=file]{overflow:hidden!important;text
     setTimeout(hide, 3600);
   })();
   </script>
-
 
   <main class="player-shell">
     <div class="paper-card sketch-border">
@@ -3115,7 +3887,6 @@ html body #add-modal .file-field input[type=file]{overflow:hidden!important;text
           <ol class="queue-list" id="queue-list"></ol>
         </section>
 
-        
       </section>
 
       <section class="top10-section">
@@ -4257,7 +5028,7 @@ function caMapCrateRow(row) {
 
 const GUEST_IDB_NAME = 'chiroot_guest_v1';
 const GUEST_IDB_STORE = 'tracks';
-let caGuestMem = null; // fallback jika IndexedDB tidak tersedia
+let caGuestMem = null; 
 
 function caIsGuest() {
   return !(ChirootAuth.session && ChirootAuth.profile);
@@ -4627,7 +5398,6 @@ async function caCrateReset() {
     if (t._coverPath) { try { await caStorageDelete(t._coverPath); } catch (e) {} }
   }
 }
-
 
 function caLoginRedirectUrl() {
   try {
@@ -5611,6 +6381,8 @@ function caStopPlaybackForSwitch() {
     shuffleBtn.classList.remove('active');
   } catch (e) {}
   try {
+    if (typeof isEggActive === 'boolean') isEggActive = false;
+    if (typeof activeEggTrack !== 'undefined') activeEggTrack = null;
     if (typeof isPlaying === 'boolean') isPlaying = false;
     if (typeof isLoop === 'boolean') isLoop = false;
     if (typeof isShuffle === 'boolean') isShuffle = false;
@@ -6395,7 +7167,6 @@ async function loadChirootEggUrl() {
 async function triggerChirootEasterEgg() {
   if (_eggLoading || swapLock) return;
 
-  // Toggle off if already playing the Easter Egg track
   if (isEggActive) {
     isEggActive = false;
     activeEggTrack = null;
@@ -7647,7 +8418,6 @@ function drawWobblyRect(ctx, x, y, w, h, r=24, wobble=4){
   ctx.closePath();
 }
 
-
 function ogEscapeXml(val) {
   return String(val == null ? '' : val)
     .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
@@ -7764,7 +8534,7 @@ function ogWrapTitleLines(rawTitle) {
 async function ogResolveCoverDataUri(src) {
   if (!src || typeof src !== 'string') return '';
   if (/^data:image\//i.test(src)) return src;
-  // 1) Try fetch -> Blob -> square 420x420 JPEG data URI so saved SVG is 100% self-contained & taint-free
+  
   try {
     var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
     var tid = ctrl ? setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, 4500) : null;
@@ -7804,7 +8574,6 @@ async function ogResolveCoverDataUri(src) {
     }
   } catch (e) {}
 
-  // 2) Fallback: Image with crossOrigin='anonymous' -> canvas -> dataURL
   return new Promise(function (resolve) {
     var done = false;
     function finish(val) { if (!done) { done = true; resolve(val || ''); } }
@@ -9859,6 +10628,602 @@ if (btnRefreshLyrics) {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();</script>
+
+<div id="chiroot-mobile-player" aria-label="Mobile Music Player">
+  
+  <div class="cmp-mini" id="cmp-mini" role="region" aria-label="Mini Music Player">
+    <div class="cmp-mini-cover" id="cmp-mini-cover">
+      <img class="cmp-mini-photo" id="cmp-mini-photo" alt="" style="display:none;">
+      <svg class="cmp-mini-deck-svg" id="cmp-mini-deck" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0" width="52" height="52" rx="12" fill="#9A5F37"/>
+        <g class="cmp-mini-disc">
+          <circle cx="26" cy="26" r="20.5" fill="#18181B"/>
+          <circle cx="26" cy="26" r="16.5" fill="none" stroke="rgba(255,255,255,0.09)" stroke-width="0.9"/>
+          <circle cx="26" cy="26" r="12.5" fill="none" stroke="rgba(255,255,255,0.09)" stroke-width="0.9"/>
+          <circle id="cmp-mini-label-circle" cx="26" cy="26" r="8.2" fill="#DA4C3B"/>
+          <circle cx="26" cy="26" r="1.8" fill="#FAF3EC"/>
+        </g>
+        <path d="M44 6 L37 16 L30 19.5" fill="none" stroke="#F5EDE3" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="44" cy="6" r="2.6" fill="#241911"/>
+      </svg>
+    </div>
+
+    <div class="cmp-mini-info">
+      <p class="cmp-mini-title" id="cmp-mini-title">The Crate</p>
+      <p class="cmp-mini-sub" id="cmp-mini-sub">Chiroot • 1924</p>
+      <div class="cmp-mini-prog" aria-hidden="true">
+        <div class="cmp-mini-prog-fill" id="cmp-mini-prog-fill"></div>
+      </div>
+    </div>
+
+    <div class="cmp-mini-actions">
+      <button type="button" class="cmp-mini-play" id="cmp-mini-play" aria-label="Play / Pause">
+        <span id="cmp-mini-play-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7.5 5.6v12.8c0 .8.9 1.3 1.6.8l10.2-6.4c.6-.4.6-1.3 0-1.7L9.1 4.8c-.7-.5-1.6 0-1.6.8z"/></svg>
+        </span>
+      </button>
+      <button type="button" class="cmp-mini-more" id="cmp-mini-more" aria-label="More options">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="cmp-sheet-wrap" id="cmp-sheet-wrap" aria-hidden="true">
+    <div class="cmp-backdrop" id="cmp-backdrop"></div>
+    <section class="cmp-sheet" id="cmp-sheet" role="dialog" aria-modal="true" aria-label="Now Playing">
+      <button type="button" class="cmp-handle-area" id="cmp-handle-btn" aria-label="Tutup panel pemutar">
+        <span class="cmp-handle-pill"></span>
+      </button>
+
+      <div class="cmp-art-outer" id="cmp-art-outer" title="Ketuk untuk ganti tampilan cover">
+        <img class="cmp-full-cover" id="cmp-full-cover" alt="" style="display:none;">
+        <div class="cmp-wood-deck">
+          <div class="cmp-vinyl" id="cmp-vinyl">
+            <div class="cmp-vinyl-label" id="cmp-vinyl-label">
+              <img id="cmp-vinyl-cover" alt="" style="display:none;">
+              <span class="cmp-vinyl-label-txt" id="cmp-vinyl-label-txt">GRAMO<br>1924</span>
+            </div>
+            <div class="cmp-spindle"></div>
+          </div>
+          <svg class="cmp-tonearm" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="90" cy="15" r="10" fill="#2A1C12"/>
+            <circle cx="90" cy="15" r="4.5" fill="#EDE1D3"/>
+            <path d="M90 15 L69 52 L34 69" fill="none" stroke="#241911" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M90 15 L69 52 L34 69" fill="none" stroke="#F4EBE0" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="19" y="64" width="21" height="12" rx="4" transform="rotate(-24 29 70)" fill="#241911"/>
+          </svg>
+        </div>
+        <div class="cmp-badge cmp-badge-chopper">Tony<br>Chopper</div>
+        <div class="cmp-badge cmp-badge-heart">♡ ♪</div>
+        <div class="cmp-badge cmp-badge-chiroot">CHIROOT</div>
+        <div class="cmp-badge cmp-badge-gramo">GRAMO • 1924</div>
+      </div>
+
+      <div class="cmp-meta-row">
+        <div class="cmp-meta-text">
+          <h3 class="cmp-exp-title" id="cmp-exp-title">The Crate</h3>
+          <p class="cmp-exp-sub" id="cmp-exp-sub">Chiroot • 1924</p>
+        </div>
+        <button type="button" class="cmp-exp-more" id="cmp-exp-more" aria-label="Opsi lagu lainnya" aria-expanded="false">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/></svg>
+        </button>
+      </div>
+
+      <div class="cmp-more-drawer" id="cmp-more-drawer">
+        <button type="button" class="cmp-more-item" id="cmp-act-reverb">
+          <span>♪ Reverb</span>
+        </button>
+        <button type="button" class="cmp-more-item" id="cmp-act-share">
+          <span>✦ Poster</span>
+        </button>
+        <button type="button" class="cmp-more-item" id="cmp-act-queue">
+          <span>＋ Queue</span>
+        </button>
+        <button type="button" class="cmp-more-item" id="cmp-act-stop">
+          <span>■ Stop</span>
+        </button>
+        <button type="button" class="cmp-more-item" id="cmp-act-bt">
+          <span>Bluetooth</span>
+        </button>
+        <button type="button" class="cmp-more-item" id="cmp-act-settings">
+          <span>⚙ Settings</span>
+        </button>
+      </div>
+
+      <div class="cmp-prog-row">
+        <span class="cmp-time" id="cmp-cur-time">0:00</span>
+        <div class="cmp-seek-wrap">
+          <div class="cmp-seek-track">
+            <div class="cmp-seek-fill" id="cmp-seek-fill"></div>
+            <div class="cmp-seek-thumb" id="cmp-seek-thumb"></div>
+          </div>
+          <input type="range" class="cmp-seek-input" id="cmp-seek" min="0" max="100" step="0.1" value="0" aria-label="Geser posisi lagu">
+        </div>
+        <span class="cmp-time end" id="cmp-dur-time">0:00</span>
+      </div>
+
+      <div class="cmp-transport">
+        <button type="button" class="cmp-ctrl-btn" id="cmp-btn-shuffle" aria-label="Shuffle">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+            <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+            <line x1="4" y1="4" x2="9" y2="9"/>
+          </svg>
+        </button>
+
+        <button type="button" class="cmp-ctrl-btn" id="cmp-btn-prev" aria-label="Previous">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor">
+            <rect x="5" y="5" width="2.6" height="14" rx="1.2"/>
+            <path d="M18.4 5.7v12.6c0 .8-.9 1.2-1.5.8L8.8 12.8c-.6-.4-.6-1.2 0-1.6l8.1-6.3c.6-.4 1.5 0 1.5.8z"/>
+          </svg>
+        </button>
+
+        <button type="button" class="cmp-ctrl-play" id="cmp-btn-play" aria-label="Play / Pause">
+          <span id="cmp-exp-play-icon">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M8 5.5v13c0 .8.9 1.3 1.6.8l10.2-6.5c.6-.4.6-1.3 0-1.7L9.6 4.7C8.9 4.2 8 4.7 8 5.5z"/></svg>
+          </span>
+        </button>
+
+        <button type="button" class="cmp-ctrl-btn" id="cmp-btn-next" aria-label="Next">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor">
+            <rect x="16.4" y="5" width="2.6" height="14" rx="1.2"/>
+            <path d="M5.6 5.7v12.6c0 .8.9 1.2 1.5.8l8.1-6.3c.6-.4.6-1.2 0-1.6L7.1 4.9c-.6-.4-1.5 0-1.5.8z"/>
+          </svg>
+        </button>
+
+        <button type="button" class="cmp-ctrl-btn" id="cmp-btn-loop" aria-label="Repeat">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="17 2 21 6 17 10"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+            <polyline points="7 22 3 18 7 14"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="cmp-vol-card">
+        <button type="button" class="cmp-mute-btn" id="cmp-btn-mute" aria-label="Mute / Unmute">
+          <span id="cmp-mute-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.08"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+          </span>
+        </button>
+        <div class="cmp-vol-wrap">
+          <div class="cmp-vol-track">
+            <div class="cmp-vol-fill" id="cmp-vol-fill"></div>
+            <div class="cmp-vol-thumb" id="cmp-vol-thumb"></div>
+          </div>
+          <input type="range" class="cmp-vol-input" id="cmp-volume" min="0" max="1" step="0.01" value="0.82" aria-label="Volume">
+        </div>
+        <span class="cmp-vol-pct" id="cmp-vol-pct">82%</span>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script id="chiroot-mobile-player-script">
+(function () {
+  var root = document.getElementById('chiroot-mobile-player');
+  var audioEl = document.getElementById('audio');
+  if (!root || !audioEl) return;
+
+  var miniEl = document.getElementById('cmp-mini');
+  var miniPhoto = document.getElementById('cmp-mini-photo');
+  var miniDeck = document.getElementById('cmp-mini-deck');
+  var miniLabelCircle = document.getElementById('cmp-mini-label-circle');
+  var miniTitle = document.getElementById('cmp-mini-title');
+  var miniSub = document.getElementById('cmp-mini-sub');
+  var miniProgFill = document.getElementById('cmp-mini-prog-fill');
+  var miniPlayBtn = document.getElementById('cmp-mini-play');
+  var miniPlayIcon = document.getElementById('cmp-mini-play-icon');
+  var miniMoreBtn = document.getElementById('cmp-mini-more');
+
+  var sheetWrap = document.getElementById('cmp-sheet-wrap');
+  var backdrop = document.getElementById('cmp-backdrop');
+  var sheet = document.getElementById('cmp-sheet');
+  var handleBtn = document.getElementById('cmp-handle-btn');
+  var artOuter = document.getElementById('cmp-art-outer');
+  var fullCoverImg = document.getElementById('cmp-full-cover');
+  var vinylLabel = document.getElementById('cmp-vinyl-label');
+  var vinylCoverImg = document.getElementById('cmp-vinyl-cover');
+  var vinylLabelTxt = document.getElementById('cmp-vinyl-label-txt');
+  var expTitle = document.getElementById('cmp-exp-title');
+  var expSub = document.getElementById('cmp-exp-sub');
+  var expMoreBtn = document.getElementById('cmp-exp-more');
+  var moreDrawer = document.getElementById('cmp-more-drawer');
+
+  var curTimeEl = document.getElementById('cmp-cur-time');
+  var durTimeEl = document.getElementById('cmp-dur-time');
+  var seekInput = document.getElementById('cmp-seek');
+  var seekFill = document.getElementById('cmp-seek-fill');
+  var seekThumb = document.getElementById('cmp-seek-thumb');
+
+  var btnShuffle = document.getElementById('cmp-btn-shuffle');
+  var btnPrev = document.getElementById('cmp-btn-prev');
+  var btnPlay = document.getElementById('cmp-btn-play');
+  var expPlayIcon = document.getElementById('cmp-exp-play-icon');
+  var btnNext = document.getElementById('cmp-btn-next');
+  var btnLoop = document.getElementById('cmp-btn-loop');
+
+  var btnMute = document.getElementById('cmp-btn-mute');
+  var muteIconEl = document.getElementById('cmp-mute-icon');
+  var volInput = document.getElementById('cmp-volume');
+  var volFill = document.getElementById('cmp-vol-fill');
+  var volThumb = document.getElementById('cmp-vol-thumb');
+  var volPct = document.getElementById('cmp-vol-pct');
+
+  var actReverb = document.getElementById('cmp-act-reverb');
+  var actShare = document.getElementById('cmp-act-share');
+  var actQueue = document.getElementById('cmp-act-queue');
+  var actStop = document.getElementById('cmp-act-stop');
+  var actBt = document.getElementById('cmp-act-bt');
+  var actSettings = document.getElementById('cmp-act-settings');
+
+  var PLAY_SVG_SM = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7.5 5.6v12.8c0 .8.9 1.3 1.6.8l10.2-6.4c.6-.4.6-1.3 0-1.7L9.1 4.8c-.7-.5-1.6 0-1.6.8z"/></svg>';
+  var PAUSE_SVG_SM = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="6.5" y="5" width="4" height="14" rx="1.6"/><rect x="13.5" y="5" width="4" height="14" rx="1.6"/></svg>';
+  var PLAY_SVG_LG = '<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M8 5.5v13c0 .8.9 1.3 1.6.8l10.2-6.5c.6-.4.6-1.3 0-1.7L9.6 4.7C8.9 4.2 8 4.7 8 5.5z"/></svg>';
+  var PAUSE_SVG_LG = '<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><rect x="6.5" y="5" width="4.2" height="14" rx="1.8"/><rect x="13.3" y="5" width="4.2" height="14" rx="1.8"/></svg>';
+
+  var cmpSeeking = false;
+  var lastCoverKey = null;
+
+  function cmpFmt(s) {
+    if (!isFinite(s) || s < 0) return '0:00';
+    var m = Math.floor(s / 60);
+    var sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  function getActiveTrackObj() {
+    try {
+      if (typeof isEggActive !== 'undefined' && isEggActive && typeof activeEggTrack !== 'undefined' && activeEggTrack) {
+        return activeEggTrack;
+      }
+      if (typeof tracks !== 'undefined' && Array.isArray(tracks) && tracks.length > 0 && typeof currentIndex === 'number') {
+        return tracks[currentIndex] || tracks[0] || null;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function syncTrackMeta() {
+    var tr = getActiveTrackObj();
+    var title = '';
+    var artist = '';
+    var cover = '';
+    var color = '#DA4C3B';
+    var yearSuffix = '1924';
+
+    if (tr) {
+      title = String(tr.title || '').trim();
+      artist = String(tr.artist || '').trim();
+      cover = String(tr.cover || '').trim();
+      if (tr.labelColor) color = tr.labelColor;
+      if (tr.year) yearSuffix = String(tr.year);
+    } else {
+      var domTitle = document.getElementById('song-title');
+      var domArtist = document.getElementById('artist-name');
+      var tVal = domTitle ? (domTitle.textContent || '').trim() : '';
+      var aVal = domArtist ? (domArtist.textContent || '').trim() : '';
+      if (tVal && !/no record loaded/i.test(tVal)) title = tVal;
+      if (aVal && !/tap \+ add music|add your first/i.test(aVal)) artist = aVal;
+    }
+
+    var finalTitle = title || 'The Crate';
+    var finalSub = artist ? (artist.indexOf('•') !== -1 ? artist : (artist + ' • ' + yearSuffix)) : ('Chiroot • ' + yearSuffix);
+
+    if (miniTitle.textContent !== finalTitle) miniTitle.textContent = finalTitle;
+    if (miniSub.textContent !== finalSub) miniSub.textContent = finalSub;
+    if (expTitle.textContent !== finalTitle) expTitle.textContent = finalTitle;
+    if (expSub.textContent !== finalSub) expSub.textContent = finalSub;
+
+    var coverKey = cover + '|' + color;
+    if (coverKey !== lastCoverKey) {
+      lastCoverKey = coverKey;
+      if (miniLabelCircle) miniLabelCircle.setAttribute('fill', color);
+      if (vinylLabel) vinylLabel.style.background = color;
+
+      if (cover) {
+        miniPhoto.setAttribute('src', cover);
+        miniPhoto.style.display = 'block';
+        miniDeck.style.display = 'none';
+
+        vinylCoverImg.setAttribute('src', cover);
+        vinylCoverImg.style.display = 'block';
+        vinylLabelTxt.style.display = 'none';
+
+        fullCoverImg.setAttribute('src', cover);
+        fullCoverImg.style.display = 'block';
+      } else {
+        miniPhoto.removeAttribute('src');
+        miniPhoto.style.display = 'none';
+        miniDeck.style.display = 'block';
+
+        vinylCoverImg.removeAttribute('src');
+        vinylCoverImg.style.display = 'none';
+        vinylLabelTxt.style.display = 'block';
+
+        fullCoverImg.removeAttribute('src');
+        fullCoverImg.style.display = 'none';
+        artOuter.classList.remove('show-full-cover');
+      }
+    }
+  }
+
+  miniPhoto.addEventListener('error', function () {
+    miniPhoto.style.display = 'none';
+    miniDeck.style.display = 'block';
+  });
+  vinylCoverImg.addEventListener('error', function () {
+    vinylCoverImg.style.display = 'none';
+    vinylLabelTxt.style.display = 'block';
+    fullCoverImg.style.display = 'none';
+    artOuter.classList.remove('show-full-cover');
+  });
+
+  function syncPlayAndModes() {
+    var playing = !audioEl.paused && !audioEl.ended;
+    try {
+      if (typeof isPlaying === 'boolean') playing = isPlaying;
+    } catch (e) {}
+    root.classList.toggle('is-playing', playing);
+    miniPlayIcon.innerHTML = playing ? PAUSE_SVG_SM : PLAY_SVG_SM;
+    expPlayIcon.innerHTML = playing ? PAUSE_SVG_LG : PLAY_SVG_LG;
+
+    var shufOrig = document.getElementById('btn-shuffle');
+    var loopOrig = document.getElementById('btn-loop');
+    var revOrig = document.getElementById('btn-reverb');
+    if (shufOrig) btnShuffle.classList.toggle('is-active', shufOrig.classList.contains('active'));
+    if (loopOrig) btnLoop.classList.toggle('is-active', loopOrig.classList.contains('active'));
+    if (revOrig && actReverb) actReverb.classList.toggle('is-active', revOrig.classList.contains('active'));
+  }
+
+  function syncProgress() {
+    if (cmpSeeking) return;
+    var cur = audioEl.currentTime || 0;
+    var dur = audioEl.duration || 0;
+    var pct = (dur && isFinite(dur)) ? Math.min(100, Math.max(0, (cur / dur) * 100)) : 0;
+    miniProgFill.style.width = pct + '%';
+    seekFill.style.width = pct + '%';
+    seekThumb.style.left = pct + '%';
+    seekInput.value = pct;
+    curTimeEl.textContent = cmpFmt(cur);
+    durTimeEl.textContent = cmpFmt(dur);
+  }
+
+  function syncVolume() {
+    var v = typeof audioEl.volume === 'number' ? audioEl.volume : 0.82;
+    var muted = !!audioEl.muted || v === 0;
+    var effective = muted ? 0 : Math.round(v * 100);
+    volInput.value = muted ? 0 : v;
+    volFill.style.width = effective + '%';
+    volThumb.style.left = effective + '%';
+    volPct.textContent = effective + '%';
+
+    if (muted) {
+      muteIconEl.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+    } else if (v > 0.5) {
+      muteIconEl.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.08"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+    } else {
+      muteIconEl.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.08"/></svg>';
+    }
+  }
+
+  function syncAll() {
+    syncTrackMeta();
+    syncPlayAndModes();
+    syncProgress();
+    syncVolume();
+  }
+
+  function openExpanded(openMore) {
+    syncAll();
+    root.classList.add('is-expanded');
+    sheetWrap.setAttribute('aria-hidden', 'false');
+    if (openMore) {
+      moreDrawer.classList.add('is-open');
+      expMoreBtn.classList.add('is-open');
+      expMoreBtn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  function closeExpanded() {
+    sheet.classList.remove('is-dragging');
+    sheet.style.transform = '';
+    root.classList.remove('is-expanded');
+    sheetWrap.setAttribute('aria-hidden', 'true');
+    moreDrawer.classList.remove('is-open');
+    expMoreBtn.classList.remove('is-open');
+    expMoreBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  function clickOrig(id) {
+    var b = document.getElementById(id);
+    if (b) b.click();
+    setTimeout(syncAll, 20);
+  }
+
+  miniEl.addEventListener('click', function (e) {
+    if (e.target.closest('#cmp-mini-play') || e.target.closest('#cmp-mini-more')) return;
+    openExpanded(false);
+  });
+  miniPlayBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    clickOrig('btn-play');
+  });
+  miniMoreBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    openExpanded(true);
+  });
+
+  var stageDeck = document.querySelector('.gramophone-stage .turntable-base');
+  if (stageDeck) {
+    stageDeck.addEventListener('click', function () {
+      if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
+        openExpanded(false);
+      }
+    });
+  }
+
+  backdrop.addEventListener('click', closeExpanded);
+  handleBtn.addEventListener('click', closeExpanded);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && root.classList.contains('is-expanded')) {
+      closeExpanded();
+    }
+  });
+
+  var touchStartY = 0;
+  var touchDeltaY = 0;
+  var draggingSheet = false;
+
+  miniEl.addEventListener('touchstart', function (e) {
+    if (!e.touches || !e.touches.length) return;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  miniEl.addEventListener('touchend', function (e) {
+    if (!e.changedTouches || !e.changedTouches.length) return;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (dy < -28) openExpanded(false);
+  }, { passive: true });
+
+  handleBtn.addEventListener('touchstart', function (e) {
+    if (!e.touches || !e.touches.length) return;
+    draggingSheet = true;
+    touchStartY = e.touches[0].clientY;
+    touchDeltaY = 0;
+    sheet.classList.add('is-dragging');
+  }, { passive: true });
+
+  handleBtn.addEventListener('touchmove', function (e) {
+    if (!draggingSheet || !e.touches || !e.touches.length) return;
+    touchDeltaY = Math.max(0, e.touches[0].clientY - touchStartY);
+    sheet.style.transform = 'translateY(' + touchDeltaY + 'px)';
+  }, { passive: true });
+
+  handleBtn.addEventListener('touchend', function () {
+    if (!draggingSheet) return;
+    draggingSheet = false;
+    sheet.classList.remove('is-dragging');
+    if (touchDeltaY > 68) {
+      closeExpanded();
+    } else {
+      sheet.style.transform = '';
+    }
+    touchDeltaY = 0;
+  }, { passive: true });
+
+  artOuter.addEventListener('click', function () {
+    if (fullCoverImg.getAttribute('src')) {
+      artOuter.classList.toggle('show-full-cover');
+    }
+  });
+
+  expMoreBtn.addEventListener('click', function () {
+    var open = !moreDrawer.classList.contains('is-open');
+    moreDrawer.classList.toggle('is-open', open);
+    expMoreBtn.classList.toggle('is-open', open);
+    expMoreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    syncPlayAndModes();
+  });
+
+  actReverb.addEventListener('click', function () {
+    clickOrig('btn-reverb');
+  });
+  actShare.addEventListener('click', function () {
+    closeExpanded();
+    clickOrig('btn-share');
+  });
+  actQueue.addEventListener('click', function () {
+    try {
+      if (typeof addToQueue === 'function' && typeof currentIndex === 'number') {
+        addToQueue(currentIndex);
+        return;
+      }
+    } catch (e) {}
+    var qBtn = document.querySelector('.playlist-item.active .queue-track');
+    if (qBtn) qBtn.click();
+  });
+  actStop.addEventListener('click', function () {
+    clickOrig('btn-stop');
+  });
+  actBt.addEventListener('click', function () {
+    closeExpanded();
+    clickOrig('btn-bluetooth-open');
+  });
+  actSettings.addEventListener('click', function () {
+    closeExpanded();
+    clickOrig('btn-settings-open');
+  });
+
+  btnPlay.addEventListener('click', function () { clickOrig('btn-play'); });
+  btnPrev.addEventListener('click', function () { clickOrig('btn-prev'); });
+  btnNext.addEventListener('click', function () { clickOrig('btn-next'); });
+  btnShuffle.addEventListener('click', function () { clickOrig('btn-shuffle'); });
+  btnLoop.addEventListener('click', function () { clickOrig('btn-loop'); });
+
+  seekInput.addEventListener('input', function (e) {
+    cmpSeeking = true;
+    var pct = parseFloat(e.target.value) || 0;
+    seekFill.style.width = pct + '%';
+    seekThumb.style.left = pct + '%';
+    miniProgFill.style.width = pct + '%';
+    if (audioEl.duration && isFinite(audioEl.duration)) {
+      curTimeEl.textContent = cmpFmt((audioEl.duration * pct) / 100);
+    }
+  });
+  seekInput.addEventListener('change', function (e) {
+    var pct = parseFloat(e.target.value) || 0;
+    if (audioEl.duration && isFinite(audioEl.duration)) {
+      audioEl.currentTime = (audioEl.duration * pct) / 100;
+    }
+    cmpSeeking = false;
+    syncProgress();
+  });
+
+  volInput.addEventListener('input', function (e) {
+    var val = Math.min(1, Math.max(0, parseFloat(e.target.value) || 0));
+    var origVol = document.getElementById('volume');
+    if (origVol) {
+      origVol.value = val;
+      origVol.dispatchEvent(new Event('input', { bubbles: true }));
+    } else {
+      audioEl.volume = val;
+      audioEl.muted = false;
+    }
+    syncVolume();
+  });
+  btnMute.addEventListener('click', function () {
+    clickOrig('btn-mute');
+  });
+
+  ['play', 'playing', 'pause', 'ended', 'timeupdate', 'loadedmetadata', 'durationchange', 'volumechange', 'seeked', 'emptied'].forEach(function (ev) {
+    audioEl.addEventListener(ev, syncAll);
+  });
+
+  ['btn-play', 'btn-prev', 'btn-next', 'btn-stop', 'btn-shuffle', 'btn-loop', 'btn-reverb', 'btn-mute'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('click', function () { setTimeout(syncAll, 25); });
+  });
+
+  if (window.MutationObserver) {
+    ['song-title', 'artist-name', 'label-inner', 'play-icon'].forEach(function (id) {
+      var target = document.getElementById(id);
+      if (target) {
+        new MutationObserver(syncAll).observe(target, { childList: true, subtree: true, characterData: true, attributes: true });
+      }
+    });
+  }
+
+  setInterval(syncAll, 900);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncAll);
+  } else {
+    syncAll();
+  }
+})();
+</script>
 <script type="module" src="normal.js"></script>
 <script src="Lang.js" defer></script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4f884811f67dfe3',t:'MTc5Mjg0MDA0Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a537a306e905fd20',t:'MTc5MzUwMTg5Ng=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a537a306e905fd20',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4f884811f67dfe3',t:'MTc5Mjg0MDA0Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a53bad2cae7b3fa1',t:'MTc5MzU0NDI1NQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a53bad2cae7b3fa1',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>
