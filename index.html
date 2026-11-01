@@ -32,7 +32,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,500;0,600;0,700;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,500;0,600;0,700;1,500&family=Caveat:wght@600;700&family=Gloria+Hallelujah&family=Kalam:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -2571,78 +2571,6 @@
         border-radius: 6px;
       }
     
-      
-      body {
-        background: #0e0c14;
-      }
-      body::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 102;
-        opacity: 0.035;
-        background-image:
-          repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,0.9) 2px 3px),
-          repeating-linear-gradient(90deg, transparent 0 3px, rgba(255,255,255,0.25) 3px 4px);
-        mix-blend-mode: soft-light;
-      }
-      .paper-texture {
-        opacity: 0.18;
-      }
-      .site-nav {
-        background: #0a0a0f;
-        border-bottom-color: #0a0a0f;
-      }
-      .site-nav .brand {
-        background: #0a0a0f;
-        box-shadow: 4px 4px 0 #d8b24a;
-      }
-      .tick-bar {
-        background: #0a0a0f;
-        border-bottom-color: #0a0a0f;
-      }
-      .hero {
-        background: #fdf6e3;
-        position: relative;
-        overflow: clip;
-      }
-      .hero::before {
-        content: "";
-        position: absolute;
-        right: -40px;
-        top: 36px;
-        width: min(560px, 88vw);
-        height: min(560px, 88vw);
-        border-radius: 50%;
-        background:
-          radial-gradient(ellipse at 30% 18%, rgba(255,220,160,0.95) 0 1.2%, transparent 1.4%),
-          radial-gradient(ellipse at 55% 12%, rgba(255,255,255,0.9) 0 0.9%, transparent 1.1%),
-          radial-gradient(ellipse at 70% 28%, rgba(255,255,255,0.7) 0 0.8%, transparent 1%),
-          radial-gradient(ellipse at 20% 35%, rgba(255,255,255,0.5) 0 0.7%, transparent 0.9%),
-          linear-gradient(180deg, #1b1b2e 0%, #0f0f1e 55%, #1a1022 100%);
-        border: 4px solid #0a0a0f;
-        box-shadow: 14px 14px 0 #0a0a0f;
-        z-index: 0;
-        opacity: 0.98;
-      }
-      .hero::after {
-        content: "";
-        position: absolute;
-        right: -40px;
-        top: 36px;
-        width: min(560px, 88vw);
-        height: min(560px, 88vw);
-        border-radius: 50%;
-        background:
-          linear-gradient(to top, #0a0a0f 0 18%, transparent 18%),
-          repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 18px);
-        mask: radial-gradient(circle, black 68%, transparent 68%);
-        -webkit-mask: radial-gradient(circle, black 68%, transparent 68%);
-        pointer-events: none;
-        z-index: 0;
-        opacity: 0.55;
-      }
       .hero-grid, .hero-copy {
         position: relative;
         z-index: 1;
@@ -2949,6 +2877,190 @@
 
     
       
+      .hero-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+      }
+      .hero-copy {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      .pc-blob { display: none !important; }
+      img { max-width: 100%; }
+      .hero-grid, .hero-copy, .section-inner, .footer-inner > *, .hero-actions > *, .linux-dropdown-wrap { min-width: 0; }
+      .hero-copy { width: 100%; }
+      .nav-inner { gap: 16px; }
+      .poster-preview { max-width: 760px; margin: 0 auto; padding: 0 24px 64px; color: #fdf6e3; }
+      .poster-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+      .poster-heading h2 { font-family: var(--font-display); font-size: clamp(24px, 5vw, 36px); margin: 0; }
+      .poster-heading span { font-family: var(--font-mono); color: #d8b24a; font-size: 12px; }
+      .poster-stage { border: 2px solid #d8b24a; background: #14111d; box-shadow: 7px 7px 0 #332845; overflow: hidden; touch-action: pan-y; }
+      .poster-slide { margin: 0; }
+      .poster-slide[hidden] { display: none; }
+      .poster-art { aspect-ratio: 4 / 5; max-height: 540px; display: grid; place-content: center; text-align: center; padding: 28px; background: radial-gradient(circle at 50% 40%, #49335e, #14111d 70%); }
+      .poster-slide:nth-child(2) .poster-art { background: radial-gradient(circle at 50% 40%, #633521, #14111d 70%); }
+      .poster-slide:nth-child(3) .poster-art { background: radial-gradient(circle at 50% 40%, #234f48, #14111d 70%); }
+      .poster-art b { font-size: clamp(70px, 18vw, 130px); color: #d8b24a; }
+      .poster-art strong { font-family: var(--font-display); font-size: 24px; }
+      .poster-art p { color: #d5c9df; font-size: 14px; }
+      .poster-slide img { display: block; width: 100%; height: auto; max-height: 540px; object-fit: contain; }
+      .poster-slide figcaption { padding: 16px; font-family: var(--font-mono); font-size: 12px; border-top: 1px solid #44384e; }
+      .poster-controls { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 22px; }
+      .poster-controls button { min-width: 44px; min-height: 44px; border: 1px solid #d8b24a; background: #14111d; color: #fdf6e3; cursor: pointer; }
+      .poster-controls button[aria-current="true"] { background: #d8b24a; color: #14111d; }
+      @media (max-width: 900px) {
+        :root { --nav-h: 100px; }
+        .nav-inner { padding: 18px 16px; min-height: var(--nav-h); justify-content: space-between; gap: 12px; }
+        .site-nav .brand { padding: 8px; gap: 7px; flex-shrink: 0; }
+        .site-nav .brand-text { font-size: 10px; letter-spacing: 0; }
+        .site-nav .brand-text span { font-size: 14px; }
+        .site-nav .brand-mark { width: 24px; height: 24px; }
+        .site-nav .nav-links { display: flex; position: static; flex-direction: row; margin: 0; padding: 0; background: transparent; border: 0; transform: none; opacity: 1; visibility: visible; gap: 0; }
+        .site-nav .nav-links > li:not(.nav-cta-item) { display: none; }
+        .site-nav .nav-links .nav-cta-item { display: flex; flex-direction: column; top: auto; margin: 0; padding: 0; border: 0; }
+        .site-nav .cta-flame { position: relative; left: auto; bottom: auto; transform: none; width: auto; margin: 0 0 7px; padding: 4px; font-size: clamp(6px, 1.7vw, 9px); letter-spacing: 0; }
+        .site-nav .nav-links .nav-cta { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px; font-size: 11px; letter-spacing: 0; white-space: nowrap; }
+        .hero-grid { grid-template-columns: minmax(0, 1fr) !important; }
+        .hero { padding: 36px 20px 48px; }
+        .hero-copy { padding-top: 0; }
+        .hero-title { font-size: clamp(34px, 9vw, 68px); overflow-wrap: anywhere; }
+        .typewriter-word { min-width: 0; max-width: 100%; }
+        .hero-actions { flex-direction: column; align-items: stretch; }
+        .hero-actions .btn { width: 100%; transform: none; white-space: normal; }
+        .linux-shell-outside, .shell-row { max-width: 100%; min-width: 0; }
+        .shell-row { flex-wrap: wrap; }
+        .shell-row code { white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+        .linux-dropdown { position: static; margin-top: 12px; }
+        .linux-dropdown-item { flex-wrap: wrap; }
+        .linux-dropdown-item span { white-space: normal; margin-left: 0; }
+        .section-head { flex-wrap: wrap; gap: 20px; }
+        .section-head > * { min-width: 0; max-width: 100%; }
+        .feature-card, .faq-card { min-width: 0; overflow-wrap: anywhere; }
+        .footer-inner { padding: 40px 20px; }
+        .footer-bottom { padding-inline: 20px; text-align: center; }
+        .install-card { max-width: 100%; max-height: 85dvh; overflow-y: auto; }
+        .doodle-notes { display: none; }
+      }
+      @media (max-width: 360px) {
+        .nav-inner { padding-inline: 10px; gap: 8px; }
+        .site-nav .brand-mark { display: none; }
+        .hero, .section-inner { padding-inline: 16px; }
+        .poster-preview { padding-inline: 16px; }
+        .poster-controls { gap: 7px; }
+      }
+
+    
+      .shell-toggle { display: none; }
+      .poster-preview { max-width: 960px; padding: 0 20px 64px; }
+      .poster-stage { border: 0; background: transparent; box-shadow: none; overflow: hidden; touch-action: pan-y; }
+      .poster-track { display: flex; width: max-content; animation: poster-drift 48s linear infinite; }
+      .poster-set { display: flex; flex-shrink: 0; gap: 20px; padding-right: 20px; }
+      .poster-slide { flex: 0 0 auto; width: clamp(180px, 55vw, 300px); border: 0; box-shadow: none; background: transparent; }
+      .poster-art { aspect-ratio: 4 / 5; padding: 16px; }
+      .poster-slide img { width: 100%; height: auto; max-height: none; object-fit: contain; border: 0; border-radius: 0; box-shadow: none; }
+      @keyframes poster-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+      @media (max-width: 900px) {
+        .shell-toggle { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; background: #14141c; color: #d8b24a; border: 1px solid #51462d; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+        #linux-shell-content { display: none; }
+        .shell-open #linux-shell-content { display: block; margin-top: 14px; }
+        .linux-shell-outside { padding: 0; background: transparent; border: 0; box-shadow: none; }
+        .poster-preview { padding-inline: 16px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .poster-track { animation: none; width: auto; }
+        .poster-set { flex-wrap: wrap; padding: 0; justify-content: center; width: 100%; }
+        .poster-set[aria-hidden="true"] { display: none; }
+      }
+
+
+      /* Chiroot OG default Poster Section & post-event clean state */
+      .cta-flame, .hw-event-bar { display: none; }
+      .poster-section { position: relative; background: var(--paper-2); border-bottom: 3px solid var(--ink); padding: clamp(36px, 6vw, 72px) 0; }
+      .poster-section .poster-preview { padding-bottom: 0; color: var(--ink); }
+      .posters-intro { max-width: 960px; margin: 0 auto 28px; padding: 0 20px; }
+      .posters-intro h2 { margin: 0 0 12px; color: var(--ink); font-family: var(--font-display); font-size: clamp(30px, 5vw, 48px); line-height: 1.15; text-transform: uppercase; }
+      .posters-intro p { margin: 0; color: var(--ink-muted); font-size: clamp(14px, 2vw, 17px); line-height: 1.6; }
+      .poster-art { background: var(--paper); border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); border-radius: 8px; }
+      .poster-art b { color: var(--gold); }
+      .poster-art p { color: var(--ink-muted); }
+      .poster-slide figcaption { color: var(--ink-soft); border-top: 2px dashed var(--ink); }
+      @media (max-width: 900px) {
+        .posters-intro { padding-inline: 16px; }
+        .shell-toggle { background: var(--ink); color: var(--gold-soft); border: 2px solid var(--ink); }
+      }
+    </style>
+    <style id="index-halloween-style" data-halloween-style>
+      body {
+        background: #0e0c14;
+      }
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 102;
+        opacity: 0.035;
+        background-image:
+          repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,0.9) 2px 3px),
+          repeating-linear-gradient(90deg, transparent 0 3px, rgba(255,255,255,0.25) 3px 4px);
+        mix-blend-mode: soft-light;
+      }
+      .paper-texture {
+        opacity: 0.18;
+      }
+      .site-nav {
+        background: #0a0a0f;
+        border-bottom-color: #0a0a0f;
+      }
+      .site-nav .brand {
+        background: #0a0a0f;
+        box-shadow: 4px 4px 0 #d8b24a;
+      }
+      .tick-bar {
+        background: #0a0a0f;
+        border-bottom-color: #0a0a0f;
+      }
+      .hero {
+        background: #fdf6e3;
+        position: relative;
+        overflow: clip;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: 36px;
+        width: min(560px, 88vw);
+        height: min(560px, 88vw);
+        border-radius: 50%;
+        background:
+          radial-gradient(ellipse at 30% 18%, rgba(255,220,160,0.95) 0 1.2%, transparent 1.4%),
+          radial-gradient(ellipse at 55% 12%, rgba(255,255,255,0.9) 0 0.9%, transparent 1.1%),
+          radial-gradient(ellipse at 70% 28%, rgba(255,255,255,0.7) 0 0.8%, transparent 1%),
+          radial-gradient(ellipse at 20% 35%, rgba(255,255,255,0.5) 0 0.7%, transparent 0.9%),
+          linear-gradient(180deg, #1b1b2e 0%, #0f0f1e 55%, #1a1022 100%);
+        border: 4px solid #0a0a0f;
+        box-shadow: 14px 14px 0 #0a0a0f;
+        z-index: 0;
+        opacity: 0.98;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: 36px;
+        width: min(560px, 88vw);
+        height: min(560px, 88vw);
+        border-radius: 50%;
+        background:
+          linear-gradient(to top, #0a0a0f 0 18%, transparent 18%),
+          repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 18px);
+        mask: radial-gradient(circle, black 68%, transparent 68%);
+        -webkit-mask: radial-gradient(circle, black 68%, transparent 68%);
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.55;
+      }
       .lofi-linux {
         background: transparent !important;
         border: none !important;
@@ -2980,20 +3092,6 @@
       .tick-bar {
         background: #0a0a0f !important;
       }
-
-    
-      
-      .hero-grid {
-        grid-template-columns: 1fr !important;
-        gap: 0 !important;
-      }
-      .hero-copy {
-        max-width: 760px;
-        margin: 0 auto;
-      }
-      .pc-blob { display: none !important; }
-
-
       @property --fire-angle {
         syntax: "<angle>";
         initial-value: 0deg;
@@ -3286,94 +3384,6 @@
           animation: none !important;
         }
       }
-    
-      img { max-width: 100%; }
-      .hero-grid, .hero-copy, .section-inner, .footer-inner > *, .hero-actions > *, .linux-dropdown-wrap { min-width: 0; }
-      .hero-copy { width: 100%; }
-      .nav-inner { gap: 16px; }
-      .poster-preview { max-width: 760px; margin: 0 auto; padding: 0 24px 64px; color: #fdf6e3; }
-      .poster-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
-      .poster-heading h2 { font-family: var(--font-display); font-size: clamp(24px, 5vw, 36px); margin: 0; }
-      .poster-heading span { font-family: var(--font-mono); color: #d8b24a; font-size: 12px; }
-      .poster-stage { border: 2px solid #d8b24a; background: #14111d; box-shadow: 7px 7px 0 #332845; overflow: hidden; touch-action: pan-y; }
-      .poster-slide { margin: 0; }
-      .poster-slide[hidden] { display: none; }
-      .poster-art { aspect-ratio: 4 / 5; max-height: 540px; display: grid; place-content: center; text-align: center; padding: 28px; background: radial-gradient(circle at 50% 40%, #49335e, #14111d 70%); }
-      .poster-slide:nth-child(2) .poster-art { background: radial-gradient(circle at 50% 40%, #633521, #14111d 70%); }
-      .poster-slide:nth-child(3) .poster-art { background: radial-gradient(circle at 50% 40%, #234f48, #14111d 70%); }
-      .poster-art b { font-size: clamp(70px, 18vw, 130px); color: #d8b24a; }
-      .poster-art strong { font-family: var(--font-display); font-size: 24px; }
-      .poster-art p { color: #d5c9df; font-size: 14px; }
-      .poster-slide img { display: block; width: 100%; height: auto; max-height: 540px; object-fit: contain; }
-      .poster-slide figcaption { padding: 16px; font-family: var(--font-mono); font-size: 12px; border-top: 1px solid #44384e; }
-      .poster-controls { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 22px; }
-      .poster-controls button { min-width: 44px; min-height: 44px; border: 1px solid #d8b24a; background: #14111d; color: #fdf6e3; cursor: pointer; }
-      .poster-controls button[aria-current="true"] { background: #d8b24a; color: #14111d; }
-      @media (max-width: 900px) {
-        :root { --nav-h: 100px; }
-        .nav-inner { padding: 18px 16px; min-height: var(--nav-h); justify-content: space-between; gap: 12px; }
-        .site-nav .brand { padding: 8px; gap: 7px; flex-shrink: 0; }
-        .site-nav .brand-text { font-size: 10px; letter-spacing: 0; }
-        .site-nav .brand-text span { font-size: 14px; }
-        .site-nav .brand-mark { width: 24px; height: 24px; }
-        .site-nav .nav-links { display: flex; position: static; flex-direction: row; margin: 0; padding: 0; background: transparent; border: 0; transform: none; opacity: 1; visibility: visible; gap: 0; }
-        .site-nav .nav-links > li:not(.nav-cta-item) { display: none; }
-        .site-nav .nav-links .nav-cta-item { display: flex; flex-direction: column; top: auto; margin: 0; padding: 0; border: 0; }
-        .site-nav .cta-flame { position: relative; left: auto; bottom: auto; transform: none; width: auto; margin: 0 0 7px; padding: 4px; font-size: clamp(6px, 1.7vw, 9px); letter-spacing: 0; }
-        .site-nav .nav-links .nav-cta { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px; font-size: 11px; letter-spacing: 0; white-space: nowrap; }
-        .hero-grid { grid-template-columns: minmax(0, 1fr) !important; }
-        .hero { padding: 36px 20px 48px; }
-        .hero-copy { padding-top: 0; }
-        .hero-title { font-size: clamp(34px, 9vw, 68px); overflow-wrap: anywhere; }
-        .typewriter-word { min-width: 0; max-width: 100%; }
-        .hero-actions { flex-direction: column; align-items: stretch; }
-        .hero-actions .btn { width: 100%; transform: none; white-space: normal; }
-        .linux-shell-outside, .shell-row { max-width: 100%; min-width: 0; }
-        .shell-row { flex-wrap: wrap; }
-        .shell-row code { white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
-        .linux-dropdown { position: static; margin-top: 12px; }
-        .linux-dropdown-item { flex-wrap: wrap; }
-        .linux-dropdown-item span { white-space: normal; margin-left: 0; }
-        .section-head { flex-wrap: wrap; gap: 20px; }
-        .section-head > * { min-width: 0; max-width: 100%; }
-        .feature-card, .faq-card { min-width: 0; overflow-wrap: anywhere; }
-        .footer-inner { padding: 40px 20px; }
-        .footer-bottom { padding-inline: 20px; text-align: center; }
-        .install-card { max-width: 100%; max-height: 85dvh; overflow-y: auto; }
-        .doodle-notes { display: none; }
-      }
-      @media (max-width: 360px) {
-        .nav-inner { padding-inline: 10px; gap: 8px; }
-        .site-nav .brand-mark { display: none; }
-        .hero, .section-inner { padding-inline: 16px; }
-        .poster-preview { padding-inline: 16px; }
-        .poster-controls { gap: 7px; }
-      }
-
-    
-      .shell-toggle { display: none; }
-      .poster-preview { max-width: 960px; padding: 0 20px 64px; }
-      .poster-stage { border: 0; background: transparent; box-shadow: none; overflow: hidden; touch-action: pan-y; }
-      .poster-track { display: flex; width: max-content; animation: poster-drift 48s linear infinite; }
-      .poster-set { display: flex; flex-shrink: 0; gap: 20px; padding-right: 20px; }
-      .poster-slide { flex: 0 0 auto; width: clamp(180px, 55vw, 300px); border: 0; box-shadow: none; background: transparent; }
-      .poster-art { aspect-ratio: 4 / 5; padding: 16px; }
-      .poster-slide img { width: 100%; height: auto; max-height: none; object-fit: contain; border: 0; border-radius: 0; box-shadow: none; }
-      @keyframes poster-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-      @media (max-width: 900px) {
-        .shell-toggle { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; background: #14141c; color: #d8b24a; border: 1px solid #51462d; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
-        #linux-shell-content { display: none; }
-        .shell-open #linux-shell-content { display: block; margin-top: 14px; }
-        .linux-shell-outside { padding: 0; background: transparent; border: 0; box-shadow: none; }
-        .poster-preview { padding-inline: 16px; }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .poster-track { animation: none; width: auto; }
-        .poster-set { flex-wrap: wrap; padding: 0; justify-content: center; width: 100%; }
-        .poster-set[aria-hidden="true"] { display: none; }
-      }
-
-
       .poster-section { position: relative; background: #0e0c14; padding: clamp(36px, 6vw, 72px) 0; }
       .poster-section .poster-preview { padding-bottom: 0; }
     
@@ -3381,7 +3391,139 @@
       .posters-intro h2 { margin: 0 0 12px; color: #fdf6e3; font-family: var(--font-display); font-size: clamp(30px, 5vw, 48px); line-height: 1.15; }
       .posters-intro p { margin: 0; color: #d5c9df; font-size: clamp(14px, 2vw, 17px); line-height: 1.6; }
       @media (max-width: 900px) { .posters-intro { padding-inline: 16px; } }
+
+      .cta-flame { display: inline-flex; }
+      .hw-event-bar {
+        display: block;
+        background: linear-gradient(90deg, #160c24 0%, #241133 50%, #1a0c18 100%);
+        border-bottom: 2px solid #d8b24a;
+        color: #fdf6e3;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        padding: 10px 20px;
+        position: relative;
+        z-index: 40;
+      }
+      .hw-event-bar-inner {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        text-align: center;
+      }
+      .hw-event-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        background: #d84a3a;
+        color: #fffaf0;
+        border: 1.5px solid #ffd466;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .hw-event-bar strong {
+        color: #ffd466;
+      }
+      .hw-event-countdown {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        background: #0a0a0f;
+        border: 1px solid #d8b24a;
+        color: #ffd466;
+        font-weight: 700;
+      }
+      .hw-event-cta {
+        color: #ffd466;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .poster-art { border: 0; box-shadow: none; border-radius: 0; background: radial-gradient(circle at 50% 40%, #49335e, #14111d 70%); }
     </style>
+    <script>
+(function () {
+  var END_ISO = "2026-11-05T00:00:00+07:00";
+  var END_TS = Date.parse(END_ISO);
+  var forcedMode = null;
+  try {
+    var qs = new URLSearchParams(window.location.search);
+    if (qs.get("og") === "1" || qs.get("halloween") === "0" || qs.get("after_event") === "1") {
+      forcedMode = "og";
+    } else if (qs.get("halloween") === "1") {
+      forcedMode = "halloween";
+    }
+  } catch (e) {}
+
+  function isActive() {
+    if (forcedMode === "og") return false;
+    if (forcedMode === "halloween") return true;
+    return Date.now() < END_TS;
+  }
+
+  function remainingMs() {
+    if (forcedMode === "og") return 0;
+    return Math.max(0, END_TS - Date.now());
+  }
+
+  function formatCountdown() {
+    var ms = remainingMs();
+    if (ms <= 0) return "Event telah berakhir";
+    var totalSec = Math.floor(ms / 1000);
+    var d = Math.floor(totalSec / 86400);
+    var h = Math.floor((totalSec % 86400) / 3600);
+    var m = Math.floor((totalSec % 3600) / 60);
+    var s = totalSec % 60;
+    function pad(n) { return n < 10 ? "0" + n : String(n); }
+    return (d > 0 ? d + " hari " : "") + pad(h) + ":" + pad(m) + ":" + pad(s);
+  }
+
+  function syncHeadStyles() {
+    var active = isActive();
+    var hwStyles = document.querySelectorAll("style[data-halloween-style]");
+    if (active) {
+      document.documentElement.classList.remove("chiroot-og-mode");
+      document.documentElement.classList.add("chiroot-halloween-mode");
+      for (var i = 0; i < hwStyles.length; i++) {
+        hwStyles[i].disabled = false;
+        hwStyles[i].media = "all";
+        hwStyles[i].removeAttribute("disabled");
+      }
+    } else {
+      document.documentElement.classList.remove("chiroot-halloween-mode");
+      document.documentElement.classList.add("chiroot-og-mode");
+      for (var j = 0; j < hwStyles.length; j++) {
+        hwStyles[j].disabled = true;
+        hwStyles[j].media = "not all";
+      }
+    }
+  }
+
+  window.ChirootHalloweenEvent = {
+    END_ISO: END_ISO,
+    END_TS: END_TS,
+    END_LABEL_ID: "5 November 2026",
+    isActive: isActive,
+    remainingMs: remainingMs,
+    formatCountdown: formatCountdown,
+    syncHeadStyles: syncHeadStyles,
+    forceMode: function (mode) {
+      forcedMode = (mode === "og" || mode === "halloween") ? mode : null;
+      syncHeadStyles();
+      document.dispatchEvent(new CustomEvent("chiroot:event-mode-changed", { detail: { active: isActive() } }));
+    }
+  };
+
+  syncHeadStyles();
+})();
+</script>
     <script src="index.js" defer></script>
   </head>
   <body>
@@ -3406,7 +3548,7 @@
 <li><a href="#features">Fitur</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li class="nav-cta-item">
-            <span class="cta-flame">HALLOWEEN EVENT IS HERE!<span class="cta-bat" aria-hidden="true">🦇</span><i class="ember e1" aria-hidden="true"></i><i class="ember e2" aria-hidden="true"></i><i class="ember e3" aria-hidden="true"></i></span>
+            <span class="cta-flame">HALLOWEEN • S/D 5 NOV 2026!<span class="cta-bat" aria-hidden="true">🦇</span><i class="ember e1" aria-hidden="true"></i><i class="ember e2" aria-hidden="true"></i><i class="ember e3" aria-hidden="true"></i></span>
             <a class="nav-cta" href="Main.html">Mulai Dengerin</a>
           </li>
         </ul>
@@ -3425,6 +3567,15 @@
         ><span>Tanpa Premium Plan</span><i>✦</i><span>Est. 1924</span><i>✦</i
         ><span>Gramophone</span><i>✦</i><em>No Ads</em><i>✦</i
         ><span>Putar Musik Mu</span><i>✦</i>
+      </div>
+    </div>
+
+    <div class="hw-event-bar" id="hw-event-bar" role="status" aria-live="polite">
+      <div class="hw-event-bar-inner">
+        <span class="hw-event-badge">🎃 Event Terbatas</span>
+        <span>Halloween Event akan berakhir pada <strong>5 November 2026</strong>!</span>
+        <span class="hw-event-countdown">⏳ Sisa waktu: <span id="hw-index-countdown">Menghitung…</span></span>
+        <a class="hw-event-cta" href="Main.html">Klaim Coins &amp; Border Sekarang →</a>
       </div>
     </div>
 
@@ -3996,5 +4147,568 @@
   });
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4f7e6126a61919f',t:'MTc5MjgzMzU1NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+    <script>
+      (function () {
+        "use strict";
+
+        function getPlayedOrTemplateTracks() {
+          try {
+            var saved = JSON.parse(localStorage.getItem("chiroot_played_tracks_v1") || "[]");
+            if (Array.isArray(saved) && saved.length > 0) {
+              return [
+                saved[0],
+                saved[1] || saved[0],
+                saved[2] || saved[0]
+              ];
+            }
+          } catch (e) {}
+          return [
+            { title: "Lagu yang Kamu Putar", artist: "Nama Artis Otomatis", cover: "" },
+            { title: "Koleksi Crate Kamu", artist: "Chiroot Vinyl Player", cover: "" },
+            { title: "Putar & Simpan SVG", artist: "Tanpa Watermark Iklan", cover: "" }
+          ];
+        }
+
+        function ogEscapeXml(val) {
+          return String(val == null ? '' : val)
+            .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
+        }
+
+        function ogStar4Pts(cx, cy, rx, ry, curve) {
+          var c = curve == null ? 0.22 : curve;
+          var cxOff = rx * c;
+          var cyOff = ry * c;
+          var quads = [
+            [[cx, cy - ry], [cx + cxOff, cy - cyOff], [cx + rx, cy]],
+            [[cx + rx, cy], [cx + cxOff, cy + cyOff], [cx, cy + ry]],
+            [[cx, cy + ry], [cx - cxOff, cy + cyOff], [cx - rx, cy]],
+            [[cx - rx, cy], [cx - cxOff, cy - cyOff], [cx, cy - ry]]
+          ];
+          var pts = [];
+          var steps = 10;
+          for (var q = 0; q < quads.length; q++) {
+            var p0 = quads[q][0], p1 = quads[q][1], p2 = quads[q][2];
+            for (var s = 0; s < steps; s++) {
+              var t = s / steps, u = 1 - t;
+              var x = u * u * p0[0] + 2 * u * t * p1[0] + t * t * p2[0];
+              var y = u * u * p0[1] + 2 * u * t * p1[1] + t * t * p2[1];
+              pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+            }
+          }
+          return pts.join(' ');
+        }
+
+        function ogStar4Hollow(cx, cy, rx, ry, thick, curve, color, bg) {
+          var irx = Math.max(2, rx - thick * 1.45);
+          var iry = Math.max(2, ry - thick * 1.45);
+          return (
+            '<polygon points="' + ogStar4Pts(cx, cy, rx, ry, curve) + '" fill="' + (color || '#181816') + '"/>' +
+            '<polygon points="' + ogStar4Pts(cx, cy, irx, iry, (curve || 0.22) * 1.12) + '" fill="' + (bg || '#f2ecdf') + '"/>'
+          );
+        }
+
+        function ogTiltedOvalPts(cx, cy, rx, ry, deg) {
+          var rad = (deg == null ? -26 : deg) * Math.PI / 180;
+          var ca = Math.cos(rad), sa = Math.sin(rad);
+          var pts = [];
+          for (var i = 0; i < 24; i++) {
+            var a = (2 * Math.PI * i) / 24;
+            var px = rx * Math.cos(a), py = ry * Math.sin(a);
+            pts.push((cx + px * ca - py * sa).toFixed(1) + ',' + (cy + px * sa + py * ca).toFixed(1));
+          }
+          return pts.join(' ');
+        }
+
+        function ogWedgePts(cx, cy, rIn, rOut, deg1, deg2) {
+          var steps = 12, pts = [];
+          for (var i = 0; i <= steps; i++) {
+            var a = (deg1 + (deg2 - deg1) * (i / steps)) * Math.PI / 180;
+            pts.push((cx + rOut * Math.cos(a)).toFixed(1) + ',' + (cy + rOut * Math.sin(a)).toFixed(1));
+          }
+          for (var j = steps; j >= 0; j--) {
+            var b = (deg1 + (deg2 - deg1) * (j / steps)) * Math.PI / 180;
+            pts.push((cx + rIn * Math.cos(b)).toFixed(1) + ',' + (cy + rIn * Math.sin(b)).toFixed(1));
+          }
+          return pts.join(' ');
+        }
+
+        function ogTaperedArcPts(x0, y0, xc, yc, x1, y1, hwMid, hwEnd) {
+          var steps = 28, top = [], bot = [];
+          for (var i = 0; i <= steps; i++) {
+            var t = i / steps, u = 1 - t;
+            var x = u * u * x0 + 2 * u * t * xc + t * t * x1;
+            var y = u * u * y0 + 2 * u * t * yc + t * t * y1;
+            var dx = 2 * u * (xc - x0) + 2 * t * (x1 - xc);
+            var dy = 2 * u * (yc - y0) + 2 * t * (y1 - yc);
+            var ln = Math.sqrt(dx * dx + dy * dy) || 1;
+            var nx = -dy / ln, ny = dx / ln;
+            var w = hwEnd + (hwMid - hwEnd) * Math.sin(Math.PI * t);
+            top.push((x + nx * w).toFixed(1) + ',' + (y + ny * w).toFixed(1));
+            bot.push((x - nx * w).toFixed(1) + ',' + (y - ny * w).toFixed(1));
+          }
+          bot.reverse();
+          return top.concat(bot).join(' ');
+        }
+
+        function ogWrapTitleLines(rawTitle) {
+          var clean = String(rawTitle || '').replace(/\s+/g, ' ').trim();
+          if (!clean) return { lines: [''], fontSize: 92 };
+          if (clean.length <= 16) return { lines: [clean], fontSize: 94 };
+          if (clean.length <= 27) {
+            var fs = Math.max(58, Math.min(92, Math.round((94 * 16.5) / clean.length)));
+            return { lines: [clean], fontSize: fs };
+          }
+          var words = clean.split(' ');
+          var line1 = '', line2 = '';
+          for (var i = 0; i < words.length; i++) {
+            var cand = line1 ? line1 + ' ' + words[i] : words[i];
+            if (cand.length <= 26 || !line1) {
+              line1 = cand;
+            } else {
+              line2 = words.slice(i).join(' ');
+              break;
+            }
+          }
+          if (!line2 && line1.length > 28) {
+            line2 = line1.slice(26);
+            line1 = line1.slice(0, 26);
+          }
+          if (line2.length > 28) line2 = line2.slice(0, 27) + '…';
+          return { lines: line2 ? [line1, line2] : [line1], fontSize: 50 };
+        }
+
+        async function ogResolveCoverDataUri(src) {
+          if (!src || typeof src !== 'string') return '';
+          if (/^data:image\//i.test(src)) return src;
+          // 1) Try fetch -> Blob -> square 420x420 JPEG data URI so saved SVG is 100% self-contained & taint-free
+          try {
+            var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+            var tid = ctrl ? setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, 4500) : null;
+            var res = await fetch(src, ctrl ? { signal: ctrl.signal, mode: 'cors', credentials: 'omit' } : { mode: 'cors', credentials: 'omit' });
+            if (tid) clearTimeout(tid);
+            if (res && res.ok) {
+              var blob = await res.blob();
+              var bmpUrl = URL.createObjectURL(blob);
+              try {
+                var dataUri = await new Promise(function (resolve) {
+                  var im = new Image();
+                  im.onload = function () {
+                    try {
+                      var side = 420;
+                      var c = document.createElement('canvas');
+                      c.width = side;
+                      c.height = side;
+                      var ctx = c.getContext('2d');
+                      var sw = im.naturalWidth || im.width || side;
+                      var sh = im.naturalHeight || im.height || side;
+                      var sMin = Math.min(sw, sh);
+                      var sx = (sw - sMin) / 2;
+                      var sy = (sh - sMin) / 2;
+                      ctx.drawImage(im, sx, sy, sMin, sMin, 0, 0, side, side);
+                      resolve(c.toDataURL('image/jpeg', 0.88));
+                    } catch (err) {
+                      resolve('');
+                    }
+                  };
+                  im.onerror = function () { resolve(''); };
+                  im.src = bmpUrl;
+                });
+                if (dataUri) return dataUri;
+              } finally {
+                URL.revokeObjectURL(bmpUrl);
+              }
+            }
+          } catch (e) {}
+
+          // 2) Fallback: Image with crossOrigin='anonymous' -> canvas -> dataURL
+          return new Promise(function (resolve) {
+            var done = false;
+            function finish(val) { if (!done) { done = true; resolve(val || ''); } }
+            var timer = setTimeout(function () { finish(''); }, 4000);
+            var im = new Image();
+            im.crossOrigin = 'anonymous';
+            im.onload = function () {
+              clearTimeout(timer);
+              try {
+                var side = 420;
+                var c = document.createElement('canvas');
+                c.width = side;
+                c.height = side;
+                var ctx = c.getContext('2d');
+                var sw = im.naturalWidth || im.width || side;
+                var sh = im.naturalHeight || im.height || side;
+                var sMin = Math.min(sw, sh);
+                ctx.drawImage(im, (sw - sMin) / 2, (sh - sMin) / 2, sMin, sMin, 0, 0, side, side);
+                finish(c.toDataURL('image/jpeg', 0.88));
+              } catch (err) {
+                finish('');
+              }
+            };
+            im.onerror = function () { clearTimeout(timer); finish(''); };
+            im.src = src;
+          });
+        }
+
+        function buildChirootOgPosterSvgSync(track, coverHref, includeFontImport) {
+          var W = 1080, H = 1440, cx = 540, cy = 608;
+          var rawTitle = track && track.title ? String(track.title).trim() : '';
+          var rawArtist = track && track.artist ? String(track.artist).trim() : '';
+
+          var titleWrap = ogWrapTitleLines(rawTitle);
+          var artistClean = rawArtist.length > 46 ? rawArtist.slice(0, 45) + '…' : rawArtist;
+          var artistFs = artistClean.length <= 22 ? 52 : Math.max(32, Math.round((52 * 22) / artistClean.length));
+
+          var sheens = [];
+          var sheenDirs = [222, 42];
+          var sheenSteps = [[28, '0.014'], [21, '0.016'], [15, '0.018'], [9, '0.022'], [4, '0.024']];
+          for (var di = 0; di < sheenDirs.length; di++) {
+            for (var si = 0; si < sheenSteps.length; si++) {
+              var ha = sheenSteps[si][0], op = sheenSteps[si][1];
+              sheens.push('<polygon points="' + ogWedgePts(cx, cy, 171, 403, sheenDirs[di] - ha, sheenDirs[di] + ha) + '" fill="#ffffff" fill-opacity="' + op + '"/>');
+            }
+          }
+
+          var grooves = [];
+          for (var r = 188; r < 396; r += 13) {
+            var gop = (r % 26 === 6) ? '0.052' : '0.026';
+            var ri = (r - 1.2).toFixed(1);
+            grooves.push(
+              '<path d="M ' + (cx - r) + ',' + cy + ' A ' + r + ',' + r + ' 0 1,0 ' + (cx + r) + ',' + cy + ' A ' + r + ',' + r + ' 0 1,0 ' + (cx - r) + ',' + cy + ' Z ' +
+              'M ' + (cx - r + 1.2).toFixed(1) + ',' + cy + ' A ' + ri + ',' + ri + ' 0 1,1 ' + (cx + r - 1.2).toFixed(1) + ',' + cy + ' A ' + ri + ',' + ri + ' 0 1,1 ' + (cx - r + 1.2).toFixed(1) + ',' + cy + ' Z" fill="#ffffff" fill-opacity="' + gop + '" fill-rule="evenodd"/>'
+            );
+          }
+
+          var rulerTicks = [];
+          for (var ty = 812; ty < 1118; ty += 38) {
+            var tw = ((ty - 812) % 76 === 0) ? 8 : 4.5;
+            rulerTicks.push('<line x1="' + (1028 - tw) + '" y1="' + ty + '" x2="1030.5" y2="' + ty + '" stroke="#9b988f" stroke-width="1.3"/>');
+          }
+
+          function swRect(x, y, w, h, fill, border) {
+            var bw = 2.3;
+            return (
+              '<rect x="' + (x - bw) + '" y="' + (y - bw) + '" width="' + (w + bw * 2) + '" height="' + (h + bw * 2) + '" fill="' + border + '"/>' +
+              '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + fill + '"/>'
+            );
+          }
+
+          var safeCover = coverHref ? ogEscapeXml(coverHref) : '';
+          var centerLabelContent = safeCover
+            ? (
+              '<circle cx="' + cx + '" cy="' + cy + '" r="162.5" fill="#7f8285"/>' +
+              '<g clip-path="url(#og-label-clip)">' +
+                '<image href="' + safeCover + '" xlink:href="' + safeCover + '" x="' + (cx - 162.5) + '" y="' + (cy - 162.5) + '" width="325" height="325" preserveAspectRatio="xMidYMid slice"/>' +
+              '</g>'
+            )
+            : (
+              '<circle cx="' + cx + '" cy="' + cy + '" r="162.5" fill="#7d8083"/>' +
+              '<circle cx="' + (cx - 18) + '" cy="' + (cy - 16) + '" r="126" fill="#929598" fill-opacity="0.55"/>' +
+              '<circle cx="' + (cx + 22) + '" cy="' + (cy + 24) + '" r="102" fill="#a7aaad" fill-opacity="0.42"/>' +
+              '<circle cx="' + cx + '" cy="' + cy + '" r="162.5" fill="url(#og-smoky-grad)" fill-opacity="0.88"/>'
+            );
+
+          var titleSvg = '';
+          if (titleWrap.lines.length === 1) {
+            titleSvg = '<text x="' + cx + '" y="1108" text-anchor="middle" fill="#121210" font-family="Caveat, Kalam, Segoe Print, Bradley Hand, cursive" font-size="' + titleWrap.fontSize + '" font-weight="700" font-style="italic">' + ogEscapeXml(titleWrap.lines[0]) + '</text>';
+          } else {
+            titleSvg =
+              '<text x="' + cx + '" y="1074" text-anchor="middle" fill="#121210" font-family="Caveat, Kalam, Segoe Print, Bradley Hand, cursive" font-size="' + titleWrap.fontSize + '" font-weight="700" font-style="italic">' + ogEscapeXml(titleWrap.lines[0]) + '</text>' +
+              '<text x="' + cx + '" y="1126" text-anchor="middle" fill="#121210" font-family="Caveat, Kalam, Segoe Print, Bradley Hand, cursive" font-size="' + titleWrap.fontSize + '" font-weight="700" font-style="italic">' + ogEscapeXml(titleWrap.lines[1]) + '</text>';
+          }
+
+          var fontImportBlock = includeFontImport
+            ? "<style>@import url(https://fonts.googleapis.com/css2?family=Archivo:wght@500&amp;family=Caveat:wght@500;700&amp;family=Kalam:ital,wght@0,700;1,400;1,700&amp;display=swap);</style>"
+            : '';
+
+          return (
+            '<?xml version="1.0" encoding="UTF-8"?>\n' +
+            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">' +
+              '<defs>' +
+                fontImportBlock +
+                '<radialGradient id="og-smoky-grad" cx="42%" cy="36%" r="68%">' +
+                  '<stop offset="0%" stop-color="#b5b7b9"/>' +
+                  '<stop offset="48%" stop-color="#8b8e91"/>' +
+                  '<stop offset="85%" stop-color="#6d7073"/>' +
+                  '<stop offset="100%" stop-color="#585b5e"/>' +
+                '</radialGradient>' +
+                '<clipPath id="og-label-clip"><circle cx="' + cx + '" cy="' + cy + '" r="162.5"/></clipPath>' +
+              '</defs>' +
+              '<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="#f2ecdf"/>' +
+              '<line x1="24" y1="14" x2="1056" y2="14" stroke="#2c2b28" stroke-width="2.6"/>' +
+              '<line x1="1056" y1="14" x2="1056" y2="1426" stroke="#2c2b28" stroke-width="2.6"/>' +
+              '<line x1="1056" y1="1426" x2="24" y2="1426" stroke="#2c2b28" stroke-width="2.6"/>' +
+              '<line x1="24" y1="1426" x2="24" y2="14" stroke="#2c2b28" stroke-width="2.6"/>' +
+              '<line x1="66" y1="41" x2="1014" y2="41" stroke="#d2cfc3" stroke-width="1.4"/>' +
+              '<line x1="66" y1="1396" x2="1014" y2="1396" stroke="#d7d4c8" stroke-width="1.3"/>' +
+              '<line x1="1034" y1="88" x2="1034" y2="466" stroke="#dad7cc" stroke-width="1.2"/>' +
+              '<line x1="80" y1="820" x2="80" y2="1108" stroke="#dcd9ce" stroke-width="1.2"/>' +
+              '<circle cx="52" cy="41" r="4.4" fill="#181816"/>' +
+              '<circle cx="1028" cy="41" r="4.4" fill="#181816"/>' +
+              '<circle cx="52" cy="1396" r="4.4" fill="#181816"/>' +
+              '<circle cx="1028" cy="1396" r="4.4" fill="#181816"/>' +
+              ogStar4Hollow(90, 89, 19, 21, 1.8, 0.21, '#45443f', '#f2ecdf') +
+              '<line x1="90" y1="62" x2="90" y2="69" stroke="#7a7870" stroke-width="1.4"/>' +
+              '<line x1="90" y1="109" x2="90" y2="116" stroke="#7a7870" stroke-width="1.4"/>' +
+              '<line x1="63" y1="89" x2="70" y2="89" stroke="#7a7870" stroke-width="1.4"/>' +
+              '<line x1="109" y1="89" x2="174" y2="89" stroke="#7a7870" stroke-width="1.5"/>' +
+              '<line x1="126" y1="73" x2="126" y2="95" stroke="#96948b" stroke-width="1.3"/>' +
+              '<line x1="154" y1="78" x2="154" y2="94" stroke="#a6a49b" stroke-width="1.2"/>' +
+              ogStar4Hollow(266, 144, 30, 35, 5.2, 0.23, '#161614', '#f2ecdf') +
+              '<line x1="168" y1="233" x2="168" y2="245" stroke="#b5b2a8" stroke-width="1.4"/>' +
+              '<line x1="168" y1="251" x2="168" y2="263" stroke="#b5b2a8" stroke-width="1.4"/>' +
+              '<line x1="155" y1="248" x2="165" y2="248" stroke="#b5b2a8" stroke-width="1.4"/>' +
+              '<line x1="171" y1="248" x2="181" y2="248" stroke="#b5b2a8" stroke-width="1.4"/>' +
+              ogStar4Hollow(990, 150, 24, 29, 2.2, 0.20, '#363531', '#f2ecdf') +
+              ogStar4Hollow(926, 295, 35, 40, 5.8, 0.23, '#141412', '#f2ecdf') +
+              '<polygon points="' + ogStar4Pts(83, 578, 14, 17, 0.19) + '" fill="#141412"/>' +
+              '<polygon points="' + ogStar4Pts(86, 756, 6.8, 6.8, 0.24) + '" fill="#1b1b19"/>' +
+              swRect(74, 223, 36, 38, '#6b97bb', '#3d464d') +
+              swRect(74, 275, 36, 38, '#709bbe', '#3d464d') +
+              swRect(74, 327, 36, 38, '#84a8c6', '#3d464d') +
+              swRect(74, 379, 36, 38, '#c4ced5', '#4f565b') +
+              swRect(74, 431, 36, 38, '#dbdbd8', '#6c6c66') +
+              '<circle cx="' + cx + '" cy="' + cy + '" r="414" fill="#7fa4c2"/>' +
+              '<circle cx="' + cx + '" cy="' + cy + '" r="404.5" fill="#090a0c"/>' +
+              sheens.join('') +
+              grooves.join('') +
+              '<circle cx="' + cx + '" cy="' + cy + '" r="170" fill="#8cb0cd"/>' +
+              centerLabelContent +
+              '<circle cx="' + cx + '" cy="' + cy + '" r="23.5" fill="#141515"/>' +
+              '<circle cx="' + cx + '" cy="' + cy + '" r="19" fill="#f3f3f1"/>' +
+              '<circle cx="' + cx + '" cy="' + cy + '" r="15" fill="#e6e6e2"/>' +
+              '<circle cx="' + cx + '" cy="' + cy + '" r="13.5" fill="#f5f5f3"/>' +
+              '<polygon points="' + ogTiltedOvalPts(1001, 611, 12.5, 8.8, -26) + '" fill="#141412"/>' +
+              '<rect x="1009.5" y="553" width="3.8" height="56" fill="#141412"/>' +
+              '<polygon points="' + ogTiltedOvalPts(163, 1012, 12.5, 8.8, -26) + '" fill="#141412"/>' +
+              '<polygon points="' + ogTiltedOvalPts(196, 1003, 12.5, 8.8, -26) + '" fill="#141412"/>' +
+              '<rect x="171.5" y="960" width="3.8" height="50" fill="#141412"/>' +
+              '<rect x="204.5" y="951" width="3.8" height="50" fill="#141412"/>' +
+              '<polygon points="171.5,960 208.3,950 208.3,956.5 171.5,966.5" fill="#141412"/>' +
+              '<polygon points="171.5,970.5 208.3,960.5 208.3,966.5 171.5,976.5" fill="#141412"/>' +
+              '<circle cx="930" cy="902" r="4.3" fill="#171715"/>' +
+              '<circle cx="930" cy="930" r="4.3" fill="#171715"/>' +
+              '<circle cx="930" cy="958" r="4.3" fill="#171715"/>' +
+              '<circle cx="930" cy="986" r="4.3" fill="#171715"/>' +
+              '<line x1="1028" y1="801" x2="1028" y2="1118" stroke="#8a8880" stroke-width="1.6"/>' +
+              rulerTicks.join('') +
+              '<line x1="74" y1="1150" x2="126" y2="1150" stroke="#56554f" stroke-width="2.0"/>' +
+              '<line x1="74" y1="1180" x2="126" y2="1180" stroke="#56554f" stroke-width="2.0"/>' +
+              '<line x1="74" y1="1209" x2="126" y2="1209" stroke="#56554f" stroke-width="2.0"/>' +
+              '<line x1="74" y1="1238" x2="126" y2="1238" stroke="#56554f" stroke-width="2.0"/>' +
+              '<line x1="76" y1="1282" x2="76" y2="1359" stroke="#6c6b64" stroke-width="1.8"/>' +
+              '<line x1="76" y1="1359" x2="208" y2="1359" stroke="#6c6b64" stroke-width="1.8"/>' +
+              '<line x1="136" y1="1319" x2="226" y2="1319" stroke="#8e8c84" stroke-width="1.8"/>' +
+              '<line x1="152" y1="1319" x2="152" y2="1359" stroke="#aba9a0" stroke-width="1.3"/>' +
+              '<line x1="192" y1="1319" x2="192" y2="1359" stroke="#6c6b64" stroke-width="1.8"/>' +
+              '<line x1="790" y1="1316" x2="986" y2="1316" stroke="#8a8880" stroke-width="1.7"/>' +
+              '<line x1="790" y1="1359" x2="986" y2="1359" stroke="#575650" stroke-width="2.0"/>' +
+              ogStar4Hollow(1022, 1184, 12.5, 12.5, 1.8, 0.24, '#3c3b37', '#f2ecdf') +
+              ogStar4Hollow(1022, 1236, 12.5, 12.5, 1.8, 0.24, '#3c3b37', '#f2ecdf') +
+              '<polygon points="1022,1279.5 1033.5,1292 1022,1304.5 1010.5,1292" fill="#151513"/>' +
+              ogStar4Hollow(1022, 1348, 12.5, 12.5, 1.8, 0.24, '#3c3b37', '#f2ecdf') +
+              titleSvg +
+              '<polygon points="' + ogTaperedArcPts(294, 1176, 565, 1138, 814, 1152, 6.0, 3.8) + '" fill="#7da3c2"/>' +
+              '<circle cx="294" cy="1176" r="3.8" fill="#7da3c2"/>' +
+              '<circle cx="814" cy="1152" r="3.8" fill="#7da3c2"/>' +
+              '<text x="' + cx + '" y="1226" text-anchor="middle" fill="#1d1d1b" font-family="Caveat, Kalam, Segoe Print, Bradley Hand, cursive" font-size="' + artistFs + '" font-weight="500" font-style="italic">' + ogEscapeXml(artistClean) + '</text>' +
+              '<text x="' + cx + '" y="1353" text-anchor="middle" fill="#1e1e1c" font-family="Archivo, Inter, system-ui, sans-serif" font-size="25" font-weight="500" letter-spacing="7">chiroot</text>' +
+            '</svg>'
+          );
+        }
+
+        function ogTriggerSvgDownload(svgString, filename) {
+          var blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          a.rel = 'noopener';
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () {
+            try { a.remove(); } catch (e) {}
+            try { URL.revokeObjectURL(url); } catch (e) {}
+          }, 1500);
+        }
+
+        async function renderChirootOgPosterSvgAndCanvas(track, opts) {
+          if (!track) return null;
+          var useCover = !(opts && opts.cover === false);
+          var embeddedCover = '';
+          var externalCoverOnly = '';
+          if (useCover && track.cover) {
+            embeddedCover = await ogResolveCoverDataUri(track.cover);
+            if (!embeddedCover && /^https?:\/\//i.test(track.cover)) {
+              externalCoverOnly = track.cover;
+            }
+          }
+          var previewCover = embeddedCover || externalCoverOnly;
+          var domSvg = buildChirootOgPosterSvgSync(track, previewCover, false).replace(/^<\?xml[^>]*>\s*/, '');
+          var downloadableSvg = buildChirootOgPosterSvgSync(track, previewCover, true);
+          var canvasSafeSvg = buildChirootOgPosterSvgSync(track, embeddedCover, false);
+
+          var modal = document.getElementById('share-modal');
+          if (modal) {
+            modal._lastOgSvg = downloadableSvg;
+          }
+
+          var svgWrap = document.getElementById('share-svg-wrap');
+          if (svgWrap) {
+            svgWrap.innerHTML = domSvg;
+            svgWrap.style.display = 'block';
+            var svgEl = svgWrap.querySelector('svg');
+            if (svgEl) {
+              svgEl.style.width = '100%';
+              svgEl.style.height = 'auto';
+              svgEl.style.maxHeight = '62dvh';
+              svgEl.style.display = 'block';
+            }
+          }
+
+          var canvas = document.getElementById('share-canvas');
+          if (canvas) {
+            canvas.style.display = 'none';
+            canvas.width = 1080;
+            canvas.height = 1440;
+            await new Promise(function (resolve) {
+              var im = new Image();
+              var svgBlob = new Blob([canvasSafeSvg], { type: 'image/svg+xml;charset=utf-8' });
+              var u = URL.createObjectURL(svgBlob);
+              im.onload = function () {
+                try {
+                  var ctx = canvas.getContext('2d');
+                  ctx.clearRect(0, 0, 1080, 1440);
+                  ctx.drawImage(im, 0, 0, 1080, 1440);
+                } catch (e) {}
+                URL.revokeObjectURL(u);
+                resolve();
+              };
+              im.onerror = function () {
+                URL.revokeObjectURL(u);
+                resolve();
+              };
+              im.src = u;
+            });
+          }
+          return downloadableSvg;
+        }
+
+        function ogRememberPlayedTrack(track) {
+          if (!track || !track.title) return;
+          try {
+            var key = 'chiroot_played_tracks_v1';
+            var prev = JSON.parse(localStorage.getItem(key) || '[]');
+            if (!Array.isArray(prev)) prev = [];
+            var safeCover = (typeof track.cover === 'string' && (/^https?:\/\//i.test(track.cover) || (track.cover.indexOf('data:image/') === 0 && track.cover.length < 180000))) ? track.cover : '';
+            var entry = {
+              title: String(track.title || '').trim(),
+              artist: String(track.artist || '').trim(),
+              cover: safeCover
+            };
+            prev = prev.filter(function (x) {
+              return x && (x.title !== entry.title || x.artist !== entry.artist);
+            });
+            prev.unshift(entry);
+            localStorage.setItem(key, JSON.stringify(prev.slice(0, 3)));
+          } catch (e) {}
+        }
+
+        var ogDataUrls = {};
+
+        function renderOgPosterDataUrl(key) {
+          if (ogDataUrls[key]) return ogDataUrls[key];
+          var list = getPlayedOrTemplateTracks();
+          var idxMap = { "poster-1": 0, "poster-2": 1, "poster-3": 2 };
+          var track = list[idxMap[key] || 0] || list[0];
+          var inlineCover = (track && typeof track.cover === "string" && track.cover.indexOf("data:image/") === 0) ? track.cover : "";
+          var svg = buildChirootOgPosterSvgSync(track, inlineCover, false);
+          ogDataUrls[key] = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+          return ogDataUrls[key];
+        }
+
+        function applyOgPosters() {
+          var list = getPlayedOrTemplateTracks();
+          var idxMap = { "poster-1": 0, "poster-2": 1, "poster-3": 2 };
+          var imgs = document.querySelectorAll("img[data-poster-image]");
+          imgs.forEach(function (img) {
+            var key = img.getAttribute("data-poster-image");
+            var t = list[idxMap[key] || 0] || list[0];
+            var url = renderOgPosterDataUrl(key);
+            if (img.getAttribute("src") !== url) {
+              img.setAttribute("src", url);
+            }
+            if (t && t.title) {
+              img.setAttribute("alt", "Poster Chiroot — " + t.title + (t.artist ? " (" + t.artist + ")" : ""));
+            }
+          });
+        }
+
+        var ogObserver = null;
+        function activateIndexOgMode() {
+          if (window.ChirootHalloweenEvent) window.ChirootHalloweenEvent.syncHeadStyles();
+          var bar = document.getElementById("hw-event-bar");
+          if (bar) bar.style.display = "none";
+          ogDataUrls = {};
+          if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () {
+              ogDataUrls = {};
+              applyOgPosters();
+            });
+          }
+          applyOgPosters();
+          if (!ogObserver && typeof MutationObserver === "function") {
+            var stage = document.getElementById("poster-preview");
+            if (stage) {
+              ogObserver = new MutationObserver(function () {
+                if (window.ChirootHalloweenEvent && !window.ChirootHalloweenEvent.isActive()) {
+                  applyOgPosters();
+                }
+              });
+              ogObserver.observe(stage, { attributes: true, subtree: true, attributeFilter: ["src"] });
+            }
+          }
+        }
+
+        document.addEventListener("chiroot:event-mode-changed", function (ev) {
+          if (ev && ev.detail && !ev.detail.active) {
+            activateIndexOgMode();
+          } else {
+            var bar = document.getElementById("hw-event-bar");
+            if (bar) bar.style.display = "";
+          }
+        });
+
+        function initEventCountdown() {
+          var cdEl = document.getElementById("hw-index-countdown");
+          if (!window.ChirootHalloweenEvent || !window.ChirootHalloweenEvent.isActive()) {
+            activateIndexOgMode();
+            window.addEventListener("load", activateIndexOgMode);
+            return;
+          }
+          function tick() {
+            if (!window.ChirootHalloweenEvent.isActive()) {
+              clearInterval(iv);
+              activateIndexOgMode();
+              return;
+            }
+            if (cdEl) cdEl.textContent = window.ChirootHalloweenEvent.formatCountdown();
+          }
+          tick();
+          var iv = setInterval(tick, 1000);
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initEventCountdown);
+        } else {
+          initEventCountdown();
+        }
+      })();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4f7e6126a61919f',t:'MTc5MjgzMzU1NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a537d635f82840b8',t:'MTc5MzUwMzk5Mw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a537d635f82840b8',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
