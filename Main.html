@@ -3939,7 +3939,7 @@ html body #add-modal .file-field input[type=file]{overflow:hidden!important;text
           <input type="url" id="input-youtube-url" class="sketch-input" placeholder="https://www.youtube.com/watch?v=..." inputmode="url" autocomplete="off" style="flex: 1; min-width:220px; font-size: 14px;">
           <button type="button" id="btn-youtube-fetch" class="btn-primary sketch-border-soft" style="padding: 0 15px; min-height:44px; white-space: nowrap;">Ambil Data</button>
         </div>
-        <p class="file-hint" style="margin-top:5px;">Tempel link YouTube untuk mengisi Judul, Artis (channel), & Thumbnail. Tetap harus upload MP3 nya ya!</p>
+        <p class="file-hint" style="margin-top:5px;">Tempel link YouTube untuk mengisi Judul, Artis (channel), & Thumbnail. Tetap harus upload MP3 nya ya :> </p>
       </div>
 
       <form id="add-form" class="add-form" novalidate>
@@ -7658,7 +7658,7 @@ function play() {
       document.body.classList.remove('is-playing');
       isPlaying = false;
       updatePlayPauseUI();
-      if (typeof showToast === 'function') showToast('Tap Play lagi – browser blok autoplay');
+      if (typeof showToast === 'function') showToast('Lost connection, pls try again later');
     });
   }
 }
