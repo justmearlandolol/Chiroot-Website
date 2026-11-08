@@ -4584,7 +4584,14 @@ html body #add-modal .file-field input[type=file]{overflow:hidden!important;text
     return hasNew;
   }
 
+  var pnInFlight = false;
+  var pnLoadedAt = 0;
+
   async function fetchPatchNotes(){
+    // Guard: dulu dijadwalkan 2x saat boot (DOMContentLoaded + waitReady) -> bisa dobel request.
+    if(pnInFlight) return;
+    if(pnLoadedAt && Date.now() - pnLoadedAt < 30000) return;
+    pnInFlight = true;
     try {
       var url = String(SUPABASE_URL).trim().replace(/\/+$/,'');
       var key = String(SUPABASE_PUBLISHABLE_KEY || '').trim();
@@ -4604,8 +4611,10 @@ html body #add-modal .file-field input[type=file]{overflow:hidden!important;text
         } else {
           checkUnseen();
         }
+        pnLoadedAt = Date.now();
       }
     } catch(e){ console.warn('Patch notes fetch failed', e); }
+    finally { pnInFlight = false; }
   }
 
   document.getElementById('btn-patchnotes-open').addEventListener('click', function(){ openModal(0); });
@@ -5112,26 +5121,53 @@ async function caGuestDeleteById(id) {
     const i = mem.findIndex(function (r) { return r.id === id; });
     if (i >= 0) mem.splice(i, 1);
   }
+  dropGuestObjectUrl(String(id) + ':audio');
+  dropGuestObjectUrl(String(id) + ':cover');
 }
 
 async function caGuestClear() {
   try { await caGuestIdbRun('readwrite', function (s) { return s.clear(); }); }
   catch (e) { caGuestMem = []; }
+  revokeGuestObjectUrls();
 }
 
 function caGuestNextId() {
   return 'g_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
 }
 
+const __guestObjectUrls = new Map();
+
+function guestObjectUrl(key, blob) {
+  var hit = __guestObjectUrls.get(key);
+  if (hit && hit.blob === blob) return hit.url;
+  if (hit) { try { URL.revokeObjectURL(hit.url); } catch (e) {} }
+  var url = '';
+  try { url = URL.createObjectURL(blob); } catch (e) { return ''; }
+  __guestObjectUrls.set(key, { blob: blob, url: url });
+  return url;
+}
+
+function revokeGuestObjectUrls() {
+  __guestObjectUrls.forEach(function (v) { try { URL.revokeObjectURL(v.url); } catch (e) {} });
+  __guestObjectUrls.clear();
+}
+
+function dropGuestObjectUrl(key) {
+  var hit = __guestObjectUrls.get(key);
+  if (!hit) return;
+  try { URL.revokeObjectURL(hit.url); } catch (e) {}
+  __guestObjectUrls.delete(key);
+}
+
 function caGuestTrackFromRec(rec) {
   const title = caCleanText(rec.title, 80);
   if (!title) return null;
   let src = '';
-  if (rec.audioBlob) { try { src = URL.createObjectURL(rec.audioBlob); } catch (e) {} }
+  if (rec.audioBlob) src = guestObjectUrl(String(rec.id) + ':audio', rec.audioBlob);
   if (!src && rec.srcRef) src = String(rec.srcRef);
   if (!src) return null;
   let cover = null;
-  if (rec.coverBlob) { try { cover = URL.createObjectURL(rec.coverBlob); } catch (e) {} }
+  if (rec.coverBlob) cover = guestObjectUrl(String(rec.id) + ':cover', rec.coverBlob) || null;
   if (!cover && rec.coverRef) cover = String(rec.coverRef);
   return {
     id: String(rec.id),
@@ -6609,7 +6645,11 @@ const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
 
 const SUPABASE_URL = (window.CHIROOT_CONFIG && window.CHIROOT_CONFIG.SUPABASE_URL) || 'https://astuagdezahmuuwjoghf.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = (window.CHIROOT_CONFIG && window.CHIROOT_CONFIG.SUPABASE_ANON_KEY) || 'sb_publishable_NXhR-MquEMwYDrCBPAOgAQ_MZ4BXQlT';
+const SUPABASE_PUBLISHABLE_KEY =
+  (window.CHIROOT_CONFIG &&
+    (window.CHIROOT_CONFIG.SUPABASE_PUBLISHABLE_KEY ||
+     window.CHIROOT_CONFIG.SUPABASE_ANON_KEY)) ||
+  'sb_publishable_NXhR-MquEMwYDrCBPAOgAQ_MZ4BXQlT';
 
 function isSupabaseConfigured(){
   const projectUrl = String(SUPABASE_URL || '').trim();
@@ -6980,11 +7020,18 @@ function cleanupLegacyStorage() {
   try { if (window.indexedDB && indexedDB.deleteDatabase) indexedDB.deleteDatabase('gramophone_v3'); } catch (e) {}
 }
 
-function saveState() {
+var __stateSig = '';
+
+function saveState(force) {
   try {
+    var queue = playQueue.slice();
+    var sig = currentIndex + '|' + isLoop + '|' + isShuffle + '|' + queue.join(',') + '|' + Math.round((audio.volume || 0) * 100);
+    // Lewati penulisan kalau tidak ada yang berubah (kecuali dipaksa, mis. saat ditutup).
+    if (!force && sig === __stateSig) return;
+    __stateSig = sig;
     localStorage.setItem(LS_STATE, JSON.stringify({
       currentIndex,
-      queue: playQueue.slice(),
+      queue: queue,
       time: audio.currentTime || 0,
       volume: audio.volume,
       isLoop,
@@ -8022,11 +8069,12 @@ function setupAddModal(){
       try {
         var apiUrl = SUPABASE_URL + '/functions/v1/youtube-fetch';
 
+        // Publishable key BUKAN JWT — kirim hanya di header `apikey`.
+        // (Mengirimnya di Authorization: Bearer membuat gateway menolak dengan "Invalid JWT".)
         var response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + SUPABASE_PUBLISHABLE_KEY,
             'apikey': SUPABASE_PUBLISHABLE_KEY
           },
           body: JSON.stringify({ videoId: videoId })
@@ -8040,8 +8088,9 @@ function setupAddModal(){
         }
 
         if(!response.ok){
-          var errorMsg = (data.error && data.error.message) ? data.error.message : (data.error || 'HTTP ' + response.status);
-          console.error('YouTube API error', data);
+          // Function versi baru selalu mengembalikan { error: "pesan" } untuk kegagalan.
+          var errorMsg = (data.error && data.error.message) ? data.error.message : (data.error || ('HTTP ' + response.status));
+          console.error('YouTube API error', response.status, data);
           throw new Error('YouTube API: ' + errorMsg);
         }
 
@@ -8086,7 +8135,7 @@ function setupAddModal(){
         console.error('YouTube API request failed', err);
         var friendlyMsg = err.message || "YouTube API error";
         if (err.message === 'Failed to fetch') {
-          friendlyMsg = 'Gagal konek ke server (cek CORS/deploy Edge Function, atau JWT verification)';
+          friendlyMsg = 'Gagal konek ke server. Cek koneksi internet & deploy Edge Function.';
         }
         showToast(friendlyMsg);
       } finally {
@@ -9604,12 +9653,26 @@ function setupMonthlyReport(){
       const nowMonth = new Date().toISOString().slice(0, 7);
       const fresh = { currentMonth: nowMonth, totalUsageSeconds: 0, tracks: {}, lastReportShown: nowMonth };
       saveMonthlyStats(fresh);
+      __stats = fresh;
+      __statsDirty = false;
       renderMonthlyReportModal(fresh);
       showToast('Statistik bulanan telah direset ✦');
     });
   }
+  // Akumulasi detik pemakaian di memori; flush ke localStorage tiap 20 detik,
+  // saat tab disembunyikan, dan saat halaman ditutup. (Dulu: tulis tiap 1 detik.)
+  var __stats = null;
+  var __statsDirty = false;
+
+  function flushStats(){
+    if(!__statsDirty || !__stats) return;
+    saveMonthlyStats(__stats);
+    __statsDirty = false;
+  }
+
   setInterval(()=>{
-    const stats = getMonthlyStats();
+    if(!__stats) __stats = getMonthlyStats();
+    const stats = __stats;
     stats.totalUsageSeconds = (stats.totalUsageSeconds || 0) + 1;
     if(isPlaying && !audio.paused && tracks && tracks[currentIndex]){
       const tr = tracks[currentIndex];
@@ -9620,8 +9683,15 @@ function setupMonthlyReport(){
         stats.tracks[tr.id].playSeconds = (stats.tracks[tr.id].playSeconds || 0) + 1;
       }
     }
-    saveMonthlyStats(stats);
+    __statsDirty = true;
+    if(stats.totalUsageSeconds % 20 === 0) flushStats();
   }, 1000);
+
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'hidden') flushStats();
+  });
+  window.addEventListener('pagehide', flushStats);
+  window.addEventListener('beforeunload', flushStats);
 }
 function checkMonthlyReportTrigger(){
   const nowMonth = new Date().toISOString().slice(0, 7);
@@ -9635,8 +9705,9 @@ function checkMonthlyReportTrigger(){
 }
 document.addEventListener('DOMContentLoaded', init);
 
-setInterval(saveState, 6000);
-window.addEventListener('beforeunload', saveState);
+setInterval(function(){ saveState(false); }, 15000);
+window.addEventListener('beforeunload', function(){ saveState(true); });
+document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') saveState(true); });
 
 const wifiBanner = document.getElementById('wifi-banner');
 function updateWifiBanner(){
@@ -9695,8 +9766,26 @@ if (btnLyrics && lyricsTooltip) {
   btnLyrics.addEventListener('mouseleave', () => lyricsTooltip.style.opacity = '0');
 }
 
+const __lyricsCache = new Map();
+const LYRICS_CACHE_MAX = 40;
+
 async function fetchLyricsFromAPI(artist, title) {
   if (!artist || !title) return null;
+
+  const cacheKey = String(artist).trim().toLowerCase() + '|' + String(title).trim().toLowerCase();
+  if (__lyricsCache.has(cacheKey)) return __lyricsCache.get(cacheKey);
+
+  const remember = function (val) {
+    if (val) {
+      __lyricsCache.set(cacheKey, val);
+      if (__lyricsCache.size > LYRICS_CACHE_MAX) {
+        var firstKey = __lyricsCache.keys().next().value;
+        if (firstKey !== undefined) __lyricsCache.delete(firstKey);
+      }
+    }
+    return val || null;
+  };
+
   if (!isSupabaseConfigured()) {
         try {
       const searchUrl = `https://lrclib.net/api/search?artist_name=${encodeURIComponent(artist)}&track_name=${encodeURIComponent(title)}`;
@@ -9710,7 +9799,7 @@ async function fetchLyricsFromAPI(artist, title) {
       if (!searchData || searchData.length === 0) return null;
 
       const track = searchData[0];
-      return track.syncedLyrics || track.plainLyrics || null;
+      return remember(track.syncedLyrics || track.plainLyrics || null);
     } catch (e) {
       console.warn('LRCLIB fallback error:', e);
       return null;
@@ -9732,7 +9821,7 @@ async function fetchLyricsFromAPI(artist, title) {
 
     if (!response.ok) return null;
     const data = await response.json();
-    return data.lyrics || null;
+    return remember(data.lyrics || null);
   } catch (e) {
     console.warn('Supabase get-lyrics error:', e);
     return null;
@@ -11391,4 +11480,5 @@ if (btnRefreshLyrics) {
 </script>
 <script type="module" src="normal.js"></script>
 <script src="Lang.js" defer></script>
+</script>
 </html>
