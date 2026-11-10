@@ -3583,6 +3583,176 @@ html body #add-modal .file-field input[type=file]{overflow:hidden!important;text
   }
 }
 </style>
+<style id="crate-search-styles">
+/* =====================================================
+   The Crate — Search bar (incremental feature)
+   Sketchbook look: warm paper, hand-drawn border, Kalam.
+   ===================================================== */
+.crate-search-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:100%;
+  margin:0 0 8px;
+  padding:8px 12px;
+  background:#fffaf0;
+  border:2.3px solid var(--ink);
+  border-radius:18px 22px 17px 21px / 21px 17px 22px 18px;
+  box-shadow:0 3px 0 #d7c18a;
+  transition:background .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+.crate-search-wrap:hover{ background:#fffdf8; }
+.crate-search-wrap.is-focused{
+  background:#fffdf7;
+  box-shadow:0 3px 0 #d7c18a, 0 0 0 3.5px rgba(226,184,74,.42);
+}
+.crate-search-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  color:#6b5b45;
+}
+.crate-search-icon svg{ width:18px; height:18px; }
+.crate-search-input{
+  flex:1 1 auto;
+  min-width:0;
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  padding:3px 0;
+  font-family:'Patrick Hand', 'Kalam', sans-serif;
+  font-size:17px;
+  line-height:1.25;
+  color:#3f3324;
+  letter-spacing:.1px;
+}
+.crate-search-input::placeholder{
+  color:#a2907a;
+  font-style:italic;
+  opacity:1;
+}
+.crate-search-input:focus-visible{ outline:none; }
+/* Chrome/Safari native search decorations off — we ship our own (x) */
+.crate-search-input::-webkit-search-cancel-button,
+.crate-search-input::-webkit-search-decoration{ -webkit-appearance:none; appearance:none; }
+.crate-search-kbd{
+  flex:0 0 auto;
+  font-family:'Kalam', sans-serif;
+  font-size:12px;
+  line-height:1;
+  color:#6b6257;
+  background:#fffdf7;
+  border:1.8px solid #8d8377;
+  border-radius:8px 7px 9px 7px / 7px 9px 7px 8px;
+  padding:4px 8px 5px;
+  box-shadow:0 1.5px 0 rgba(90,70,40,.28);
+  white-space:nowrap;
+  user-select:none;
+}
+.crate-search-clear{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:26px;
+  height:26px;
+  margin-left:1px;
+  padding:0;
+  background:#fff6ea;
+  border:2px solid #3a2f22;
+  border-radius:50% 46% 50% 44% / 46% 50% 44% 50%;
+  color:#4a3b28;
+  font-family:'Kalam', sans-serif;
+  font-size:15px;
+  line-height:1;
+  cursor:pointer;
+  transition:transform .12s ease, background .15s ease;
+}
+.crate-search-clear:hover{ background:#ffe9d2; transform:rotate(-6deg) scale(1.06); }
+.crate-search-clear:active{ transform:scale(.94); }
+.crate-search-clear[hidden],
+.crate-search-kbd[hidden]{ display:none; }
+
+.crate-search-status{
+  margin:-2px 2px 8px;
+  font-family:'Kalam', sans-serif;
+  font-size:12.5px;
+  color:#8d765e;
+  letter-spacing:.15px;
+}
+.crate-search-status[hidden]{ display:none; }
+
+/* Filtered-out rows (JS toggles this class — nothing is removed) */
+.playlist-item.is-search-hidden{ display:none !important; }
+
+/* No-results state, drawn inside the crate card */
+.crate-no-results{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  padding:26px 14px 22px;
+  text-align:center;
+  border:2px dashed #c9b88a;
+  border-radius:16px 18px 15px 19px / 18px 15px 19px 16px;
+  background:#fffcf5;
+}
+.crate-no-results[hidden]{ display:none; }
+.crate-no-results .cnr-title{
+  font-family:'Caveat', cursive;
+  font-size:25px;
+  color:#4a3b23;
+  transform:rotate(-0.6deg);
+}
+.crate-no-results .cnr-sub{
+  font-family:'Kalam', sans-serif;
+  font-size:13.5px;
+  color:#7a6548;
+  max-width:340px;
+}
+.crate-no-results .cnr-query{
+  font-family:'Kalam', sans-serif;
+  font-size:13px;
+  color:#9b8364;
+  font-style:italic;
+}
+.crate-no-results .cnr-clear{
+  margin-top:9px;
+  min-height:38px;
+  padding:7px 16px;
+  font-family:'Kalam', sans-serif;
+  font-size:14px;
+  color:#4a3b23;
+  background:#f9edd0;
+  border:2.2px solid var(--ink);
+  border-radius:15px 13px 16px 14px / 13px 16px 14px 15px;
+  box-shadow:0 3px 0 #c8b78a;
+  cursor:pointer;
+  transition:transform .12s ease, background .15s ease;
+}
+.crate-no-results .cnr-clear:hover{ background:#fff5dd; transform:translateY(-1px); }
+.crate-no-results .cnr-clear:active{ transform:translateY(1px); box-shadow:0 1px 0 #c8b78a; }
+
+/* Responsive: mobile keeps the bar full-width, drops the shortcut badge */
+@media (max-width:560px){
+  .crate-search-wrap{ padding:7px 10px; gap:7px; margin-bottom:7px; }
+  .crate-search-input{ font-size:16px; padding:4px 0; }
+  .crate-search-kbd{ display:none; }
+  .crate-search-clear{ width:28px; height:28px; font-size:14px; }
+  .crate-search-status{ font-size:12px; }
+}
+@media (max-width:360px){
+  .crate-search-input::placeholder{ font-size:14px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .crate-search-wrap,
+  .crate-search-clear,
+  .crate-no-results .cnr-clear{ transition:none; }
+}
+</style>
 </head>
 <body>
 
@@ -3894,10 +4064,27 @@ html body #add-modal .file-field input[type=file]{overflow:hidden!important;text
           </div>
         </div>
 
+        <div class="crate-search-wrap" id="crate-search-wrap">
+          <span class="crate-search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.6"/><path d="M15.6 15.6 21 21"/></svg>
+          </span>
+          <label class="sr-only" for="crate-search-input">Search songs, artists, or albums</label>
+          <input id="crate-search-input" class="crate-search-input" type="text" placeholder="Search songs, artists, or albums..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-controls="playlist">
+          <kbd class="crate-search-kbd" id="crate-search-kbd" aria-hidden="true">Ctrl K</kbd>
+          <button type="button" class="crate-search-clear" id="crate-search-clear" title="Hapus pencarian" aria-label="Hapus pencarian" hidden>✕</button>
+        </div>
+        <p class="crate-search-status" id="crate-search-status" role="status" aria-live="polite" hidden></p>
+
         <div class="playlist-wrap sketch-border-soft" id="playlist-wrap">
           <ul class="playlist" id="playlist">
 
           </ul>
+          <div class="crate-no-results" id="crate-no-results" hidden>
+            <div class="cnr-title">No results found</div>
+            <div class="cnr-sub">Tidak ada lagu yang cocok di crate ini. Coba judul, artis, atau album lain.</div>
+            <div class="cnr-query" id="crate-no-results-query"></div>
+            <button type="button" class="cnr-clear" id="crate-no-results-clear">Hapus pencarian</button>
+          </div>
         </div>
 
         <section class="queue-section" id="queue-section" hidden aria-label="Antrean lagu">
@@ -11478,7 +11665,8 @@ if (btnRefreshLyrics) {
   }
 })();
 </script>
+<script src="Search.js" defer></script>
 <script type="module" src="normal.js"></script>
 <script src="Lang.js" defer></script>
 </script>
-</html>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a58492edca168357',t:'MTc5NDMwODY0MA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a58492edca168357',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>
