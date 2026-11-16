@@ -2,6 +2,7 @@
   'use strict';
 
   var STORE_KEY = 'chiroot_recap_store_v2';
+  var RECAP_WINDOW_DAYS = 3;
   var LEGACY_KEY = 'gramophone_monthly_stats_v1';
   var STATE = {
     ready: false,
@@ -362,10 +363,10 @@
       .catch(function () { STATE.summaryCache[ck] = null; return null; });
   }
 
-  function cloudMarkShown(periodKey) {
+  function cloudMarkShown(periodKey, localOnly) {
     store.marks[periodKey] = 1;
     persist();
-    if (!cloudReady()) return Promise.resolve(false);
+    if (localOnly || !cloudReady()) return Promise.resolve(false);
     return api('/rest/v1/rpc/recap_mark_shown', 'POST', { p_period_key: periodKey }).catch(function () { return false; });
   }
 
@@ -987,6 +988,10 @@
       '.rc-picker-sub{font-size:11.5px;font-weight:600;opacity:.6;margin:4px 0 0;line-height:1.45}',
       '.rc-picker-x{border:none;background:rgba(255,255,255,.1);color:#fff;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;flex:0 0 30px;font-family:inherit}',
       '.rc-picker-list{display:flex;flex-direction:column;gap:9px}',
+      '.rc-pick-empty{font-size:12px;line-height:1.55;font-weight:600;opacity:.62;padding:6px 2px}',
+      '.rc-report-btn{position:relative}',
+      '.rc-report-btn.rc-btn-fresh::after{content:"";position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:#e0522d;border:2px solid #fff9e8;animation:rcDot 1.9s ease-out infinite}',
+      '@keyframes rcDot{0%{box-shadow:0 0 0 0 rgba(224,82,45,.55)}70%{box-shadow:0 0 0 7px rgba(224,82,45,0)}100%{box-shadow:0 0 0 0 rgba(224,82,45,0)}}',
       '.rc-pick{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1.5px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);border-radius:14px;padding:12px 13px;color:#fff;font-family:inherit;cursor:pointer;transition:transform .14s ease,background .16s}',
       '.rc-pick:hover{background:rgba(255,255,255,.1);transform:translateY(-1px)}',
       '.rc-pick-ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex:0 0 34px;background:linear-gradient(140deg,#ff2f7d,#8a2bd9)}',
@@ -1029,7 +1034,7 @@
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-modal', 'true');
     el.setAttribute('aria-label', 'Pilih periode recap');
-    el.innerHTML = '<div class="rc-picker-card"><div class="rc-picker-head"><div><h3 class="rc-picker-title">Chiroot Recap</h2><p class="rc-picker-sub">Pilih periode. Recap diputar seperti slideshow dan disinkronkan ke semua device lewat akun Google kamu.</p></div><button type="button" class="rc-picker-x" data-rc-pick-close="1" aria-label="Tutup">✕</button></div><div class="rc-picker-list" id="rc-picker-list"></div></div>';
+    el.innerHTML = '<div class="rc-picker-card"><div class="rc-picker-head"><div><h3 class="rc-picker-title">Chiroot Recap</h2><p class="rc-picker-sub">Recap cuma muncul di ' + RECAP_WINDOW_DAYS + ' hari pertama setiap ganti bulan/tahun. Pilih satu buat diputar.</p></div><button type="button" class="rc-picker-x" data-rc-pick-close="1" aria-label="Tutup">✕</button></div><div class="rc-picker-list" id="rc-picker-list"></div></div>';
     document.body.appendChild(el);
     el.addEventListener('click', function (e) {
       if (e.target === el || e.target.closest('[data-rc-pick-close]')) closePicker();
@@ -1040,17 +1045,11 @@
   function renderPicker() {
     var list = document.getElementById('rc-picker-list');
     if (!list) return;
-    var now = new Date();
-    var curM = monthKeyOf(now);
-    var prevM = shiftMonth(curM, -1);
-    var curY = yearKeyOf(now);
-    var prevY = String(now.getFullYear() - 1);
-    var items = [
-      { kind: 'month', key: curM, icon: '✦', title: 'Bulan ini', sub: monthLabel(curM) },
-      { kind: 'month', key: prevM, icon: '↺', title: 'Bulan lalu', sub: monthLabel(prevM) },
-      { kind: 'year', key: curY, icon: '★', title: 'Tahun ini', sub: 'Januari — sekarang' },
-      { kind: 'year', key: prevY, icon: '✧', title: 'Tahun lalu', sub: prevY }
-    ];
+    var items = freshRecaps();
+    if (!items.length) {
+      list.innerHTML = '<div class="rc-pick-empty">Belum ada recap baru. Recap hanya muncul di ' + RECAP_WINDOW_DAYS + ' hari pertama setiap ganti bulan (dan awal tahun).</div>';
+      return;
+    }
     list.innerHTML = items.map(function (it, i) {
       return '<button type="button" class="rc-pick" data-rc-pick="' + i + '">' +
         '<span class="rc-pick-ico">' + it.icon + '</span>' +
@@ -1252,7 +1251,7 @@
       overlay.classList.add('rc-on');
       STATE.open = true;
       lockUI();
-      cloudMarkShown((kind === 'month' ? 'month:' : 'year:') + key);
+      cloudMarkShown(opts.markKey || ((kind === 'month' ? 'month:' : 'year:') + key), !!opts.localMark);
       document.getElementById('rc-progress').innerHTML = progressMarkup(STATE.slides.length);
       var stage = document.getElementById('rc-stage');
       stage.innerHTML = '';
@@ -1309,6 +1308,8 @@
     unlockUI();
     persist();
     cloudFlush();
+    setRecapButtonVisible(false);
+    setTimeout(function () { updateRecapButton(); }, 900);
   }
 
   function bindStageGestures() {
@@ -1334,17 +1335,79 @@
     }, { passive: true });
   }
 
+  function recapWindowOpen(now) {
+    return (now || new Date()).getDate() <= RECAP_WINDOW_DAYS;
+  }
+
+  function freshRecaps() {
+    var now = new Date();
+    var out = [];
+    if (!recapWindowOpen(now)) return out;
+    var prevM = shiftMonth(monthKeyOf(now), -1);
+    if (!store.marks['month:' + prevM]) {
+      out.push({ kind: 'month', key: prevM, icon: '↺', title: 'Recap bulan lalu', sub: monthLabel(prevM) });
+    }
+    if (now.getMonth() === 0) {
+      var prevY = String(now.getFullYear() - 1);
+      if (!store.marks['year:' + prevY]) {
+        out.push({ kind: 'year', key: prevY, icon: '★', title: 'Recap tahun lalu', sub: prevY });
+      }
+    }
+    return out;
+  }
+
+  function setRecapButtonVisible(on) {
+    var btn = document.getElementById('btn-recap-open');
+    if (!btn) return;
+    if (on) {
+      btn.style.display = 'inline-flex';
+      btn.removeAttribute('aria-hidden');
+      btn.classList.add('rc-btn-fresh');
+    } else {
+      btn.style.display = 'none';
+      btn.setAttribute('aria-hidden', 'true');
+      btn.classList.remove('rc-btn-fresh');
+    }
+  }
+
+  function updateRecapButton() {
+    var btn = document.getElementById('btn-recap-open');
+    if (!btn) return Promise.resolve(false);
+    if (STATE.open) return Promise.resolve(false);
+    var cands = freshRecaps();
+    if (!cands.length) { setRecapButtonVisible(false); return Promise.resolve(false); }
+    return loadRecap(cands[0].kind, cands[0].key).then(function (data) {
+      var still = freshRecaps();
+      var show = !!(data && data.hasData && still.length);
+      setRecapButtonVisible(show);
+      return show;
+    }).catch(function () { setRecapButtonVisible(false); return false; });
+  }
+
   function bindEntryButton() {
     var ids = ['btn-recap-open', 'btn-report-open'];
     ids.forEach(function (id) {
       var btn = document.getElementById(id);
       if (!btn || btn._rcBound) return;
       btn._rcBound = true;
-      btn.addEventListener('click', function (e) { e.preventDefault(); openPicker(); });
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var cands = freshRecaps();
+        if (cands.length === 1) {
+          startRecap(cands[0].kind, cands[0].key, { manual: true });
+          return;
+        }
+        if (cands.length > 1) { openPicker(); return; }
+        setRecapButtonVisible(false);
+      });
     });
     document.addEventListener('click', function (e) {
       var t = e.target.closest ? e.target.closest('[data-rc-open]') : null;
-      if (t) { e.preventDefault(); openPicker(); }
+      if (!t) return;
+      e.preventDefault();
+      var cands = freshRecaps();
+      if (cands.length === 1) startRecap(cands[0].kind, cands[0].key, { manual: true });
+      else openPicker();
     });
   }
 
@@ -1352,23 +1415,17 @@
 
   function maybeShowDue() {
     if (STATE.open || STATE.busy || STATE.manualIntent) return Promise.resolve(false);
-    if (!cloudReady()) {
-      var anyLocal = Object.keys(store.months).length > 0;
-      if (!anyLocal) return Promise.resolve(false);
-    }
     var now = new Date();
     var curM = monthKeyOf(now);
     var curY = yearKeyOf(now);
-    var lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    var endOfMonth = now.getDate() === lastDayOfMonth && now.getHours() === 23 && now.getMinutes() >= 56;
+    var lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    var endOfMonth = now.getDate() === lastDay && now.getHours() === 23 && now.getMinutes() >= 56;
     var endOfYear = now.getMonth() === 11 && now.getDate() === 31 && now.getHours() === 23 && now.getMinutes() >= 56;
     var cands = [];
-    if (endOfYear && !store.marks[periodKeyOf('year', curY)]) cands.push({ kind: 'year', key: curY });
-    if (endOfMonth && !store.marks[periodKeyOf('month', curM)]) cands.push({ kind: 'month', key: curM });
-    var prevM = shiftMonth(curM, -1);
-    var prevY = String(now.getFullYear() - 1);
-    if (!store.marks[periodKeyOf('month', prevM)]) cands.push({ kind: 'month', key: prevM });
-    if (!store.marks[periodKeyOf('year', prevY)]) cands.push({ kind: 'year', key: prevY });
+    if (endOfYear && !store.marks['pre:year:' + curY]) cands.push({ kind: 'year', key: curY, markKey: 'pre:year:' + curY, localMark: true });
+    if (endOfMonth && !store.marks['pre:month:' + curM]) cands.push({ kind: 'month', key: curM, markKey: 'pre:month:' + curM, localMark: true });
+    var atNewPeriodMidnight = now.getHours() === 0 && now.getMinutes() < 30;
+    if (atNewPeriodMidnight) freshRecaps().forEach(function (c) { cands.push(c); });
     if (!cands.length) return Promise.resolve(false);
 
     var tryNext = function (i) {
@@ -1376,13 +1433,12 @@
       var c = cands[i];
       return loadRecap(c.kind, c.key).then(function (data) {
         if (!data.hasData) {
-          store.marks[periodKeyOf(c.kind, c.key)] = 1;
-          persist();
+          var key = c.markKey || periodKeyOf(c.kind, c.key);
+          if (c.localMark) { store.marks[key] = 1; persist(); }
+          else cloudMarkShown(key);
           return tryNext(i + 1);
         }
-        STATE.data = data;
-        STATE.slides = buildSlides(data);
-        return startRecap(c.kind, c.key, { auto: true }).then(function () { return true; });
+        return startRecap(c.kind, c.key, { auto: true, markKey: c.markKey, localMark: c.localMark }).then(function () { return true; });
       });
     };
     return tryNext(0);
@@ -1408,12 +1464,16 @@
     bindAudioHooks();
     bindStageGestures();
     bindEntryButton();
+    setRecapButtonVisible(false);
     startTicker();
     var kick = function () {
       bindAudioHooks();
       bindEntryButton();
+      updateRecapButton().catch(function () {});
       setTimeout(function () { maybeShowDue().catch(function () {}); }, 2600);
       setInterval(function () { if (!STATE.open) maybeShowDue().catch(function () {}); }, 300000);
+      setInterval(function () { if (!STATE.open) updateRecapButton().catch(function () {}); }, 600000);
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) updateRecapButton().catch(function () {}); });
     };
     try {
       if (window.ChirootAuth && typeof ChirootAuth.waitReady === 'function') {
