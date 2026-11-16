@@ -320,6 +320,10 @@
             <span class="pn-btn-label">Patch Notes</span>
             <span class="pn-badge-dot" id="pn-new-dot" style="display:none;"></span>
           </button>
+          <button type="button" class="rc-report-btn" id="btn-recap-open" title="Buka Recap bulanan / tahunan" aria-label="Buka Recap">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17V9.5"/><path d="M9 17V5"/><path d="M15 17v-5.5"/><path d="M21 17V7"/></svg>
+            <span>Recap</span>
+          </button>
           <button class="add-btn sketch-border-soft" id="btn-add-open">
             <span class="plus">+</span> Add Music
           </button>
@@ -469,47 +473,6 @@
           <button type="button" class="btn-secondary sketch-border-soft" id="btn-share-regen">⟳ Redraw</button>
           <button type="button" class="btn-secondary sketch-border-soft" id="btn-share-copy">Copy</button>
           <button type="button" class="btn-primary sketch-border-soft" id="btn-share-download">Download SVG</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="report-modal" aria-hidden="true">
-    <div class="modal-card sketch-border" style="max-width:560px;">
-      <button class="modal-close sketchy" id="btn-report-close" aria-label="Close">✕</button>
-      <h3 class="modal-title" style="margin-bottom:4px;"> Monthly Listening Report</h3>
-      <p class="modal-sub" id="report-modal-subtitle">Statistik pemakaian & track favorit</p>
-
-      <div style="display:flex; flex-direction:column; gap:14px; margin-top:10px;">
-        <div class="report-box">
-          <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;">You have use this app for </div>
-          <div id="report-total-hours" style="font-family:'Caveat',cursive; font-size:38px; color:#1a1a1a; line-height:1.1; margin-top:4px;">0 Jam 0 Menit</div>
-          <div style="font-family:'Kalam',sans-serif; font-size:13px; color:#5b4630;">Total waktu aktif membuka & mendengarkan gramophone.</div>
-        </div>
-
-        <div class="report-box" style="background:#fffef7;">
-          <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px;"> Track Paling Sering Didengar</div>
-          <div id="report-top-track" style="display:flex; align-items:center; gap:14px; margin-top:10px;">
-            <div id="report-top-cover" style="width:54px; height:54px; border-radius:50%; background:#1e1e24; border:2.4px solid #1a1a1a; display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px; font-family:'Caveat',cursive; flex-shrink:0;">✦</div>
-            <div style="min-width:0; flex:1;">
-              <div id="report-top-title" style="font-family:'Patrick Hand',sans-serif; font-size:22px; color:#1a1a1a; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Belum ada track</div>
-              <div id="report-top-artist" style="font-family:'Kalam',sans-serif; font-size:15px; color:#5b4630;">Putar musik untuk merekam stats</div>
-              <div id="report-top-stats" style="font-family:'Kalam',sans-serif; font-size:13px; color:#a85a36; margin-top:2px;">0 kali diputar • 0 menit</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="report-box" style="background:#fdf8ec; padding:14px 16px;">
-          <div style="font-family:'Kalam',sans-serif; font-size:14px; color:#7a6548; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;"> Top Tracks Bulan Ini</div>
-          <ul id="report-track-list" style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; max-height:150px; overflow-y:auto;">
-          </ul>
-        </div>
-      </div>
-
-      <div class="modal-actions" style="justify-content:space-between; align-items:center; margin-top:20px;">
-        <div style="display:flex; gap:8px;">
-          <button type="button" class="btn-secondary sketch-border-soft" id="btn-report-reset-stats">↺ Reset Stats</button>
-          <button type="button" class="btn-primary sketch-border-soft" id="btn-report-ok">Tutup Laporan</button>
         </div>
       </div>
     </div>
@@ -5616,140 +5579,6 @@ function updateTransportDisabled(disabled){
   const p=document.getElementById('progress'); if(p) p.disabled = disabled;
 }
 
-const STATS_KEY = 'gramophone_monthly_stats_v1';
-function smallCoverForStats(url){
-  return caSafeImageUrl(url) || null;
-}
-function getMonthlyStats(){
-  const nowMonth = new Date().toISOString().slice(0, 7);
-  let stats = null;
-  try{
-    const raw = localStorage.getItem(STATS_KEY);
-    if(raw) stats = JSON.parse(raw);
-  }catch(e){}
-  if(!stats || typeof stats !== 'object'){
-    stats = {
-      currentMonth: nowMonth,
-      totalUsageSeconds: 0,
-      tracks: {},
-      lastReportShown: nowMonth
-    };
-  }
-  return stats;
-}
-function saveMonthlyStats(stats){
-  try{
-    localStorage.setItem(STATS_KEY, JSON.stringify(stats));
-  }catch(e){}
-}
-function recordTrackPlay(track){
-  if(!track || !track.id) return;
-  const stats = getMonthlyStats();
-  if(!stats.tracks[track.id]){
-    stats.tracks[track.id] = { title: track.title, artist: track.artist, cover: smallCoverForStats(track.cover), labelColor: track.labelColor || '#d84a3a', playCount: 0, playSeconds: 0 };
-  }
-  stats.tracks[track.id].title = track.title;
-  stats.tracks[track.id].artist = track.artist;
-  var stCover = smallCoverForStats(track.cover);
-  if(stCover) stats.tracks[track.id].cover = stCover;
-  stats.tracks[track.id].playCount += 1;
-  saveMonthlyStats(stats);
-  caPushPlayEventCloud(track);
-}
-function caPushPlayEventCloud(track) {
-  if (!(ChirootAuth.session && ChirootAuth.session.user && track && track.id)) return;
-  try {
-    caApiCall('/rest/v1/play_events', 'POST', {
-      user_id: ChirootAuth.session.user.id,
-      track_id: String(track.id),
-      title: String(track.title || '').slice(0, 120),
-      artist: String(track.artist || '').slice(0, 120)
-    }).catch(function () {});
-  } catch (e) {}
-}
-function renderMonthlyReportModal(stats){
-  const modal = $('#report-modal');
-  if(!modal) return;
-  const sub = $('#report-modal-subtitle');
-  if(sub) sub.textContent = 'Laporan statistik musik gramophone bulan ' + (stats.currentMonth || new Date().toISOString().slice(0, 7));
-  const hoursEl = $('#report-total-hours');
-  if(hoursEl){
-    const totalSec = stats.totalUsageSeconds || 0;
-    const hrs = Math.floor(totalSec / 3600);
-    const mins = Math.floor((totalSec % 3600) / 60);
-    hoursEl.textContent = hrs + ' Jam ' + mins + ' Menit';
-  }
-  const trackEntries = Object.values(stats.tracks || {});
-  trackEntries.sort((a,b)=>(b.playSeconds||0) - (a.playSeconds||0) || (b.playCount||0) - (a.playCount||0));
-
-  const topTrack = trackEntries[0];
-  const topCoverEl = $('#report-top-cover');
-  const topTitleEl = $('#report-top-title');
-  const topArtistEl = $('#report-top-artist');
-  const topStatsEl = $('#report-top-stats');
-  if(topTrack){
-    if(topTitleEl) topTitleEl.textContent = topTrack.title;
-    if(topArtistEl) topArtistEl.textContent = topTrack.artist;
-    const minsPlay = Math.max(1, Math.floor((topTrack.playSeconds || 60) / 60));
-    if(topStatsEl) topStatsEl.textContent = (topTrack.playCount || 1) + ' kali diputar • ' + minsPlay + ' menit didengarkan';
-    if(topCoverEl){
-      const safeReportCover = caSafeImageUrl(topTrack.cover);
-      if(safeReportCover){
-        topCoverEl.style.backgroundImage = 'url("' + safeReportCover + '")';
-        topCoverEl.style.backgroundSize = 'cover';
-        topCoverEl.style.backgroundPosition = 'center';
-        topCoverEl.textContent = '';
-      } else {
-        topCoverEl.style.backgroundImage = '';
-        topCoverEl.style.background = topTrack.labelColor || '#1e1e24';
-        topCoverEl.textContent = '✦';
-      }
-    }
-  } else {
-    if(topTitleEl) topTitleEl.textContent = 'Belum ada track yang diputar';
-    if(topArtistEl) topArtistEl.textContent = 'Coba mainkan beberapa piringan hitam';
-    if(topStatsEl) topStatsEl.textContent = '0 kali diputar • 0 menit';
-    if(topCoverEl){ topCoverEl.style.backgroundImage = ''; topCoverEl.style.background = '#1e1e24'; topCoverEl.textContent = '✦'; }
-  }
-  const listEl = $('#report-track-list');
-  if(listEl){
-    listEl.innerHTML = '';
-    const displayList = trackEntries.slice(0, 8);
-    if(displayList.length === 0){
-      listEl.innerHTML = '<li style="font-family:Kalam,sans-serif;font-size:14px;color:#8b745b;padding:4px 0;">Belum ada riwayat track bulan ini.</li>';
-    } else {
-      displayList.forEach((t, i)=>{
-        const li = document.createElement('li');
-        li.style.display = 'flex';
-        li.style.alignItems = 'center';
-        li.style.justifyContent = 'space-between';
-        li.style.padding = '6px 8px';
-        li.style.background = i === 0 ? '#fff5db' : '#fffdf7';
-        li.style.border = '1.8px solid #1a1a1a';
-        li.style.borderRadius = '8px';
-        const m = Math.max(1, Math.floor((t.playSeconds || 60) / 60));
-        li.innerHTML = '<div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;"><span style="font-family:Caveat,cursive;font-size:20px;font-weight:700;color:#1a1a1a;width:20px;">#' + (i+1) + '</span><div style="min-width:0;flex:1;"><div style="font-family:Patrick Hand,sans-serif;font-size:16px;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(t.title) + '</div><div style="font-family:Kalam,sans-serif;font-size:12px;color:#5b4630;">' + escapeHtml(t.artist) + '</div></div></div><div style="font-family:Kalam,sans-serif;font-size:13px;color:#a85a36;white-space:nowrap;margin-left:8px;">' + (t.playCount||1) + 'x • ' + m + 'm</div>';
-        listEl.appendChild(li);
-      });
-    }
-  }
-}
-function showMonthlyReportModal(forceStats=null){
-  const stats = forceStats || getMonthlyStats();
-  renderMonthlyReportModal(stats);
-  const modal = $('#report-modal');
-  if(modal){
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-  }
-}
-function hideMonthlyReportModal(){
-  const modal = $('#report-modal');
-  if(modal){
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
-  }
-}
 const CRATE_ZIP_META = 'chiroot-backup.json';
 let __crateZipBusy = false;
 let __crcTable = null;
@@ -6086,72 +5915,6 @@ function setupSettings(){
   });
 }
 
-function setupMonthlyReport(){
-  const btnClose = $('#btn-report-close');
-  if(btnClose) btnClose.addEventListener('click', hideMonthlyReportModal);
-  const btnOk = $('#btn-report-ok');
-  if(btnOk) btnOk.addEventListener('click', hideMonthlyReportModal);
-  const modal = $('#report-modal');
-  if(modal){
-    modal.addEventListener('click', (e)=>{ if(e.target === modal) hideMonthlyReportModal(); });
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modal.classList.contains('open')) hideMonthlyReportModal(); });
-  }
-  const btnResetStats = $('#btn-report-reset-stats');
-  if(btnResetStats){
-    btnResetStats.addEventListener('click', ()=>{
-      const nowMonth = new Date().toISOString().slice(0, 7);
-      const fresh = { currentMonth: nowMonth, totalUsageSeconds: 0, tracks: {}, lastReportShown: nowMonth };
-      saveMonthlyStats(fresh);
-      __stats = fresh;
-      __statsDirty = false;
-      renderMonthlyReportModal(fresh);
-      showToast('Statistik bulanan telah direset ✦');
-    });
-  }
-  // Akumulasi detik pemakaian di memori; flush ke localStorage tiap 20 detik,
-  // saat tab disembunyikan, dan saat halaman ditutup. (Dulu: tulis tiap 1 detik.)
-  var __stats = null;
-  var __statsDirty = false;
-
-  function flushStats(){
-    if(!__statsDirty || !__stats) return;
-    saveMonthlyStats(__stats);
-    __statsDirty = false;
-  }
-
-  setInterval(()=>{
-    if(!__stats) __stats = getMonthlyStats();
-    const stats = __stats;
-    stats.totalUsageSeconds = (stats.totalUsageSeconds || 0) + 1;
-    if(isPlaying && !audio.paused && tracks && tracks[currentIndex]){
-      const tr = tracks[currentIndex];
-      if(tr && tr.id){
-        if(!stats.tracks[tr.id]){
-          stats.tracks[tr.id] = { title: tr.title, artist: tr.artist, cover: smallCoverForStats(tr.cover), labelColor: tr.labelColor || '#d84a3a', playCount: 0, playSeconds: 0 };
-        }
-        stats.tracks[tr.id].playSeconds = (stats.tracks[tr.id].playSeconds || 0) + 1;
-      }
-    }
-    __statsDirty = true;
-    if(stats.totalUsageSeconds % 20 === 0) flushStats();
-  }, 1000);
-
-  document.addEventListener('visibilitychange', function(){
-    if(document.visibilityState === 'hidden') flushStats();
-  });
-  window.addEventListener('pagehide', flushStats);
-  window.addEventListener('beforeunload', flushStats);
-}
-function checkMonthlyReportTrigger(){
-  const nowMonth = new Date().toISOString().slice(0, 7);
-  const stats = getMonthlyStats();
-  if(stats.lastReportShown !== nowMonth){
-    stats.lastReportShown = nowMonth;
-    stats.currentMonth = nowMonth;
-    saveMonthlyStats(stats);
-    showMonthlyReportModal(stats);
-  }
-}
 document.addEventListener('DOMContentLoaded', init);
 
 setInterval(function(){ saveState(false); }, 15000);
@@ -7927,8 +7690,9 @@ if (btnRefreshLyrics) {
   }
 })();
 </script>
+<script src="report.js" defer></script>
 <script src="Search.js" defer></script>
 <script type="module" src="normal.js"></script>
 <script src="Lang.js" defer></script>
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a58498a23d21a3e0',t:'MTc5NDMwODg3NA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a58498a23d21a3e0',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a58498a23d21a3e0',t:'MTc5NDMwODg3NA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a58498a23d21a3e0',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5b5fbe77996f8e6',t:'MTc5NDgyNjc0Mg=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5b5fbe77996f8e6',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>
