@@ -1417,8 +1417,8 @@ function toast(msg, type){
 function openModal(id){ const m = document.getElementById(id); if (m){ m.classList.add('open'); m.setAttribute('aria-hidden', 'false'); } }
 function closeModal(id){ const m = document.getElementById(id); if (m){ m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); } }
 function playerHref(){
-  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') return './main';
-  return './Main.html';
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') return 'main';
+  return 'Main.html';
 }
 
 function mapAuthSession(data){
