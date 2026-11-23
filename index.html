@@ -3568,6 +3568,21 @@
 })();
 </script>
     <script src="index.js" defer></script>
+      <!-- Chiroot: hide the native page scrollbar (page still scrolls normally) -->
+    <style id="chiroot-no-page-scrollbar">
+      /* Removes only the page-level scrollbar + its gutter.
+         Inner scroll areas (playlist, queue, code boxes, etc.) are untouched. */
+      html {
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* legacy Edge / IE */
+      }
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
     <div class="paper-texture" aria-hidden="true"></div>
