@@ -3734,3 +3734,19 @@ html body #add-modal .file-field input[type=file]{overflow:hidden!important;text
   .crate-search-clear,
   .crate-no-results .cnr-clear{ transition:none; }
 }
+
+/* ==========================================================================
+   Chiroot — hide the native page scrollbar (page still scrolls normally)
+   Only the page-level bar/gutter is removed. Inner scroll areas such as
+   .playlist-wrap, .top10-wrap and .queue-list keep their own scrollbars.
+   ========================================================================== */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge / IE */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
