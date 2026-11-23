@@ -73,6 +73,21 @@ h1 span::after{content:"";position:absolute;z-index:-1;left:-2px;right:-4px;bott
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 <script src="paper.js" defer></script>
+    <!-- Chiroot: hide the native page scrollbar (page still scrolls normally) -->
+    <style id="chiroot-no-page-scrollbar">
+      /* Removes only the page-level scrollbar + its gutter.
+         Inner scroll areas (playlist, queue, code boxes, etc.) are untouched. */
+      html {
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* legacy Edge / IE */
+      }
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+        display: none !important;
+      }
+    </style>
 </head>
 <body>
 <div class="card">
