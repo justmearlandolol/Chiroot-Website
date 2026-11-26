@@ -817,6 +817,9 @@
     loadRemoteSettings();
     renderProfileBox();
     handleDeepLink();
+    /* crate sudah selesai dimuat — kalau user sedang di My Songs,
+       refresh supaya daftar "Masih di Crate" langsung terisi */
+    if (currentRoute() === 'songs') refreshSongs();
   });
   wrapHook('onProfileUpdated', function () { renderProfileBox(); });
 
