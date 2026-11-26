@@ -1,3 +1,16 @@
 dist/
 *.exe
 *.apk
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Dependensi & tooling
+node_modules/
+.vercel/
+
+# Lokal & rahasia
+.env
+.env.*
+*.log

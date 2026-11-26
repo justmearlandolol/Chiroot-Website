@@ -137,12 +137,12 @@
             </div>
 
             <div class="gramo-sticker sticker-2">
-              <img src="win.jpeg" alt="sticker-emoji" class="sticker-label" width="67" height="67" loading="lazy" decoding="async" style="width: 67px; height: 67px;">
+              <img src="assets/img/win-sticker.jpeg" alt="sticker-emoji" class="sticker-label" width="67" height="67" loading="lazy" decoding="async" style="width: 67px; height: 67px;">
               <span class="chopper-label"></span>
             </div>
 
             <div class="gramo-sticker sticker-3 chopper-sticker sketch-border-tiny">
-              <img src="Chopper-removebg-preview.png" alt="Chopper" class="chopper-img" loading="lazy" decoding="async">
+              <img src="assets/img/chopper.png" alt="Chopper" class="chopper-img" loading="lazy" decoding="async">
               <span class="chopper-label"></span>
             </div>
 
@@ -1571,16 +1571,55 @@ function dropGuestObjectUrl(key) {
   __guestObjectUrls.delete(key);
 }
 
+// Resolver aset lama -> lokasi baru (hasil reorganisasi repo).
+// Crate guest lama di IndexedDB masih menyimpan srcRef/coverRef berupa nama file lama;
+// dipetakan di sini supaya tetap bisa diputar tanpa migrasi manual.
+const LEGACY_ASSET_MAP = {
+  'Coldplay - Hymn For The Weekend.mp3': 'audio/hymn-for-the-weekend.mp3',
+  'Harvey.mp3': 'audio/harvey.mp3',
+  'Day 1.mp3': 'audio/day-1.mp3',
+  'vidssave.com Malcolm Todd - Sweet Boy (Lyrics) LOW.mp3': 'audio/sweet-boy.mp3',
+  'Smile.mp3': 'audio/smile.mp3',
+  'Coldplay.jpeg': 'assets/covers/hymn-for-the-weekend.jpg',
+  'Harvey.jpeg': 'assets/covers/harvey.jpg',
+  'sweetboy.jpeg': 'assets/covers/sweet-boy.jpg',
+  'Smile.jpeg': 'assets/covers/smile.jpg',
+  '/Smile.jpeg': 'assets/covers/smile.jpg',
+  'reze.png': 'assets/covers/day-1.png',
+  'win.jpeg': 'assets/img/win-sticker.jpeg',
+  'Chopper-removebg-preview.png': 'assets/img/chopper.png',
+  'error.png': 'assets/img/error.png',
+  'Chiroot-Donate.png': 'assets/img/donate.png'
+};
+
+function caResolveLegacyAsset(ref) {
+  if (!ref || typeof ref !== 'string') return ref;
+  let key = ref;
+  if (/^https?:\/\//i.test(ref)) {
+    try {
+      const u = new URL(ref);
+      const host = (typeof location !== 'undefined' && location.hostname) ? location.hostname : '';
+      const sameHost = !!host && u.hostname === host;
+      const legacyHost = /(^|\.)chiroot\.netlify\.app$/i.test(u.hostname);
+      if (!sameHost && !legacyHost) return ref;
+      key = decodeURIComponent(u.pathname).replace(/^\/+/, '');
+    } catch (e) { return ref; }
+  } else {
+    key = ref.replace(/^\/+/, '');
+  }
+  return LEGACY_ASSET_MAP[key] || ref;
+}
+
 function caGuestTrackFromRec(rec) {
   const title = caCleanText(rec.title, 80);
   if (!title) return null;
   let src = '';
   if (rec.audioBlob) src = guestObjectUrl(String(rec.id) + ':audio', rec.audioBlob);
-  if (!src && rec.srcRef) src = String(rec.srcRef);
+  if (!src && rec.srcRef) src = caResolveLegacyAsset(String(rec.srcRef));
   if (!src) return null;
   let cover = null;
   if (rec.coverBlob) cover = guestObjectUrl(String(rec.id) + ':cover', rec.coverBlob) || null;
-  if (!cover && rec.coverRef) cover = String(rec.coverRef);
+  if (!cover && rec.coverRef) cover = caResolveLegacyAsset(String(rec.coverRef));
   return {
     id: String(rec.id),
     title: title,
@@ -3114,40 +3153,40 @@ const TOP10_SONGS = [
   {
     title: "Hymn for the weekend",
     artist: "ColdPlay",
-    src: "Coldplay - Hymn For The Weekend.mp3",
-    cover: "Coldplay.jpeg",
+    src: "audio/hymn-for-the-weekend.mp3",
+    cover: "assets/covers/hymn-for-the-weekend.jpg",
     labelColor: "#d84a3a",
     vinylColor: "#1e1e24"
   },
   {
     title: "Harvey",
     artist: "Her's",
-    src: "Harvey.mp3",
-    cover: "Harvey.jpeg",
+    src: "audio/harvey.mp3",
+    cover: "assets/covers/harvey.jpg",
     labelColor: "#c9a227",
     vinylColor: "#1e1e24"
   },
   {
     title: "Day 1",
     artist: "Red Velvet",
-    src: "Day 1.mp3",
-    cover: "reze.png",
+    src: "audio/day-1.mp3",
+    cover: "assets/covers/day-1.png",
     labelColor: "#3a8a6a",
     vinylColor: "#1a2a1e"
   },
   {
     title: "Sweet Boy",
     artist: "Malcolm Todd",
-    src: "vidssave.com Malcolm Todd - Sweet Boy (Lyrics) LOW.mp3",
-    cover: "sweetboy.jpeg",
+    src: "audio/sweet-boy.mp3",
+    cover: "assets/covers/sweet-boy.jpg",
     labelColor: "#5b6ee1",
     vinylColor: "#1a2238"
   },
   {
     title: "Smile",
     artist: "Lily Allen",
-    src: "Smile.mp3",
-    cover: "/Smile.jpeg",
+    src: "audio/smile.mp3",
+    cover: "assets/covers/smile.jpg",
     labelColor: "#b65a9a",
     vinylColor: "#2a1a1e"
   }
@@ -3622,7 +3661,7 @@ async function loadChirootEggUrl() {
   if (_eggBlobUrl) return _eggBlobUrl;
   let raw = (typeof window !== 'undefined' && window.eggAudio) ? window.eggAudio : '';
   if (!raw) {
-    const mod = await import('./egg.js');
+    const mod = await import('./js/egg.js');
     raw = (mod && (mod.default || mod.eggAudio)) || '';
   }
   if (!raw || typeof raw !== 'string') return '';
@@ -7690,9 +7729,9 @@ if (btnRefreshLyrics) {
   }
 })();
 </script>
-<script src="report.js" defer></script>
-<script src="Search.js" defer></script>
-<script type="module" src="normal.js"></script>
-<script src="Lang.js" defer></script>
+<script src="js/report.js" defer></script>
+<script src="js/Search.js" defer></script>
+<script type="module" src="js/normal.js"></script>
+<script src="js/Lang.js" defer></script>
 </script>
 <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a58498a23d21a3e0',t:'MTc5NDMwODg3NA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a58498a23d21a3e0',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5b607e34d009d4e',t:'MTc5NDgyNzIzMw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5b607e34d009d4e',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>
