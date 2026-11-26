@@ -160,15 +160,28 @@
     document.documentElement.style.colorScheme = v;
   }
 
+  function renderThemeToggle() {
+    var wrap = $('app-theme-toggle');
+    if (!wrap) return;
+    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var resolved = t === 'light' ? 'light' : (t === 'dark' ? 'dark' : ((OS_LIGHT_MQ && OS_LIGHT_MQ.matches) ? 'light' : 'dark'));
+    Array.prototype.forEach.call(wrap.querySelectorAll('button[data-theme-value]'), function (b) {
+      var on = b.dataset.themeValue === resolved;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
   function applyTheme(theme) {
     var t = (theme === 'light' || theme === 'system') ? theme : 'dark';
     document.documentElement.setAttribute('data-theme', t);
     applyColorScheme(t);
+    renderThemeToggle();
   }
 
   if (OS_LIGHT_MQ && OS_LIGHT_MQ.addEventListener) {
     OS_LIGHT_MQ.addEventListener('change', function () {
-      if (currentTheme() === 'system') applyColorScheme('system');
+      if (currentTheme() === 'system') { applyColorScheme('system'); renderThemeToggle(); }
     });
   }
 
@@ -242,6 +255,38 @@
   bindSeg($('cr-theme-seg'), function (v) {
     applyTheme(v); lsSet(LS_THEME, v); saveSettingsRemote({ theme: v });
   });
+
+  /* Toggle tema sun/moon di sidebar (lihat juga Settings untuk opsi System) */
+  var themeToggle = $('app-theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-theme-value]');
+      if (!b) return;
+      applyTheme(b.dataset.themeValue);
+      lsSet(LS_THEME, b.dataset.themeValue);
+      saveSettingsRemote({ theme: b.dataset.themeValue });
+    });
+  }
+
+  /* Sidebar collapsible (desktop) — status dipersist di localStorage */
+  var LS_SIDEBAR = 'chiroot_sidebar_v1';
+  function applySidebar(collapsed) {
+    document.documentElement.setAttribute('data-sidebar', collapsed ? 'collapsed' : 'open');
+    var btn = $('app-sidebar-toggle');
+    if (btn) {
+      btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      btn.title = collapsed ? 'Buka sidebar' : 'Tutup sidebar';
+    }
+  }
+  var sidebarToggleBtn = $('app-sidebar-toggle');
+  if (sidebarToggleBtn) {
+    applySidebar(lsGet(LS_SIDEBAR) === 'collapsed');
+    sidebarToggleBtn.addEventListener('click', function () {
+      var next = document.documentElement.getAttribute('data-sidebar') !== 'collapsed';
+      applySidebar(!next);
+      lsSet(LS_SIDEBAR, next ? 'collapsed' : 'open');
+    });
+  }
   /* Mode tampilan: TAP gramophone / cover di halaman utama untuk berganti.
      Perpindahan instan — audio, progres, dan antrean tidak terganggu. */
   (function () {
@@ -249,7 +294,6 @@
     function toggleDisplay() {
       var next = currentDisplay() === 'cover' ? 'gramophone' : 'cover';
       applyDisplay(next); lsSet(LS_DISPLAY, next); saveSettingsRemote({ display_mode: next });
-      showToast(next === 'cover' ? 'Mode Cover Art — tap lagi untuk kembali ke gramophone' : 'Mode Gramophone — tap untuk lihat cover art');
     }
     targets.forEach(function (el) {
       el.classList.add('display-toggle');
