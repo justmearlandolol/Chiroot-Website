@@ -1304,7 +1304,9 @@ body.is-playing .cover-stage-disc {
   outline-offset: 2px;
 }
 
-.chiroot-topbar .avatar-wrap {
+.chiroot-topbar .avatar-wrap,
+.chiroot-topbar .topbar-avatar,
+#topbar-avatar-btn {
   display: none !important;
 }
 
@@ -1559,6 +1561,80 @@ html[data-sidebar='collapsed'] .app-logout svg {
   animation: crd-rot 0.8s linear infinite;
   vertical-align: -4px;
   margin-right: 8px;
+}
+
+/* ---------- 4e. Adaptasi dark: patch notes ---------- */
+html[data-theme='dark'] .pn-modal-card {
+  background: var(--cr-surface) !important;
+  border: 1px solid var(--cr-line);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme='dark'] .pn-modal-scroll {
+  background: var(--cr-bg) !important;
+  border: 1px solid var(--cr-line) !important;
+  border-radius: var(--cr-radius-sm) !important;
+}
+
+html[data-theme='dark'] .pn-modal-title {
+  color: var(--cr-text) !important;
+}
+
+html[data-theme='dark'] .pn-modal-date,
+html[data-theme='dark'] .pn-modal-summary,
+html[data-theme='dark'] .pn-modal-ver,
+html[data-theme='dark'] .pn-modal-group-title,
+html[data-theme='dark'] .pn-nav-counter,
+html[data-theme='dark'] .pn-history-meta {
+  color: var(--cr-muted) !important;
+}
+
+html[data-theme='dark'] .pn-modal-item {
+  color: var(--cr-text) !important;
+}
+
+html[data-theme='dark'] .pn-modal-summary {
+  border: 1px dashed var(--cr-line) !important;
+  border-radius: var(--cr-radius-sm);
+  padding: 10px 14px;
+}
+
+html[data-theme='dark'] .pn-modal-type-pill {
+  border-color: var(--cr-line) !important;
+}
+
+html[data-theme='dark'] .pn-pill-major { background: rgba(245, 183, 62, 0.15) !important; color: var(--cr-accent) !important; }
+html[data-theme='dark'] .pn-pill-minor { background: rgba(76, 215, 135, 0.14) !important; color: var(--cr-success) !important; }
+html[data-theme='dark'] .pn-pill-patch { background: rgba(255, 93, 93, 0.14) !important; color: var(--cr-danger) !important; }
+html[data-theme='dark'] .pn-pill-maintenance { background: rgba(91, 110, 225, 0.16) !important; color: #8f9cf0 !important; }
+
+html[data-theme='dark'] :is(.pn-nav-btn, .pn-open-btn, .pn-history-item) {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  color: var(--cr-text) !important;
+  border-radius: var(--cr-radius-sm) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .pn-nav-btn:hover:not(:disabled),
+html[data-theme='dark'] .pn-open-btn:hover {
+  background: var(--cr-accent) !important;
+  color: var(--cr-accent-ink) !important;
+}
+
+html[data-theme='dark'] .pn-history-item:hover {
+  background: var(--cr-elevated) !important;
+  border-color: var(--cr-accent) !important;
+}
+
+html[data-theme='dark'] .pn-history-title,
+html[data-theme='dark'] .pn-history-ver {
+  color: var(--cr-text) !important;
+}
+
+html[data-theme='dark'] .pn-empty,
+html[data-theme='dark'] .pn-empty-title {
+  color: var(--cr-muted) !important;
 }
 
 /* ---------- 10b. Transisi halus ganti mode tampilan ---------- */

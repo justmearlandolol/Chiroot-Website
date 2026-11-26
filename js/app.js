@@ -282,9 +282,9 @@
   if (sidebarToggleBtn) {
     applySidebar(lsGet(LS_SIDEBAR) === 'collapsed');
     sidebarToggleBtn.addEventListener('click', function () {
-      var next = document.documentElement.getAttribute('data-sidebar') !== 'collapsed';
-      applySidebar(!next);
-      lsSet(LS_SIDEBAR, next ? 'collapsed' : 'open');
+      var isCollapsed = document.documentElement.getAttribute('data-sidebar') === 'collapsed';
+      applySidebar(!isCollapsed); // buka jika sedang collapsed, tutup jika sedang open
+      lsSet(LS_SIDEBAR, isCollapsed ? 'open' : 'collapsed');
     });
   }
   /* Mode tampilan: TAP gramophone / cover di halaman utama untuk berganti.
