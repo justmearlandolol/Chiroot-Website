@@ -466,7 +466,13 @@
     <div class="crd-state" id="songs-state" style="display:none;"></div>
     <p class="app-view-sub" style="font-weight:700; color:var(--cr-text); margin:6px 0 10px;">Lagu di Chiroot</p>
     <ul class="song-list" id="songs-cloud"></ul>
-    <p class="app-view-sub" style="font-weight:700; color:var(--cr-text); margin:18px 0 10px;">Masih di Crate (belum di Chiroot)</p>
+    <div class="songs-subhead">
+      <p class="app-view-sub" style="font-weight:700; color:var(--cr-text); margin:18px 0 10px;">Masih di Crate (belum di Chiroot)</p>
+      <button type="button" class="song-btn primary" id="btn-publish-all" style="display:none;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> Publikasikan Semua
+      </button>
+    </div>
+    <p class="crd-note" id="publish-all-status" style="display:none;"></p>
     <ul class="song-list" id="songs-crate"></ul>
   </section>
   </div>
@@ -497,8 +503,8 @@
       <h3 class="modal-title">Publikasikan lagu</h3>
       <p class="modal-sub" id="pub-song-title" style="font-weight:700; color:var(--cr-text);">—</p>
       <div class="seg" id="pub-choice" data-value="private" role="group" aria-label="Visibilitas lagu" style="margin-top:12px;">
-        <button type="button" data-value="private">🔒 Privat</button>
-        <button type="button" data-value="public">🌍 Publik</button>
+        <button type="button" data-value="private"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Privat</button>
+        <button type="button" data-value="public"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> Publik</button>
       </div>
       <p class="crd-note" style="margin-top:10px;">Privat: hanya kamu yang bisa memutar. Publik: lagu tampil di Discover dan bisa diputar siapa pun lewat link — audio tidak di-upload ulang, hanya disalin di server.</p>
       <p class="crd-note" id="pub-status" style="min-height:1.2em; color:var(--cr-accent);"></p>
@@ -7879,4 +7885,4 @@ if (btnRefreshLyrics) {
 <script src="js/Lang.js" defer></script>
 <script src="js/app.js" defer></script>
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a58498a23d21a3e0',t:'MTc5NDMwODg3NA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a58498a23d21a3e0',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5b607e34d009d4e',t:'MTc5NDgyNzIzMw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5b607e34d009d4e',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>
+</html>

@@ -573,7 +573,20 @@ html[data-theme='light'] .modal-card {
   border-color: var(--cr-accent);
 }
 
+.songs-subhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.songs-subhead .song-btn {
+  margin: 14px 0 10px;
+}
+
 .song-cover {
+  position: relative;
   width: 52px;
   height: 52px;
   border-radius: 10px;
@@ -586,6 +599,21 @@ html[data-theme='light'] .modal-card {
   color: var(--cr-muted);
   font-weight: 800;
   font-size: 15px;
+}
+
+.song-cover-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cr-muted);
+}
+
+.song-cover-fallback svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
 }
 
 .song-cover img {

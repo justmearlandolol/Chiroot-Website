@@ -36,6 +36,7 @@
     trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>',
     eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
     globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
     search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>',
     note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>'
   };
@@ -264,7 +265,7 @@
     document.querySelectorAll('[data-route]').forEach(function (b) {
       b.classList.toggle('active', b.getAttribute('data-route') === r);
     });
-    if (r === 'discover' && !discLoaded) refreshDiscover(true);
+    if (r === 'discover' && !discState.loaded) refreshDiscover(true);
     if (r === 'songs') refreshSongs();
     window.scrollTo(0, 0);
   }
@@ -402,7 +403,7 @@
       var mine = authed() && s.owner_id === uid();
       var cover = songCoverUrl(s);
       return '<li class="song-row' + (isSongPlaying(s.id) ? ' playing' : '') + '" data-song-idx="' + i + '">' +
-        '<div class="song-cover">' + (cover ? '<img src="' + esc(cover) + '" alt="" loading="lazy" onerror="this.parentNode.innerHTML=\'♪\'">' : '♪') + '</div>' +
+        '<div class="song-cover"><span class="song-cover-fallback">' + ICONS.note + '</span>' + (cover ? '<img src="' + esc(cover) + '" alt="" loading="lazy" onerror="this.remove()">' : '') + '</div>' +
         '<div class="song-meta">' +
           '<p class="song-title">' + esc(s.title) + '</p>' +
           '<p class="song-sub">' + esc(s.artist || s.owner_name || 'Pengguna Chiroot') +
@@ -530,6 +531,8 @@
      6. MY SONGS
      ================================================================== */
   var songsCache = [];
+  var crateOnlyCache = [];
+  var bulkPublishing = false;
 
   function refreshSongs() {
     var cloudEl = $('songs-cloud');
@@ -544,6 +547,8 @@
       crateEl.innerHTML = '';
       var lb = $('songs-login');
       if (lb) lb.addEventListener('click', function () { if (window.caLoginRedirect) caLoginRedirect(); });
+      crateOnlyCache = [];
+      updatePublishAllButton();
       return;
     }
     stateEl.innerHTML = '<span class="crd-spin"></span><br>Memuat lagu milikmu…';
@@ -557,7 +562,9 @@
           if (s.source_crate_track_id) publishedIds[s.source_crate_track_id] = true;
         });
         var localOnly = crateTracks.filter(function (t) { return !publishedIds[String(t.id)]; });
+        crateOnlyCache = localOnly;
         renderMySongs(cloudEl, crateEl, localOnly);
+        updatePublishAllButton();
         stateEl.style.display = 'none';
       })
       .catch(function (err) {
@@ -572,13 +579,13 @@
         var isPub = s.visibility === 'public';
         var cover = isPub ? songCoverUrl(s) : (s.source_bucket === CRATE_BUCKET && s.cover_path ? caCratePublicUrl(s.cover_path) : null);
         return '<li class="song-row" data-song-idx="' + i + '">' +
-          '<div class="song-cover">' + (cover ? '<img src="' + esc(cover) + '" alt="" loading="lazy" onerror="this.parentNode.innerHTML=\'♪\'">' : '♪') + '</div>' +
+          '<div class="song-cover"><span class="song-cover-fallback">' + ICONS.note + '</span>' + (cover ? '<img src="' + esc(cover) + '" alt="" loading="lazy" onerror="this.remove()">' : '') + '</div>' +
           '<div class="song-meta">' +
             '<p class="song-title">' + esc(s.title) + '</p>' +
             '<p class="song-sub">' + (isPub ? 'Publik' : 'Privat') + (s.created_at ? ' · ' + esc(fmtDate(s.created_at)) : '') + '</p>' +
           '</div>' +
           '<div class="song-actions">' +
-            '<span class="song-badge ' + (isPub ? 'public' : 'private') + '">' + (isPub ? ICONS.globe + ' Publik' : 'Privat') + '</span>' +
+            '<span class="song-badge ' + (isPub ? 'public' : 'private') + '">' + (isPub ? ICONS.globe + ' Publik' : ICONS.lock + ' Privat') + '</span>' +
             (isPub
               ? '<button class="song-btn primary" data-my-play="' + i + '">' + ICONS.play + ' Putar</button>' +
                 '<button class="song-btn" data-my-share="' + i + '">' + ICONS.link + ' Link</button>' +
@@ -594,7 +601,7 @@
     if (localOnly.length) {
       crateEl.innerHTML = localOnly.map(function (t, i) {
         return '<li class="song-row" data-crate-idx="' + i + '">' +
-          '<div class="song-cover">' + (t.cover ? '<img src="' + esc(t.cover) + '" alt="" loading="lazy" onerror="this.parentNode.innerHTML=\'♪\'">' : '♪') + '</div>' +
+          '<div class="song-cover"><span class="song-cover-fallback">' + ICONS.note + '</span>' + (t.cover ? '<img src="' + esc(t.cover) + '" alt="" loading="lazy" onerror="this.remove()">' : '') + '</div>' +
           '<div class="song-meta">' +
             '<p class="song-title">' + esc(t.title) + '</p>' +
             '<p class="song-sub">' + esc(t.artist || '') + '</p>' +
@@ -677,22 +684,15 @@
     return m ? m[1].toLowerCase() : 'mp3';
   }
 
-  function doPublish() {
-    if (!pubCtx || !authed()) return;
-    var track = pubCtx.track;
-    var isPublic = $('pub-choice').dataset.value === 'public';
+  function publishTrack(track, isPublic, statusEl) {
+    if (!authed()) return Promise.reject(new Error('Butuh login'));
     var audioPath = track._audioPath || '';
+    if (!audioPath) return Promise.reject(new Error('Lagu tidak punya file audio di cloud'));
     var coverPath = track._coverPath || '';
-    if (!audioPath) {
-      showToast('Lagu ini tidak punya file audio di cloud (mungkin masih lokal). Upload ulang lewat Add Music ya.');
-      return;
-    }
-    var btn = $('pub-go');
-    btn.disabled = true;
-    var status = $('pub-status');
+    var setStatus = function (m) { if (statusEl) statusEl.textContent = m; };
 
     // idempoten: cek apakah track crate ini sudah pernah dipublikasikan
-    caApiCall(SONGS + '?select=' + SONG_SELECT + '&owner_id=eq.' + encodeURIComponent(uid()) + '&source_crate_track_id=eq.' + encodeURIComponent(track.id), 'GET')
+    return caApiCall(SONGS + '?select=' + SONG_SELECT + '&owner_id=eq.' + encodeURIComponent(uid()) + '&source_crate_track_id=eq.' + encodeURIComponent(track.id), 'GET')
       .then(function (rows) {
         var existing = Array.isArray(rows) && rows[0];
         if (existing) {
@@ -715,16 +715,17 @@
           var row = Array.isArray(created) && created[0];
           if (!row || !row.id) throw new Error('Gagal membuat catatan lagu');
           if (!isPublic) return row; // privat: audio tetap di crate, tidak ada copy
-          // 2) copy audio + cover ke bucket publik chiroot-shared
-          status.textContent = 'Menyiapkan audio publik…';
+          // 2) copy audio + cover ke bucket publik chiroot-shared (server-side, tanpa re-upload)
+          setStatus('Menyiapkan audio publik…');
           var destAudio = uid() + '/' + row.id + '.' + extOf(audioPath);
           return storageCopy(CRATE_BUCKET, audioPath, SONGS_BUCKET, destAudio)
             .then(function () {
               var patch = { audio_path: destAudio, source_bucket: SONGS_BUCKET };
               if (coverPath) {
-                return storageCopy(CRATE_BUCKET, coverPath, SONGS_BUCKET, uid() + '/' + row.id + '-cover.' + extOf(coverPath))
+                var destCover = uid() + '/' + row.id + '-cover.' + extOf(coverPath);
+                return storageCopy(CRATE_BUCKET, coverPath, SONGS_BUCKET, destCover)
                   .then(function () {
-                    patch.cover_path = uid() + '/' + row.id + '-cover.' + extOf(coverPath);
+                    patch.cover_path = destCover;
                     return patch;
                   });
               }
@@ -739,19 +740,77 @@
               throw err;
             });
         });
-      })
+      });
+  }
+
+  function doPublish() {
+    if (!pubCtx || !authed()) return;
+    var isPublic = $('pub-choice').dataset.value === 'public';
+    var btn = $('pub-go');
+    btn.disabled = true;
+    var status = $('pub-status');
+    status.textContent = '';
+    publishTrack(pubCtx.track, isPublic, status)
       .then(function (res) {
         setModalOpen('publish-modal', false);
         showToast(res && res.existing
           ? 'Lagu sudah ada di My Songs — visibilitas diperbarui ✓'
           : (isPublic ? 'Lagu dipublikasikan! Sekarang terlihat di Discover ✓' : 'Lagu disimpan sebagai privat ✓'));
         if (isPublic && currentRoute() === 'discover') refreshDiscover(true);
+        if (currentRoute() === 'songs') refreshSongs();
       })
       .catch(function (err) {
         status.textContent = 'Gagal: ' + (err && err.message ? err.message : err);
       })
       .then(function () { btn.disabled = false; });
   }
+
+  /* Publikasikan SEMUA lagu Crate yang belum terhubung ke Chiroot (berurutan, dengan progres) */
+  function updatePublishAllButton() {
+    var btn = $('btn-publish-all');
+    if (!btn) return;
+    btn.style.display = (authed() && crateOnlyCache.length && !bulkPublishing) ? '' : 'none';
+    btn.disabled = bulkPublishing;
+  }
+
+  function publishAllPublic() {
+    if (!authed() || bulkPublishing) return;
+    var targets = crateOnlyCache.filter(function (t) { return t && t._audioPath; });
+    var skipped = crateOnlyCache.length - targets.length;
+    if (!targets.length) {
+      showToast('Tidak ada lagu Crate yang bisa dipublikasikan.');
+      return;
+    }
+    if (!window.confirm('Publikasikan ' + targets.length + ' lagu ke Discover?\n\nSemua lagu ini akan terlihat & bisa diputar publik. Lanjutkan?')) return;
+    bulkPublishing = true;
+    updatePublishAllButton();
+    var status = $('publish-all-status');
+    if (status) { status.style.display = ''; status.textContent = 'Mempublikasikan 1/' + targets.length + '…'; }
+    var done = 0, failed = 0;
+    function next(i) {
+      if (i >= targets.length) {
+        bulkPublishing = false;
+        crateOnlyCache = [];
+        updatePublishAllButton();
+        if (status) status.style.display = 'none';
+        showToast('Selesai: ' + (done - failed) + ' lagu dipublikasikan' +
+          (failed ? ', ' + failed + ' gagal' : '') +
+          (skipped ? ', ' + skipped + ' dilewati (tanpa audio cloud)' : '') + '.');
+        refreshSongs();
+        if (currentRoute() === 'discover') refreshDiscover(true);
+        return;
+      }
+      if (status) status.textContent = 'Mempublikasikan ' + (i + 1) + '/' + targets.length + '…';
+      publishTrack(targets[i], true, null)
+        .then(function () { done++; })
+        .catch(function (err) { console.warn('bulk publish failed:', targets[i] && targets[i].title, err); failed++; })
+        .then(function () { next(i + 1); });
+    }
+    next(0);
+  }
+
+  var pubAllBtn = $('btn-publish-all');
+  if (pubAllBtn) pubAllBtn.addEventListener('click', publishAllPublic);
 
   /* ==================================================================
      8. MODAL HELPERS
@@ -849,7 +908,7 @@
         renderPlaylist();
         loadTrack(exists, false, true); // JANGAN autoplay — tunggu aksi user
         navigate('home');
-        showToast('♪ "' + song.title + '" — dibagikan oleh ' + (song.owner_name || 'pengguna Chiroot') + '. Tekan play untuk mendengarkan.');
+        showToast('"' + song.title + '" — dibagikan oleh ' + (song.owner_name || 'pengguna Chiroot') + '. Tekan play untuk mendengarkan.');
       })
       .catch(function (err) {
         showToast('Gagal membuka lagu: ' + (err && err.message ? err.message : err));
