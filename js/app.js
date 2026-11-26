@@ -176,7 +176,6 @@
     var m = mode === 'cover' ? 'cover' : 'gramophone';
     document.documentElement.setAttribute('data-display', m);
     renderSegTheme();
-    renderSegDisplay();
     document.querySelectorAll('.display-toggle').forEach(function (el) {
       el.setAttribute('aria-label', m === 'cover'
         ? 'Tap untuk kembali ke mode gramophone'
@@ -223,16 +222,6 @@
     var seg = $('cr-theme-seg');
     if (!seg) return;
     var cur = currentTheme();
-    Array.prototype.forEach.call(seg.querySelectorAll('button'), function (b) {
-      b.classList.toggle('active', b.dataset.value === cur);
-      b.setAttribute('aria-pressed', b.dataset.value === cur ? 'true' : 'false');
-    });
-  }
-
-  function renderSegDisplay() {
-    var seg = $('cr-display-seg');
-    if (!seg) return;
-    var cur = currentDisplay();
     Array.prototype.forEach.call(seg.querySelectorAll('button'), function (b) {
       b.classList.toggle('active', b.dataset.value === cur);
       b.setAttribute('aria-pressed', b.dataset.value === cur ? 'true' : 'false');
