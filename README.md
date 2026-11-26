@@ -21,7 +21,8 @@ Platform berbagi lagu dengan identitas gramofon klasik: **Discover** (katalog pu
 ├── favicon.svg / favicon.png   # Icon situs (root, konvensi favicon)
 ├── robots.txt / sitemap.xml
 ├── css/
-│   └── style.css               # Stylesheet utama player
+│   ├── style.css               # Stylesheet legacy player
+│   └── app.css                 # Layer redesign (dark-first, sidebar, views)
 ├── js/
 │   ├── index.js                # Script landing page (6 MB, inline assets)
 │   ├── normal.js               # Modul util player + easter egg (type="module")
@@ -30,7 +31,9 @@ Platform berbagi lagu dengan identitas gramofon klasik: **Discover** (katalog pu
 │   ├── Lang.js                 # Multi-bahasa
 │   ├── Search.js               # Pencarian crate
 │   ├── report.js               # Laporan statistik (Recap)
-│   └── paper.js                # Dekorasi halaman exe.html
+│   ├── paper.js                # Dekorasi halaman exe.html
+│   ├── app.js                  # Modul baru: router/tema/Discover/My Songs/publish
+│   └── welcome.js              # Logika welcome.html
 ├── audio/                      # Audio demo Top 5 (dipakai mode guest)
 │   ├── hymn-for-the-weekend.mp3
 │   ├── harvey.mp3
