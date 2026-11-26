@@ -1,10 +1,4 @@
-/* ==========================================================================
-   Chiroot App — layer aplikasi baru (song-sharing platform)
-   Bergantung pada global legacy dari Main.html:
-   caBase, caApiKey, caApiCall, ChirootAuth, caEnterGuestMode, caDoSignOut,
-   caLoginRedirect, caFireHook, loadTrack, tracks, showToast, escapeHtml.
-   Tidak me-replace fungsi legacy — hanya membungkus & menambah.
-   ========================================================================== */
+
 (function () {
   'use strict';
 
