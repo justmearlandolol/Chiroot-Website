@@ -6,7 +6,11 @@
   </url>
 
   <url>
-    <loc>https://chiroot.my.id/main</loc>
+    <loc>https://chiroot.my.id/Main.html</loc>
+  </url>
+
+  <url>
+    <loc>https://chiroot.my.id/exe.html</loc>
   </url>
 
 </urlset>
