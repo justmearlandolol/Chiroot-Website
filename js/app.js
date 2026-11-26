@@ -153,10 +153,23 @@
   function lsGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
   function lsSet(key, val) { try { localStorage.setItem(key, val); } catch (e) {} }
 
+  var OS_LIGHT_MQ = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
+
+  function applyColorScheme(t) {
+    var v = t === 'light' ? 'light' : (t === 'dark' ? 'dark' : ((OS_LIGHT_MQ && OS_LIGHT_MQ.matches) ? 'light' : 'dark'));
+    document.documentElement.style.colorScheme = v;
+  }
+
   function applyTheme(theme) {
     var t = (theme === 'light' || theme === 'system') ? theme : 'dark';
     document.documentElement.setAttribute('data-theme', t);
-    document.documentElement.style.colorScheme = t === 'light' ? 'light' : 'dark';
+    applyColorScheme(t);
+  }
+
+  if (OS_LIGHT_MQ && OS_LIGHT_MQ.addEventListener) {
+    OS_LIGHT_MQ.addEventListener('change', function () {
+      if (currentTheme() === 'system') applyColorScheme('system');
+    });
   }
 
   function applyDisplay(mode) {
@@ -164,6 +177,11 @@
     document.documentElement.setAttribute('data-display', m);
     renderSegTheme();
     renderSegDisplay();
+    document.querySelectorAll('.display-toggle').forEach(function (el) {
+      el.setAttribute('aria-label', m === 'cover'
+        ? 'Tap untuk kembali ke mode gramophone'
+        : 'Tap untuk ganti ke mode cover art');
+    });
   }
 
   function saveSettingsRemote(patch) {
@@ -235,9 +253,26 @@
   bindSeg($('cr-theme-seg'), function (v) {
     applyTheme(v); lsSet(LS_THEME, v); saveSettingsRemote({ theme: v });
   });
-  bindSeg($('cr-display-seg'), function (v) {
-    applyDisplay(v); lsSet(LS_DISPLAY, v); saveSettingsRemote({ display_mode: v });
-  });
+  /* Mode tampilan: TAP gramophone / cover di halaman utama untuk berganti.
+     Perpindahan instan — audio, progres, dan antrean tidak terganggu. */
+  (function () {
+    var targets = Array.prototype.slice.call(document.querySelectorAll('.gramophone-wrap, .cover-stage'));
+    function toggleDisplay() {
+      var next = currentDisplay() === 'cover' ? 'gramophone' : 'cover';
+      applyDisplay(next); lsSet(LS_DISPLAY, next); saveSettingsRemote({ display_mode: next });
+      showToast(next === 'cover' ? 'Mode Cover Art — tap lagi untuk kembali ke gramophone' : 'Mode Gramophone — tap untuk lihat cover art');
+    }
+    targets.forEach(function (el) {
+      el.classList.add('display-toggle');
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      el.addEventListener('click', toggleDisplay);
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleDisplay(); }
+      });
+    });
+    applyDisplay(currentDisplay());
+  })();
 
   /* ==================================================================
      3. ROUTER (hash): #/home | #/discover | #/songs
