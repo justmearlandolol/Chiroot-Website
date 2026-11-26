@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark" data-display="gramophone">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gloria+Hallelujah&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 
@@ -99,7 +100,49 @@
   })();
   </script>
 
-  <main class="player-shell">
+    <div class="app-shell">
+  <aside class="app-sidebar" aria-label="Navigasi Chiroot">
+    <a class="app-brand" href="#/home" aria-label="Chiroot — ke halaman utama">
+      <img src="favicon.svg" alt="" width="30" height="30">
+      <span class="app-brand-text">
+        <span class="app-brand-name">Chiroot</span>
+        <span class="app-brand-sub">Song Sharing</span>
+      </span>
+    </a>
+    <nav class="app-nav" aria-label="Menu utama">
+      <button type="button" class="app-nav-item" data-route="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+        Crate<span class="nav-dot"></span>
+      </button>
+      <button type="button" class="app-nav-item" data-route="discover">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+        Discover<span class="nav-dot"></span>
+      </button>
+      <button type="button" class="app-nav-item" data-route="songs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+        My Songs<span class="nav-dot"></span>
+      </button>
+      <button type="button" class="app-nav-item" id="app-nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
+        Settings
+      </button>
+    </nav>
+    <div class="app-sidebar-footer">
+      <div class="app-profile">
+        <div class="app-profile-avatar" id="app-profile-avatar">?</div>
+        <div class="app-profile-info">
+          <div class="app-profile-name" id="app-profile-name">—</div>
+          <div class="app-profile-mail" id="app-profile-mail"></div>
+        </div>
+      </div>
+      <button type="button" class="app-logout" id="app-logout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+  <div class="app-main">
+  <main class="player-shell app-view app-view-home" data-view="home">
     <div class="paper-card sketch-border">
 
       <div class="corner-doodle tl">✦</div>
@@ -125,6 +168,16 @@
       </header>
 
       <section class="gramophone-stage">
+    <div class="cover-stage">
+      <div class="cover-stage-art">
+        <img id="cover-stage-img" alt="Cover lagu yang sedang diputar" style="display:none;">
+        <div class="cover-stage-fallback" id="cover-stage-fallback">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+          <span>Belum ada cover</span>
+        </div>
+      </div>
+      <div class="cover-stage-disc" aria-hidden="true"></div>
+    </div>
         <div class="stage-shadow"></div>
 
         <div class="gramophone-wrap">
@@ -380,6 +433,82 @@
     </div>
   </main>
 
+  <section class="app-view" data-view="discover" id="view-discover" aria-label="Discover — lagu publik">
+    <div class="app-view-head">
+      <div>
+        <h2 class="app-view-title">Discover</h2>
+        <p class="app-view-sub">Lagu publik yang dibagikan pengguna Chiroot. Tekan putar untuk mendengarkan.</p>
+      </div>
+    </div>
+    <div class="crd-toolbar">
+      <div class="crd-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+        <input type="search" id="disc-search" placeholder="Cari judul atau nama pengunggah…" aria-label="Cari lagu publik">
+      </div>
+      <select class="crd-sort" id="disc-sort" aria-label="Urutkan lagu">
+        <option value="newest">Terbaru</option>
+        <option value="oldest">Terlama dibagikan</option>
+        <option value="title">Judul A–Z</option>
+      </select>
+    </div>
+    <ul class="song-list" id="disc-list"></ul>
+    <div class="crd-state" id="disc-state" style="display:none;"></div>
+    <button type="button" class="crd-more" id="disc-more" style="display:none;">Muat lagi</button>
+  </section>
+
+  <section class="app-view" data-view="songs" id="view-songs" aria-label="My Songs">
+    <div class="app-view-head">
+      <div>
+        <h2 class="app-view-title">My Songs</h2>
+        <p class="app-view-sub">Semua lagumu di Chiroot — termasuk yang masih privat di Crate.</p>
+      </div>
+    </div>
+    <div class="crd-state" id="songs-state" style="display:none;"></div>
+    <p class="app-view-sub" style="font-weight:700; color:var(--cr-text); margin:6px 0 10px;">Lagu di Chiroot</p>
+    <ul class="song-list" id="songs-cloud"></ul>
+    <p class="app-view-sub" style="font-weight:700; color:var(--cr-text); margin:18px 0 10px;">Masih di Crate (belum di Chiroot)</p>
+    <ul class="song-list" id="songs-crate"></ul>
+  </section>
+  </div>
+  </div>
+
+  <nav class="app-bottomnav" aria-label="Navigasi utama">
+    <button type="button" data-route="home" aria-label="Crate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+      Crate
+    </button>
+    <button type="button" data-route="discover" aria-label="Discover">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+      Discover
+    </button>
+    <button type="button" data-route="songs" aria-label="My Songs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      My Songs
+    </button>
+    <button type="button" data-open-settings aria-label="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
+      Settings
+    </button>
+  </nav>
+
+    <div class="modal-overlay" id="publish-modal" aria-hidden="true">
+    <div class="modal-card sketch-border" style="max-width:430px; width:100%;">
+      <button class="modal-close sketchy" id="pub-close" aria-label="Close">✕</button>
+      <h3 class="modal-title">Publikasikan lagu</h3>
+      <p class="modal-sub" id="pub-song-title" style="font-weight:700; color:var(--cr-text);">—</p>
+      <div class="seg" id="pub-choice" data-value="private" role="group" aria-label="Visibilitas lagu" style="margin-top:12px;">
+        <button type="button" data-value="private">🔒 Privat</button>
+        <button type="button" data-value="public">🌍 Publik</button>
+      </div>
+      <p class="crd-note" style="margin-top:10px;">Privat: hanya kamu yang bisa memutar. Publik: lagu tampil di Discover dan bisa diputar siapa pun lewat link — audio tidak di-upload ulang, hanya disalin di server.</p>
+      <p class="crd-note" id="pub-status" style="min-height:1.2em; color:var(--cr-accent);"></p>
+      <div style="display:flex; gap:10px; margin-top:14px;">
+        <button type="button" class="song-btn primary" id="pub-go" style="flex:1; justify-content:center; height:42px;">Publikasikan</button>
+        <button type="button" class="song-btn" id="pub-cancel" style="flex:1; justify-content:center; height:42px;">Batal</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="add-modal" aria-hidden="true">
     <div class="modal-card sketch-border">
       <button class="modal-close sketchy" id="btn-add-close" aria-label="Close">✕</button>
@@ -538,6 +667,21 @@
         <span>Settings</span>
       </h3>
       <p class="modal-sub">Kelola crate dan data kamu. Lagu tersinkron di akun Google.</p>
+
+        <div class="report-box" style="background:var(--cr-elevated); border:1px solid var(--cr-line); border-radius:16px;">
+          <div style="font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; color:var(--cr-muted); text-transform:uppercase; letter-spacing:0.5px;">Tampilan</div>
+          <p class="crd-note" style="margin:4px 0 10px;">Tema gelap adalah default Chiroot.</p>
+          <div class="seg" id="cr-theme-seg" role="group" aria-label="Tema aplikasi">
+            <button type="button" data-value="dark">Dark</button>
+            <button type="button" data-value="light">Light</button>
+            <button type="button" data-value="system">System</button>
+          </div>
+          <p class="crd-note" style="margin:12px 0 6px;">Mode tampilan player — perubahan langsung tanpa menghentikan musik:</p>
+          <div class="seg" id="cr-display-seg" role="group" aria-label="Mode tampilan player">
+            <button type="button" data-value="gramophone">Gramophone</button>
+            <button type="button" data-value="cover">Cover Art</button>
+          </div>
+        </div>
 
       <div style="display:flex; flex-direction:column; gap:16px; margin-top:10px;">
 
@@ -7733,5 +7877,6 @@ if (btnRefreshLyrics) {
 <script src="js/Search.js" defer></script>
 <script type="module" src="js/normal.js"></script>
 <script src="js/Lang.js" defer></script>
+<script src="js/app.js" defer></script>
 </script>
 <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a58498a23d21a3e0',t:'MTc5NDMwODg3NA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a58498a23d21a3e0',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5b607e34d009d4e',t:'MTc5NDgyNzIzMw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5b607e34d009d4e',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>

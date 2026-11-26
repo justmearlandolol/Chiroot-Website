@@ -77,3 +77,53 @@ Tetap di root: semua entry point HTML, `favicon.svg`/`favicon.png` (konvensi fav
 4. Mode tampilan Gramophone/Cover (persist di settings user), dark default + Light/System.
 5. Patch notes admin-only server-side; top bar Patch Notes hanya tampil bila ada catatan terpublish nyata.
 6. Migrasi Supabase dieksekusi via connector Supabase, idempotent, tanpa menghapus data.
+
+---
+
+# Eksekusi Redesign — 2026-11-26 (fase 2)
+
+Eksekusi prompt redesign sesuai `chiroot-redesign-prompt.txt`.
+
+## Supabase (dieksekusi via connector — project `astuagdezahmuuwjoghf`, "Chiroot")
+
+**Migrasi `chiroot_public_song_sharing`** (additive, tidak menyentuh tabel/policy/data existing):
+
+- Tabel `songs`: id uuid PK, owner_id → auth.users (cascade), owner_name (snapshot nama uploader untuk anon), title, artist, duration_seconds, audio_path, cover_path, source_crate_track_id → crate_tracks(id) (FK text, on delete set null), source_bucket, visibility (`private|public`, default `private`), published_at, timestamps. Unique constraint `(owner_id, source_crate_track_id)` → publish Crate yang sama dua kali bersifat idempotent.
+- Tabel `user_settings`: user_id PK, theme (`dark|light|system`, default `dark`), display_mode (`gramophone|cover`, default `gramophone`), prefs jsonb.
+- Trigger `touch_updated_at` untuk keduanya.
+- RLS: songs — select `visibility='public' OR owner_id=auth.uid()`, insert/update owner-only, delete owner-or-admin (via `is_chiroot_admin()` security definer yang sudah ada). user_settings — ALL owner-only.
+- Bucket baru: `chiroot-shared` (public — khusus lagu yang di-publish) & `chiroot-library` (private, owner-folder). Bucket legacy `chiroot-crate` tidak diubah. Mime: audio/mpeg, image/jpeg, image/png; limit 25 MB.
+- Index: partial `published_at desc WHERE visibility='public'`, `owner_id+created_at desc`, GIN trigram `title` (pg_trgm) untuk search.
+- Grant: anon hanya SELECT songs; authenticated CRUD keduanya.
+
+**RLS diverifikasi via role simulation** (set local role + rollback, tanpa residu data):
+- anon × lagu private → 0 baris ✓
+- anon × lagu public → 1 baris ✓
+- authenticated (JWT claims owner) × lagu sendiri → 1 baris ✓
+
+**Auth config** (via connector): `uri_allow_list` ditambah `welcome.html` (vercel + www/apex domain) dan glob `https://chiroots.vercel.app/**`, `https://www.chiroot.my.id/**` — semua entri existing (localhost dev, deep link `com.chiroot.app://…`, `chiroot://…`) dipertahankan. `site_url` tetap `https://chiroot.my.id`. Google OAuth sudah enabled (tidak diubah).
+
+**Catatan keamanan yang diwarisi arsitektur lama (dokumentasi, bukan regresi):** bucket `chiroot-crate` bersifat public-read sejak sebelumnya (path `{uid}/{id}.mp3` unguessable tapi bukan rahasia). Lagu privat tidak pernah disalin ke `chiroot-shared` — hanya lagu yang di-publish yang ada di bucket publik.
+
+## Frontend
+
+| File | Perubahan |
+|---|---|
+| `welcome.html` + `js/welcome.js` | BARU — entry sign-in Google-only (PKCE flow identik dengan Main: storage key `chiroot_pkce_v1` sama supaya callback Main tetap menemukan verifier; session valid → langsung redirect app; `?error=access_denied` → state dibatalkan; opsi "Lanjut sebagai Guest" dipertahankan sebagai fitur lama; `noindex`). |
+| `css/app.css` | BARU — layer redesign flat dark-first: override token legacy, supresi doodle/paper, sidebar + bottom nav responsive, list lagu, segmented control, mode cover, skeleton, empty/error states, light theme, reduced-motion, focus-visible. |
+| `js/app.js` | BARU — modul aplikasi: gate guest→welcome, tema Dark/Light/System (persist `user_settings` + localStorage fallback), mode Gramophone/Cover (CSS attribute switch tanpa interrupt playback, cover dimirror via MutationObserver), router hash `#/home|/discover|/songs`, Discover (search ilike title/owner, sort, pagination 24/hal, play/copy-link/unpublish/delete owner-only), My Songs (lagu di Chiroot + yang masih di Crate), publish flow (Public/Private, storage-side copy via `/storage/v1/object/copy` — tanpa re-upload, idempotent), deep link `?song=<id>` tanpa autoplay, logout→welcome, settings Appearance. |
+| `Main.html` | 8 anchor edit: html data-attrs, link app.css, wrap app-shell+sidebar, views Discover & My Songs, section Tampilan di Settings modal, modal publish, cover-stage, tag `js/app.js`. Semua anchor di-edit dengan assertion count. |
+| Referensi | `LEGACY_ASSET_MAP` (fase 1) tetap berlaku; crate Supabase user login tidak terpengaruh (path di DB). |
+
+## Alur auth (sesuai prompt)
+
+- Belum login + buka `Main.html` → redirect `welcome.html` (kecuali flag Guest — fitur guest lama dipertahankan).
+- `welcome.html`: Google-only → PKCE → `redirect_to` Main.html (allow list sudah diupdate).
+- Sudah login + buka `welcome.html` → langsung ke Main.html.
+- Logout: `caSignOut` server-side + bersih-bersih state existing + redirect `welcome.html`.
+
+## Hasil test
+
+Lulus: sintaks 13/13 inline script Main.html + 10/10 file JS (node --check); tanpa duplikat ID; struktur HTML seimbang; 32/32 referensi lokal HTTP 200; RLS 3 skenario ✓; migrasi terverifikasi (5 index, 3 bucket, policy terpasang); data produksi utuh (45 crate_tracks, 4 profiles).
+
+Tidak bisa dijalankan dari sandbox (dibatasi jaringan): uji klik end-to-end di browser (playback, OAuth popup Google nyata, Bluetooth picker) dan uji REST anon live ke Supabase (outbound ke supabase.co diblok dari sandbox). Hal ini perlu diverifikasi manual setelah deploy.
