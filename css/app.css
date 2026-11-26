@@ -492,6 +492,104 @@ html[data-theme='light'] .modal-card {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
 }
 
+/* ---------- 4b. Tap target ganti mode tampilan ---------- */
+.display-toggle {
+  cursor: pointer;
+  border-radius: var(--cr-radius);
+}
+
+.display-toggle:focus-visible {
+  outline: 2px solid var(--cr-accent);
+  outline-offset: 4px;
+}
+
+/* ---------- 4c. Adaptasi tema komponen legacy (dark/light adaptif) ---------- */
+/* Permukaan bergaya terang di style.css/inline -> ikut tema */
+html[data-theme='dark'] .report-box {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  border-radius: var(--cr-radius-sm);
+}
+
+html[data-theme='dark'] .report-box * {
+  color: var(--cr-muted) !important;
+}
+
+html[data-theme='dark'] .report-box > div:first-child,
+html[data-theme='dark'] .report-box strong {
+  color: var(--cr-text) !important;
+}
+
+html[data-theme='dark'] #doodle-toast {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  color: var(--cr-text) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme='dark'] #auth-overlay {
+  background: rgba(10, 10, 14, 0.85) !important;
+}
+
+html[data-theme='dark'] :is(.player-footer, .hint-text, .np-eyebrow, .np-artist, .modal-sub, .form-note,
+  .file-hint, .gate-note, .crate-search-status, .crate-count, .top10-artist, .acct-hint, .pn-meta,
+  .footer-dot, .label-brand, .lp-label, .queue-sub, .p-artist, .p-duration, .vinyl-stamp,
+  .artist-name, .top10-add-btn, .crate-search-kbd) {
+  color: var(--cr-muted);
+}
+
+html[data-theme='dark'] :is(.np-track, .song-title, .modal-title, .gate-status, .cnr-title,
+  .queue-title, .top10-song-title, .brand-text, .greeting-text, .gate-title, .auth-overlay-title,
+  .auth-overlay-sub, .acct-list strong, .delete-confirm-box, .crate-no-results) {
+  color: var(--cr-text);
+}
+
+html[data-theme='dark'] .modal-card {
+  color: var(--cr-text);
+}
+
+html[data-theme='dark'] .modal-card :is(p, span, small, strong, label, h3, h4, h5, li, td, th, div) {
+  color: inherit;
+}
+
+html[data-theme='dark'] .modal-card :is(.crd-note, small) {
+  color: var(--cr-muted);
+}
+
+html[data-theme='dark'] .modal-card input:not([type='range']):not([type='checkbox']):not([type='radio']):not([type='color']):not([type='file']),
+html[data-theme='dark'] .modal-card textarea,
+html[data-theme='dark'] .modal-card select {
+  background: var(--cr-bg);
+  border-color: var(--cr-line);
+  color: var(--cr-text);
+}
+
+html[data-theme='dark'] :is(.crate-search-wrap, .queue-panel, .delete-confirm-box, .acct-list li,
+  .bluetooth-status-card, .pn-card) {
+  background: var(--cr-surface);
+  border-color: var(--cr-line);
+  color: var(--cr-text);
+}
+
+html[data-theme='dark'] .crate-search-input {
+  background: var(--cr-surface);
+  color: var(--cr-text);
+  border-color: var(--cr-line);
+}
+
+html[data-theme='dark'] .crate-search-input::placeholder {
+  color: var(--cr-muted);
+}
+
+html[data-theme='dark'] .playlist li,
+html[data-theme='dark'] .queue-item {
+  color: var(--cr-text);
+}
+
+html[data-theme='light'] .display-toggle:hover {
+  filter: brightness(0.97);
+}
+
 /* ---------- 5. Komponen baru: daftar lagu ---------- */
 .crd-toolbar {
   display: flex;
@@ -573,7 +671,20 @@ html[data-theme='light'] .modal-card {
   border-color: var(--cr-accent);
 }
 
+.songs-subhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.songs-subhead .song-btn {
+  margin: 14px 0 10px;
+}
+
 .song-cover {
+  position: relative;
   width: 52px;
   height: 52px;
   border-radius: 10px;
@@ -586,6 +697,21 @@ html[data-theme='light'] .modal-card {
   color: var(--cr-muted);
   font-weight: 800;
   font-size: 15px;
+}
+
+.song-cover-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cr-muted);
+}
+
+.song-cover-fallback svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
 }
 
 .song-cover img {
