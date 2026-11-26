@@ -40,6 +40,10 @@ html[data-theme='system'] {
   --cr-success: #4cd787;
   --cr-radius: 16px;
   --cr-radius-sm: 12px;
+  --cr-glass: rgba(17, 17, 22, 0.60);
+  --cr-glass-strong: rgba(17, 17, 22, 0.80);
+  --cr-glass-line: rgba(255, 255, 255, 0.07);
+  --cr-glass-shadow: rgba(0, 0, 0, 0.38);
 }
 
 html[data-theme='light'] {
@@ -70,6 +74,10 @@ html[data-theme='light'] {
   --cr-accent-ink: #ffffff;
   --cr-danger: #d43a3a;
   --cr-success: #2e9e63;
+  --cr-glass: rgba(255, 255, 255, 0.60);
+  --cr-glass-strong: rgba(255, 255, 255, 0.80);
+  --cr-glass-line: rgba(20, 20, 40, 0.08);
+  --cr-glass-shadow: rgba(20, 20, 40, 0.14);
 }
 
 @media (prefers-color-scheme: light) {
@@ -99,6 +107,10 @@ html[data-theme='light'] {
     --cr-accent-ink: #ffffff;
     --cr-danger: #d43a3a;
     --cr-success: #2e9e63;
+    --cr-glass: rgba(255, 255, 255, 0.60);
+    --cr-glass-strong: rgba(255, 255, 255, 0.80);
+    --cr-glass-line: rgba(20, 20, 40, 0.08);
+    --cr-glass-shadow: rgba(20, 20, 40, 0.14);
   }
 }
 
@@ -159,8 +171,10 @@ html[data-theme='light'] .modal-card {
   flex-direction: column;
   gap: 6px;
   padding: 18px 14px;
-  background: var(--cr-surface);
-  border-right: 1px solid var(--cr-line);
+  background: var(--cr-glass);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  border-right: 1px solid var(--cr-glass-line);
   z-index: 40;
 }
 
@@ -1386,8 +1400,10 @@ html[data-sidebar='collapsed'] .app-logout svg {
     bottom: 0;
     z-index: 60;
     display: flex;
-    background: var(--cr-surface);
-    border-top: 1px solid var(--cr-line);
+    background: var(--cr-glass-strong);
+    backdrop-filter: blur(18px) saturate(1.3);
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    border-top: 1px solid var(--cr-glass-line);
     padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
   }
 
@@ -1416,11 +1432,11 @@ html[data-sidebar='collapsed'] .app-logout svg {
   }
 
   .app-view {
-    padding-bottom: 86px;
+    padding-bottom: calc(152px + env(safe-area-inset-bottom, 0px));
   }
 
   .player-shell {
-    padding-bottom: 92px !important;
+    padding-bottom: calc(152px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   .song-actions {
@@ -1701,6 +1717,167 @@ html[data-display='gramophone'] .turntable-base {
 
   .app-theme-toggle {
     display: none;
+  }
+}
+
+/* ---------- 10d. Mobile player (cmp) — glass & adaptif ---------- */
+/* Mini bar: transparan, SELALU di atas bottom navbar (Spotify-style) */
+.cmp-mini {
+  bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important;
+  background: var(--cr-glass-strong) !important;
+  border: 1px solid var(--cr-glass-line) !important;
+  border-radius: 20px !important;
+  padding: 8px 10px !important;
+  backdrop-filter: blur(20px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.3) !important;
+  box-shadow: 0 12px 32px var(--cr-glass-shadow) !important;
+  z-index: 62 !important;
+}
+
+.cmp-mini-title {
+  color: var(--cr-text) !important;
+}
+
+.cmp-mini-sub {
+  color: var(--cr-muted) !important;
+}
+
+.cmp-mini-prog {
+  background: var(--cr-line) !important;
+}
+
+.cmp-mini-prog-fill {
+  background: linear-gradient(90deg, var(--cr-accent), var(--cr-accent-strong)) !important;
+}
+
+.cmp-mini-play {
+  background: var(--cr-accent) !important;
+  color: var(--cr-accent-ink) !important;
+  box-shadow: none !important;
+}
+
+.cmp-mini-play:active {
+  background: var(--cr-accent-strong) !important;
+}
+
+.cmp-mini-more,
+.cmp-exp-more {
+  background: transparent !important;
+  border: 1px solid var(--cr-line) !important;
+  color: var(--cr-text) !important;
+  box-shadow: none !important;
+}
+
+.cmp-mini-more.is-open,
+.cmp-exp-more.is-open {
+  color: var(--cr-accent) !important;
+  border-color: var(--cr-accent) !important;
+}
+
+/* Full sheet (tap mini bar) */
+.cmp-sheet {
+  background: var(--cr-glass-strong) !important;
+  border: 1px solid var(--cr-glass-line) !important;
+  backdrop-filter: blur(24px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.3) !important;
+}
+
+.cmp-sheet-wrap {
+  z-index: 70 !important;
+}
+
+.cmp-backdrop {
+  background: rgba(8, 8, 12, 0.5) !important;
+}
+
+html[data-theme='light'] .cmp-backdrop {
+  background: rgba(20, 20, 40, 0.32) !important;
+}
+
+.cmp-exp-title {
+  color: var(--cr-text) !important;
+}
+
+.cmp-exp-sub {
+  color: var(--cr-muted) !important;
+}
+
+.cmp-time {
+  color: var(--cr-muted) !important;
+}
+
+.cmp-seek-track,
+.cmp-vol-track {
+  background: var(--cr-line) !important;
+}
+
+.cmp-seek-fill,
+.cmp-vol-fill {
+  background: linear-gradient(90deg, var(--cr-accent), var(--cr-accent-strong)) !important;
+}
+
+.cmp-ctrl-btn {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  color: var(--cr-text) !important;
+  box-shadow: none !important;
+}
+
+.cmp-ctrl-btn.is-active {
+  color: var(--cr-accent) !important;
+  border-color: var(--cr-accent) !important;
+  background: transparent !important;
+}
+
+.cmp-ctrl-play {
+  background: var(--cr-accent) !important;
+  color: var(--cr-accent-ink) !important;
+  box-shadow: none !important;
+}
+
+.cmp-vol-card {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  box-shadow: none !important;
+}
+
+.cmp-mute-btn {
+  color: var(--cr-text) !important;
+}
+
+.cmp-more-drawer {
+  background: var(--cr-bg) !important;
+  border: 1px solid var(--cr-line) !important;
+}
+
+.cmp-more-item {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  color: var(--cr-text) !important;
+}
+
+.cmp-handle-pill {
+  background: var(--cr-muted) !important;
+}
+
+/* Uraian teks di dalam sheet ikut tema */
+#chiroot-mobile-player {
+  color: var(--cr-text);
+}
+
+/* Toast & maskot di atas (navbar + mini player) */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: calc(158px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  #doodle-toast {
+    bottom: calc(150px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  html body .melissa-root #mli-character,
+  .melissa-character {
+    bottom: calc(158px + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 
