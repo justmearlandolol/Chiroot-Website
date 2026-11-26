@@ -989,58 +989,69 @@ body.is-playing .cover-stage-disc {
   }
 }
 
-/* ---------- 10. Welcome page ---------- */
+/* ---------- 10. Welcome page (light, kartu terpusat ala mockup) ---------- */
+.wl-body,
+.wl-body * {
+  box-sizing: border-box;
+}
+
 .wl-body {
   margin: 0;
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(600px 320px at 50% -80px, rgba(245, 183, 62, 0.09), transparent 70%),
-    var(--cr-bg);
-  color: var(--cr-text);
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: #ececf1;
+  background-image: radial-gradient(700px 380px at 50% -120px, rgba(35, 35, 54, 0.05), transparent 70%);
+  color: #17171c;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   padding: 24px 16px;
 }
 
 .wl-card {
   width: min(400px, 100%);
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 42px 34px 26px;
   text-align: center;
-  background: var(--cr-surface);
-  border: 1px solid var(--cr-line);
-  border-radius: 20px;
-  padding: 38px 30px 30px;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 24px 60px rgba(23, 23, 40, 0.10),
+    0 2px 8px rgba(23, 23, 40, 0.05);
 }
 
 .wl-logo {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 14px;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
   display: block;
 }
 
 .wl-title {
   margin: 0;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.01em;
+  color: #17171c;
 }
 
-.wl-sub {
-  margin: 8px 0 26px;
-  color: var(--cr-muted);
-  font-size: 14px;
-  line-height: 1.55;
+.wl-tagline {
+  margin: 6px 0 26px;
+  color: #8a8a96;
+  font-size: 14.5px;
+}
+
+.wl-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .wl-btn {
   width: 100%;
-  height: 48px;
-  border-radius: 14px;
+  height: 50px;
+  border-radius: 999px;
   border: 1px solid transparent;
-  background: var(--cr-accent);
-  color: var(--cr-accent-ink);
+  background: #232336;
+  color: #ffffff;
   font: 700 15px 'Plus Jakarta Sans', system-ui, sans-serif;
   cursor: pointer;
   display: inline-flex;
@@ -1051,7 +1062,7 @@ body.is-playing .cover-stage-disc {
 }
 
 .wl-btn:hover:not(:disabled) {
-  background: var(--cr-accent-strong);
+  background: #2f2f49;
 }
 
 .wl-btn:active:not(:disabled) {
@@ -1059,50 +1070,54 @@ body.is-playing .cover-stage-disc {
 }
 
 .wl-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.65;
   cursor: default;
 }
 
+.wl-btn-ghost {
+  background: #f2f2f6;
+  border-color: #e5e5ec;
+  color: #3a3a46;
+}
+
+.wl-btn-ghost:hover:not(:disabled) {
+  background: #e9e9f0;
+}
+
 .wl-note {
-  margin: 14px 0 0;
+  margin: 12px 0 0;
   font-size: 12px;
-  color: var(--cr-muted);
-  line-height: 1.5;
+  color: #9a9aa6;
+  line-height: 1.6;
 }
 
 .wl-status {
   margin: 16px 0 0;
   min-height: 20px;
   font-size: 13px;
-  color: var(--cr-muted);
+  color: #8a8a96;
 }
 
 .wl-status.error {
-  color: var(--cr-danger);
+  color: #c4393a;
   font-weight: 600;
 }
 
-.wl-guest {
-  margin-top: 18px;
-  background: none;
-  border: 0;
-  color: var(--cr-muted);
-  font: 600 13px 'Plus Jakarta Sans', system-ui, sans-serif;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.wl-guest:hover {
-  color: var(--cr-text);
+.wl-fine {
+  margin: 18px 0 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #b9b9c4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .wl-spinner {
   display: inline-block;
   width: 18px;
   height: 18px;
-  border: 2.5px solid var(--cr-line);
-  border-top-color: var(--cr-accent);
+  border: 2.5px solid #e5e5ec;
+  border-top-color: #232336;
   border-radius: 50%;
   animation: crd-rot 0.8s linear infinite;
   vertical-align: -4px;
@@ -1116,7 +1131,7 @@ body.is-playing .cover-stage-disc {
 .seg button:focus-visible,
 .app-logout:focus-visible,
 .wl-btn:focus-visible,
-.wl-guest:focus-visible,
+.wl-btn-ghost:focus-visible,
 .app-bottomnav button:focus-visible {
   outline: 2px solid var(--cr-accent);
   outline-offset: 2px;
