@@ -188,7 +188,6 @@
   function applyDisplay(mode) {
     var m = mode === 'cover' ? 'cover' : 'gramophone';
     document.documentElement.setAttribute('data-display', m);
-    renderSegTheme();
     document.querySelectorAll('.display-toggle').forEach(function (el) {
       el.setAttribute('aria-label', m === 'cover'
         ? 'Tap untuk kembali ke mode gramophone'
@@ -231,16 +230,6 @@
     return lsGet(LS_DISPLAY) || 'gramophone';
   }
 
-  function renderSegTheme() {
-    var seg = $('cr-theme-seg');
-    if (!seg) return;
-    var cur = currentTheme();
-    Array.prototype.forEach.call(seg.querySelectorAll('button'), function (b) {
-      b.classList.toggle('active', b.dataset.value === cur);
-      b.setAttribute('aria-pressed', b.dataset.value === cur ? 'true' : 'false');
-    });
-  }
-
   function bindSeg(seg, onPick) {
     if (!seg) return;
     seg.addEventListener('click', function (e) {
@@ -252,10 +241,6 @@
 
   applyTheme(currentTheme());
   applyDisplay(currentDisplay());
-  bindSeg($('cr-theme-seg'), function (v) {
-    applyTheme(v); lsSet(LS_THEME, v); saveSettingsRemote({ theme: v });
-  });
-
   /* Toggle tema sun/moon di sidebar (lihat juga Settings untuk opsi System) */
   var themeToggle = $('app-theme-toggle');
   if (themeToggle) {
