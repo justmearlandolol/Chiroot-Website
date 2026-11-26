@@ -928,6 +928,31 @@
     if (window.caAskSignOut) caAskSignOut();
   });
 
+  /* Profil di sidebar: klik -> Edit Profile (modal legacy) */
+  var profileBox = document.querySelector('.app-sidebar-footer .app-profile');
+  if (profileBox) {
+    profileBox.classList.add('app-profile-clickable');
+    profileBox.setAttribute('role', 'button');
+    profileBox.setAttribute('tabindex', '0');
+    profileBox.setAttribute('title', 'Edit profil');
+    profileBox.addEventListener('click', function () {
+      if (!authed()) { showToast('Login dulu untuk mengedit profil.'); return; }
+      if (window.caOpenProfileModal) caOpenProfileModal();
+    });
+    profileBox.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); profileBox.click(); }
+    });
+  }
+
+  /* Ganti Akun di sidebar -> account switcher legacy */
+  var switchBtn = $('app-switch-account');
+  if (switchBtn) {
+    switchBtn.addEventListener('click', function () {
+      if (window.caOpenAccountSwitcher) caOpenAccountSwitcher();
+      else showToast('Fitur ganti akun tidak tersedia.');
+    });
+  }
+
   /* wrap hooks legacy supaya profil & settings ikut ter-render */
   function wrapHook(name, after) {
     var hooks = window.ChirootHooks;

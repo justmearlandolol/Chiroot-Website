@@ -1283,6 +1283,31 @@ body.is-playing .cover-stage-disc {
   border: 1px solid var(--cr-line);
 }
 
+/* Profil clickable + sembunyikan avatar duplikat di topbar Crate */
+.app-profile-clickable {
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.app-profile-clickable:hover {
+  background: var(--cr-accent);
+  border-color: var(--cr-accent);
+}
+
+.app-profile-clickable:hover :is(.app-profile-name, .app-profile-mail, .app-profile-avatar) {
+  color: var(--cr-accent-ink);
+  border-color: var(--cr-accent-ink);
+}
+
+.app-profile-clickable:focus-visible {
+  outline: 2px solid var(--cr-accent);
+  outline-offset: 2px;
+}
+
+.chiroot-topbar .avatar-wrap {
+  display: none !important;
+}
+
 /* ---------- 9a. Sidebar collapsed (desktop) ---------- */
 html[data-sidebar='collapsed'] .app-shell {
   grid-template-columns: 76px minmax(0, 1fr);
