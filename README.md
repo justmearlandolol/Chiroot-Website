@@ -1,10 +1,11 @@
 # Chiroot Website
 
-Pemutar musik web gratis tanpa iklan dengan identitas gramofon klasik. Static site murni (HTML/CSS/JS vanilla) — data & audio pengguna tersimpan di Supabase (Auth Google + tabel `crate_tracks` + Storage).
+Platform berbagi lagu dengan identitas gramofon klasik: **Discover** (katalog publik, search + sort + pagination), **My Songs** (publish dari Crate tanpa re-upload — audio disalin server-side ke bucket `chiroot-shared`; wajib pilih Private/Public, default privat), dan **Crate** player klasik yang tetap utuh. Tema dark default (Light/System di Settings), mode tampilan **Gramophone/Cover Art** bisa dipindah kapan pun tanpa menghentikan musik. Schema & RLS: `docs/AUDIT.md` (migrasi `chiroot_public_song_sharing`). Static site murni (HTML/CSS/JS vanilla) — data & audio pengguna tersimpan di Supabase (Auth Google + tabel `crate_tracks` + Storage).
 
 - **Produksi:** https://chiroots.vercel.app — deploy otomatis dari `main` via Vercel
 - **Domain:** https://chiroot.my.id (→ `www.chiroot.my.id`)
 - **Backend:** Supabase — klien & konfigurasi ada di `Main.html`
+- **Entry flow:** belum login → `welcome.html` (Google-only, PKCE) → `Main.html`; sudah login langsung ke `Main.html`. Mode Guest per-device masih tersedia.
 
 ## Struktur
 
@@ -38,6 +39,7 @@ Pemutar musik web gratis tanpa iklan dengan identitas gramofon klasik. Static si
 ├── assets/
 │   ├── covers/                 # Cover art lagu demo
 │   └── img/                    # Gambar UI (maskot, stiker, donate, error)
+├── welcome.html                # Entry sign-in Google-only (PKCE)
 ├── archive/                    # SNAPSHOT LEGACY — jangan diubah
 └── docs/
     └── AUDIT.md                # Hasil audit repo sebelum redesign
