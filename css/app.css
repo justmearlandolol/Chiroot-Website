@@ -199,6 +199,69 @@ html[data-theme='light'] .modal-card {
   text-transform: uppercase;
 }
 
+.app-sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  height: 30px;
+  margin-bottom: 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cr-muted);
+  font: 600 11.5px 'Plus Jakarta Sans', system-ui, sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.app-sidebar-toggle:hover {
+  background: var(--cr-elevated);
+  color: var(--cr-text);
+}
+
+.app-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 4px;
+  background: var(--cr-bg);
+  border: 1px solid var(--cr-line);
+  border-radius: 999px;
+}
+
+.app-theme-toggle button {
+  width: 34px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cr-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.app-theme-toggle button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.app-theme-toggle button:hover {
+  color: var(--cr-text);
+}
+
+.app-theme-toggle button.active {
+  background: var(--cr-elevated);
+  border-color: var(--cr-line);
+  color: var(--cr-text);
+}
+
 .app-nav {
   display: flex;
   flex-direction: column;
@@ -311,18 +374,43 @@ html[data-theme='light'] .modal-card {
 .app-logout {
   margin-top: 8px;
   width: 100%;
-  padding: 9px 12px;
+  padding: 7px 10px;
   border: 1px solid var(--cr-line);
   border-radius: var(--cr-radius-sm);
   background: transparent;
   color: var(--cr-muted);
-  font: 600 13px/1 'Plus Jakarta Sans', system-ui, sans-serif;
+  font: 600 12.5px/1 'Plus Jakarta Sans', system-ui, sans-serif;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 7px;
   transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.app-logout svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.app-sidebar-toggle,
+.song-btn svg,
+.seg button svg {
+  display: inline-flex;
+}
+
+.song-btn svg,
+.seg button svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.app-sidebar-toggle svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
 }
 
 .app-logout:hover {
@@ -490,6 +578,149 @@ html[data-theme='light'] .modal-card {
   border-radius: var(--cr-radius) !important;
   color: var(--cr-muted) !important;
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+}
+
+/* ---------- 4d. Adaptasi tema lanjutan: playlist, chips, topbar, top10 ---------- */
+html[data-theme='dark'] .playlist-item {
+  background: var(--cr-surface) !important;
+  border: 1px solid var(--cr-line) !important;
+  border-radius: var(--cr-radius-sm) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .playlist-item:hover {
+  background: var(--cr-elevated) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .playlist-item.active {
+  background: var(--cr-elevated) !important;
+  border-color: var(--cr-accent) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .playlist-item.to-delete {
+  background: rgba(255, 93, 93, 0.08) !important;
+  border-color: var(--cr-danger) !important;
+}
+
+html[data-theme='dark'] .playlist-item .p-title,
+html[data-theme='dark'] .playlist-meta strong {
+  color: var(--cr-text);
+}
+
+html[data-theme='dark'] .playlist-item .p-artist,
+html[data-theme='dark'] .playlist-item .p-duration {
+  color: var(--cr-muted);
+}
+
+html[data-theme='dark'] .playlist-thumb {
+  border-color: var(--cr-line);
+}
+
+html[data-theme='dark'] :is(.queue-track, .edit-track, .delete-track, .mini-btn) {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  color: var(--cr-text) !important;
+  box-shadow: none !important;
+  border-radius: 999px !important;
+}
+
+html[data-theme='dark'] .queue-track.queued {
+  border-color: var(--cr-accent) !important;
+  color: var(--cr-accent) !important;
+}
+
+html[data-theme='dark'] .delete-track:hover {
+  border-color: var(--cr-danger) !important;
+  color: var(--cr-danger) !important;
+}
+
+html[data-theme='dark'] .topbar-greeting {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  color: var(--cr-text) !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700;
+  padding: 8px 14px !important;
+}
+
+html[data-theme='dark'] .admin-panel-btn {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-accent) !important;
+  color: var(--cr-accent) !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 13px !important;
+}
+
+html[data-theme='dark'] .admin-panel-btn:hover {
+  background: var(--cr-accent) !important;
+  color: var(--cr-accent-ink) !important;
+}
+
+html[data-theme='dark'] .crate-search-wrap {
+  background: var(--cr-surface) !important;
+  border: 1px solid var(--cr-line) !important;
+  border-radius: var(--cr-radius-sm) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .crate-search-input {
+  color: var(--cr-text) !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+}
+
+html[data-theme='dark'] .crate-search-input::placeholder {
+  color: var(--cr-muted) !important;
+}
+
+html[data-theme='dark'] .crate-search-kbd {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  color: var(--cr-muted) !important;
+}
+
+html[data-theme='dark'] .top10-item {
+  background: var(--cr-surface) !important;
+  border: 1px solid var(--cr-line) !important;
+  border-radius: var(--cr-radius-sm) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .top10-song-title {
+  color: var(--cr-text) !important;
+}
+
+html[data-theme='dark'] .top10-artist {
+  color: var(--cr-muted) !important;
+}
+
+html[data-theme='dark'] .top10-add-btn {
+  background: var(--cr-elevated) !important;
+  border: 1px solid var(--cr-line) !important;
+  color: var(--cr-text) !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .top10-add-btn.added,
+html[data-theme='dark'] .top10-add-btn:hover {
+  border-color: var(--cr-accent) !important;
+  color: var(--cr-accent) !important;
+}
+
+html[data-theme='dark'] :is(.track-header .vinyl-stamp, .player-footer, .crate-count, .crate-search-status) {
+  color: var(--cr-muted);
+}
+
+html[data-theme='dark'] .track-header .song-title,
+html[data-theme='dark'] .track-header .artist-name {
+  color: var(--cr-text);
 }
 
 /* ---------- 4b. Tap target ganti mode tampilan ---------- */
@@ -1052,7 +1283,62 @@ body.is-playing .cover-stage-disc {
   border: 1px solid var(--cr-line);
 }
 
-/* ---------- 9. Bottom nav (mobile) ---------- */
+/* ---------- 9a. Sidebar collapsed (desktop) ---------- */
+html[data-sidebar='collapsed'] .app-shell {
+  grid-template-columns: 76px minmax(0, 1fr);
+}
+
+html[data-sidebar='collapsed'] .app-sidebar {
+  padding: 14px 10px 16px;
+}
+
+html[data-sidebar='collapsed'] .app-brand {
+  justify-content: center;
+  padding: 4px 0 8px;
+}
+
+html[data-sidebar='collapsed'] .app-brand-text,
+html[data-sidebar='collapsed'] .nav-label,
+html[data-sidebar='collapsed'] .app-profile-info,
+html[data-sidebar='collapsed'] .app-logout .app-logout-label,
+html[data-sidebar='collapsed'] .app-sidebar-toggle .app-logout-label {
+  display: none;
+}
+
+html[data-sidebar='collapsed'] .app-nav-item {
+  justify-content: center;
+  padding: 11px 8px;
+}
+
+html[data-sidebar='collapsed'] .nav-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  margin: 0;
+}
+
+html[data-sidebar='collapsed'] .app-nav-item {
+  position: relative;
+}
+
+html[data-sidebar='collapsed'] .app-theme-toggle {
+  flex-direction: column;
+  margin-top: 10px;
+  width: 44px;
+  align-self: center;
+  padding: 4px 0;
+}
+
+html[data-sidebar='collapsed'] .app-profile {
+  justify-content: center;
+  padding: 6px;
+}
+
+html[data-sidebar='collapsed'] .app-logout svg {
+  margin: 0 auto;
+}
+
+/* ---------- 9b. Bottom nav (mobile) ---------- */
 .app-bottomnav {
   display: none;
 }
@@ -1250,6 +1536,73 @@ body.is-playing .cover-stage-disc {
   margin-right: 8px;
 }
 
+/* ---------- 10b. Transisi halus ganti mode tampilan ---------- */
+html[data-display='cover'] .cover-stage,
+html[data-display='gramophone'] .gramophone-wrap,
+html[data-display='gramophone'] .gramo-stickers,
+html[data-display='gramophone'] .turntable-base {
+  animation: mode-in 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes mode-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- 10c. Responsif tambahan ---------- */
+@media (max-width: 640px) {
+  .song-row {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .song-cover {
+    width: 44px;
+    height: 44px;
+  }
+
+  .song-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .app-view {
+    padding: 14px 12px 30px;
+  }
+
+  .app-view-title {
+    font-size: 20px;
+  }
+
+  .crd-sort {
+    flex: 1 1 100%;
+  }
+
+  .cover-stage-art {
+    width: min(300px, 82vw);
+  }
+
+  .app-bottomnav button {
+    font-size: 9.5px;
+  }
+}
+
+@media (max-width: 900px) {
+  .app-sidebar-toggle {
+    display: none;
+  }
+
+  .app-theme-toggle {
+    display: none;
+  }
+}
+
 /* ---------- 11. Aksesibilitas ---------- */
 .app-nav-item:focus-visible,
 .song-btn:focus-visible,
@@ -1272,6 +1625,13 @@ body.is-playing .cover-stage-disc {
   .loading-ring .ring {
     animation-duration: 0.001s !important;
     animation-iteration-count: 1 !important;
+  }
+
+  html[data-display='cover'] .cover-stage,
+  html[data-display='gramophone'] .gramophone-wrap,
+  html[data-display='gramophone'] .gramo-stickers,
+  html[data-display='gramophone'] .turntable-base {
+    animation: none !important;
   }
 
   .skeleton-row {
