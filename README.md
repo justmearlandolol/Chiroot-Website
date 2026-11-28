@@ -77,11 +77,17 @@ Crate guest lama (IndexedDB per browser) menyimpan referensi audio/cover berupa 
 - Jangan mengubah isi `archive/` (snapshot versi lama, sengaja dibekukan).
 - `docs/AUDIT.md` berisi hasil audit lengkap: hosting, perilaku legacy, masalah yang ditemukan, dan rencana redesign menjadi platform berbagi lagu publik.
 
-## Liked Songs (update parsial)
+## Playlist dan Liked Songs
 
 Migrasi `supabase/migrations/20261128040510_chiroot_song_likes.sql` telah diterapkan pada project Chiroot. Likes disimpan per akun; RLS membatasi baca/tulis kepada pemilik dan hanya menerima lagu yang terlihat oleh pengguna. Lagu yang kemudian menjadi privat milik orang lain tidak ditampilkan karena tetap tunduk pada RLS `songs`. Tidak ada lagu bawaan untuk akun baru.
 
-Uji unit tanpa dependensi: `node --test tests/liked-songs.test.js`. Update playlist, Discover playlist, menu untuk lagu Crate yang belum diterbitkan, dan pengujian browser end-to-end masih perlu diselesaikan sebelum update ini siap di-merge.
+Playlist publik dan privat disimpan di `playlists` dan `playlist_items` (migrasi `20261128042752_chiroot_playlists`). Pemilik dapat membuat, mengubah nama/visibilitas, menghapus playlist, serta menambah dan menghapus lagu. Penambahan menggunakan RPC yang mengunci baris playlist untuk urutan stabil dan menolak duplikat. RLS hanya memperlihatkan lagu publik di playlist publik kepada pengguna lain; lagu privat pemilik tetap hanya terlihat pada sesi pemilik. Foto/nama pembuat berasal dari snapshot profil ketika playlist dibuat. Playlist tidak mempublikasikan lagu otomatis.
+
+Lagu Crate cloud yang belum terhubung ke `songs` disimpan sebagai entri **privat** saat pertama kali ditambahkan ke playlist atau disukai; lagu tanpa file audio cloud tidak dapat ditambahkan sampai tersimpan di cloud. Mode Guest tidak memiliki koleksi akun.
+
+**Batasan storage lama:** bucket `chiroot-crate` dan `chiroot-shared` sudah public-read sejak sebelumnya. RLS melindungi baris data dan tidak mengekspos lagu privat di query playlist publik, tetapi URL objek yang diketahui masih dapat diakses langsung; ini bukan jaminan kerahasiaan media. Memindahkan storage lama ke bucket privat/signed URL memerlukan migrasi kompatibilitas terpisah.
+
+Uji unit tanpa dependensi: `node --test tests/*.test.js`. Tidak ada protokol desktop pembuka lagu yang terverifikasi di repo, jadi aksi "open in desktop app" sengaja tidak ditampilkan.
 
 ## CI dan deployment
 
