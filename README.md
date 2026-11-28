@@ -82,3 +82,15 @@ Crate guest lama (IndexedDB per browser) menyimpan referensi audio/cover berupa 
 Migrasi `supabase/migrations/20261128040510_chiroot_song_likes.sql` telah diterapkan pada project Chiroot. Likes disimpan per akun; RLS membatasi baca/tulis kepada pemilik dan hanya menerima lagu yang terlihat oleh pengguna. Lagu yang kemudian menjadi privat milik orang lain tidak ditampilkan karena tetap tunduk pada RLS `songs`. Tidak ada lagu bawaan untuk akun baru.
 
 Uji unit tanpa dependensi: `node --test tests/liked-songs.test.js`. Update playlist, Discover playlist, menu untuk lagu Crate yang belum diterbitkan, dan pengujian browser end-to-end masih perlu diselesaikan sebelum update ini siap di-merge.
+
+## CI dan deployment
+
+GitHub Actions (`.github/workflows/ci.yml`) berjalan pada push, PR ke `main`, atau secara manual. CI memeriksa sintaks JavaScript (termasuk script inline di HTML), duplikasi ID, aset lokal yang direferensikan oleh script/link, format manifest, dan menjalankan unit test. Jalankan pemeriksaan yang sama secara lokal:
+
+```bash
+python3 scripts/check_static.py
+python3 -m unittest discover -s tests -p 'test_*.py'
+node --test tests/*.test.js
+```
+
+CI ini tidak membutuhkan secret dan tidak melakukan deploy atau migrasi database. Vercel tetap menangani preview PR dan deploy produksi dari `main` seperti sebelumnya; workflow GitHub Actions ini **tidak otomatis memblokir deploy**. Jika ingin menjadikan CI syarat merge, atur status `Static site checks and tests` sebagai required check dalam branch protection/ruleset GitHub. Hasil CI bukan pengganti uji browser, OAuth, audio, atau RLS end-to-end.
