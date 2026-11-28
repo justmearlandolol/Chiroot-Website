@@ -48,19 +48,28 @@
   function uid() { return (ChirootAuth.session && ChirootAuth.session.user && ChirootAuth.session.user.id) || ''; }
   function profile() { return (window.ChirootAuth && ChirootAuth.profile) || null; }
 
+  function isHttpUrl(path) {
+    return /^https:\/\/[^\s"'<>]+$/i.test(String(path || ''));
+  }
+
   function storageUrl(bucket, path) {
     return caBase() + '/storage/v1/object/public/' + bucket + '/' + String(path || '').replace(/^\/+/, '');
   }
 
+  /* audio_path/cover_path bisa berupa URL langsung (lagu URL-only) atau path objek storage. */
   function songAudioUrl(song) {
+    var path = String(song.audio_path || '');
+    if (isHttpUrl(path)) return path;
     var bucket = song.source_bucket || SONGS_BUCKET;
-    if (bucket === CRATE_BUCKET) return caCratePublicUrl(song.audio_path);
-    return storageUrl(bucket, song.audio_path);
+    if (bucket === CRATE_BUCKET) return caCratePublicUrl(path);
+    return storageUrl(bucket, path);
   }
 
   function songCoverUrl(song) {
-    if (!song.cover_path) return null;
-    return storageUrl(song.source_bucket === CRATE_BUCKET ? CRATE_BUCKET : SONGS_BUCKET, song.cover_path);
+    var path = String(song.cover_path || '');
+    if (!path) return null;
+    if (isHttpUrl(path)) return path;
+    return storageUrl(song.source_bucket === CRATE_BUCKET ? CRATE_BUCKET : SONGS_BUCKET, path);
   }
 
   function fmtDate(iso) {
@@ -511,6 +520,7 @@
       if (String(tracks[i].id) === track.id) { idx = i; break; }
     }
     if (idx < 0) { tracks.push(track); idx = tracks.length - 1; } else { tracks[idx] = track; }
+    caPersistDynamicSongTracks();
     try {
       renderPlaylist();
       loadTrack(idx, true, true);
@@ -559,14 +569,54 @@
       .catch(function (err) { showToast('Gagal: ' + (err && err.message ? err.message : err)); });
   }
 
+  /* Referensi objek storage yang dipakai baris lagu ini, per bucket sumber.
+     audio_path/cover_path berupa URL langsung tidak punya objek storage. */
+  function songObjectRefs(song) {
+    var bucket = song.source_bucket || SONGS_BUCKET;
+    var refs = [];
+    if (song.audio_path && !isHttpUrl(song.audio_path)) refs.push({ bucket: bucket, path: String(song.audio_path) });
+    if (song.cover_path && !isHttpUrl(song.cover_path)) refs.push({ bucket: bucket, path: String(song.cover_path) });
+    return refs;
+  }
+
+  /* Hapus objek audio/cover milik baris lagu yang sudah dihapus, TAPI hanya bila
+     tidak ada baris songs atau crate_tracks lain yang masih memakai objek yang sama.
+     Gagal memeriksa referensi -> objek dibiarkan tetap ada (aman, tidak ada lagu lain yang rusak). */
+  function deleteSongObjectsIfUnused(song) {
+    var refs = songObjectRefs(song);
+    if (!refs.length) return;
+    var filters = [];
+    refs.forEach(function (r) {
+      filters.push('audio_path.eq.' + encodeURIComponent(r.path), 'cover_path.eq.' + encodeURIComponent(r.path));
+    });
+    var orFilter = 'or=(' + filters.join(',') + ')';
+    caApiCall(SONGS + '?select=id,audio_path,cover_path&' + orFilter, 'GET').then(function (rows) {
+      var used = {};
+      (rows || []).forEach(function (r) {
+        if (r.audio_path) used[r.audio_path] = true;
+        if (r.cover_path) used[r.cover_path] = true;
+      });
+      // Baris privat di chiroot-crate bisa berbagi objek dengan crate_tracks sendiri.
+      return caApiCall('/rest/v1/crate_tracks?select=id,audio_path,cover_path&user_id=eq.' + encodeURIComponent(uid()) + '&' + orFilter, 'GET').then(function (crateRows) {
+        (crateRows || []).forEach(function (r) {
+          if (r.audio_path) used[r.audio_path] = true;
+          if (r.cover_path) used[r.cover_path] = true;
+        });
+        return used;
+      });
+    }).then(function (used) {
+      refs.forEach(function (r) {
+        if (used[r.path]) return; // masih direferensikan lagu/crate lain — jangan dihapus
+        storageDeleteIn(r.bucket, r.path);
+      });
+    }).catch(function () { /* gagal cek referensi -> jangan hapus objek apa pun */ });
+  }
+
   function deleteSong(song) {
     showToast('Menghapus…');
     caApiCall(SONGS + '?id=eq.' + encodeURIComponent(song.id) + '&owner_id=eq.' + encodeURIComponent(uid()), 'DELETE')
       .then(function () {
-        if (song.audio_path && (song.source_bucket || SONGS_BUCKET) === SONGS_BUCKET) {
-          storageDeleteIn(SONGS_BUCKET, song.audio_path);
-        }
-        if (song.cover_path) storageDeleteIn(SONGS_BUCKET, song.cover_path);
+        deleteSongObjectsIfUnused(song);
         showToast('Lagu dihapus ✓');
         refreshDiscover(true);
       })
@@ -586,6 +636,86 @@
     refreshDiscover(true);
   });
   $('disc-more').addEventListener('click', function () { refreshDiscover(false); });
+
+  /* ==================================================================
+     5b. LAGU DINAMIS DI ANTRIAN (tetap ada setelah reload)
+     ==================================================================
+     Lagu dari Discover/Liked/Playlist dimasukkan ke `tracks` secara dinamis
+     (id "song:<uuid>") dan tidak tersimpan di crate_tracks, jadi setelah reload
+     entri antrean (playQueue) yang menunjuk ke lagu itu biasanya terbuang oleh
+     restoreState(). Daftar lagu dinamis dipersistenkan per akun (atau guest)
+     dan dimuat ulang sebelum restoreState() dijalankan oleh Main.html. */
+  var LS_DYN_SONGS = 'chiroot_dynamic_songs_v1';
+  var DYN_SONGS_MAX = 100;
+
+  function dynSongsKey() {
+    var owner = 'guest';
+    try { if (authed() && uid()) owner = String(uid()); } catch (e) {}
+    return LS_DYN_SONGS + ':' + owner;
+  }
+
+  function readDynSongIds() {
+    try {
+      var v = JSON.parse(localStorage.getItem(dynSongsKey()) || '[]');
+      return Array.isArray(v) ? v.map(String) : [];
+    } catch (e) { return []; }
+  }
+
+  function writeDynSongIds(ids) {
+    try { localStorage.setItem(dynSongsKey(), JSON.stringify(ids.slice(0, DYN_SONGS_MAX))); } catch (e) {}
+  }
+
+  function dynSongIdsInTracks() {
+    var ids = [];
+    (tracks || []).forEach(function (t) {
+      if (t && t._songId && String(t.id).indexOf('song:') === 0 && ids.indexOf(String(t._songId)) === -1) ids.push(String(t._songId));
+    });
+    return ids;
+  }
+
+  /* Gabungkan (bukan timpa) daftar lagu dinamis — pemanggil bisa terjadi sebelum
+     crate akun baru selesai dimuat, jadi jangan pernah mengecilkan daftar di sini.
+     Pembersihan entri basi dilakukan oleh caRestoreDynamicSongTracks lewat cek RLS. */
+  function caPersistDynamicSongTracks() {
+    try {
+      var current = dynSongIdsInTracks();
+      if (!current.length) return;
+      var stored = readDynSongIds();
+      current.forEach(function (id) { if (stored.indexOf(id) === -1) stored.push(id); });
+      writeDynSongIds(stored);
+    } catch (e) {}
+  }
+
+  /* Muat ulang lagu dinamis ke `tracks` sebelum restoreState(). Lagu yang sudah
+     tidak terlihat (dihapus pemilik lain/dijadikan privat) otomatis dibuang
+     karena query tunduk pada RLS songs. */
+  function caRestoreDynamicSongTracks() {
+    var stored = readDynSongIds();
+    var valid = [];
+    stored.forEach(function (id) {
+      if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id) && valid.indexOf(id) === -1) valid.push(id);
+    });
+    if (!valid.length) return Promise.resolve();
+    var q = SONGS + '?select=' + SONG_SELECT + '&id=in.(' + valid.join(',') + ')';
+    var req = authed() ? caApiCall(q, 'GET') :
+      fetch(caBase() + q, { headers: { apikey: caApiKey(), Authorization: 'Bearer ' + caApiKey() } }).then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); });
+    return req.then(function (rows) {
+      var kept = [];
+      (rows || []).forEach(function (song) {
+        if (!song || !song.id) return;
+        var track = songToTrack(song);
+        var idx = -1;
+        for (var i = 0; i < tracks.length; i++) {
+          if (String(tracks[i].id) === track.id) { idx = i; break; }
+        }
+        if (idx < 0) tracks.push(track);
+        kept.push(String(song.id));
+      });
+      writeDynSongIds(kept); // buang id yang sudah tidak terlihat
+    }).catch(function () { /* offline/gagal: biarkan daftar tetap, coba lagi reload berikutnya */ });
+  }
+  window.caPersistDynamicSongTracks = caPersistDynamicSongTracks;
+  window.caRestoreDynamicSongTracks = caRestoreDynamicSongTracks;
 
   /* ==================================================================
      6. MY SONGS
@@ -638,7 +768,10 @@
     if (songsCache.length) {
       cloudEl.innerHTML = songsCache.map(function (s, i) {
         var isPub = s.visibility === 'public';
-        var cover = isPub ? songCoverUrl(s) : (s.source_bucket === CRATE_BUCKET && s.cover_path ? caCratePublicUrl(s.cover_path) : null);
+        /* Cover selalu dari songCoverUrl: baris privat yang pernah dipublikasikan
+           masih menyimpan cover di chiroot-shared (source_bucket tetap chiroot-shared
+           setelah unpublish), baris privat murni memakai cover di chiroot-crate. */
+        var cover = songCoverUrl(s);
         return '<li class="song-row" data-song-idx="' + i + '">' +
           '<div class="song-cover"><span class="song-cover-fallback">' + ICONS.note + '</span>' + (cover ? '<img src="' + esc(cover) + '" alt="" loading="lazy" onerror="this.remove()">' : '') + '</div>' +
           '<div class="song-meta">' +
@@ -722,7 +855,9 @@
   function openPublishModal(track) {
     pubCtx = { track: track };
     $('pub-song-title').textContent = track.title || 'Tanpa judul';
-    $('pub-status').textContent = '';
+    $('pub-status').textContent = (!track._audioPath && track._audioUrl)
+      ? 'Lagu ini memakai tautan audio (URL) — akan dibagikan sebagai link, bukan salinan file.'
+      : '';
     setPubChoice('private');
     setModalOpen('publish-modal', true);
   }
@@ -748,60 +883,102 @@
     return m ? m[1].toLowerCase() : 'mp3';
   }
 
+  /* Salin audio/cover milik baris lagu ke bucket publik chiroot-shared SEBELUM
+     baris dijadikan publik. audio_path berupa URL langsung tidak perlu disalin.
+     Bila ada yang gagal, objek yang sudah tersalin dibersihkan dan error dilempar. */
+  function copySongFilesToShared(songId, audioPath, coverPath, setStatus) {
+    var patch = { source_bucket: SONGS_BUCKET };
+    var copied = [];
+    var undoCopies = function () {
+      copied.forEach(function (key) { storageDeleteIn(SONGS_BUCKET, key); });
+    };
+    var chain = Promise.resolve();
+    if (audioPath && !isHttpUrl(audioPath)) {
+      var destAudio = uid() + '/' + songId + '.' + extOf(audioPath);
+      chain = chain.then(function () {
+        if (setStatus) setStatus('Menyiapkan audio publik…');
+        return storageCopy(CRATE_BUCKET, audioPath, SONGS_BUCKET, destAudio);
+      }).then(function () { copied.push(destAudio); patch.audio_path = destAudio; });
+    }
+    if (coverPath && !isHttpUrl(coverPath)) {
+      var destCover = uid() + '/' + songId + '-cover.' + extOf(coverPath);
+      chain = chain.then(function () {
+        if (setStatus) setStatus('Menyalin cover…');
+        return storageCopy(CRATE_BUCKET, coverPath, SONGS_BUCKET, destCover);
+      }).then(function () { copied.push(destCover); patch.cover_path = destCover; });
+    }
+    return chain.then(function () { return patch; }).catch(function (err) {
+      undoCopies();
+      throw err;
+    });
+  }
+
   function publishTrack(track, isPublic, statusEl) {
     if (!authed()) return Promise.reject(new Error('Butuh login'));
-    var audioPath = track._audioPath || '';
-    if (!audioPath) return Promise.reject(new Error('Lagu tidak punya file audio di cloud'));
-    var coverPath = track._coverPath || '';
+    var crateAudioPath = track._audioPath || '';
+    var audioUrl = isHttpUrl(track._audioUrl) ? track._audioUrl : null;
+    if (!crateAudioPath && !audioUrl) return Promise.reject(new Error('Lagu tidak punya file audio di cloud atau URL audio'));
+    var crateCoverPath = track._coverPath || '';
     var setStatus = function (m) { if (statusEl) statusEl.textContent = m; };
+    var patchMeta = { title: String(track.title || 'Tanpa judul'), artist: track.artist || null };
 
     // idempoten: cek apakah track crate ini sudah pernah dipublikasikan
     return caApiCall(SONGS + '?select=' + SONG_SELECT + '&owner_id=eq.' + encodeURIComponent(uid()) + '&source_crate_track_id=eq.' + encodeURIComponent(track.id), 'GET')
       .then(function (rows) {
         var existing = Array.isArray(rows) && rows[0];
         if (existing) {
-          return caApiCall(SONGS + '?id=eq.' + encodeURIComponent(existing.id), 'PATCH', { visibility: isPublic ? 'public' : 'private', published_at: isPublic ? (existing.published_at || new Date().toISOString()) : null, title: track.title, artist: track.artist || null })
-            .then(function () { return { existing: true }; });
+          if (!isPublic) {
+            return caApiCall(SONGS + '?id=eq.' + encodeURIComponent(existing.id), 'PATCH', Object.assign({ visibility: 'private', published_at: null }, patchMeta))
+              .then(function () { return { existing: true }; });
+          }
+          var audioInShared = isHttpUrl(existing.audio_path) || (existing.source_bucket || SONGS_BUCKET) === SONGS_BUCKET;
+          var needsCoverCopy = !!existing.cover_path && !isHttpUrl(existing.cover_path) && (existing.source_bucket || SONGS_BUCKET) !== SONGS_BUCKET;
+          if (audioInShared && !needsCoverCopy) {
+            // File publik sudah ada di chiroot-shared (termasuk lagu URL-only) — cukup ubah visibilitas.
+            return caApiCall(SONGS + '?id=eq.' + encodeURIComponent(existing.id), 'PATCH', Object.assign({ visibility: 'public', published_at: existing.published_at || new Date().toISOString() }, patchMeta))
+              .then(function () { return { existing: true }; });
+          }
+          // Baris lama masih menunjuk ke objek di chiroot-crate (mis. disimpan privat
+          // lewat like/playlist): salin dulu ke chiroot-shared, baru dijadikan publik.
+          return copySongFilesToShared(existing.id, audioInShared ? '' : existing.audio_path, needsCoverCopy ? existing.cover_path : '', setStatus)
+            .catch(function (err) {
+              throw new Error('Gagal menyiapkan file publik: ' + (err && err.message ? err.message : err) + '. Lagu tetap privat, coba publikasikan lagi nanti.');
+            })
+            .then(function (patch) {
+              patch.visibility = 'public';
+              patch.published_at = existing.published_at || new Date().toISOString();
+              return caApiCall(SONGS + '?id=eq.' + encodeURIComponent(existing.id), 'PATCH', Object.assign(patch, patchMeta)).then(function () { return { existing: true }; });
+            });
         }
-        // 1) insert row (audio_path sementara = path crate; diperbarui setelah copy)
+        // 1) buat baris sebagai PRIVAT dulu (audio masih di chiroot-crate atau URL) —
+        //    lagu baru terlihat publik SETELAH salinan beres.
         return caApiCall(SONGS, 'POST', {
           owner_id: uid(),
           owner_name: (profile() && (profile().display_name || profile().email)) || 'Pengguna Chiroot',
           title: String(track.title || 'Tanpa judul'),
           artist: track.artist || null,
-          audio_path: audioPath,
-          cover_path: coverPath || null,
+          audio_path: crateAudioPath || audioUrl,
+          cover_path: crateCoverPath || null,
           source_crate_track_id: String(track.id),
-          source_bucket: isPublic ? SONGS_BUCKET : CRATE_BUCKET,
-          visibility: isPublic ? 'public' : 'private',
-          published_at: isPublic ? new Date().toISOString() : null
+          source_bucket: (crateAudioPath || crateCoverPath) ? CRATE_BUCKET : SONGS_BUCKET,
+          visibility: 'private',
+          published_at: null
         }).then(function (created) {
           var row = Array.isArray(created) && created[0];
           if (!row || !row.id) throw new Error('Gagal membuat catatan lagu');
-          if (!isPublic) return row; // privat: audio tetap di crate, tidak ada copy
-          // 2) copy audio + cover ke bucket publik chiroot-shared (server-side, tanpa re-upload)
-          setStatus('Menyiapkan audio publik…');
-          var destAudio = uid() + '/' + row.id + '.' + extOf(audioPath);
-          return storageCopy(CRATE_BUCKET, audioPath, SONGS_BUCKET, destAudio)
-            .then(function () {
-              var patch = { audio_path: destAudio, source_bucket: SONGS_BUCKET };
-              if (coverPath) {
-                var destCover = uid() + '/' + row.id + '-cover.' + extOf(coverPath);
-                return storageCopy(CRATE_BUCKET, coverPath, SONGS_BUCKET, destCover)
-                  .then(function () {
-                    patch.cover_path = destCover;
-                    return patch;
-                  });
-              }
-              return patch;
+          if (!isPublic) return row; // privat: audio tetap di crate/URL, tidak ada penyalinan
+          // 2) salin audio + cover ke bucket publik chiroot-shared (server-side, tanpa re-upload)
+          return copySongFilesToShared(row.id, crateAudioPath, crateCoverPath, setStatus)
+            .catch(function (err) {
+              // gagal copy -> baris tetap PRIVAT dengan path sumber (bisa dicoba lagi),
+              // dan tidak pernah dijadikan publik dengan file yang belum siap.
+              throw new Error('Gagal menyiapkan file publik: ' + (err && err.message ? err.message : err) + '. Lagu tersimpan privat, coba publikasikan lagi nanti.');
             })
             .then(function (patch) {
+              // 3) baru jadikan publik
+              patch.visibility = 'public';
+              patch.published_at = new Date().toISOString();
               return caApiCall(SONGS + '?id=eq.' + encodeURIComponent(row.id), 'PATCH', patch).then(function () { return row; });
-            })
-            .catch(function (err) {
-              // gagal copy -> bersihkan row supaya tidak meninggalkan catatan setengah jadi
-              caApiCall(SONGS + '?id=eq.' + encodeURIComponent(row.id), 'DELETE').catch(function () {});
-              throw err;
             });
         });
       });
@@ -839,7 +1016,7 @@
 
   function publishAllPublic() {
     if (!authed() || bulkPublishing) return;
-    var targets = crateOnlyCache.filter(function (t) { return t && t._audioPath; });
+    var targets = crateOnlyCache.filter(function (t) { return t && (t._audioPath || isHttpUrl(t._audioUrl)); });
     var skipped = crateOnlyCache.length - targets.length;
     if (!targets.length) {
       showToast('Tidak ada lagu Crate yang bisa dipublikasikan.');
@@ -859,7 +1036,7 @@
         if (status) status.style.display = 'none';
         showToast('Selesai: ' + (done - failed) + ' lagu dipublikasikan' +
           (failed ? ', ' + failed + ' gagal' : '') +
-          (skipped ? ', ' + skipped + ' dilewati (tanpa audio cloud)' : '') + '.');
+          (skipped ? ', ' + skipped + ' dilewati (tanpa audio cloud/URL)' : '') + '.');
         refreshSongs();
         if (currentRoute() === 'discover') refreshDiscover(true);
         return;
@@ -1029,7 +1206,7 @@
       var song = button.dataset.likeSource === 'discover' ? discState.items[i] : button.dataset.likeSource === 'playlist' ? detailSongs[i] && detailSongs[i].songs : songsCache[i];
       if (song) button.textContent = likedIds[song.id] ? '♥ Hapus dari Liked Songs' : '♡ Tambah ke Liked Songs';
     });
-    var track = tracks && tracks[currentIndex], btn = $('persistent-like');
+    var track = displayedPlayerTrack(), btn = $('persistent-like');
     if (btn && track) { var linked = track._songId || track._linkedSongId || ((songsCache || []).find(function (s) { return String(s.source_crate_track_id) === String(track.id); }) || {}).id; btn.textContent = linked && likedIds[linked] ? '♥' : '♡'; btn.setAttribute('aria-label', linked && likedIds[linked] ? 'Hapus dari Liked Songs' : 'Tambah ke Liked Songs'); }
   }
   var likesOwner = '';
@@ -1125,11 +1302,21 @@
     }
   });
 
+  /* Track yang sedang ditampilkan pemutar. Saat mode easter egg aktif, turntable
+     menampilkan Secret Track — bukan tracks[currentIndex] — jadi semua aksi pemutar
+     (like/playlist/share/label) harus menarget track yang tampil. */
+  function displayedPlayerTrack() {
+    try {
+      if (typeof isEggActive !== 'undefined' && isEggActive && typeof activeEggTrack !== 'undefined' && activeEggTrack) return activeEggTrack;
+    } catch (e) {}
+    return (tracks && tracks[currentIndex]) || null;
+  }
+
   /* Desktop bar uses the same legacy audio element and queue as the main player. */
   (function () {
     var bar = $('persistent-player'), seek = $('persistent-seek'), volume = $('persistent-volume');
     function sync() {
-      var track = (typeof isEggActive !== 'undefined' && isEggActive && activeEggTrack) || (tracks && tracks[currentIndex]);
+      var track = displayedPlayerTrack();
       var active = !!(track && audio.getAttribute('src'));
       bar.hidden = !active;
       document.body.classList.toggle('has-persistent-player', active);
@@ -1150,7 +1337,7 @@
       if (document.activeElement !== seek) seek.value = duration ? audio.currentTime / duration * 100 : 0;
       if (document.activeElement !== volume) volume.value = audio.volume;
     }
-    $('persistent-like').addEventListener('click', function () { doTrackAction(tracks && tracks[currentIndex], 'like'); });
+    $('persistent-like').addEventListener('click', function () { doTrackAction(displayedPlayerTrack(), 'like'); });
     $('persistent-play').addEventListener('click', function () { if (audio.paused) play(); else pause(); });
     $('persistent-prev').addEventListener('click', function () { prevTrack(); });
     $('persistent-next').addEventListener('click', function () { nextTrack(); });
@@ -1263,7 +1450,7 @@
     if (!authed()) return Promise.reject(new Error('Login untuk menyimpan lagu.'));
     if (!track) return Promise.reject(new Error('Lagu tidak tersedia.'));
     if (track._songId) return Promise.resolve({ id: track._songId, title: track.title });
-    if (!track._audioPath) return Promise.reject(new Error('Lagu ini belum tersimpan di cloud.'));
+    if (!track._audioPath && !track._audioUrl) return Promise.reject(new Error('Lagu ini belum tersimpan di cloud dan belum punya URL audio.'));
     var owner = uid();
     return caApiCall(SONGS + '?select=' + SONG_SELECT + '&owner_id=eq.' + encodeURIComponent(owner) + '&source_crate_track_id=eq.' + encodeURIComponent(track.id), 'GET').then(function (rows) {
       if (!authed() || uid() !== owner) throw new Error('Akun telah berubah.');
@@ -1272,6 +1459,7 @@
     });
   }
   function doTrackAction(track, action) {
+    if (track && track.isEasterEgg && action !== 'share') { showToast('Secret Track ✦ tidak bisa ditambahkan ke koleksi.'); return; }
     if (action === 'share') {
       if (!track) { showToast('Lagu tidak tersedia.'); return; }
       var fetchPublic = track._songId ? fetchSongPublic(track._songId).then(function (song) { return song ? [song] : []; }) :
@@ -1286,6 +1474,7 @@
     if (!songs.length) { showToast('Playlist kosong.'); return; }
     if (shuffle) for (var i = songs.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), tmp = songs[i]; songs[i] = songs[j]; songs[j] = tmp; }
     var ids = songs.map(function (song) { var t = songToTrack(song), idx = tracks.findIndex(function (x) { return String(x.id) === t.id; }); if (idx < 0) tracks.push(t); else tracks[idx] = t; return t.id; });
+    caPersistDynamicSongTracks();
     playQueue = ids.slice(1); renderPlaylist(); loadTrack(queueTrackIndex(ids[0]), true, false); saveState();
   }
   $('playlist-create').addEventListener('click', function () { openPlaylistForm(null, false); });
@@ -1312,11 +1501,11 @@
   var publicSearchTimer;
   $('discover-playlist-search').addEventListener('input', function () { clearTimeout(publicSearchTimer); publicSearchTimer = setTimeout(refreshPublicPlaylists, 350); });
   $('discover-playlist-sort').addEventListener('change', refreshPublicPlaylists);
-  $('persistent-share-song').addEventListener('click', function () { doTrackAction(tracks && tracks[currentIndex], 'share'); });
-  $('cmp-act-link').addEventListener('click', function () { doTrackAction(tracks && tracks[currentIndex], 'share'); });
-  $('persistent-add-playlist').addEventListener('click', function () { doTrackAction(tracks && tracks[currentIndex], 'playlist'); });
-  $('cmp-act-like').addEventListener('click', function () { doTrackAction(tracks && tracks[currentIndex], 'like'); });
-  $('cmp-act-playlist').addEventListener('click', function () { doTrackAction(tracks && tracks[currentIndex], 'playlist'); });
+  $('persistent-share-song').addEventListener('click', function () { doTrackAction(displayedPlayerTrack(), 'share'); });
+  $('cmp-act-link').addEventListener('click', function () { doTrackAction(displayedPlayerTrack(), 'share'); });
+  $('persistent-add-playlist').addEventListener('click', function () { doTrackAction(displayedPlayerTrack(), 'playlist'); });
+  $('cmp-act-like').addEventListener('click', function () { doTrackAction(displayedPlayerTrack(), 'like'); });
+  $('cmp-act-playlist').addEventListener('click', function () { doTrackAction(displayedPlayerTrack(), 'playlist'); });
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-open-playlist]'); if (b) { navigate('playlist/' + b.dataset.openPlaylist); return; }
     b = e.target.closest('[data-crate-action]'); if (b) { doTrackAction(tracks[Number(b.dataset.crateIndex)], b.dataset.crateAction); return; }

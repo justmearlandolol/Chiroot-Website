@@ -1,6 +1,6 @@
 # Chiroot Website
 
-Platform berbagi lagu dengan identitas gramofon klasik: **Discover** (katalog publik, search + sort + pagination), **My Songs** (publish dari Crate tanpa re-upload — audio disalin server-side ke bucket `chiroot-shared`; wajib pilih Private/Public, default privat), dan **Crate** player klasik yang tetap utuh. Tema dark default (Light/System di Settings), mode tampilan **Gramophone/Cover Art** bisa dipindah kapan pun tanpa menghentikan musik. Schema & RLS: `docs/AUDIT.md` (migrasi `chiroot_public_song_sharing`). Static site murni (HTML/CSS/JS vanilla) — data & audio pengguna tersimpan di Supabase (Auth Google + tabel `crate_tracks` + Storage).
+Platform berbagi lagu dengan identitas gramofon klasik: **Discover** (katalog publik, search + sort + pagination), **My Songs** (publish dari Crate tanpa re-upload — audio & cover disalin server-side ke bucket `chiroot-shared` **sebelum** lagu dijadikan publik; lagu Crate URL-only dibagikan sebagai tautan audio, bukan salinan file; wajib pilih Private/Public, default privat), dan **Crate** player klasik yang tetap utuh. Tema dark default (Light/System di Settings), mode tampilan **Gramophone/Cover Art** bisa dipindah kapan pun tanpa menghentikan musik. Schema & RLS: `docs/AUDIT.md` (migrasi `chiroot_public_song_sharing`). Static site murni (HTML/CSS/JS vanilla) — data & audio pengguna tersimpan di Supabase (Auth Google + tabel `crate_tracks` + Storage).
 
 - **Produksi:** https://chiroots.vercel.app — deploy otomatis dari `main` via Vercel
 - **Domain:** https://chiroot.my.id (→ `www.chiroot.my.id`)
@@ -83,7 +83,9 @@ Migrasi `supabase/migrations/20261128040510_chiroot_song_likes.sql` telah ditera
 
 Playlist publik dan privat disimpan di `playlists` dan `playlist_items` (migrasi `20261128042752_chiroot_playlists`). Pemilik dapat membuat, mengubah nama/visibilitas, menghapus playlist, serta menambah dan menghapus lagu. Penambahan menggunakan RPC yang mengunci baris playlist untuk urutan stabil dan menolak duplikat. RLS hanya memperlihatkan lagu publik di playlist publik kepada pengguna lain; lagu privat pemilik tetap hanya terlihat pada sesi pemilik. Foto/nama pembuat berasal dari snapshot profil ketika playlist dibuat. Playlist tidak mempublikasikan lagu otomatis.
 
-Lagu Crate cloud yang belum terhubung ke `songs` disimpan sebagai entri **privat** saat pertama kali ditambahkan ke playlist atau disukai; lagu tanpa file audio cloud tidak dapat ditambahkan sampai tersimpan di cloud. Mode Guest tidak memiliki koleksi akun.
+Lagu Crate cloud yang belum terhubung ke `songs` disimpan sebagai entri **privat** saat pertama kali ditambahkan ke playlist atau disukai; lagu URL-only (tanpa file, hanya tautan audio) ikut didukung dan dibagikan apa adanya sebagai link. Mode Guest tidak memiliki koleksi akun.
+
+**Publikasi dan penghapusan:** mempublikasikan lagu Crate menyalin audio & cover ke `chiroot-shared` lebih dulu, lalu mengubah visibilitas menjadi publik — kalau penyalinan gagal, lagu tetap privat dan bisa dicoba lagi (tidak ada lagu publik dengan file yang belum siap). Menghapus lagu hanya menghapus objek storage yang tidak lagi direferensikan baris `songs` atau `crate_tracks` lain, dan selalu dari bucket sumber yang benar (`chiroot-shared` atau `chiroot-crate`).
 
 **Batasan storage lama:** bucket `chiroot-crate` dan `chiroot-shared` sudah public-read sejak sebelumnya. RLS melindungi baris data dan tidak mengekspos lagu privat di query playlist publik, tetapi URL objek yang diketahui masih dapat diakses langsung; ini bukan jaminan kerahasiaan media. Memindahkan storage lama ke bucket privat/signed URL memerlukan migrasi kompatibilitas terpisah.
 

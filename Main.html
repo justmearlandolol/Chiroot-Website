@@ -1874,6 +1874,7 @@ async function caEnterGuestMode(note) {
   caSettled(false);
   try {
     tracks = await caGuestLoadCrate();
+    if (typeof caRestoreDynamicSongTracks === 'function') { try { await caRestoreDynamicSongTracks(); } catch (e) {} }
     restoreState();
   } catch (err) {
     console.error('guest crate load failed', err);
@@ -2042,11 +2043,22 @@ async function caCrateUpdate(track, fields, audioBlob, coverBlob) {
     throw patchErr;
   }
 
-  if (audioBlob && oldAudioPath && oldAudioPath !== audioPath) {
-    caStorageDelete(oldAudioPath).catch(function () {});
-  }
-  if (coverBlob && oldCoverPath && oldCoverPath !== coverPath) {
-    caStorageDelete(oldCoverPath).catch(function () {});
+  // Objek lama hanya dihapus bila tidak dipakai baris songs lain (mis. lagu privat
+  // yang dibuat saat lagu disukai/ditambahkan ke playlist memakai objek crate yang sama).
+  const replacedOldPaths = [];
+  if (audioBlob && oldAudioPath && oldAudioPath !== audioPath) replacedOldPaths.push(oldAudioPath);
+  if (coverBlob && oldCoverPath && oldCoverPath !== coverPath) replacedOldPaths.push(oldCoverPath);
+  if (replacedOldPaths.length) {
+    let oldStillUsed = true;
+    try { oldStillUsed = (await caSongsReferencedObjectPaths(replacedOldPaths)).length > 0; } catch (e) { oldStillUsed = true; }
+    if (!oldStillUsed) {
+      if (audioBlob && oldAudioPath && oldAudioPath !== audioPath) {
+        caStorageDelete(oldAudioPath).catch(function () {});
+      }
+      if (coverBlob && oldCoverPath && oldCoverPath !== coverPath) {
+        caStorageDelete(oldCoverPath).catch(function () {});
+      }
+    }
   }
 
   const row = (Array.isArray(rows) && rows.length) ? rows[0] : null;
@@ -2068,16 +2080,47 @@ async function caCrateUpdate(track, fields, audioBlob, coverBlob) {
   return fallback;
 }
 
+/* Kembalikan daftar path (dari daftar yang diberikan) yang masih direferensikan
+   baris songs mana pun yang terlihat (milik sendiri + publik, sesuai RLS). Lagu
+   privat yang dibuat otomatis saat like/playlist menunjuk objek crate yang sama,
+   jadi objek itu tidak boleh dihapus dari storage selama masih direferensikan.
+   Query ini TIDAK menggantikan kebijakan Storage — hanya pengaman tambahan. */
+async function caSongsReferencedObjectPaths(paths) {
+  const list = (paths || []).filter(Boolean);
+  const found = [];
+  if (!list.length) return found;
+  const filters = [];
+  list.forEach(function (p) { filters.push('audio_path.eq.' + encodeURIComponent(p), 'cover_path.eq.' + encodeURIComponent(p)); });
+  const rows = await caApiCall('/rest/v1/songs?select=id,audio_path,cover_path&or=(' + filters.join(',') + ')', 'GET');
+  const seen = {};
+  (Array.isArray(rows) ? rows : []).forEach(function (r) {
+    if (r.audio_path) seen[r.audio_path] = true;
+    if (r.cover_path) seen[r.cover_path] = true;
+  });
+  list.forEach(function (p) { if (seen[p]) found.push(p); });
+  return found;
+}
+
 async function caCrateDelete(track) {
   await caApiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(track.id), 'DELETE');
+  const refs = [track._audioPath, track._coverPath].filter(Boolean);
+  let stillUsed = true;
+  try { stillUsed = (await caSongsReferencedObjectPaths(refs)).length > 0; } catch (e) { stillUsed = true; }
+  if (stillUsed) return; // file masih dipakai lagu lain — biarkan tetap ada di storage
   if (track._audioPath) { try { await caStorageDelete(track._audioPath); } catch (e) {} }
   if (track._coverPath) { try { await caStorageDelete(track._coverPath); } catch (e) {} }
 }
 
 async function caCrateReset() {
   const rows = await caFetchCrate();
+  const allPaths = [];
+  rows.forEach(function (t) { if (t._audioPath) allPaths.push(t._audioPath); if (t._coverPath) allPaths.push(t._coverPath); });
+  let usedPaths = null;
+  try { usedPaths = {}; (await caSongsReferencedObjectPaths(allPaths)).forEach(function (p) { usedPaths[p] = true; }); } catch (e) { usedPaths = null; }
   for (const t of rows) {
     try { await caApiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(t.id), 'DELETE'); } catch (e) {}
+    const referenced = !usedPaths || usedPaths[t._audioPath] || usedPaths[t._coverPath];
+    if (referenced) continue; // aman: jangan hapus objek yang masih dipakai baris songs
     if (t._audioPath) { try { await caStorageDelete(t._audioPath); } catch (e) {} }
     if (t._coverPath) { try { await caStorageDelete(t._coverPath); } catch (e) {} }
   }
@@ -3217,6 +3260,7 @@ async function caAccountActivate(userId) {
     caStopPlaybackForSwitch();
     currentIndex = 0;
     tracks = await caFetchCrate();
+    if (typeof caRestoreDynamicSongTracks === 'function') { try { await caRestoreDynamicSongTracks(); } catch (e) {} }
     restoreState();
     caGateHide();
     caRerenderForUser(false);
@@ -3395,6 +3439,7 @@ window.ChirootHooks = {
     cleanupLegacyStorage();
     try {
       await loadPlaylist();
+      if (typeof caRestoreDynamicSongTracks === 'function') { try { await caRestoreDynamicSongTracks(); } catch (e) {} }
       restoreState();
       renderPlaylist();
       renderTop10();
@@ -3664,6 +3709,9 @@ function saveState(force) {
       isLoop,
       isShuffle
     }));
+    // Lagu yang ditambahkan dinamis (Discover/Playlist/Liked) ikut dipersistenkan
+    // supaya entri antreannya tidak hilang setelah reload.
+    if (typeof caPersistDynamicSongTracks === 'function') caPersistDynamicSongTracks();
   } catch(e){}
 }
 function restoreState(){
@@ -3836,6 +3884,19 @@ let isEggActive = false;
 let activeEggTrack = null;
 let _eggBlobUrl = null;
 let _eggLoading = false;
+
+/* Track yang sedang tampil di turntable. Saat easter egg aktif, yang tampil adalah
+   Secret Track — bukan tracks[currentIndex] — jadi aksi pemutar (lyrics, share, dll.)
+   harus menarget track yang tampil, bukan track crate yang tersembunyi. */
+function chirootDisplayedTrack() {
+  try {
+    if (isEggActive && activeEggTrack) return activeEggTrack;
+  } catch (e) {}
+  try {
+    if (Array.isArray(tracks) && tracks.length && typeof currentIndex === 'number' && tracks[currentIndex]) return tracks[currentIndex];
+  } catch (e) {}
+  return null;
+}
 
 async function loadChirootEggUrl() {
   if (_eggBlobUrl) return _eggBlobUrl;
@@ -6260,7 +6321,7 @@ async function fetchLyricsFromAPI(artist, title) {
 }
 
 async function openLyricsModal() {
-  const track = tracks[currentIndex];
+  const track = chirootDisplayedTrack();
   if (!track) return;
 
   lyricsTitle.textContent = track.title || 'Untitled';
@@ -6304,7 +6365,7 @@ lyricsModal.addEventListener('click', (e) => {
 const btnRefreshLyrics = document.getElementById('btn-lyrics-refresh');
 if (btnRefreshLyrics) {
   btnRefreshLyrics.addEventListener('click', async () => {
-    const track = tracks[currentIndex];
+    const track = chirootDisplayedTrack();
     if (!track) return;
 
     lyricsContent.innerHTML = `<div style="text-align:center;color:#8b745b;padding:20px;">Mencari lyrics...</div>`;
