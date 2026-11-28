@@ -16,6 +16,7 @@ function setup() {
     authed: () => !!user, uid: () => user, currentRoute: () => 'liked',
     esc: String, fmtDate: () => '1 Jan 2026', songCoverUrl: () => null,
     ICONS: {note:'', play:''}, SONG_SELECT:'id,title,artist',
+    SONG_APP_BUTTONS: () => '',
     showToast: () => {},
     caApiCall: async (path, method, body) => {
       if (method === 'POST') { rows.push({user_id:body.user_id, song_id:body.song_id, songs:song, added_at:'2026-01-01'}); return []; }

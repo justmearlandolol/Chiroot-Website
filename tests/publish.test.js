@@ -47,6 +47,7 @@ function setup() {
     CRATE_BUCKET: 'chiroot-crate',
     PAGE_SIZE: 24,
     ICONS: { note: '', play: '' },
+    SONG_APP_BUTTONS: () => '',
     $: el,
     document: { addEventListener() {}, querySelectorAll: () => [] },
     window: { confirm: () => true },
