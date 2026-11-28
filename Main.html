@@ -125,9 +125,6 @@
         <span class="nav-label">My Songs</span><span class="nav-dot"></span>
       </button>
       <button type="button" class="app-nav-item" data-route="playlists" title="Playlist"><span aria-hidden="true">☷</span><span class="nav-label">Playlist</span><span class="nav-dot"></span></button>
-      <button type="button" class="app-nav-item liked-nav" data-route="liked" title="Liked Songs">
-        <img src="assets/covers/liked-songs-default.png" alt="" width="28" height="28"><span class="nav-label">Liked Songs</span><span class="nav-dot"></span>
-      </button>
       <button type="button" class="app-nav-item" id="app-nav-settings" title="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
         <span class="nav-label">Settings</span>
@@ -531,7 +528,6 @@
       My Songs
     </button>
     <button type="button" data-route="playlists" aria-label="Playlist"><span aria-hidden="true" style="font-size:21px;line-height:21px">☷</span>Playlist</button>
-    <button type="button" data-route="liked" aria-label="Liked Songs"><span aria-hidden="true" style="font-size:21px;line-height:21px">♥</span>Liked</button>
     <button type="button" data-open-settings aria-label="Settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
       Settings
@@ -1606,12 +1602,20 @@ function caLoadImage(url) {
   });
 }
 
-async function caProcessPfpFile(file) {
+/* Validasi ketat file foto profil: EKSTENSI dan MIME keduanya harus
+   PNG/JPEG/WebP (bukan salah satu saja), ukuran maksimal 5 MB. */
+const CHIROOT_PFP_MAX_BYTES = 5 * 1024 * 1024;
+function caValidateProfileImageFile(file) {
   if (!file) throw new Error('Pilih file foto dulu.');
-  const typeOk = ['image/png', 'image/jpeg', 'image/webp'].indexOf(file.type) !== -1;
-  const nameOk = /\.(png|jpe?g|webp)$/i.test(file.name || '');
-  if (!typeOk && !nameOk) throw new Error('Format foto harus PNG, JPEG, atau WEBP.');
-  if (file.size > 5 * 1024 * 1024) throw new Error('Foto terlalu besar. Maksimal 5 MB.');
+  const typeOk = ['image/png', 'image/jpeg', 'image/webp'].indexOf(String(file.type || '').toLowerCase()) !== -1;
+  const nameOk = /\.(png|jpe?g|webp)$/i.test(String(file.name || ''));
+  if (!typeOk || !nameOk) throw new Error('Format foto harus PNG, JPEG, atau WEBP (ekstensi dan jenis file harus cocok).');
+  if (file.size > CHIROOT_PFP_MAX_BYTES) throw new Error('Foto terlalu besar. Maksimal 5 MB.');
+  return true;
+}
+
+async function caProcessPfpFile(file) {
+  caValidateProfileImageFile(file);
   const objectUrl = URL.createObjectURL(file);
   try {
     const img = await caLoadImage(objectUrl);
@@ -2617,7 +2621,24 @@ async function caOnboardingSave() {
   if (!consumeClientRateLimit('onboardSave', RATE_LIMITS.onboardSave)) return;
   if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan…'; }
   try {
-    const profile = await caCreateProfile({ display_name: name, email: email, pfp: obPfpDataUrl, description: '', banner_color: '#d84a3a' });
+    // Foto diunggah ke Storage (URL hemat dibanding data URL di DB). Bila upload
+    // gagal, lanjutkan dengan data URL seperti perilaku lama supaya onboarding
+    // tidak terblokir. Bila simpan profil gagal setelah upload, objek dihapus.
+    let pfpValue = obPfpDataUrl;
+    let uploadedPfp = null;
+    if (obPfpDataUrl) {
+      try {
+        uploadedPfp = await caUploadProfilePictureFromDataUrl(obPfpDataUrl, { oldPfp: '' });
+        pfpValue = uploadedPfp.url;
+      } catch (upErr) { console.warn('pfp upload gagal (fallback data URL)', upErr); uploadedPfp = null; }
+    }
+    let profile = null;
+    try {
+      profile = await caCreateProfile({ display_name: name, email: email, pfp: pfpValue, description: '', banner_color: '#d84a3a' });
+    } catch (createErr) {
+      if (uploadedPfp) { try { await caStorageDelete(uploadedPfp.path); } catch (e) {} }
+      throw createErr;
+    }
     if (!profile) throw new Error('Gagal menyimpan profil.');
     ChirootAuth.profile = profile;
     caAccountRemember();
@@ -2739,6 +2760,113 @@ async function caProfileSave() {
     showToast('Gagal menyimpan profil: ' + (err && err.message ? err.message : err));
   } finally {
     if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Simpan Profil'; }
+  }
+}
+
+/* ==================================================================
+   FOTO PROFIL: validasi -> upload Storage -> simpan URL di profiles.pfp
+   ==================================================================
+   Konvensi storage yang dipakai: bucket publik milik pengguna
+   (chiroot-crate, folder {uid}/… sama seperti file crate), upload via
+   caStorageUpload, URL publik via caCratePublicUrl. Foto diproses menjadi
+   JPEG 256x256 oleh caProcessPfpFile (JPEG diizinkan bucket). File lama
+   hanya dihapus bila milik user ini DAN tidak dipakai snapshot
+   playlists.creator_image; kalau pemeriksaan gagal, file dibiarkan ada. */
+function caDataUrlToBlob(dataUrl) {
+  const m = /^data:([^;,]+);base64,([\s\S]*)$/.exec(String(dataUrl || ''));
+  if (!m) throw new Error('Foto tidak valid.');
+  const bin = atob(m[2].replace(/\s+/g, ''));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new Blob([bytes], { type: m[1] });
+}
+
+function caPfpStoragePath() {
+  const uid = (ChirootAuth.session && ChirootAuth.session.user && ChirootAuth.session.user.id) || 'anon';
+  return uid + '/profile/avatar-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8) + '.jpg';
+}
+
+function caPfpPublicUrl(path) {
+  return caCratePublicUrl(path);
+}
+
+/* Kembalikan path objek storage HANYA bila URL menunjuk ke bucket crate milik
+   sesi ini (policy storage hanya mengizinkan hapus di folder sendiri). */
+function caOwnPfpStoragePathFromUrl(url) {
+  const prefix = caBase() + '/storage/v1/object/public/' + CHIROOT_CRATE_BUCKET + '/';
+  const s = String(url || '');
+  if (s.indexOf(prefix) !== 0) return null;
+  const path = decodeURIComponent(s.slice(prefix.length).split('?')[0]);
+  const uid = (ChirootAuth.session && ChirootAuth.session.user && ChirootAuth.session.user.id) || '';
+  if (!uid || path.indexOf(uid + '/') !== 0) return null;
+  return /^[a-zA-Z0-9._/-]+$/.test(path) && path.indexOf('..') === -1 ? path : null;
+}
+
+/* Snapshot creator_image pada playlists masih memakai URL foto lama —
+   jangan hapus file yang masih direferensikan. Gagal cek -> anggap dipakai. */
+async function caProfileImageReferenced(url) {
+  try {
+    const rows = await caApiCall('/rest/v1/playlists?select=id&creator_image=eq.' + encodeURIComponent(url) + '&limit=1', 'GET');
+    return Array.isArray(rows) && rows.length > 0;
+  } catch (e) { return true; }
+}
+
+/* Upload foto (sudah diproses jadi data URL JPEG) ke storage lalu simpan URL-nya
+   di profiles.pfp. Bila PATCH profil gagal, objek yang baru diunggah dihapus
+   supaya tidak ada file yatim. Kembalikan { url, path }. */
+async function caUploadProfilePictureFromDataUrl(dataUrl, opts) {
+  const oldPfp = (opts && opts.oldPfp !== undefined) ? opts.oldPfp : ((ChirootAuth.profile && ChirootAuth.profile.pfp) || '');
+  const blob = caDataUrlToBlob(dataUrl);
+  const path = caPfpStoragePath();
+  await caStorageUpload(path, blob, 'image/jpeg');
+  const url = caPfpPublicUrl(path);
+  try {
+    await caUpdateProfile({ pfp: url });
+  } catch (patchErr) {
+    try { await caStorageDelete(path); } catch (e) {}
+    throw patchErr;
+  }
+  const oldPath = caOwnPfpStoragePathFromUrl(oldPfp);
+  if (oldPath && oldPath !== path && !(await caProfileImageReferenced(oldPfp))) {
+    try { await caStorageDelete(oldPath); } catch (e) {}
+  }
+  return { url: url, path: path };
+}
+
+function caSetAvatarUploading(busy) {
+  ['app-profile-avatar', 'bn-avatar', 'pf-avatar', 'pf-preview-avatar', 'ob-avatar-preview'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('avatar-uploading', !!busy);
+  });
+}
+
+let caPfpUploadBusy = false;
+/* Alur lengkap saat avatar diklik / file dipilih: validasi ketat, proses jadi
+   JPEG persegi, upload, simpan ke profil, perbarui semua tampilan avatar. */
+async function caChangeProfilePictureFromFile(file) {
+  if (caPfpUploadBusy) { showToast('Unggahan foto sedang berjalan, tunggu sebentar.'); return null; }
+  if (!(ChirootAuth.session && ChirootAuth.profile)) { showToast('Login untuk mengganti foto profil.'); return null; }
+  caPfpUploadBusy = true;
+  caSetAvatarUploading(true);
+  try {
+    caValidateProfileImageFile(file);
+    const dataUrl = await caProcessPfpFile(file);
+    const up = await caUploadProfilePictureFromDataUrl(dataUrl, {});
+    ChirootAuth.profile = caSanitizeProfile(Object.assign({}, ChirootAuth.profile, { pfp: up.url }), ChirootAuth.profile.id) || ChirootAuth.profile;
+    pfDraft.pfp = up.url;
+    caAccountRemember();
+    caRenderTopbar();
+    caRenderGreeting();
+    caRenderProfilePreview();
+    caFireHook('onProfileUpdated', ChirootAuth.profile);
+    showToast('Foto profil diperbarui ✓');
+    return up.url;
+  } catch (err) {
+    showToast('Gagal mengganti foto: ' + (err && err.message ? err.message : err));
+    return null;
+  } finally {
+    caPfpUploadBusy = false;
+    caSetAvatarUploading(false);
   }
 }
 
@@ -2954,18 +3082,38 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  /* Avatar onboarding juga bisa diklik (termasuk foto default) untuk membuka picker. */
+  const obPreviewAvatar = document.getElementById('ob-avatar-preview');
+  if (obPreviewAvatar && obInput) {
+    obPreviewAvatar.classList.add('avatar-editable');
+    obPreviewAvatar.setAttribute('title', 'Klik untuk ganti foto profil');
+    obPreviewAvatar.addEventListener('click', function () { obInput.click(); });
+  }
+
   const pfInput = document.getElementById('pf-pfp-input');
   if (pfInput) pfInput.addEventListener('change', function () {
     const f = pfInput.files && pfInput.files[0];
     const hint = document.getElementById('pf-pfp-hint');
     if (!f) return;
-    caProcessPfpFile(f).then(function (dataUrl) {
-      pfDraft.pfp = dataUrl;
-      if (hint) { hint.textContent = '✓ ' + f.name; hint.style.color = '#2a7a3a'; }
-      caRenderProfilePreview();
-    }).catch(function (err) {
+    if (hint) { hint.textContent = '⏳ Mengunggah foto…'; hint.style.color = ''; }
+    caChangeProfilePictureFromFile(f).then(function (url) {
       pfInput.value = '';
-      if (hint) { hint.textContent = '❌ ' + (err && err.message ? err.message : 'File tidak valid'); hint.style.color = '#b42318'; }
+      if (hint && url) { hint.textContent = '✓ ' + f.name + ' — tersimpan'; hint.style.color = '#2a7a3a'; }
+      else if (hint) { hint.textContent = '❌ Gagal mengunggah foto. Coba lagi.'; hint.style.color = '#b42318'; }
+    });
+  });
+
+  /* Avatar bisa diklik (termasuk foto default) untuk langsung membuka file picker
+     foto profil; satu alur dengan input di modal Edit Profil. */
+  ['app-profile-avatar', 'bn-avatar', 'pf-avatar', 'pf-preview-avatar'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('avatar-editable');
+    el.setAttribute('title', 'Klik untuk ganti foto profil');
+    el.addEventListener('click', function () {
+      if (!(ChirootAuth.session && ChirootAuth.profile)) { showToast('Login untuk mengganti foto profil.'); return; }
+      const input = document.getElementById('pf-pfp-input');
+      if (input) input.click();
     });
   });
 
@@ -3526,7 +3674,7 @@ window.ChirootHooks = {
     }
     try { await caMigrateGuestCrateToAccount(); } catch (err) { console.warn('guest crate migrate failed', err); }
   },
-  onProfileUpdated() {}
+  onProfileUpdated() { try { if (window.__chirootRenderProfileBox) window.__chirootRenderProfileBox(); } catch (e) {} }
 };
 
 function renderTop10(){

@@ -485,6 +485,7 @@
           '<button data-add-source="discover" data-add-index="' + i + '">＋ Tambah ke playlist</button>' +
           '<button data-like-source="discover" data-like-index="' + i + '">♡ Suka / batal suka</button>' +
           '<button data-song-share="' + i + '">Salin link</button>' +
+          SONG_APP_BUTTONS('discover', i) +
           (mine ? '<button data-song-unpublish="' + i + '">Jadikan privat</button><button data-song-del="' + i + '">Hapus lagu</button>' : '') +
           '</div></details>' +
         '</div>' +
@@ -513,13 +514,36 @@
     };
   }
 
+  /* Cari entri track yang SUDAH mewakili lagu ini berdasarkan ID stabil (bukan judul):
+     1) track "song:<uuid>" yang sama, 2) _songId yang sama,
+     3) track Crate milik pengguna yang terhubung lewat source_crate_track_id lagu.
+     Ini mencegah lagu yang sama muncul dua kali di daftar putar saat diputar dari
+     Discover/Liked/Playlist padahal sudah ada di Crate. */
+  function findTrackForSong(song) {
+    var songId = String((song && song.id) || '');
+    if (!songId) return -1;
+    var linkedCrateId = song.source_crate_track_id ? String(song.source_crate_track_id) : '';
+    for (var i = 0; i < tracks.length; i++) {
+      var t = tracks[i];
+      if (!t) continue;
+      if (String(t.id) === 'song:' + songId) return i;
+      if (t._songId && String(t._songId) === songId) return i;
+      if (linkedCrateId && String(t.id).indexOf('song:') !== 0 && String(t.id) === linkedCrateId) return i;
+    }
+    return -1;
+  }
+
+  /* Perbarui track yang sudah ada dengan data lagu tanpa mengganti identitasnya:
+     id lama (termasuk id crate) dipertahankan supaya antrean/index tetap valid. */
+  function mergeSongIntoTrack(existing, song) {
+    var t = songToTrack(song);
+    return Object.assign({}, existing, t, { id: existing.id, _songId: String(song.id) });
+  }
+
   function playSong(song) {
     var track = songToTrack(song);
-    var idx = -1;
-    for (var i = 0; i < tracks.length; i++) {
-      if (String(tracks[i].id) === track.id) { idx = i; break; }
-    }
-    if (idx < 0) { tracks.push(track); idx = tracks.length - 1; } else { tracks[idx] = track; }
+    var idx = findTrackForSong(song);
+    if (idx < 0) { tracks.push(track); idx = tracks.length - 1; } else { tracks[idx] = mergeSongIntoTrack(tracks[idx], song); }
     caPersistDynamicSongTracks();
     try {
       renderPlaylist();
@@ -783,7 +807,9 @@
             '<details class="song-menu"><summary class="song-btn" aria-label="Aksi lagu">⋯</summary><div class="song-menu-panel">' +
             '<button data-add-source="mine" data-add-index="' + i + '">＋ Tambah ke playlist</button>' +
             '<button data-like-source="mine" data-like-index="' + i + '">♡ Suka / batal suka</button>' +
-            (isPub ? '<button data-my-share="' + i + '">Salin link</button><button data-my-unpub="' + i + '">Jadikan privat</button>' : '<button data-my-pub="' + i + '">Publikasikan</button>') +
+            (isPub ? '<button data-my-share="' + i + '">Salin link</button>' : '') +
+            SONG_APP_BUTTONS('mine', i) +
+            (isPub ? '<button data-my-unpub="' + i + '">Jadikan privat</button>' : '<button data-my-pub="' + i + '">Publikasikan</button>') +
             '<button data-my-del="' + i + '">Hapus lagu</button></div></details>' +
           '</div>' +
         '</li>';
@@ -1094,6 +1120,8 @@
       avEl.innerHTML = g;
       if (av2) av2.innerHTML = g;
     }
+    // Ekspos supaya hook onProfileUpdated (Main.html) bisa menyegarkan avatar sidebar.
+    window.__chirootRenderProfileBox = renderProfileBox;
   }
 
   var _appLogout = $('app-logout');
@@ -1248,7 +1276,7 @@
       var song = row.songs, cover = songCoverUrl(song);
       return '<li class="song-row"><div class="song-cover"><span class="song-cover-fallback">' + ICONS.note + '</span>' + (cover ? '<img src="' + esc(cover) + '" alt="" onerror="this.remove()">' : '') + '</div>' +
         '<div class="song-meta"><p class="song-title">' + esc(song.title) + '</p><p class="song-sub">' + esc(song.artist || song.owner_name || 'Pengguna Chiroot') + ' · Disukai ' + esc(fmtDate(row.added_at)) + '</p></div>' +
-        '<div class="song-actions"><button class="song-btn primary" data-liked-play="' + i + '">' + ICONS.play + ' Putar</button><details class="song-menu"><summary class="song-btn" aria-label="Aksi lagu">⋯</summary><div class="song-menu-panel"><button data-add-source="liked" data-add-index="' + i + '">＋ Tambah ke playlist</button><button data-like-source="liked" data-like-index="' + i + '">♥ Hapus dari Liked Songs</button>' + (song.visibility === 'public' ? '<button data-share-liked="' + i + '">Salin link lagu</button>' : '') + '</div></details></div></li>';
+        '<div class="song-actions"><button class="song-btn primary" data-liked-play="' + i + '">' + ICONS.play + ' Putar</button><details class="song-menu"><summary class="song-btn" aria-label="Aksi lagu">⋯</summary><div class="song-menu-panel"><button data-add-source="liked" data-add-index="' + i + '">＋ Tambah ke playlist</button><button data-like-source="liked" data-like-index="' + i + '">♥ Hapus dari Liked Songs</button>' + (song.visibility === 'public' ? '<button data-share-liked="' + i + '">Salin link lagu</button>' : '') + SONG_APP_BUTTONS('liked', i) + '</div></details></div></li>';
     }).join('');
   }
   function toggleLike(song) {
@@ -1370,6 +1398,17 @@
         '<strong>' + esc(p.name) + '</strong><span>' + esc(p.creator_name || 'Pengguna Chiroot') + ' · ' + items.length + ' lagu</span></button>';
     }).join('');
   }
+  /* Kartu "Liked Songs" dipin di atas daftar playlist — ini SYSTEM PLAYLIST:
+     tidak membuat record di tabel playlists, isinya turunan langsung dari
+     song_likes sehingga tetap privat per pengguna dan otomatis mengikuti like. */
+  function likedPlaylistCard() {
+    var count = Object.keys(likedIds || {}).length;
+    var sub = 'Koleksi pribadi · ' + (count ? count + ' lagu' : 'belum ada lagu');
+    return '<button type="button" class="collection-card liked-card" data-open-liked="1">' +
+      '<span class="collection-art"><img src="assets/covers/liked-songs-default.png" alt="" loading="lazy"></span>' +
+      '<strong>Liked Songs</strong><span>' + esc(sub) + '</span></button>';
+  }
+
   function refreshMyPlaylists() {
     var state = $('my-playlists-state'), list = $('my-playlists-list'), owner = authed() ? uid() : '';
     var request = ++playlistRequest; list.innerHTML = '';
@@ -1377,9 +1416,11 @@
     state.style.display = ''; state.innerHTML = '<span class="crd-spin"></span><br>Memuat playlist…';
     return caApiCall(PLAYLISTS + '?select=' + PL_SELECT + '&owner_id=eq.' + encodeURIComponent(owner) + '&order=created_at.desc,id.desc', 'GET').then(function (rows) {
       if (request !== playlistRequest || !authed() || uid() !== owner) return;
-      myPlaylists = rows || []; list.innerHTML = cards(myPlaylists);
-      state.style.display = myPlaylists.length ? 'none' : '';
-      state.innerHTML = myPlaylists.length ? '' : '<strong>Belum ada playlist</strong>Buat playlist pertamamu untuk menyimpan lagu.';
+      myPlaylists = rows || [];
+      // Kartu Liked Songs selalu ada; pesan kosong hanya bila tidak ada playlist buatan.
+      var empty = myPlaylists.length ? '' : '<div class="collection-empty">Belum ada playlist buatanmu — tekan “+ Buat playlist”.</div>';
+      list.innerHTML = likedPlaylistCard() + cards(myPlaylists) + empty;
+      state.style.display = 'none'; state.innerHTML = '';
     }).catch(function (err) { if (request === playlistRequest) { state.style.display = ''; state.textContent = 'Gagal memuat playlist: ' + (err.message || err); } });
   }
   function refreshPublicPlaylists() {
@@ -1411,7 +1452,7 @@
       if (!detailSongs.length) { list.innerHTML = '<li class="crd-state"><strong>Playlist masih kosong</strong>Tambahkan lagu dari Songs atau Discover.</li>'; return; }
       list.innerHTML = detailSongs.map(function (row, i) {
         var song = row.songs, cover = songCoverUrl(song);
-        return '<li class="song-row"><div class="song-cover"><span class="song-cover-fallback">' + ICONS.note + '</span>' + (cover ? '<img src="' + esc(cover) + '" alt="">' : '') + '</div><div class="song-meta"><p class="song-title">' + esc(song.title) + '</p><p class="song-sub">' + esc(song.artist || song.owner_name || 'Pengguna Chiroot') + ' · Ditambahkan ' + esc(fmtDate(row.added_at)) + '</p></div><div class="song-actions"><button class="song-btn primary" data-playlist-track="' + i + '">' + ICONS.play + ' Putar</button><details class="song-menu"><summary class="song-btn" aria-label="Aksi lagu">⋯</summary><div class="song-menu-panel"><button data-add-source="playlist" data-add-index="' + i + '">＋ Tambah ke playlist</button><button data-like-source="playlist" data-like-index="' + i + '">♡ Suka / batal suka</button>' + (song.visibility === 'public' ? '<button data-share-playlist-track="' + i + '">Salin link lagu</button>' : '') + (mine ? '<button data-remove-playlist-track="' + i + '">Hapus dari playlist</button>' : '') + '</div></details></div></li>';
+        return '<li class="song-row"><div class="song-cover"><span class="song-cover-fallback">' + ICONS.note + '</span>' + (cover ? '<img src="' + esc(cover) + '" alt="">' : '') + '</div><div class="song-meta"><p class="song-title">' + esc(song.title) + '</p><p class="song-sub">' + esc(song.artist || song.owner_name || 'Pengguna Chiroot') + ' · Ditambahkan ' + esc(fmtDate(row.added_at)) + '</p></div><div class="song-actions"><button class="song-btn primary" data-playlist-track="' + i + '">' + ICONS.play + ' Putar</button><details class="song-menu"><summary class="song-btn" aria-label="Aksi lagu">⋯</summary><div class="song-menu-panel"><button data-add-source="playlist" data-add-index="' + i + '">＋ Tambah ke playlist</button><button data-like-source="playlist" data-like-index="' + i + '">♡ Suka / batal suka</button>' + (song.visibility === 'public' ? '<button data-share-playlist-track="' + i + '">Salin link lagu</button>' : '') + SONG_APP_BUTTONS('playlist', i) + (mine ? '<button data-remove-playlist-track="' + i + '">Hapus dari playlist</button>' : '') + '</div></details></div></li>';
       }).join('');
       updateLikeLabels();
     }).catch(function (err) { if (request === detailRequest) { state.style.display = ''; state.textContent = 'Gagal memuat playlist: ' + (err.message || err); } });
@@ -1450,6 +1491,16 @@
     if (!authed()) return Promise.reject(new Error('Login untuk menyimpan lagu.'));
     if (!track) return Promise.reject(new Error('Lagu tidak tersedia.'));
     if (track._songId) return Promise.resolve({ id: track._songId, title: track.title });
+    /* Track dari baris songs (id "song:<uuid>") tidak boleh pernah membuat baris
+       songs baru — pakai id lagunya langsung, kalau tidak lagu yang sudah ada di
+       My Songs bisa tercatat ganda saat like/playlist dari pemutar. */
+    if (String(track.id).indexOf('song:') === 0) {
+      var songId = String(track.id).slice('song:'.length);
+      if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(songId)) {
+        return Promise.resolve({ id: songId, title: track.title });
+      }
+      return Promise.reject(new Error('Lagu tidak tersedia.'));
+    }
     if (!track._audioPath && !track._audioUrl) return Promise.reject(new Error('Lagu ini belum tersimpan di cloud dan belum punya URL audio.'));
     var owner = uid();
     return caApiCall(SONGS + '?select=' + SONG_SELECT + '&owner_id=eq.' + encodeURIComponent(owner) + '&source_crate_track_id=eq.' + encodeURIComponent(track.id), 'GET').then(function (rows) {
@@ -1458,6 +1509,47 @@
       return publishTrack(track, false, null).then(function (row) { if (!row || !row.id) throw new Error('Gagal menyimpan lagu.'); return row; });
     });
   }
+  /* ==================================================================
+     9b. BUKA LAGU DI APLIKASI DESKTOP / MOBILE
+     ==================================================================
+     Skema deep-link Chiroot yang TERVERIFIKASI (docs/AUDIT.md + allowlist auth
+     Supabase) hanya untuk callback login: chiroot://auth/callback,
+     com.chiroot.app://auth/player, http://127.0.0.1:47821/auth/callback.
+     Belum ada protokol resmi untuk membuka lagu tertentu, jadi sesuai spesifikasi
+     aksi menu memakai fallback terverifikasi: halaman unduhan/awal aplikasi
+     desktop (exe.html) dan halaman lagu di situs untuk mobile. Jangan mengarang
+     skema lagu — kalau aplikasi kelak mendefinisikannya, isi
+     CHIROOT_APP_SONG_URL (satu tempat) dan kedua aksi otomatis memakainya. */
+  var CHIROOT_APP_SONG_URL = null; // contoh nanti: 'chiroot://song?id=' — hanya setelah terverifikasi di aplikasi
+
+  function openSongInApp(song, target) {
+    if (!song || !song.id) { showToast('Lagu tidak tersedia.'); return; }
+    if (CHIROOT_APP_SONG_URL) {
+      try { window.open(CHIROOT_APP_SONG_URL + encodeURIComponent(song.id), '_blank'); return; } catch (e) {}
+    }
+    if (target === 'desktop') {
+      window.open('exe.html', '_blank');
+      showToast('Membuka halaman aplikasi desktop Chiroot…');
+    } else {
+      window.open(canonicalShareUrl(song.id), '_blank');
+      showToast('Membuka halaman lagu di browser…');
+    }
+  }
+
+  /* Ambil baris lagu dari menu titik-tiga berdasarkan sumber + index (satu resolver
+     untuk semua daftar supaya aksi tetap bekerja di layar kecil). */
+  function songFromMenuSource(source, i) {
+    return source === 'discover' ? discState.items[i]
+      : source === 'mine' ? songsCache[i]
+      : source === 'liked' ? (likedSongs[i] && likedSongs[i].songs)
+      : (detailSongs[i] && detailSongs[i].songs);
+  }
+
+  var SONG_APP_BUTTONS = function (source, i) {
+    return '<button data-song-app="' + source + '" data-song-app-index="' + i + '" data-song-app-kind="desktop">◱ Buka di aplikasi desktop</button>' +
+      '<button data-song-app="' + source + '" data-song-app-index="' + i + '" data-song-app-kind="mobile">▤ Buka di aplikasi mobile</button>';
+  };
+
   function doTrackAction(track, action) {
     if (track && track.isEasterEgg && action !== 'share') { showToast('Secret Track ✦ tidak bisa ditambahkan ke koleksi.'); return; }
     if (action === 'share') {
@@ -1475,7 +1567,9 @@
     if (shuffle) for (var i = songs.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), tmp = songs[i]; songs[i] = songs[j]; songs[j] = tmp; }
     var ids = songs.map(function (song) { var t = songToTrack(song), idx = tracks.findIndex(function (x) { return String(x.id) === t.id; }); if (idx < 0) tracks.push(t); else tracks[idx] = t; return t.id; });
     caPersistDynamicSongTracks();
-    playQueue = ids.slice(1); renderPlaylist(); loadTrack(queueTrackIndex(ids[0]), true, false); saveState();
+    // Jangan tumpuk entri antrean yang sama persis (id stabil) dari aksi berulang.
+    var uniqueIds = ids.filter(function (id, i) { return ids.indexOf(id) === i; });
+    playQueue = uniqueIds.slice(1); renderPlaylist(); loadTrack(queueTrackIndex(uniqueIds[0]), true, false); saveState();
   }
   $('playlist-create').addEventListener('click', function () { openPlaylistForm(null, false); });
   $('playlist-cancel').addEventListener('click', function () { playlistDialog.close(); if (createFromPicker && pickerSong) showPicker(pickerSong); });
@@ -1508,7 +1602,9 @@
   $('cmp-act-playlist').addEventListener('click', function () { doTrackAction(displayedPlayerTrack(), 'playlist'); });
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-open-playlist]'); if (b) { navigate('playlist/' + b.dataset.openPlaylist); return; }
+    b = e.target.closest('[data-open-liked]'); if (b) { navigate('liked'); return; }
     b = e.target.closest('[data-crate-action]'); if (b) { doTrackAction(tracks[Number(b.dataset.crateIndex)], b.dataset.crateAction); return; }
+    b = e.target.closest('[data-song-app]'); if (b) { openSongInApp(songFromMenuSource(b.dataset.songApp, Number(b.dataset.songAppIndex)), b.dataset.songAppKind); return; }
     b = e.target.closest('[data-add-source]');
     if (b) { var i = Number(b.dataset.addIndex), source = b.dataset.addSource; var song = source === 'discover' ? discState.items[i] : source === 'mine' ? songsCache[i] : source === 'liked' ? likedSongs[i] && likedSongs[i].songs : detailSongs[i] && detailSongs[i].songs; if (song) showPicker(song); return; }
     b = e.target.closest('[data-playlist-track]'); if (b && detailSongs[Number(b.dataset.playlistTrack)]) { playSong(detailSongs[Number(b.dataset.playlistTrack)].songs); return; }

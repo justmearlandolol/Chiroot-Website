@@ -18,6 +18,7 @@ function setup() {
   const rows = [{id:'00000000-0000-0000-0000-000000000001',name:'<My list>',creator_name:'Owner',owner_id:'user-a',visibility:'private',created_at:'2026-01-01',playlist_items:songs}];
   const ctx = {
     $: id => el[id], SONG_SELECT:'id,title', ICONS:{note:'',play:''},
+    SONG_APP_BUTTONS: () => '', likedIds: {},
     window:{location:{hash:'#/playlist/00000000-0000-0000-0000-000000000001'}},
     authed:()=>!!account, uid:()=>account, songCoverUrl:()=>null,
     esc: x => String(x || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'),
