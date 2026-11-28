@@ -1377,6 +1377,25 @@ function caClearSession() {
   try { localStorage.removeItem(CHIROOT_AUTH_KEY); } catch (e) {}
 }
 
+const CA_FETCH_TIMEOUT_MS = 15000;
+/* fetch dengan batas waktu. Request boot-critical (refresh token, tukar kode OAuth,
+   GET/JSON ke REST) tidak boleh menggantung tanpa batas — di koneksi yang macet
+   spinner "Memeriksa sesi…" akan berputar selamanya karena boot menunggu fetch ini.
+   Body berkas (Blob, mis. upload audio/cover 25 MB) sengaja TANPA timeout, dan
+   browser tanpa AbortController kembali ke fetch biasa. */
+function caFetchWithTimeout(url, options, timeoutMs) {
+  options = options || {};
+  if (timeoutMs === undefined) timeoutMs = CA_FETCH_TIMEOUT_MS;
+  const body = options.body;
+  const isMediaUpload = !!body && typeof Blob === 'function' && body instanceof Blob;
+  if (!timeoutMs || isMediaUpload || typeof AbortController !== 'function') return fetch(url, options);
+  const ctrl = new AbortController();
+  const timer = window.setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, timeoutMs);
+  const p = fetch(url, Object.assign({}, options, { signal: ctrl.signal }));
+  p.then(function () { window.clearTimeout(timer); }, function () { window.clearTimeout(timer); });
+  return p;
+}
+
 let caRefreshPromise = null;
 async function caEnsureFreshToken(force) {
   const current = ChirootAuth.session;
@@ -1385,7 +1404,7 @@ async function caEnsureFreshToken(force) {
   if (caRefreshPromise) return caRefreshPromise;
   caRefreshPromise = (async () => {
     try {
-      const res = await fetch(caBase() + '/auth/v1/token?grant_type=refresh_token', {
+      const res = await caFetchWithTimeout(caBase() + '/auth/v1/token?grant_type=refresh_token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'apikey': caApiKey() },
         body: JSON.stringify({ refresh_token: current.refresh_token })
@@ -1419,7 +1438,7 @@ async function caFetch(url, options, retried) {
   headers['Authorization'] = 'Bearer ' + ChirootAuth.session.access_token;
   let res;
   try {
-    res = await fetch(url, Object.assign({}, options, { headers: headers }));
+    res = await caFetchWithTimeout(url, Object.assign({}, options, { headers: headers }));
   } catch (netErr) {
     throw new Error('Tidak bisa terhubung ke server. Periksa koneksi internetmu.');
   }
@@ -2189,7 +2208,7 @@ async function caHandleAuthCallback() {
   try { sessionStorage.removeItem(CHIROOT_PKCE_KEY); } catch (e) {}
   try { localStorage.removeItem(CHIROOT_PKCE_KEY + '_backup'); } catch (e) {}
   if (!verifier) throw new Error('Sesi login tidak ditemukan. Silakan login ulang.');
-  const res = await fetch(caBase() + '/auth/v1/token?grant_type=pkce', {
+  const res = await caFetchWithTimeout(caBase() + '/auth/v1/token?grant_type=pkce', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'apikey': caApiKey() },
     body: JSON.stringify({ auth_code: code, code_verifier: verifier })
@@ -2314,6 +2333,45 @@ function caAddGateRetry(fn) {
   btn.innerHTML = '<span>↻ Coba Lagi</span>';
   btn.disabled = false;
   btn.onclick = fn;
+}
+
+/* Fallback kalau pemeriksaan sesi saat boot menggantung terlalu lama (koneksi macet,
+   jaringan lambat, atau error tak terduga): hentikan spinner, tampilkan pesan,
+   tombol coba lagi (reload penuh — membatalkan semua request menggantung), dan
+   tombol lanjut sebagai Guest supaya aplikasi tetap bisa dipakai. */
+function caGateStuck(message) {
+  const gate = document.getElementById('auth-overlay');
+  const content = document.getElementById('auth-overlay-content');
+  if (!gate || !content || !gate.classList.contains('open')) return; // boot sudah selesai
+  if (!content.querySelector('.gate-spinner')) return; // bukan status "Memeriksa sesi…"
+  console.warn('[Chiroot] boot menggantung — menampilkan fallback:', message);
+  content.querySelectorAll('.gate-status').forEach(function (el) { el.remove(); });
+  caGateError(message);
+  caAddGateRetry(function () { try { window.location.reload(); } catch (e) {} });
+  const wrap = content.querySelector('.gate-btn-wrap');
+  if (wrap && !document.getElementById('gate-guest-btn')) {
+    const guestBtn = document.createElement('button');
+    guestBtn.type = 'button';
+    guestBtn.className = 'btn-secondary sketch-border-soft gate-pick-btn';
+    guestBtn.id = 'gate-guest-btn';
+    guestBtn.textContent = 'Lanjut sebagai Guest';
+    guestBtn.addEventListener('click', function () {
+      caBootRunId++; // batalkan boot lama yang masih menggantung agar tidak menimpa fallback
+      caEnterGuestMode('Mode Guest ✦ lagu lokal tetap bisa diputar. Login lagi dari tombol di atas kapan pun kamu siap.');
+    });
+    wrap.appendChild(guestBtn);
+  }
+}
+
+const CA_BOOT_WATCHDOG_MS = 30000;
+function caStartBootWatchdog() {
+  window.setTimeout(function () {
+    try {
+      if (!ChirootAuth._settled) {
+        caGateStuck('Memeriksa sesi memakan waktu terlalu lama — koneksi ke server Chiroot lambat atau terputus.');
+      }
+    } catch (e) { console.warn('boot watchdog error', e); }
+  }, CA_BOOT_WATCHDOG_MS);
 }
 
 function caSetLoginButtonsBusy(busy) {
@@ -2802,26 +2860,36 @@ function caFinishPopupOAuth(ok, errMsg) {
   setTimeout(function () { try { window.close(); } catch (e) {} }, 120);
 }
 
-async function caBootProfileStep(fresh) {
+/* Naikkan setiap boot dijalankan atau fallback watchdog mengambil alih: langkah
+   boot lama yang akhirnya selesai setelah fallback tidak boleh menimpa keadaan
+   yang sudah diambil alih (mis. mode Guest yang sudah dipilih pengguna). */
+let caBootRunId = 0;
+
+async function caBootProfileStep(fresh, runId) {
+  if (runId === undefined) runId = caBootRunId;
   caGateShow('checking');
   if (!fresh) {
     try {
       await caEnsureFreshToken(true);
     } catch (err) {
+      if (runId !== caBootRunId) return; // fallback sudah mengambil alih
       ChirootAuth.session = null;
       caClearSession();
-      await caEnterGuestMode('Sesi login sudah tidak valid — lanjut sebagai Guest. Login lagi buat sinkron cloud.');
+      await caEnterGuestMode('Sesi login sudah tidak valid (' + (err && err.message ? err.message : err) + ') — lanjut sebagai Guest. Login lagi buat sinkron cloud.');
       return;
     }
   }
+  if (runId !== caBootRunId) return;
   let profile = null;
   try {
     profile = await caFetchProfile();
   } catch (err) {
     console.warn('profile fetch failed', err);
+    if (runId !== caBootRunId) return;
     await caEnterGuestMode('Gagal memuat profil (' + (err && err.message ? err.message : 'terjadi kesalahan') + ') — lanjut sebagai Guest.');
     return;
   }
+  if (runId !== caBootRunId) return;
   if (profile) {
     ChirootAuth.profile = profile;
     caAccountRemember();
@@ -2837,6 +2905,8 @@ async function caBootProfileStep(fresh) {
 }
 
 async function caBoot() {
+  caStartBootWatchdog();
+  const runId = ++caBootRunId;
   caGateShow('checking');
   caRenderTopbar();
   caRenderGreeting();
@@ -2864,7 +2934,7 @@ async function caBoot() {
     await caEnterGuestMode();
     return;
   }
-  await caBootProfileStep(fromCallback);
+  await caBootProfileStep(fromCallback, runId);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -2954,7 +3024,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   setInterval(function () { caRenderGreeting(); }, 30000);
 
-  caBoot();
+  caBoot().catch(function (err) {
+    // Error tak terduga saat boot tidak boleh meninggalkan spinner selamanya.
+    console.error('Chiroot boot failed', err);
+    caGateStuck('Terjadi kesalahan saat memeriksa sesi: ' + (err && err.message ? err.message : err));
+  });
 });
 </script>
 
