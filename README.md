@@ -76,3 +76,14 @@ Crate guest lama (IndexedDB per browser) menyimpan referensi audio/cover berupa 
 
 - Jangan mengubah isi `archive/` (snapshot versi lama, sengaja dibekukan).
 - `docs/AUDIT.md` berisi hasil audit lengkap: hosting, perilaku legacy, masalah yang ditemukan, dan rencana redesign menjadi platform berbagi lagu publik.
+
+## CI
+
+GitHub Actions menjalankan pemeriksaan situs statis pada push dan PR ke `main`. Jalankan pemeriksaan yang sama secara lokal dengan Python 3 dan Node.js 22:
+
+```bash
+python3 scripts/check_static.py
+python3 -m unittest discover -s tests -p 'test_*.py'
+```
+
+Pemeriksaan ini tidak melakukan deployment atau mengakses Supabase. Lihat [docs/CI_CD.md](docs/CI_CD.md) untuk cakupan dan batasannya.
