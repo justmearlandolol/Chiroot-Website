@@ -124,6 +124,9 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
         <span class="nav-label">My Songs</span><span class="nav-dot"></span>
       </button>
+      <button type="button" class="app-nav-item liked-nav" data-route="liked" title="Liked Songs">
+        <img src="assets/covers/liked-songs-default.png" alt="" width="28" height="28"><span class="nav-label">Liked Songs</span><span class="nav-dot"></span>
+      </button>
       <button type="button" class="app-nav-item" id="app-nav-settings" title="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
         <span class="nav-label">Settings</span>
@@ -466,6 +469,12 @@
     <button type="button" class="crd-more" id="disc-more" style="display:none;">Muat lagi</button>
   </section>
 
+  <section class="app-view" data-view="liked" id="view-liked" aria-label="Liked Songs">
+    <div class="liked-header"><img src="assets/covers/liked-songs-default.png" alt="" class="liked-cover"><div><p class="app-view-sub">Koleksi pribadi</p><h2 class="app-view-title">Liked Songs</h2><p class="app-view-sub" id="liked-count"></p></div></div>
+    <div class="crd-state" id="liked-state" aria-live="polite"></div>
+    <ul class="song-list" id="liked-list"></ul>
+  </section>
+
   <section class="app-view" data-view="songs" id="view-songs" aria-label="My Songs">
     <div class="app-view-head">
       <div>
@@ -488,6 +497,11 @@
   </div>
   </div>
 
+  <div class="persistent-player" id="persistent-player" hidden role="region" aria-label="Pemutar musik">
+    <button type="button" class="persistent-track" data-route="home" aria-label="Buka pemutar dan antrean"><img id="persistent-cover" alt=""><span><strong id="persistent-title"></strong><small id="persistent-artist"></small></span></button>
+    <div class="persistent-center"><div class="persistent-controls"><button type="button" id="persistent-prev" aria-label="Lagu sebelumnya">⏮</button><button type="button" id="persistent-play" aria-label="Putar">▶</button><button type="button" id="persistent-next" aria-label="Lagu berikutnya">⏭</button></div><div class="persistent-progress"><span id="persistent-time">0:00</span><input type="range" id="persistent-seek" min="0" max="100" value="0" step="0.1" aria-label="Posisi lagu"><span id="persistent-duration">0:00</span></div></div>
+    <div class="persistent-extra"><button type="button" class="song-btn" id="persistent-like" hidden aria-label="Sukai lagu">♡</button><label class="persistent-volume">Volume <input type="range" id="persistent-volume" min="0" max="1" step="0.01" aria-label="Volume"></label></div>
+  </div>
   <nav class="app-bottomnav" aria-label="Navigasi utama">
     <button type="button" data-route="home" aria-label="Songs">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
@@ -501,6 +515,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
       My Songs
     </button>
+    <button type="button" data-route="liked" aria-label="Liked Songs"><span aria-hidden="true" style="font-size:21px;line-height:21px">♥</span>Liked</button>
     <button type="button" data-open-settings aria-label="Settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
       Settings

@@ -60,7 +60,7 @@
 
   function songCoverUrl(song) {
     if (!song.cover_path) return null;
-    return storageUrl(SONGS_BUCKET, song.cover_path);
+    return storageUrl(song.source_bucket === CRATE_BUCKET ? CRATE_BUCKET : SONGS_BUCKET, song.cover_path);
   }
 
   function fmtDate(iso) {
@@ -289,7 +289,7 @@
   /* ==================================================================
      3. ROUTER (hash): #/home | #/discover | #/songs
      ================================================================== */
-  var ROUTES = ['home', 'discover', 'songs'];
+  var ROUTES = ['home', 'discover', 'songs', 'liked'];
 
   function currentRoute() {
     var h = String(window.location.hash || '').replace(/^#\/?/, '');
@@ -314,6 +314,8 @@
     });
     if (r === 'discover' && !discState.loaded) refreshDiscover(true);
     if (r === 'songs') refreshSongs();
+    if (r === 'liked') refreshLikes();
+    closeSongMenus();
     window.scrollTo(0, 0);
   }
 
@@ -415,6 +417,7 @@
         discState.items = discState.items.concat(rows || []);
         discState.offset += (rows && rows.length) || 0;
         renderDiscover();
+        updateLikeLabels();
         if (rows && rows.length >= PAGE_SIZE) {
           moreBtn.style.display = '';
           moreBtn.disabled = false;
@@ -459,11 +462,11 @@
         '</div>' +
         '<div class="song-actions">' +
           '<button class="song-btn primary" data-song-play="' + i + '">' + ICONS.play + ' Putar</button>' +
-          '<button class="song-btn" data-song-share="' + i + '">' + ICONS.link + ' Link</button>' +
-          (mine
-            ? '<button class="song-btn danger" data-song-unpublish="' + i + '">' + ICONS.eyeOff + ' Privat</button>' +
-              '<button class="song-btn danger" data-song-del="' + i + '">' + ICONS.trash + '</button>'
-            : '') +
+          '<details class="song-menu"><summary class="song-btn" aria-label="Aksi lagu">⋯</summary><div class="song-menu-panel">' +
+          '<button data-like-source="discover" data-like-index="' + i + '">♡ Suka / batal suka</button>' +
+          '<button data-song-share="' + i + '">Salin link</button>' +
+          (mine ? '<button data-song-unpublish="' + i + '">Jadikan privat</button><button data-song-del="' + i + '">Hapus lagu</button>' : '') +
+          '</div></details>' +
         '</div>' +
       '</li>';
     }).join('');
@@ -504,7 +507,6 @@
       showToast('Gagal memutar: ' + (e && e.message ? e.message : e));
       return;
     }
-    navigate('home');
   }
 
   $('disc-list').addEventListener('click', function (e) {
@@ -611,6 +613,7 @@
         var localOnly = crateTracks.filter(function (t) { return !publishedIds[String(t.id)]; });
         crateOnlyCache = localOnly;
         renderMySongs(cloudEl, crateEl, localOnly);
+        updateLikeLabels();
         updatePublishAllButton();
         stateEl.style.display = 'none';
       })
@@ -632,13 +635,11 @@
             '<p class="song-sub">' + (isPub ? 'Publik' : 'Privat') + (s.created_at ? ' · ' + esc(fmtDate(s.created_at)) : '') + '</p>' +
           '</div>' +
           '<div class="song-actions">' +
-            '<span class="song-badge ' + (isPub ? 'public' : 'private') + '">' + (isPub ? ICONS.globe + ' Publik' : ICONS.lock + ' Privat') + '</span>' +
-            (isPub
-              ? '<button class="song-btn primary" data-my-play="' + i + '">' + ICONS.play + ' Putar</button>' +
-                '<button class="song-btn" data-my-share="' + i + '">' + ICONS.link + ' Link</button>' +
-                '<button class="song-btn danger" data-my-unpub="' + i + '">' + ICONS.eyeOff + ' Privat</button>'
-              : '<button class="song-btn primary" data-my-pub="' + i + '">' + ICONS.globe + ' Publikasikan</button>') +
-            '<button class="song-btn danger" data-my-del="' + i + '">' + ICONS.trash + '</button>' +
+            '<button class="song-btn primary" data-my-play="' + i + '">' + ICONS.play + ' Putar</button>' +
+            '<details class="song-menu"><summary class="song-btn" aria-label="Aksi lagu">⋯</summary><div class="song-menu-panel">' +
+            '<button data-like-source="mine" data-like-index="' + i + '">♡ Suka / batal suka</button>' +
+            (isPub ? '<button data-my-share="' + i + '">Salin link</button><button data-my-unpub="' + i + '">Jadikan privat</button>' : '<button data-my-pub="' + i + '">Publikasikan</button>') +
+            '<button data-my-del="' + i + '">Hapus lagu</button></div></details>' +
           '</div>' +
         '</li>';
       }).join('');
@@ -682,6 +683,10 @@
         unpublishSong(s3);
         window.setTimeout(refreshSongs, 800);
       }
+    } else if (e.target.closest('[data-my-pub]')) {
+      var toPublish = songsCache[Number(e.target.closest('[data-my-pub]').dataset.myPub)];
+      var crateTrack = toPublish && (tracks || []).find(function (t) { return String(t.id) === String(toPublish.source_crate_track_id); });
+      if (crateTrack) openPublishModal(crateTrack); else showToast('Lagu sumber tidak ditemukan di Crate.');
     } else if (e.target.closest('[data-my-del]')) {
       var d = e.target.closest('[data-my-del]').dataset.myDel;
       var s4 = songsCache[Number(d)];
@@ -947,6 +952,8 @@
   wrapHook('onProfileReady', function () {
     loadRemoteSettings();
     renderProfileBox();
+    refreshLikeStates();
+    if (currentRoute() === 'liked') refreshLikes();
     handleDeepLink();
     /* crate sudah selesai dimuat — kalau user sedang di My Songs,
        refresh supaya daftar "Masih di Crate" langsung terisi */
@@ -987,10 +994,151 @@
       });
   }
 
+  /* A user's likes are always loaded from the server; no sample entries. */
+  var likedSongs = [];
+  var likedIds = Object.create(null);
+  var likeStateOwner = '';
+  function refreshLikeStates() {
+    var owner = authed() ? uid() : '';
+    likedIds = Object.create(null); likeStateOwner = owner;
+    if (!owner) return;
+    caApiCall('/rest/v1/song_likes?select=song_id&user_id=eq.' + encodeURIComponent(owner), 'GET').then(function (rows) {
+      if (!authed() || uid() !== owner || likeStateOwner !== owner) return;
+      (rows || []).forEach(function (row) { likedIds[row.song_id] = true; });
+      updateLikeLabels();
+    }).catch(function () { /* The collection view reports loading errors explicitly. */ });
+  }
+  function updateLikeLabels() {
+    document.querySelectorAll('[data-like-source]').forEach(function (button) {
+      if (button.dataset.likeSource === 'liked') return;
+      var i = Number(button.dataset.likeIndex);
+      var song = button.dataset.likeSource === 'discover' ? discState.items[i] : songsCache[i];
+      if (song) button.textContent = likedIds[song.id] ? '♥ Hapus dari Liked Songs' : '♡ Tambah ke Liked Songs';
+    });
+    var track = tracks && tracks[currentIndex], btn = $('persistent-like');
+    if (btn && track && track._songId) { btn.textContent = likedIds[track._songId] ? '♥' : '♡'; btn.setAttribute('aria-label', likedIds[track._songId] ? 'Hapus dari Liked Songs' : 'Tambah ke Liked Songs'); }
+  }
+  var likesOwner = '';
+  var likesRequest = 0;
+  function refreshLikes() {
+    var state = $('liked-state'), list = $('liked-list'), count = $('liked-count');
+    var owner = authed() ? uid() : '';
+    var request = ++likesRequest;
+    likedSongs = []; likesOwner = owner; list.innerHTML = ''; count.textContent = '';
+    if (!owner) {
+      state.style.display = 'block';
+      state.innerHTML = '<strong>Login untuk melihat Liked Songs</strong>Koleksi ini disimpan secara pribadi di akunmu.';
+      return Promise.resolve();
+    }
+    state.style.display = 'block'; state.innerHTML = '<span class="crd-spin"></span><br>Memuat lagu…';
+    return caApiCall('/rest/v1/song_likes?select=added_at,songs(' + SONG_SELECT + ')&user_id=eq.' + encodeURIComponent(owner) + '&order=added_at.desc', 'GET')
+      .then(function (rows) {
+        if (request !== likesRequest || !authed() || uid() !== owner) return;
+        likedSongs = (rows || []).filter(function (row) { return !!row.songs; });
+        renderLikes();
+      }).catch(function (err) {
+        if (request !== likesRequest || !authed() || uid() !== owner) return;
+        state.style.display = 'block';
+        state.innerHTML = '<strong>Gagal memuat Liked Songs</strong>' + esc(err.message || 'Coba lagi.') + '<br><button class="song-btn" id="liked-retry">Coba lagi</button>';
+        $('liked-retry').addEventListener('click', refreshLikes);
+      });
+  }
+  function renderLikes() {
+    var state = $('liked-state'), list = $('liked-list');
+    $('liked-count').textContent = likedSongs.length + ' lagu';
+    if (!likedSongs.length) {
+      list.innerHTML = '';
+      state.style.display = 'block';
+      state.innerHTML = '<img class="liked-empty-art" src="assets/covers/liked-songs-default.png" alt=""><strong>Belum ada lagu yang disukai</strong>Lagu yang kamu sukai akan muncul di sini.<br><button type="button" class="song-btn primary" data-route="discover">Cari lagu di Discover</button>';
+      return;
+    }
+    state.style.display = 'none';
+    list.innerHTML = likedSongs.map(function (row, i) {
+      var song = row.songs, cover = songCoverUrl(song);
+      return '<li class="song-row"><div class="song-cover"><span class="song-cover-fallback">' + ICONS.note + '</span>' + (cover ? '<img src="' + esc(cover) + '" alt="" onerror="this.remove()">' : '') + '</div>' +
+        '<div class="song-meta"><p class="song-title">' + esc(song.title) + '</p><p class="song-sub">' + esc(song.artist || song.owner_name || 'Pengguna Chiroot') + ' · Disukai ' + esc(fmtDate(row.added_at)) + '</p></div>' +
+        '<div class="song-actions"><button class="song-btn primary" data-liked-play="' + i + '">' + ICONS.play + ' Putar</button><button class="song-btn" data-like-source="liked" data-like-index="' + i + '" aria-label="Hapus dari Liked Songs">♥</button></div></li>';
+    }).join('');
+  }
+  function toggleLike(song) {
+    if (!authed()) { showToast('Login untuk menyukai lagu.'); return; }
+    var owner = uid();
+    var path = '/rest/v1/song_likes?user_id=eq.' + encodeURIComponent(owner) + '&song_id=eq.' + encodeURIComponent(song.id);
+    caApiCall(path + '&select=song_id', 'GET').then(function (rows) {
+      if (!authed() || uid() !== owner) throw new Error('Akun telah berubah.');
+      return rows && rows.length ? caApiCall(path, 'DELETE').then(function () { return false; }) :
+        caApiCall('/rest/v1/song_likes', 'POST', { user_id: owner, song_id: song.id }).then(function () { return true; });
+    }).then(function (liked) {
+      if (uid() === owner && likeStateOwner === owner) { if (liked) likedIds[song.id] = true; else delete likedIds[song.id]; updateLikeLabels(); }
+      showToast(liked ? 'Ditambahkan ke Liked Songs ✓' : 'Dihapus dari Liked Songs');
+      if (currentRoute() === 'liked' && likesOwner === owner) refreshLikes();
+    }).catch(function (err) { showToast('Gagal menyimpan: ' + (err.message || err)); });
+  }
+  function closeSongMenus(except) {
+    document.querySelectorAll('details.song-menu[open]').forEach(function (menu) { if (menu !== except) menu.open = false; });
+  }
+  document.addEventListener('click', function (e) {
+    var summary = e.target.closest('.song-menu summary');
+    if (summary) closeSongMenus(summary.parentNode);
+    else if (!e.target.closest('.song-menu')) closeSongMenus();
+    var button = e.target.closest('[data-like-source]');
+    if (button) {
+      var i = Number(button.dataset.likeIndex), source = button.dataset.likeSource;
+      var song = source === 'discover' ? discState.items[i] : source === 'mine' ? songsCache[i] : likedSongs[i] && likedSongs[i].songs;
+      closeSongMenus(); if (song) toggleLike(song);
+    }
+    var playButton = e.target.closest('[data-liked-play]');
+    if (playButton && likedSongs[Number(playButton.dataset.likedPlay)]) playSong(likedSongs[Number(playButton.dataset.likedPlay)].songs);
+    if (e.target.closest('.song-menu-panel button')) closeSongMenus();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      var open = document.querySelector('details.song-menu[open]');
+      if (open) { var summary = open.querySelector('summary'); closeSongMenus(); summary.focus(); }
+    }
+  });
+
+  /* Desktop bar uses the same legacy audio element and queue as the main player. */
+  (function () {
+    var bar = $('persistent-player'), seek = $('persistent-seek'), volume = $('persistent-volume');
+    function sync() {
+      var track = (typeof isEggActive !== 'undefined' && isEggActive && activeEggTrack) || (tracks && tracks[currentIndex]);
+      var active = !!(track && audio.getAttribute('src'));
+      bar.hidden = !active;
+      document.body.classList.toggle('has-persistent-player', active);
+      if (!active) return;
+      $('persistent-like').hidden = !track._songId;
+      updateLikeLabels();
+      $('persistent-title').textContent = track.title || 'Tanpa judul';
+      $('persistent-artist').textContent = track.artist || 'Pengguna Chiroot';
+      var cover = $('persistent-cover');
+      if (track.cover) { if (cover.getAttribute('src') !== track.cover) cover.src = track.cover; cover.hidden = false; }
+      else { cover.removeAttribute('src'); cover.hidden = true; }
+      $('persistent-play').textContent = audio.paused ? '▶' : '❚❚';
+      $('persistent-play').setAttribute('aria-label', audio.paused ? 'Putar' : 'Jeda');
+      var duration = Number.isFinite(audio.duration) ? audio.duration : 0;
+      $('persistent-time').textContent = fmtDur(audio.currentTime) || '0:00';
+      $('persistent-duration').textContent = fmtDur(duration) || '0:00';
+      seek.disabled = !duration;
+      if (document.activeElement !== seek) seek.value = duration ? audio.currentTime / duration * 100 : 0;
+      if (document.activeElement !== volume) volume.value = audio.volume;
+    }
+    $('persistent-like').addEventListener('click', function () { var t = tracks && tracks[currentIndex]; if (t && t._songId) toggleLike({ id: t._songId }); });
+    $('persistent-play').addEventListener('click', function () { if (audio.paused) play(); else pause(); });
+    $('persistent-prev').addEventListener('click', function () { prevTrack(); });
+    $('persistent-next').addEventListener('click', function () { nextTrack(); });
+    seek.addEventListener('input', function () { if (Number.isFinite(audio.duration)) audio.currentTime = audio.duration * Number(seek.value) / 100; });
+    volume.addEventListener('input', function () { audio.volume = Number(volume.value); });
+    ['loadstart', 'loadedmetadata', 'timeupdate', 'play', 'pause', 'ended', 'emptied', 'volumechange', 'error'].forEach(function (event) { audio.addEventListener(event, sync); });
+    audio.addEventListener('error', function () { if (audio.getAttribute('src')) showToast('Audio tidak tersedia. Coba lagi.'); });
+    sync();
+  })();
+
   /* ==================================================================
      INIT
      ================================================================== */
   renderProfileBox();
+  refreshLikeStates();
   renderRoute();
 
   /* Mode COVER: mirror cover dari label vinyl (tanpa menyentuh kode legacy).

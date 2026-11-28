@@ -76,3 +76,9 @@ Crate guest lama (IndexedDB per browser) menyimpan referensi audio/cover berupa 
 
 - Jangan mengubah isi `archive/` (snapshot versi lama, sengaja dibekukan).
 - `docs/AUDIT.md` berisi hasil audit lengkap: hosting, perilaku legacy, masalah yang ditemukan, dan rencana redesign menjadi platform berbagi lagu publik.
+
+## Liked Songs (update parsial)
+
+Migrasi `supabase/migrations/20261128040510_chiroot_song_likes.sql` telah diterapkan pada project Chiroot. Likes disimpan per akun; RLS membatasi baca/tulis kepada pemilik dan hanya menerima lagu yang terlihat oleh pengguna. Lagu yang kemudian menjadi privat milik orang lain tidak ditampilkan karena tetap tunduk pada RLS `songs`. Tidak ada lagu bawaan untuk akun baru.
+
+Uji unit tanpa dependensi: `node --test tests/liked-songs.test.js`. Update playlist, Discover playlist, menu untuk lagu Crate yang belum diterbitkan, dan pengujian browser end-to-end masih perlu diselesaikan sebelum update ini siap di-merge.
