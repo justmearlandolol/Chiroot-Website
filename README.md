@@ -93,4 +93,4 @@ python3 -m unittest discover -s tests -p 'test_*.py'
 node --test tests/*.test.js
 ```
 
-CI ini tidak membutuhkan secret dan tidak melakukan deploy atau migrasi database. Vercel tetap menangani preview PR dan deploy produksi dari `main` seperti sebelumnya; workflow GitHub Actions ini **tidak otomatis memblokir deploy**. Jika ingin menjadikan CI syarat merge, atur status `Static site checks and tests` sebagai required check dalam branch protection/ruleset GitHub. Hasil CI bukan pengganti uji browser, OAuth, audio, atau RLS end-to-end.
+CI juga memvalidasi migrasi dan beberapa kebijakan RLS terhadap PostgreSQL sementara menggunakan fixture terbatas. CI tidak membutuhkan GitHub secret dan tidak melakukan deploy atau migrasi database produksi. Vercel tetap menangani preview PR dan deploy produksi dari `main` seperti sebelumnya; workflow GitHub Actions ini **tidak otomatis memblokir deploy**. Lihat [docs/CI_CD.md](docs/CI_CD.md) untuk batasan, required checks, rerun, dan persiapan deployment. Hasil CI bukan pengganti uji browser, OAuth, audio, atau Supabase end-to-end.

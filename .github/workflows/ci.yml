@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: chiroot-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   static-checks:
@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
       - name: Set up Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
@@ -32,3 +34,37 @@ jobs:
         run: node --test tests/*.test.js
       - name: Test static checker
         run: python3 -m unittest discover -s tests -p "test_*.py"
+
+  migration-check:
+    name: PostgreSQL migration and RLS checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: chiroot_test
+        options: >-
+          --health-cmd "pg_isready -U postgres -d chiroot_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+      - name: Apply migrations to a disposable fixture
+        env:
+          CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: |
+          docker exec -i "$CONTAINER_ID" psql -X -v ON_ERROR_STOP=1 -U postgres -d chiroot_test < tests/sql/migration_fixture.sql
+          for migration in supabase/migrations/*.sql; do
+            echo "Checking $migration"
+            docker exec -i "$CONTAINER_ID" psql -X -v ON_ERROR_STOP=1 -U postgres -d chiroot_test < "$migration"
+          done
+      - name: Test likes constraints and RLS
+        env:
+          CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: docker exec -i "$CONTAINER_ID" psql -X -v ON_ERROR_STOP=1 -U postgres -d chiroot_test < tests/sql/song_likes_rls.sql
