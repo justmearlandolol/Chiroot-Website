@@ -68,3 +68,7 @@ jobs:
         env:
           CONTAINER_ID: ${{ job.services.postgres.id }}
         run: docker exec -i "$CONTAINER_ID" psql -X -v ON_ERROR_STOP=1 -U postgres -d chiroot_test < tests/sql/song_likes_rls.sql
+      - name: Test playlist ownership and privacy
+        env:
+          CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: docker exec -i "$CONTAINER_ID" psql -X -v ON_ERROR_STOP=1 -U postgres -d chiroot_test < tests/sql/playlists_rls.sql

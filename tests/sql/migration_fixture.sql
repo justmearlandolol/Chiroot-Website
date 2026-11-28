@@ -9,6 +9,7 @@ create function auth.uid() returns uuid language sql stable as $$
 $$;
 grant usage on schema auth, public to authenticated, anon;
 grant execute on function auth.uid() to authenticated, anon;
+create table public.profiles (id uuid primary key references auth.users(id), display_name text, pfp text);
 create table public.songs (
   id uuid primary key,
   owner_id uuid not null references auth.users(id),
@@ -21,6 +22,7 @@ create policy test_song_read on public.songs for select to authenticated, anon
 insert into auth.users values
   ('10000000-0000-0000-0000-000000000001'),
   ('10000000-0000-0000-0000-000000000002');
+insert into public.profiles values ('10000000-0000-0000-0000-000000000001', 'User One', null), ('10000000-0000-0000-0000-000000000002', 'User Two', null);
 insert into public.songs values
   ('20000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', 'public'),
   ('20000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000001', 'private');
