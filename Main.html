@@ -124,6 +124,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
         <span class="nav-label">My Songs</span><span class="nav-dot"></span>
       </button>
+      <button type="button" class="app-nav-item" data-route="playlists" title="Playlist"><span aria-hidden="true">☷</span><span class="nav-label">Playlist</span><span class="nav-dot"></span></button>
+      <button type="button" class="app-nav-item liked-nav" data-route="liked" title="Liked Songs">
+        <img src="assets/covers/liked-songs-default.png" alt="" width="28" height="28"><span class="nav-label">Liked Songs</span><span class="nav-dot"></span>
+      </button>
       <button type="button" class="app-nav-item" id="app-nav-settings" title="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
         <span class="nav-label">Settings</span>
@@ -450,6 +454,8 @@
         <p class="app-view-sub">Lagu publik yang dibagikan pengguna Chiroot. Tekan putar untuk mendengarkan.</p>
       </div>
     </div>
+    <div class="discover-tabs" role="group" aria-label="Jelajahi"><button type="button" id="discover-songs-tab" class="song-btn primary" aria-pressed="true">Lagu</button><button type="button" id="discover-playlists-tab" class="song-btn" aria-pressed="false">Playlist</button></div>
+    <div id="discover-song-content">
     <div class="crd-toolbar">
       <div class="crd-search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
@@ -464,6 +470,22 @@
     <ul class="song-list" id="disc-list"></ul>
     <div class="crd-state" id="disc-state" style="display:none;"></div>
     <button type="button" class="crd-more" id="disc-more" style="display:none;">Muat lagi</button>
+    </div>
+    <div id="discover-playlist-content" hidden><div class="crd-toolbar"><div class="crd-search"><input type="search" id="discover-playlist-search" placeholder="Cari playlist atau pembuat…" aria-label="Cari playlist publik"></div><select class="crd-sort" id="discover-playlist-sort" aria-label="Urutkan playlist"><option value="newest">Terbaru</option><option value="oldest">Terlama</option><option value="name">Nama A–Z</option></select></div><div id="public-playlist-state" class="crd-state" aria-live="polite"></div><div class="playlist-grid" id="public-playlist-list"></div></div>
+  </section>
+
+  <section class="app-view" data-view="playlists" aria-label="Playlist milikku">
+    <div class="app-view-head"><div><h2 class="app-view-title">Playlist</h2><p class="app-view-sub">Koleksi lagu yang kamu susun sendiri.</p></div><button class="song-btn primary" type="button" id="playlist-create">+ Buat playlist</button></div>
+    <div id="my-playlists-state" class="crd-state" aria-live="polite"></div><div class="playlist-grid" id="my-playlists-list"></div>
+  </section>
+  <section class="app-view" data-view="playlist" aria-label="Detail playlist">
+    <div id="playlist-detail-state" class="crd-state" aria-live="polite"></div><div id="playlist-detail"></div><ul class="song-list" id="playlist-tracks"></ul>
+  </section>
+
+  <section class="app-view" data-view="liked" id="view-liked" aria-label="Liked Songs">
+    <div class="liked-header"><img src="assets/covers/liked-songs-default.png" alt="" class="liked-cover"><div><p class="app-view-sub">Koleksi pribadi</p><h2 class="app-view-title">Liked Songs</h2><p class="app-view-sub" id="liked-count"></p></div></div>
+    <div class="crd-state" id="liked-state" aria-live="polite"></div>
+    <ul class="song-list" id="liked-list"></ul>
   </section>
 
   <section class="app-view" data-view="songs" id="view-songs" aria-label="My Songs">
@@ -488,6 +510,13 @@
   </div>
   </div>
 
+  <dialog id="playlist-dialog" class="collection-dialog" aria-labelledby="playlist-dialog-title"><form id="playlist-form"><h2 id="playlist-dialog-title">Buat playlist</h2><label>Nama playlist<input id="playlist-name" required autocomplete="off" aria-describedby="playlist-form-error"></label><label>Visibilitas<select id="playlist-visibility"><option value="private">Privat</option><option value="public">Publik</option></select></label><p id="playlist-form-error" role="alert"></p><div class="collection-dialog-actions"><button type="button" class="song-btn" id="playlist-cancel">Batal</button><button class="song-btn primary" type="submit" id="playlist-save">Simpan</button></div></form></dialog>
+  <dialog id="playlist-picker" class="collection-dialog" aria-labelledby="playlist-picker-title"><h2 id="playlist-picker-title">Tambah ke playlist</h2><p class="app-view-sub" id="playlist-picker-song"></p><div id="playlist-picker-list" aria-live="polite"></div><p id="playlist-picker-error" role="alert"></p><div class="collection-dialog-actions"><button type="button" class="song-btn" id="playlist-picker-cancel">Tutup</button><button type="button" class="song-btn primary" id="playlist-picker-create">+ Buat playlist</button></div></dialog>
+  <div class="persistent-player" id="persistent-player" hidden role="region" aria-label="Pemutar musik">
+    <button type="button" class="persistent-track" data-route="home" aria-label="Buka pemutar dan antrean"><img id="persistent-cover" alt=""><span><strong id="persistent-title"></strong><small id="persistent-artist"></small></span></button>
+    <div class="persistent-center"><div class="persistent-controls"><button type="button" id="persistent-prev" aria-label="Lagu sebelumnya">⏮</button><button type="button" id="persistent-play" aria-label="Putar">▶</button><button type="button" id="persistent-next" aria-label="Lagu berikutnya">⏭</button></div><div class="persistent-progress"><span id="persistent-time">0:00</span><input type="range" id="persistent-seek" min="0" max="100" value="0" step="0.1" aria-label="Posisi lagu"><span id="persistent-duration">0:00</span></div></div>
+    <div class="persistent-extra"><button type="button" class="song-btn" id="persistent-share-song" aria-label="Salin link lagu">↗</button><button type="button" class="song-btn" id="persistent-add-playlist" aria-label="Tambah ke playlist">＋</button><button type="button" class="song-btn" id="persistent-like" hidden aria-label="Sukai lagu">♡</button><label class="persistent-volume">Volume <input type="range" id="persistent-volume" min="0" max="1" step="0.01" aria-label="Volume"></label></div>
+  </div>
   <nav class="app-bottomnav" aria-label="Navigasi utama">
     <button type="button" data-route="home" aria-label="Songs">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
@@ -501,6 +530,8 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
       My Songs
     </button>
+    <button type="button" data-route="playlists" aria-label="Playlist"><span aria-hidden="true" style="font-size:21px;line-height:21px">☷</span>Playlist</button>
+    <button type="button" data-route="liked" aria-label="Liked Songs"><span aria-hidden="true" style="font-size:21px;line-height:21px">♥</span>Liked</button>
     <button type="button" data-open-settings aria-label="Settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
       Settings
@@ -1346,6 +1377,25 @@ function caClearSession() {
   try { localStorage.removeItem(CHIROOT_AUTH_KEY); } catch (e) {}
 }
 
+const CA_FETCH_TIMEOUT_MS = 15000;
+/* fetch dengan batas waktu. Request boot-critical (refresh token, tukar kode OAuth,
+   GET/JSON ke REST) tidak boleh menggantung tanpa batas — di koneksi yang macet
+   spinner "Memeriksa sesi…" akan berputar selamanya karena boot menunggu fetch ini.
+   Body berkas (Blob, mis. upload audio/cover 25 MB) sengaja TANPA timeout, dan
+   browser tanpa AbortController kembali ke fetch biasa. */
+function caFetchWithTimeout(url, options, timeoutMs) {
+  options = options || {};
+  if (timeoutMs === undefined) timeoutMs = CA_FETCH_TIMEOUT_MS;
+  const body = options.body;
+  const isMediaUpload = !!body && typeof Blob === 'function' && body instanceof Blob;
+  if (!timeoutMs || isMediaUpload || typeof AbortController !== 'function') return fetch(url, options);
+  const ctrl = new AbortController();
+  const timer = window.setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, timeoutMs);
+  const p = fetch(url, Object.assign({}, options, { signal: ctrl.signal }));
+  p.then(function () { window.clearTimeout(timer); }, function () { window.clearTimeout(timer); });
+  return p;
+}
+
 let caRefreshPromise = null;
 async function caEnsureFreshToken(force) {
   const current = ChirootAuth.session;
@@ -1354,7 +1404,7 @@ async function caEnsureFreshToken(force) {
   if (caRefreshPromise) return caRefreshPromise;
   caRefreshPromise = (async () => {
     try {
-      const res = await fetch(caBase() + '/auth/v1/token?grant_type=refresh_token', {
+      const res = await caFetchWithTimeout(caBase() + '/auth/v1/token?grant_type=refresh_token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'apikey': caApiKey() },
         body: JSON.stringify({ refresh_token: current.refresh_token })
@@ -1388,7 +1438,7 @@ async function caFetch(url, options, retried) {
   headers['Authorization'] = 'Bearer ' + ChirootAuth.session.access_token;
   let res;
   try {
-    res = await fetch(url, Object.assign({}, options, { headers: headers }));
+    res = await caFetchWithTimeout(url, Object.assign({}, options, { headers: headers }));
   } catch (netErr) {
     throw new Error('Tidak bisa terhubung ke server. Periksa koneksi internetmu.');
   }
@@ -1843,6 +1893,7 @@ async function caEnterGuestMode(note) {
   caSettled(false);
   try {
     tracks = await caGuestLoadCrate();
+    if (typeof caRestoreDynamicSongTracks === 'function') { try { await caRestoreDynamicSongTracks(); } catch (e) {} }
     restoreState();
   } catch (err) {
     console.error('guest crate load failed', err);
@@ -2011,11 +2062,22 @@ async function caCrateUpdate(track, fields, audioBlob, coverBlob) {
     throw patchErr;
   }
 
-  if (audioBlob && oldAudioPath && oldAudioPath !== audioPath) {
-    caStorageDelete(oldAudioPath).catch(function () {});
-  }
-  if (coverBlob && oldCoverPath && oldCoverPath !== coverPath) {
-    caStorageDelete(oldCoverPath).catch(function () {});
+  // Objek lama hanya dihapus bila tidak dipakai baris songs lain (mis. lagu privat
+  // yang dibuat saat lagu disukai/ditambahkan ke playlist memakai objek crate yang sama).
+  const replacedOldPaths = [];
+  if (audioBlob && oldAudioPath && oldAudioPath !== audioPath) replacedOldPaths.push(oldAudioPath);
+  if (coverBlob && oldCoverPath && oldCoverPath !== coverPath) replacedOldPaths.push(oldCoverPath);
+  if (replacedOldPaths.length) {
+    let oldStillUsed = true;
+    try { oldStillUsed = (await caSongsReferencedObjectPaths(replacedOldPaths)).length > 0; } catch (e) { oldStillUsed = true; }
+    if (!oldStillUsed) {
+      if (audioBlob && oldAudioPath && oldAudioPath !== audioPath) {
+        caStorageDelete(oldAudioPath).catch(function () {});
+      }
+      if (coverBlob && oldCoverPath && oldCoverPath !== coverPath) {
+        caStorageDelete(oldCoverPath).catch(function () {});
+      }
+    }
   }
 
   const row = (Array.isArray(rows) && rows.length) ? rows[0] : null;
@@ -2037,16 +2099,47 @@ async function caCrateUpdate(track, fields, audioBlob, coverBlob) {
   return fallback;
 }
 
+/* Kembalikan daftar path (dari daftar yang diberikan) yang masih direferensikan
+   baris songs mana pun yang terlihat (milik sendiri + publik, sesuai RLS). Lagu
+   privat yang dibuat otomatis saat like/playlist menunjuk objek crate yang sama,
+   jadi objek itu tidak boleh dihapus dari storage selama masih direferensikan.
+   Query ini TIDAK menggantikan kebijakan Storage — hanya pengaman tambahan. */
+async function caSongsReferencedObjectPaths(paths) {
+  const list = (paths || []).filter(Boolean);
+  const found = [];
+  if (!list.length) return found;
+  const filters = [];
+  list.forEach(function (p) { filters.push('audio_path.eq.' + encodeURIComponent(p), 'cover_path.eq.' + encodeURIComponent(p)); });
+  const rows = await caApiCall('/rest/v1/songs?select=id,audio_path,cover_path&or=(' + filters.join(',') + ')', 'GET');
+  const seen = {};
+  (Array.isArray(rows) ? rows : []).forEach(function (r) {
+    if (r.audio_path) seen[r.audio_path] = true;
+    if (r.cover_path) seen[r.cover_path] = true;
+  });
+  list.forEach(function (p) { if (seen[p]) found.push(p); });
+  return found;
+}
+
 async function caCrateDelete(track) {
   await caApiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(track.id), 'DELETE');
+  const refs = [track._audioPath, track._coverPath].filter(Boolean);
+  let stillUsed = true;
+  try { stillUsed = (await caSongsReferencedObjectPaths(refs)).length > 0; } catch (e) { stillUsed = true; }
+  if (stillUsed) return; // file masih dipakai lagu lain — biarkan tetap ada di storage
   if (track._audioPath) { try { await caStorageDelete(track._audioPath); } catch (e) {} }
   if (track._coverPath) { try { await caStorageDelete(track._coverPath); } catch (e) {} }
 }
 
 async function caCrateReset() {
   const rows = await caFetchCrate();
+  const allPaths = [];
+  rows.forEach(function (t) { if (t._audioPath) allPaths.push(t._audioPath); if (t._coverPath) allPaths.push(t._coverPath); });
+  let usedPaths = null;
+  try { usedPaths = {}; (await caSongsReferencedObjectPaths(allPaths)).forEach(function (p) { usedPaths[p] = true; }); } catch (e) { usedPaths = null; }
   for (const t of rows) {
     try { await caApiCall('/rest/v1/crate_tracks?id=eq.' + encodeURIComponent(t.id), 'DELETE'); } catch (e) {}
+    const referenced = !usedPaths || usedPaths[t._audioPath] || usedPaths[t._coverPath];
+    if (referenced) continue; // aman: jangan hapus objek yang masih dipakai baris songs
     if (t._audioPath) { try { await caStorageDelete(t._audioPath); } catch (e) {} }
     if (t._coverPath) { try { await caStorageDelete(t._coverPath); } catch (e) {} }
   }
@@ -2115,7 +2208,7 @@ async function caHandleAuthCallback() {
   try { sessionStorage.removeItem(CHIROOT_PKCE_KEY); } catch (e) {}
   try { localStorage.removeItem(CHIROOT_PKCE_KEY + '_backup'); } catch (e) {}
   if (!verifier) throw new Error('Sesi login tidak ditemukan. Silakan login ulang.');
-  const res = await fetch(caBase() + '/auth/v1/token?grant_type=pkce', {
+  const res = await caFetchWithTimeout(caBase() + '/auth/v1/token?grant_type=pkce', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'apikey': caApiKey() },
     body: JSON.stringify({ auth_code: code, code_verifier: verifier })
@@ -2240,6 +2333,45 @@ function caAddGateRetry(fn) {
   btn.innerHTML = '<span>↻ Coba Lagi</span>';
   btn.disabled = false;
   btn.onclick = fn;
+}
+
+/* Fallback kalau pemeriksaan sesi saat boot menggantung terlalu lama (koneksi macet,
+   jaringan lambat, atau error tak terduga): hentikan spinner, tampilkan pesan,
+   tombol coba lagi (reload penuh — membatalkan semua request menggantung), dan
+   tombol lanjut sebagai Guest supaya aplikasi tetap bisa dipakai. */
+function caGateStuck(message) {
+  const gate = document.getElementById('auth-overlay');
+  const content = document.getElementById('auth-overlay-content');
+  if (!gate || !content || !gate.classList.contains('open')) return; // boot sudah selesai
+  if (!content.querySelector('.gate-spinner')) return; // bukan status "Memeriksa sesi…"
+  console.warn('[Chiroot] boot menggantung — menampilkan fallback:', message);
+  content.querySelectorAll('.gate-status').forEach(function (el) { el.remove(); });
+  caGateError(message);
+  caAddGateRetry(function () { try { window.location.reload(); } catch (e) {} });
+  const wrap = content.querySelector('.gate-btn-wrap');
+  if (wrap && !document.getElementById('gate-guest-btn')) {
+    const guestBtn = document.createElement('button');
+    guestBtn.type = 'button';
+    guestBtn.className = 'btn-secondary sketch-border-soft gate-pick-btn';
+    guestBtn.id = 'gate-guest-btn';
+    guestBtn.textContent = 'Lanjut sebagai Guest';
+    guestBtn.addEventListener('click', function () {
+      caBootRunId++; // batalkan boot lama yang masih menggantung agar tidak menimpa fallback
+      caEnterGuestMode('Mode Guest ✦ lagu lokal tetap bisa diputar. Login lagi dari tombol di atas kapan pun kamu siap.');
+    });
+    wrap.appendChild(guestBtn);
+  }
+}
+
+const CA_BOOT_WATCHDOG_MS = 30000;
+function caStartBootWatchdog() {
+  window.setTimeout(function () {
+    try {
+      if (!ChirootAuth._settled) {
+        caGateStuck('Memeriksa sesi memakan waktu terlalu lama — koneksi ke server Chiroot lambat atau terputus.');
+      }
+    } catch (e) { console.warn('boot watchdog error', e); }
+  }, CA_BOOT_WATCHDOG_MS);
 }
 
 function caSetLoginButtonsBusy(busy) {
@@ -2728,26 +2860,36 @@ function caFinishPopupOAuth(ok, errMsg) {
   setTimeout(function () { try { window.close(); } catch (e) {} }, 120);
 }
 
-async function caBootProfileStep(fresh) {
+/* Naikkan setiap boot dijalankan atau fallback watchdog mengambil alih: langkah
+   boot lama yang akhirnya selesai setelah fallback tidak boleh menimpa keadaan
+   yang sudah diambil alih (mis. mode Guest yang sudah dipilih pengguna). */
+let caBootRunId = 0;
+
+async function caBootProfileStep(fresh, runId) {
+  if (runId === undefined) runId = caBootRunId;
   caGateShow('checking');
   if (!fresh) {
     try {
       await caEnsureFreshToken(true);
     } catch (err) {
+      if (runId !== caBootRunId) return; // fallback sudah mengambil alih
       ChirootAuth.session = null;
       caClearSession();
-      await caEnterGuestMode('Sesi login sudah tidak valid — lanjut sebagai Guest. Login lagi buat sinkron cloud.');
+      await caEnterGuestMode('Sesi login sudah tidak valid (' + (err && err.message ? err.message : err) + ') — lanjut sebagai Guest. Login lagi buat sinkron cloud.');
       return;
     }
   }
+  if (runId !== caBootRunId) return;
   let profile = null;
   try {
     profile = await caFetchProfile();
   } catch (err) {
     console.warn('profile fetch failed', err);
+    if (runId !== caBootRunId) return;
     await caEnterGuestMode('Gagal memuat profil (' + (err && err.message ? err.message : 'terjadi kesalahan') + ') — lanjut sebagai Guest.');
     return;
   }
+  if (runId !== caBootRunId) return;
   if (profile) {
     ChirootAuth.profile = profile;
     caAccountRemember();
@@ -2763,6 +2905,8 @@ async function caBootProfileStep(fresh) {
 }
 
 async function caBoot() {
+  caStartBootWatchdog();
+  const runId = ++caBootRunId;
   caGateShow('checking');
   caRenderTopbar();
   caRenderGreeting();
@@ -2790,7 +2934,7 @@ async function caBoot() {
     await caEnterGuestMode();
     return;
   }
-  await caBootProfileStep(fromCallback);
+  await caBootProfileStep(fromCallback, runId);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -2880,7 +3024,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   setInterval(function () { caRenderGreeting(); }, 30000);
 
-  caBoot();
+  caBoot().catch(function (err) {
+    // Error tak terduga saat boot tidak boleh meninggalkan spinner selamanya.
+    console.error('Chiroot boot failed', err);
+    caGateStuck('Terjadi kesalahan saat memeriksa sesi: ' + (err && err.message ? err.message : err));
+  });
 });
 </script>
 
@@ -3186,6 +3334,7 @@ async function caAccountActivate(userId) {
     caStopPlaybackForSwitch();
     currentIndex = 0;
     tracks = await caFetchCrate();
+    if (typeof caRestoreDynamicSongTracks === 'function') { try { await caRestoreDynamicSongTracks(); } catch (e) {} }
     restoreState();
     caGateHide();
     caRerenderForUser(false);
@@ -3364,6 +3513,7 @@ window.ChirootHooks = {
     cleanupLegacyStorage();
     try {
       await loadPlaylist();
+      if (typeof caRestoreDynamicSongTracks === 'function') { try { await caRestoreDynamicSongTracks(); } catch (e) {} }
       restoreState();
       renderPlaylist();
       renderTop10();
@@ -3633,6 +3783,9 @@ function saveState(force) {
       isLoop,
       isShuffle
     }));
+    // Lagu yang ditambahkan dinamis (Discover/Playlist/Liked) ikut dipersistenkan
+    // supaya entri antreannya tidak hilang setelah reload.
+    if (typeof caPersistDynamicSongTracks === 'function') caPersistDynamicSongTracks();
   } catch(e){}
 }
 function restoreState(){
@@ -3699,15 +3852,16 @@ function renderPlaylist(){
       </div>
       <div class="playlist-right">
         <span class="p-duration" data-pd="${i}">--:--</span>
-        <div class="playlist-actions-row">
+        <details class="song-menu"><summary class="song-btn" aria-label="Aksi lagu">⋯</summary><div class="song-menu-panel playlist-actions-row">
+          <button type="button" data-crate-action="like" data-crate-index="${i}">♡ Suka / batal suka</button><button type="button" data-crate-action="playlist" data-crate-index="${i}">＋ Tambah ke playlist</button><button type="button" data-crate-action="share" data-crate-index="${i}">↗ Salin link lagu</button>
           <button class="queue-track${isTrackQueued(t.id) ? ' queued' : ''}" data-queue="${i}" title="Add to Queue" aria-label="Add to Queue"><svg class="doodle-queue" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.6h10.5"/><path d="M4 11h10.5"/><path d="M4 15.4h5.5"/><path d="M18.4 10.2v7.6"/><path d="M14.6 14h7.6"/></svg><span>Add to Queue</span></button>
-          <button class="edit-track" data-edit="${i}" title="Edit record" aria-label="Edit record"><svg class="doodle-pencil" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 19.6h8"/><path d="M16.9 3.5a2.15 2.15 0 0 1 3.1 3.1L8 18.5l-4 1.4 1.4-4Z"/><path d="M14.7 5.8l3.1 3.1"/></svg><span>edit</span></button>
-          <button class="delete-track" data-remove="${i}" title="Delete record"><svg class="doodle-trash" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:4px;"><path d="M3.5 6.5h17"/><path d="M8 6.5l1-2.5h6l1 2.5"/><path d="M19.2 6.5c-.3 3.8-.9 9-1.4 13.2-.1 1-1 1.8-2 1.8H8.2c-1 0-1.9-.8-2-1.8C5.7 15.5 5.1 10.3 4.8 6.5"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M7 6.5l.8 13" opacity=".45"/><path d="M17 6.5l-.8 13" opacity=".45"/></svg><span>hapus</span></button>
-        </div>
+          ${t._songId ? '' : `<button class="edit-track" data-edit="${i}" title="Edit record" aria-label="Edit record"><svg class="doodle-pencil" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 19.6h8"/><path d="M16.9 3.5a2.15 2.15 0 0 1 3.1 3.1L8 18.5l-4 1.4 1.4-4Z"/><path d="M14.7 5.8l3.1 3.1"/></svg><span>edit</span></button>
+          <button class="delete-track" data-remove="${i}" title="Delete record"><svg class="doodle-trash" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:4px;"><path d="M3.5 6.5h17"/><path d="M8 6.5l1-2.5h6l1 2.5"/><path d="M19.2 6.5c-.3 3.8-.9 9-1.4 13.2-.1 1-1 1.8-2 1.8H8.2c-1 0-1.9-.8-2-1.8C5.7 15.5 5.1 10.3 4.8 6.5"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M7 6.5l.8 13" opacity=".45"/><path d="M17 6.5l-.8 13" opacity=".45"/></svg><span>hapus</span></button>`}
+        </div></details>
       </div>
     `;
     li.addEventListener('click', (e)=>{
-      if (e.target.closest('.delete-track') || e.target.closest('.edit-track') || e.target.closest('.queue-track')) return;
+      if (e.target.closest('.song-menu') || e.target.closest('.delete-track') || e.target.closest('.edit-track') || e.target.closest('.queue-track')) return;
       jumpTo(i, true);
     });
     playlistEl.appendChild(li);
@@ -3716,6 +3870,7 @@ function renderPlaylist(){
   playlistEl.querySelectorAll('.delete-track').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       e.stopPropagation();
+      if (btn.closest('details')) btn.closest('details').open = false;
       const idx = parseInt(btn.dataset.remove,10);
       removeTrack(idx);
     });
@@ -3723,6 +3878,7 @@ function renderPlaylist(){
   playlistEl.querySelectorAll('.edit-track').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       e.stopPropagation();
+      if (btn.closest('details')) btn.closest('details').open = false;
       const idx = parseInt(btn.dataset.edit,10);
       openEditTrack(idx);
     });
@@ -3730,6 +3886,7 @@ function renderPlaylist(){
   playlistEl.querySelectorAll('.queue-track').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       e.stopPropagation();
+      if (btn.closest('details')) btn.closest('details').open = false;
       const idx = parseInt(btn.dataset.queue,10);
       addToQueue(idx);
     });
@@ -3801,6 +3958,19 @@ let isEggActive = false;
 let activeEggTrack = null;
 let _eggBlobUrl = null;
 let _eggLoading = false;
+
+/* Track yang sedang tampil di turntable. Saat easter egg aktif, yang tampil adalah
+   Secret Track — bukan tracks[currentIndex] — jadi aksi pemutar (lyrics, share, dll.)
+   harus menarget track yang tampil, bukan track crate yang tersembunyi. */
+function chirootDisplayedTrack() {
+  try {
+    if (isEggActive && activeEggTrack) return activeEggTrack;
+  } catch (e) {}
+  try {
+    if (Array.isArray(tracks) && tracks.length && typeof currentIndex === 'number' && tracks[currentIndex]) return tracks[currentIndex];
+  } catch (e) {}
+  return null;
+}
 
 async function loadChirootEggUrl() {
   if (_eggBlobUrl) return _eggBlobUrl;
@@ -6225,7 +6395,7 @@ async function fetchLyricsFromAPI(artist, title) {
 }
 
 async function openLyricsModal() {
-  const track = tracks[currentIndex];
+  const track = chirootDisplayedTrack();
   if (!track) return;
 
   lyricsTitle.textContent = track.title || 'Untitled';
@@ -6269,7 +6439,7 @@ lyricsModal.addEventListener('click', (e) => {
 const btnRefreshLyrics = document.getElementById('btn-lyrics-refresh');
 if (btnRefreshLyrics) {
   btnRefreshLyrics.addEventListener('click', async () => {
-    const track = tracks[currentIndex];
+    const track = chirootDisplayedTrack();
     if (!track) return;
 
     lyricsContent.innerHTML = `<div style="text-align:center;color:#8b745b;padding:20px;">Mencari lyrics...</div>`;
@@ -7288,6 +7458,9 @@ if (btnRefreshLyrics) {
       </div>
 
       <div class="cmp-more-drawer" id="cmp-more-drawer">
+        <button type="button" class="cmp-more-item" id="cmp-act-like"><span>♡ Suka / batal suka</span></button>
+        <button type="button" class="cmp-more-item" id="cmp-act-playlist"><span>＋ Tambah ke playlist</span></button>
+        <button type="button" class="cmp-more-item" id="cmp-act-link"><span>↗ Salin link lagu</span></button>
         <button type="button" class="cmp-more-item" id="cmp-act-reverb">
           <span>♪ Reverb</span>
         </button>
